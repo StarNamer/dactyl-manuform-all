@@ -45,7 +45,7 @@ mirror ([-1, 0, 0]) {
               translate ([3, -57, 54]) {
                 rotate (a=9.0, v=[0, 1, 0]) {
                   rotate (a=178.2178217821782, v=[-1, 0, 0]) {
-                    rotate_extrude ($fn=180) {
+                    rotate_extrude () {
                       union () {
                         polygon (points=[[0, 0], [45, 0], [25/2, 6], [0, 12], [0, 12]]);
                         polygon (points=[[45, 0], [18079/405, 1/15], [25/2, 6]]);
@@ -242,7 +242,7 @@ mirror ([-1, 0, 0]) {
                       scale ([1.1, 1, 1]) {
                         translate ([0, -10, 0]) {
                           rotate (a=90.0, v=[-1, 0, 0]) {
-                            rotate_extrude ($fn=180) {
+                            rotate_extrude () {
                               difference () {
                                 polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                 polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -447,7 +447,7 @@ mirror ([-1, 0, 0]) {
                                   scale ([1.1, 1, 1]) {
                                     translate ([0, -10, 0]) {
                                       rotate (a=90.0, v=[-1, 0, 0]) {
-                                        rotate_extrude ($fn=180) {
+                                        rotate_extrude () {
                                           difference () {
                                             polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                             polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -658,7 +658,7 @@ mirror ([-1, 0, 0]) {
                                     scale ([1.1, 1, 1]) {
                                       translate ([0, -10, 0]) {
                                         rotate (a=90.0, v=[-1, 0, 0]) {
-                                          rotate_extrude ($fn=180) {
+                                          rotate_extrude () {
                                             difference () {
                                               polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                               polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -871,7 +871,7 @@ mirror ([-1, 0, 0]) {
                                               scale ([1.1, 1, 1]) {
                                                 translate ([0, -10, 0]) {
                                                   rotate (a=90.0, v=[-1, 0, 0]) {
-                                                    rotate_extrude ($fn=180) {
+                                                    rotate_extrude () {
                                                       difference () {
                                                         polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                         polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -1082,7 +1082,7 @@ mirror ([-1, 0, 0]) {
                                                 scale ([1.1, 1, 1]) {
                                                   translate ([0, -10, 0]) {
                                                     rotate (a=90.0, v=[-1, 0, 0]) {
-                                                      rotate_extrude ($fn=180) {
+                                                      rotate_extrude () {
                                                         difference () {
                                                           polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                           polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -1296,7 +1296,7 @@ mirror ([-1, 0, 0]) {
                                                 scale ([1.1, 1, 1]) {
                                                   translate ([0, -10, 0]) {
                                                     rotate (a=90.0, v=[-1, 0, 0]) {
-                                                      rotate_extrude ($fn=180) {
+                                                      rotate_extrude () {
                                                         difference () {
                                                           polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                           polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -1507,7 +1507,7 @@ mirror ([-1, 0, 0]) {
                                                   scale ([1.1, 1, 1]) {
                                                     translate ([0, -10, 0]) {
                                                       rotate (a=90.0, v=[-1, 0, 0]) {
-                                                        rotate_extrude ($fn=180) {
+                                                        rotate_extrude () {
                                                           difference () {
                                                             polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                             polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -1743,7 +1743,7 @@ mirror ([-1, 0, 0]) {
                       scale ([1.1, 1, 1]) {
                         translate ([0, -10, 0]) {
                           rotate (a=90.0, v=[-1, 0, 0]) {
-                            rotate_extrude ($fn=180) {
+                            rotate_extrude () {
                               difference () {
                                 polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                 polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -1948,7 +1948,7 @@ mirror ([-1, 0, 0]) {
                                   scale ([1.1, 1, 1]) {
                                     translate ([0, -10, 0]) {
                                       rotate (a=90.0, v=[-1, 0, 0]) {
-                                        rotate_extrude ($fn=180) {
+                                        rotate_extrude () {
                                           difference () {
                                             polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                             polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -2159,7 +2159,7 @@ mirror ([-1, 0, 0]) {
                                     scale ([1.1, 1, 1]) {
                                       translate ([0, -10, 0]) {
                                         rotate (a=90.0, v=[-1, 0, 0]) {
-                                          rotate_extrude ($fn=180) {
+                                          rotate_extrude () {
                                             difference () {
                                               polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                               polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -2372,7 +2372,7 @@ mirror ([-1, 0, 0]) {
                                               scale ([1.1, 1, 1]) {
                                                 translate ([0, -10, 0]) {
                                                   rotate (a=90.0, v=[-1, 0, 0]) {
-                                                    rotate_extrude ($fn=180) {
+                                                    rotate_extrude () {
                                                       difference () {
                                                         polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                         polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -2583,7 +2583,7 @@ mirror ([-1, 0, 0]) {
                                                 scale ([1.1, 1, 1]) {
                                                   translate ([0, -10, 0]) {
                                                     rotate (a=90.0, v=[-1, 0, 0]) {
-                                                      rotate_extrude ($fn=180) {
+                                                      rotate_extrude () {
                                                         difference () {
                                                           polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                           polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -2797,7 +2797,7 @@ mirror ([-1, 0, 0]) {
                                                 scale ([1.1, 1, 1]) {
                                                   translate ([0, -10, 0]) {
                                                     rotate (a=90.0, v=[-1, 0, 0]) {
-                                                      rotate_extrude ($fn=180) {
+                                                      rotate_extrude () {
                                                         difference () {
                                                           polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                           polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -3008,7 +3008,7 @@ mirror ([-1, 0, 0]) {
                                                   scale ([1.1, 1, 1]) {
                                                     translate ([0, -10, 0]) {
                                                       rotate (a=90.0, v=[-1, 0, 0]) {
-                                                        rotate_extrude ($fn=180) {
+                                                        rotate_extrude () {
                                                           difference () {
                                                             polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                                             polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -61497,7 +61497,7 @@ mirror ([-1, 0, 0]) {
                     scale ([1.1, 1, 1]) {
                       translate ([0, -10, 0]) {
                         rotate (a=90.0, v=[-1, 0, 0]) {
-                          rotate_extrude ($fn=180) {
+                          rotate_extrude () {
                             difference () {
                               polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                               polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -61708,7 +61708,7 @@ mirror ([-1, 0, 0]) {
                       scale ([1.1, 1, 1]) {
                         translate ([0, -10, 0]) {
                           rotate (a=90.0, v=[-1, 0, 0]) {
-                            rotate_extrude ($fn=180) {
+                            rotate_extrude () {
                               difference () {
                                 polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                 polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -61921,7 +61921,7 @@ mirror ([-1, 0, 0]) {
                                 scale ([1.1, 1, 1]) {
                                   translate ([0, -10, 0]) {
                                     rotate (a=90.0, v=[-1, 0, 0]) {
-                                      rotate_extrude ($fn=180) {
+                                      rotate_extrude () {
                                         difference () {
                                           polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                           polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -62132,7 +62132,7 @@ mirror ([-1, 0, 0]) {
                                   scale ([1.1, 1, 1]) {
                                     translate ([0, -10, 0]) {
                                       rotate (a=90.0, v=[-1, 0, 0]) {
-                                        rotate_extrude ($fn=180) {
+                                        rotate_extrude () {
                                           difference () {
                                             polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                             polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -62346,7 +62346,7 @@ mirror ([-1, 0, 0]) {
                                   scale ([1.1, 1, 1]) {
                                     translate ([0, -10, 0]) {
                                       rotate (a=90.0, v=[-1, 0, 0]) {
-                                        rotate_extrude ($fn=180) {
+                                        rotate_extrude () {
                                           difference () {
                                             polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                             polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
@@ -62557,7 +62557,7 @@ mirror ([-1, 0, 0]) {
                                     scale ([1.1, 1, 1]) {
                                       translate ([0, -10, 0]) {
                                         rotate (a=90.0, v=[-1, 0, 0]) {
-                                          rotate_extrude ($fn=180) {
+                                          rotate_extrude () {
                                             difference () {
                                               polygon (points=[[0, 0], [40, 0], [63, 43], [0, 100], [0, 100]]);
                                               polygon (points=[[40, 0], [652097/16200, 7747/16200], [63, 43]]);
