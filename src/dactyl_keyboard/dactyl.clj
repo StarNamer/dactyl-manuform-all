@@ -903,7 +903,8 @@
                        (bottom-hull
                              (key-place x 0 web-post-tl)
                              (key-place (- x 1) 0 web-post-tr))
-                       (bottom-hull (bottom-place (- x 1/2) 0 (translate [0 back-offset 1] wall-cube-bottom-back))
+                       ((if (= x 4) bottom-hull hull)
+                             (bottom-place (- x 1/2) 0 (translate [0 back-offset 1] wall-cube-bottom-back))
                              (key-place x 0 web-post-tl)
                              (key-place (- x 1) 0 web-post-tr))))
                     [(bottom-hull (bottom-place left-wall-column 0 (translate [left-offset back-offset 1.2] wall-cube-bottom-back))
