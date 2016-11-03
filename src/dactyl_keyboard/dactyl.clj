@@ -1196,16 +1196,18 @@
 
 (def dactyl-bottom-left
   (mirror [-1 0 0]
+        (difference
           (union
-           io-exp-cover
+           teensy-cover
            (difference
             bottom-plate
             (hull io-exp-cover)
             new-case
-            io-exp-cover
+            teensy-cover
             trrs-cutout
             (->> (cube 1000 1000 10) (translate [0 0 -5]))
-            screw-holes))))
+            screw-holes))
+          usb-cutout)))
 
 (def dactyl-top-right
   (difference
