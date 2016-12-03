@@ -86,7 +86,7 @@
 ;; Placement Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def columns (range 0 6))
+(def columns (range -2 6))
 (def rows (range 0 5))
 
 (def α (/ π 12))
@@ -101,7 +101,9 @@
 
 (defn placement-condition [column row]
   (and (or (not (<= column 0))
-           (not= row 4))))
+           (not= row 4))
+       (or (not (< column 0))
+           (not= row 3))))
 
 (defn key-place [column row shape]
   (let [row-placed-shape (->> shape
