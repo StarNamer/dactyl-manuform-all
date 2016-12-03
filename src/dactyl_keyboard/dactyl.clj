@@ -496,8 +496,8 @@
      
      (hull (place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
            (place (+ left-wall-column 1) 0  (translate [0 -1 1] wall-sphere-bottom-back))
-           (key-place 0 0 web-post-tl)
-           (key-place 0 0 web-post-tr))
+           (key-place -2 0 web-post-tl)
+           (key-place -2 0 web-post-tr))
 
      (hull (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (place right-wall-column 0 (translate [0 -1 1] wall-sphere-bottom-back))
@@ -505,7 +505,7 @@
            (key-place 5 0 web-post-tr))
 
      (apply union
-            (for [x (range 1 5)]
+            (for [x (range -1 5)]
               (union
                (hull (place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
                      (place (+ x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
@@ -517,7 +517,8 @@
      (hull (place (- 5 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (key-place 4 0 web-post-tr)
-           (key-place 5 0 web-post-tl)))))
+     (key-place 5 0 web-post-tl))
+     )))
 
 (def right-wall
   (let [place case-place]
