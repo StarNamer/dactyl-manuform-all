@@ -1,7 +1,9 @@
-# The Dactyl Keyboard
-The Dactyl is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
+# The OctaDactyl Keyboard
+The OctaDactyl is a parameterized, split-hand, concave, columnar, ergonomic keyboard forked from the [Dactyl keyboard](https://github.com/adereth/dactyl-keyboard).
 
-<img src="https://raw.githubusercontent.com/adereth/dactyl-cave/master/resources/glamourshot.png"/>
+The OctaDactyl extends and modifies the Dactyl by adding a few extra columns of keys and applying a few other minor tweaks.
+
+<img src="https://raw.githubusercontent.com/praabjerg/octadactyl-keyboard/master/resources/octadactyl.png"/>
 
 ## Assembly
 
@@ -35,6 +37,6 @@ A [very rough guide for the brave is here](guide/README.org#wiring) - It will be
 
 ## License
 
-Copyright © 2015 Matthew Adereth
+Copyright © 2015 Matthew Adereth, 2016 Palle Raabjerg
 
 The source code for generating the models (everything excluding the [things/](things/) and [resources/](resources/) directories is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).  The generated models and PCB designs are distributed under the [Creative Commons Attribution-NonCommercial-ShareAlike License Version 3.0](LICENSE-models).
