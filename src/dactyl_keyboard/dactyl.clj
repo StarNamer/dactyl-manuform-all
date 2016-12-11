@@ -239,23 +239,25 @@
          (rotate (/ π 12) [1 1 0])
          (translate [-52 -45 40]))))
 
-(defn thumb-2x-column [shape]
-  (thumb-place 0 -1/2 shape))
+(defn thumb-right-column [shape]
+  (union (thumb-place 0 -1/2 shape)
+         (thumb-place 0 1 shape)))
 
-(defn thumb-2x+1-column [shape]
-  (union (thumb-place 1 -1/2 shape)
+(defn thumb-middle-column [shape]
+  (union (thumb-place 1 -1 shape)
+         (thumb-place 1 0 shape)
          (thumb-place 1 1 shape)))
 
-(defn thumb-1x-column [shape]
+(defn thumb-left-column [shape]
   (union (thumb-place 2 -1 shape)
          (thumb-place 2 0 shape)
          (thumb-place 2 1 shape)))
 
 (defn thumb-layout [shape]
   (union
-   (thumb-2x-column shape)
-   (thumb-2x+1-column shape)
-   (thumb-1x-column shape)))
+   (thumb-right-column shape)
+   (thumb-middle-column shape)
+   (thumb-left-column shape)))
 
 (def double-plates
   (let [plate-height (/ (- sa-double-length mount-height) 2)
@@ -282,12 +284,14 @@
   (union
    (apply union
           (concat
-           (for [column [2] row [1]]
+           (for [column [1 2] row [-1 0 1]
+                :when (or (not= column 1)
+                          (> row 0))]
              (triangle-hulls (thumb-place column row web-post-br)
                              (thumb-place column row web-post-tr)
                              (thumb-place (dec column) row web-post-bl)
                              (thumb-place (dec column) row web-post-tl)))
-           (for [column [2] row [0 1]]
+           (for [column [1 2] row [0 1]]
              (triangle-hulls
               (thumb-place column row web-post-bl)
               (thumb-place column row web-post-br)
@@ -304,35 +308,41 @@
                        (translate [0 (- plate-height) 0]))]
      (union
 
-      ;;Connecting the two doubles
-      (triangle-hulls (thumb-place 0 -1/2 thumb-tl)
-                      (thumb-place 0 -1/2 thumb-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 -1/2 thumb-br))
-
       ;;Connecting the double to the one above it
-      (triangle-hulls (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 -1/2 thumb-tl)
+      (triangle-hulls (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 thumb-tl)
+                      (thumb-place 0 1 web-post-br)
+                      (thumb-place 0 1 web-post-bl))
+
+      ;;Connecting the top middle diagonally with the bottom right
+      (triangle-hulls (thumb-place 0 1 web-post-bl)
+                      (thumb-place 0 -1/2 thumb-tl)
                       (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-bl))
+                      (thumb-place 1 0 web-post-tr))
 
-      ;;Connecting the 4 with the double in the bottom left
-      (triangle-hulls (thumb-place 1 1 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tl)
-                      (thumb-place 2 1 web-post-br)
-                      (thumb-place 2 0 web-post-tr))
+      ;;Connecting lower left four keys diagonally
+      (triangle-hulls (thumb-place 2 0 web-post-br)
+                      (thumb-place 2 -1 web-post-tr)
+                      (thumb-place 1 0 web-post-bl)
+                      (thumb-place 1 -1 web-post-tl))
 
-      ;;Connecting the two singles with the middle double
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 1 -1/2 thumb-bl)
-            (thumb-place 2 0 web-post-br)
-            (thumb-place 2 -1 web-post-tr))
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 2 0 web-post-tr)
-            (thumb-place 2 0 web-post-br))
-      (hull (thumb-place 1 -1/2 thumb-bl)
-            (thumb-place 2 -1 web-post-tr)
-            (thumb-place 2 -1 web-post-br))
+      ;;Connecting upper left four keys diagonally
+      (triangle-hulls (thumb-place 2 1 web-post-br)
+                      (thumb-place 2 0 web-post-tr)
+                      (thumb-place 1 1 web-post-bl)
+                      (thumb-place 1 0 web-post-tl))
+
+      ;;Connecting the two lower middle singles with the right double
+      (hull (thumb-place 0 -1/2 thumb-tl)
+            (thumb-place 0 -1/2 thumb-bl)
+            (thumb-place 1 0 web-post-br)
+            (thumb-place 1 -1 web-post-tr))
+      (hull (thumb-place 0 -1/2 thumb-tl)
+            (thumb-place 1 0 web-post-tr)
+            (thumb-place 1 0 web-post-br))
+      (hull (thumb-place 0 -1/2 thumb-bl)
+            (thumb-place 1 -1 web-post-tr)
+            (thumb-place 1 -1 web-post-br))
 
       ;;Connecting the thumb to everything
       (triangle-hulls (thumb-place 0 -1/2 thumb-br)
@@ -375,8 +385,7 @@
   (union
    thumb-connectors
    (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))
-   (thumb-place 0 -1/2 double-plates)
-   (thumb-place 1 -1/2 double-plates)))
+   (thumb-place 0 -1/2 double-plates)))
 
 ;;;;;;;;;;
 ;; Case ;;
