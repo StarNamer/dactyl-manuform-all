@@ -232,12 +232,12 @@
          (rotate (* α row) [1 0 0])
          (translate [0 0 row-radius])
          (translate [0 0 (- column-radius)])
-         (rotate (* column β) [0 1 0])
+         (rotate (* column β) [0 1 0])        ;; Thumb cluster built
          (translate [0 0 column-radius])
-         (translate [mount-width 0 0])         
-         (rotate (* π (- 1/4 3/16)) [0 0 1])
-         (rotate (/ π 12) [1 1 0])
-         (translate [-52 -45 40]))))
+         (translate [mount-width 0 0])        ;; Centered
+         (rotate (/ π 10) [0 1 0])            ;; Rotate around y
+         (rotate (* π (+ 1/5 1/32)) [0 0 1])  ;; Rotate around z
+         (translate [-62 -51.5 45]))))        ;; Move to final position
 
 (defn thumb-right-column [shape]
   (union (thumb-place 0 -1/2 shape)
@@ -274,11 +274,10 @@
     (union top-plate (mirror [0 1 0] top-plate))))
 
 (def thumbcaps
-  (union
-   (thumb-2x-column (sa-cap 2))
-   (thumb-place 1 -1/2 (sa-cap 2))
-   (thumb-place 1 1 (sa-cap 1))
-   (thumb-1x-column (sa-cap 1))))
+     (union (thumb-place 0 -1/2 (sa-cap 2))
+            (thumb-place 0 1 (sa-cap 1))
+            (thumb-middle-column (sa-cap 1))
+            (thumb-left-column (sa-cap 1))))
 
 (def thumb-connectors
   (union
@@ -346,40 +345,44 @@
 
       ;;Connecting the thumb to everything
       (triangle-hulls (thumb-place 0 -1/2 thumb-br)
+                      (thumb-place 0 -1/2 thumb-tr)
+                      (key-place 0 3 web-post-bl)
+                      (thumb-place 0 -1/2 thumb-br)
                       (key-place 1 4 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (key-place 0 3 web-post-bl)
                       (key-place 1 4 web-post-tl)
-                      (key-place 1 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
                       (key-place 0 3 web-post-br)
-                      (key-place 0 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
-                      (thumb-place 0 -1/2 thumb-tl)
-                      (key-place 0 3 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 1 web-post-br)
-                      (key-place 0 3 web-post-bl)
+                      (key-place 1 3 web-post-bl)
+                      (key-place 1 4 web-post-tl)
+                      (key-place 0 3 web-post-bl))
+      (triangle-hulls (key-place 0 3 web-post-bl)
                       (key-place 0 3 web-post-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-tr)
+                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 1 web-post-br)
                       (key-place 0 3 web-post-tl)
                       (key-place 0 2 web-post-bl)
-                      (thumb-place 1 1 web-post-tr)
+                      (thumb-place 0 1 web-post-br)
                       (key-place -1 2 web-post-br)
                       (key-place -1 2 web-post-bl)
-                      (thumb-place 1 1 web-post-tr)
-                      (thumb-place 1 1 web-post-tl)
-                      (thumb-place 2 1 web-post-tr)
+                      (thumb-place 0 1 web-post-br)
+                      (key-place -1 2 web-post-br)
+                      (thumb-place 0 1 web-post-tr)
                       (key-place -1 2 web-post-bl)
+                      (thumb-place 0 1 web-post-tl)
                       (key-place -2 2 web-post-br)
-                      (key-place -2 2 web-post-bl)
-                      (thumb-place 2 1 web-post-tr)
-                      (thumb-place 2 1 web-post-tl)
                       (key-place -2 2 web-post-bl))
-      (hull (thumb-place 0 -1/2 web-post-tr)
-            (thumb-place 0 -1/2 thumb-tr)
-            (key-place 1 4 web-post-bl)
-            (key-place 1 4 web-post-tl))))))
+      (hull (thumb-place 0 1 web-post-tl)
+            (key-place -2 2 web-post-bl)
+            (thumb-place 1 1 web-post-tr))
+      (hull (thumb-place 1 1 web-post-tr)
+            (key-place -2 2 web-post-bl)
+            (thumb-place 1 1 web-post-tl))
+      (hull (thumb-place 1 1 web-post-tl)
+            (key-place -2 2 web-post-bl)
+            (thumb-place 2 1 web-post-tr))
+      (hull (thumb-place 2 1 web-post-tr)
+            (key-place -2 2 web-post-bl)
+            (thumb-place 2 1 web-post-tl))))))
 
 (def thumb
   (union
