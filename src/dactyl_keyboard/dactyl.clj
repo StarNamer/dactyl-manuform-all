@@ -172,6 +172,44 @@
 (def web-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 (def web-post-br (translate [(- (/ mount-width 2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 
+(defn web-post-td-transform [shape]
+  (->> shape
+       (rotate (/ π -2) [1 0 0])
+       (translate [0 8 9])))
+
+(defn web-post-bu-transform [shape]
+  (->> shape
+       (rotate (/ π -2) [1 0 0])
+       (translate [0 -13 -5])))
+
+(defn web-post-td [shape]
+  (hull shape
+	(web-post-td-transform shape)))
+
+(defn web-post-bu [shape]
+  (hull shape
+	(web-post-bu-transform shape)))
+
+(def web-down-t
+     (hull
+      (web-post-td web-post-tl)
+      (web-post-td web-post-tr)))
+
+(def web-up-b
+     (hull
+      (web-post-bu web-post-br)
+      (web-post-bu web-post-bl)))
+
+(def web-down-plate-t
+     (hull
+      (web-post-td-transform web-post-tl)
+      (web-post-td-transform web-post-tr)))
+
+(def web-up-plate-b
+     (hull
+      (web-post-bu-transform web-post-bl)
+      (web-post-bu-transform web-post-br)))
+
 (defn triangle-hulls [& shapes]
   (apply union
          (map (partial apply hull)
@@ -214,19 +252,20 @@
 ;; Thumbs ;;
 ;;;;;;;;;;;;
 
+(def thumb-α (/ π 12))
+(def thumb-row-radius (+ (/ (/ (+ mount-height 1) 2)
+			    (Math/sin (/ α 2)))
+			 cap-top-height))
+(def thumb-β (/ π 36))
+(def thumb-column-radius (+ (/ (/ (+ mount-width 2) 2)
+			 (Math/sin (/ β 2)))
+		      cap-top-height))
+
 (defn thumb-place [column row shape]
-  (let [cap-top-height (+ plate-thickness sa-profile-key-height)
-        α (/ π 12)
-        row-radius (+ (/ (/ (+ mount-height 1) 2)
-                         (Math/sin (/ α 2)))
-                      cap-top-height)
-        β (/ π 36)
-        column-radius (+ (/ (/ (+ mount-width 2) 2)
-                            (Math/sin (/ β 2)))
-                         cap-top-height)
-        #_(+ (/ (/ (+ pillar-width 5) 2)
-                            (Math/sin (/ β 2)))
-                         cap-top-height)]
+  (let [α thumb-α
+        row-radius thumb-row-radius
+        β thumb-β
+        column-radius thumb-column-radius]
     (->> shape
          (translate [0 0 (- row-radius)])
          (rotate (* α row) [1 0 0])
@@ -240,8 +279,8 @@
          (translate [-52 -45 40]))))
 
 (defn thumb-right-column [shape]
-  (union (thumb-place 0 -1/2 shape)
-         (thumb-place 0 1 shape)))
+  (union (thumb-place 0 0 shape)
+	 (thumb-place 0 -1 shape)))
 
 (defn thumb-middle-column [shape]
   (union (thumb-place 1 -1 shape)
@@ -274,11 +313,10 @@
     (union top-plate (mirror [0 1 0] top-plate))))
 
 (def thumbcaps
-  (union
-   (thumb-2x-column (sa-cap 2))
-   (thumb-place 1 -1/2 (sa-cap 2))
-   (thumb-place 1 1 (sa-cap 1))
-   (thumb-1x-column (sa-cap 1))))
+     (union
+      (thumb-right-column (sa-cap 1))
+      (thumb-middle-column (sa-cap 1))
+      (thumb-left-column (sa-cap 1))))
 
 (def thumb-connectors
   (union
@@ -286,12 +324,14 @@
           (concat
            (for [column [1 2] row [-1 0 1]
                 :when (or (not= column 1)
-                          (> row 0))]
+			  (< row 1))]
              (triangle-hulls (thumb-place column row web-post-br)
                              (thumb-place column row web-post-tr)
                              (thumb-place (dec column) row web-post-bl)
                              (thumb-place (dec column) row web-post-tl)))
-           (for [column [1 2] row [0 1]]
+           (for [column [0 1 2] row [0 1]
+		:when (or (not= column 0)
+			  (< row 1))]
              (triangle-hulls
               (thumb-place column row web-post-bl)
               (thumb-place column row web-post-br)
@@ -308,18 +348,6 @@
                        (translate [0 (- plate-height) 0]))]
      (union
 
-      ;;Connecting the double to the one above it
-      (triangle-hulls (thumb-place 0 -1/2 thumb-tr)
-                      (thumb-place 0 -1/2 thumb-tl)
-                      (thumb-place 0 1 web-post-br)
-                      (thumb-place 0 1 web-post-bl))
-
-      ;;Connecting the top middle diagonally with the bottom right
-      (triangle-hulls (thumb-place 0 1 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 0 web-post-tr))
-
       ;;Connecting lower left four keys diagonally
       (triangle-hulls (thumb-place 2 0 web-post-br)
                       (thumb-place 2 -1 web-post-tr)
@@ -332,60 +360,76 @@
                       (thumb-place 1 1 web-post-bl)
                       (thumb-place 1 0 web-post-tl))
 
-      ;;Connecting the two lower middle singles with the right double
-      (hull (thumb-place 0 -1/2 thumb-tl)
-            (thumb-place 0 -1/2 thumb-bl)
-            (thumb-place 1 0 web-post-br)
-            (thumb-place 1 -1 web-post-tr))
-      (hull (thumb-place 0 -1/2 thumb-tl)
-            (thumb-place 1 0 web-post-tr)
-            (thumb-place 1 0 web-post-br))
-      (hull (thumb-place 0 -1/2 thumb-bl)
-            (thumb-place 1 -1 web-post-tr)
-            (thumb-place 1 -1 web-post-br))
+      ;;Connecting lower right four keys diagonally
+      (triangle-hulls (thumb-place 1 0 web-post-br)
+                      (thumb-place 1 -1 web-post-tr)
+                      (thumb-place 0 0 web-post-bl)
+                      (thumb-place 0 -1 web-post-tl))
+
+      (thumb-place 2 1 web-down-t)
+      (key-place -2 2 web-up-b)
+      ;;Connect
+      (hull
+       (key-place -2 2 web-up-plate-b)
+       (thumb-place 2 1 web-down-plate-t))
+      (hull
+       (thumb-place 2 1 (web-post-td-transform web-post-tr))
+       (thumb-place 1 1 (web-post-td-transform web-post-tl))
+       (key-place -2 2 (web-post-bu-transform web-post-br))
+       (key-place -1 2 (web-post-bu-transform web-post-bl)))
+      (hull
+       (thumb-place 1 1 (web-post-td-transform web-post-tr))
+       (thumb-place 1 1 (web-post-td-transform web-post-tl))
+       (key-place -1 2 (web-post-bu-transform web-post-bl)))
+      (hull
+       (thumb-place 1 1 (web-post-td-transform web-post-tr))
+       (key-place -1 2 (web-post-bu-transform web-post-bl))
+       (key-place -1 2 (web-post-bu-transform web-post-br)))
+
+      (hull
+       (thumb-place 2 1 (web-post-td web-post-tr))
+       (thumb-place 1 1 (web-post-td web-post-tl)))
+      (thumb-place 1 1 web-down-t)
+
+      (hull
+       (key-place -2 2 (web-post-bu web-post-br))
+       (key-place -1 2 (web-post-bu web-post-bl)))
+      (key-place -1 2 web-up-b)
+      (hull
+       (key-place -1 2 (web-post-bu web-post-br))
+       (key-place 0 2 (web-post-bu web-post-bl)))
 
       ;;Connecting the thumb to everything
-      (triangle-hulls (thumb-place 0 -1/2 thumb-br)
+      (triangle-hulls (thumb-place 0 -1 web-post-br)
                       (key-place 1 4 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+		      (thumb-place 0 -1 web-post-tr)
+                      (key-place 1 4 web-post-bl)
+		      (thumb-place 0 0 web-post-br)
+                      (key-place 1 4 web-post-bl)
+		      (thumb-place 0 0 web-post-tr)
                       (key-place 1 4 web-post-tl)
                       (key-place 1 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+		      (thumb-place 0 0 web-post-tr)
                       (key-place 0 3 web-post-br)
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
-                      (thumb-place 0 -1/2 thumb-tl)
+		      (thumb-place 0 0 web-post-tr)
+		      (thumb-place 0 0 web-post-tl)
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 1 web-post-br)
+		      (thumb-place 1 0 web-post-tr)
+		      (thumb-place 1 1 web-post-br)
                       (key-place 0 3 web-post-bl)
-                      (key-place 0 3 web-post-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-tr)
+		      (thumb-place 1 1 web-post-tr)
                       (key-place 0 3 web-post-tl)
                       (key-place 0 2 web-post-bl)
-                      (thumb-place 1 1 web-post-tr)
+		      (thumb-place 1 1 web-post-tr)
                       (key-place -1 2 web-post-br)
-                      (key-place -1 2 web-post-bl)
-                      (thumb-place 1 1 web-post-tr)
-                      (thumb-place 1 1 web-post-tl)
-                      (thumb-place 2 1 web-post-tr)
-                      (key-place -1 2 web-post-bl)
-                      (key-place -2 2 web-post-br)
-                      (key-place -2 2 web-post-bl)
-                      (thumb-place 2 1 web-post-tr)
-                      (thumb-place 2 1 web-post-tl)
-                      (key-place -2 2 web-post-bl))
-      (hull (thumb-place 0 -1/2 web-post-tr)
-            (thumb-place 0 -1/2 thumb-tr)
-            (key-place 1 4 web-post-bl)
-            (key-place 1 4 web-post-tl))))))
+		      (thumb-place 1 1 (web-post-td-transform web-post-tr)))
+      ))))
 
 (def thumb
   (union
    thumb-connectors
-   (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))
-   (thumb-place 0 -1/2 double-plates)))
+   (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))))
 
 ;;;;;;;;;;
 ;; Case ;;
