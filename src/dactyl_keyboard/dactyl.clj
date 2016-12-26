@@ -103,7 +103,9 @@
   (and (or (not (<= column 0))
            (not= row 4))
        (or (not (< column 0))
-           (not= row 3))))
+           (not= row 3))
+       (or (not (> column 4))
+	   (< row 3))))
 
 (defn key-place [column row shape]
   (let [row-placed-shape (->> shape
@@ -140,27 +142,49 @@
          (rotate (/ π 12) [0 1 0])
          (translate [0 0 13]))))
 
+(def web-thickness 3.5)
+
+(def plate-height (/ (- sa-double-length mount-height) 2))
+
+(def double-plates
+  (let [top-plate (->> (cube mount-width plate-height web-thickness)
+                       (translate [0 (/ (+ plate-height mount-height) 2)
+                                   (- plate-thickness (/ web-thickness 2))]))
+        stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
+                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
+                                      (color [1 0 0 1/2]))
+                                 (->> (cube 16 3.5 web-thickness)
+                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
+                                      (color [1 0 0 1/2])))
+        top-plate (difference top-plate stabilizer-cutout)]
+    (union top-plate (mirror [0 1 0] top-plate))))
+
 (def key-holes
-  (apply union
-         (for [column columns
-               row rows
-               :when (placement-condition column row)]
-           (->> single-plate
-                (key-place column row)))))
+     (union
+      (apply union
+	     (for [column columns
+		  row rows
+		  :when (placement-condition column row)]
+		  (->> single-plate
+		       (key-place column row))))
+      (key-place 5 (+ 3 1/2) double-plates)
+      (key-place 5 (+ 3 1/2) single-plate)
+      ))
 
 (def caps
-  (apply union
-         (for [column columns
-               row rows
-               :when (placement-condition column row)]
-           (->> (sa-cap (if (= column 5) 1 1))
-                (key-place column row)))))
+     (union
+      (apply union
+	     (for [column columns
+		  row rows
+		  :when (placement-condition column row)]
+		  (->> (sa-cap (if (= column 5) 1 1))
+		       (key-place column row))))
+      (key-place 5 (+ 3 1/2) (sa-cap 2))
+      ))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Web Connectors ;;
 ;;;;;;;;;;;;;;;;;;;;
-
-(def web-thickness 3.5)
 (def post-size 0.1)
 (def web-post (->> (cube post-size post-size web-thickness)
                    (translate [0 0 (+ (/ web-thickness -2)
@@ -215,38 +239,89 @@
          (map (partial apply hull)
               (partition 3 1 shapes))))
 
+(def long-tl (->> web-post-tl
+		  (translate [0 plate-height 0])))
+(def long-bl (->> web-post-bl
+		  (translate [0 (- plate-height) 0])))
+(def long-tr (->> web-post-tr
+		  (translate [0 plate-height 0])))
+(def long-br (->> web-post-br
+		  (translate [0 (- plate-height) 0])))
+
 (def connectors
-  (apply union
-         (concat
-          ;; Row connections
-          (for [column (drop-last columns)
-                row rows
-                :when (placement-condition column row)]
-            (triangle-hulls
-             (key-place (inc column) row web-post-tl)
-             (key-place column row web-post-tr)
-             (key-place (inc column) row web-post-bl)
-             (key-place column row web-post-br)))
+     (union
+      (apply union
+	     (concat
+	      ;; Row connections
+	      (for [column (drop-last 2 columns)
+		   row rows
+		   :when (placement-condition column row)]
+		   (triangle-hulls
+		    (key-place (inc column) row web-post-tl)
+		    (key-place column row web-post-tr)
+		    (key-place (inc column) row web-post-bl)
+		    (key-place column row web-post-br)))
 
-          ;; Column connections
-          (for [column columns
-                row (drop-last rows)
-                :when (placement-condition column (+ row 1))]
-            (triangle-hulls
-             (key-place column row web-post-bl)
-             (key-place column row web-post-br)
-             (key-place column (inc row) web-post-tl)
-             (key-place column (inc row) web-post-tr)))
+	      ;; Column connections
+	      (for [column columns
+		   row (drop-last rows)
+		   :when (placement-condition column (+ row 1))]
+		   (triangle-hulls
+		    (key-place column row web-post-bl)
+		    (key-place column row web-post-br)
+		    (key-place column (inc row) web-post-tl)
+		    (key-place column (inc row) web-post-tr)))
 
-          ;; Diagonal connections
-          (for [column (drop-last columns)
-                row (drop-last rows)
-                :when (placement-condition column (+ row 1))]
-            (triangle-hulls
-             (key-place column row web-post-br)
-             (key-place column (inc row) web-post-tr)
-             (key-place (inc column) row web-post-bl)
-             (key-place (inc column) (inc row) web-post-tl))))))
+	      ;; Last three column connections
+	      (for [row (drop-last 2 rows)]
+		   (triangle-hulls
+		    (key-place 5 row web-post-tl)
+		    (key-place 4 row web-post-tr)
+		    (key-place 5 row web-post-bl)
+		    (key-place 4 row web-post-br)))
+
+	      ;; Diagonal connections
+	      (for [column (drop-last 2 columns)
+		   row (drop-last rows)
+		   :when (placement-condition column (+ row 1))]
+		   (triangle-hulls
+		    (key-place column row web-post-br)
+		    (key-place column (inc row) web-post-tr)
+		    (key-place (inc column) row web-post-bl)
+		    (key-place (inc column) (inc row) web-post-tl)))
+
+	      ;; Last two diagonal connections
+	      (for [row (drop-last 3 rows)]
+		   (triangle-hulls
+		    (key-place 4 row web-post-br)
+		    (key-place 4 (inc row) web-post-tr)
+		    (key-place 5 row web-post-bl)
+		    (key-place 5 (inc row) web-post-tl)))
+	      ))
+
+      (union
+       (hull (key-place 5 (+ 3 1/2) long-tl)
+	     (key-place 5 (+ 3 1/2) long-bl)
+	     (key-place 4 3 web-post-br)
+	     (key-place 4 4 web-post-tr))
+       (hull (key-place 5 (+ 3 1/2) long-tl)
+	     (key-place 4 3 web-post-tr)
+	     (key-place 4 3 web-post-br))
+       (hull (key-place 5 (+ 3 1/2) long-bl)
+	     (key-place 4 4 web-post-tr)
+	     (key-place 4 4 web-post-br))
+
+       (hull (key-place 4 3 web-post-tr)
+	     (key-place 5 (+ 3 1/2) long-tl)
+	     (key-place 4 2 web-post-br))
+       (hull (key-place 4 2 web-post-br)
+	     (key-place 5 (+ 3 1/2) long-tl)
+	     (key-place 5 2 web-post-bl))
+       (hull (key-place 5 2 web-post-bl)
+	     (key-place 5 2 web-post-br)
+	     (key-place 5 (+ 3 1/2) long-tr)
+	     (key-place 5 (+ 3 1/2) long-tl))
+       )))
 
 ;;;;;;;;;;;;
 ;; Thumbs ;;
@@ -298,20 +373,6 @@
    (thumb-middle-column shape)
    (thumb-left-column shape)))
 
-(def double-plates
-  (let [plate-height (/ (- sa-double-length mount-height) 2)
-        top-plate (->> (cube mount-width plate-height web-thickness)
-                       (translate [0 (/ (+ plate-height mount-height) 2)
-                                   (- plate-thickness (/ web-thickness 2))]))
-        stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
-                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
-                                      (color [1 0 0 1/2]))
-                                 (->> (cube 16 3.5 web-thickness)
-                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
-                                      (color [1 0 0 1/2])))
-        top-plate (difference top-plate stabilizer-cutout)]
-    (union top-plate (mirror [0 1 0] top-plate))))
-
 (def thumbcaps
      (union
       (thumb-right-column (sa-cap 1))
@@ -337,15 +398,7 @@
               (thumb-place column row web-post-br)
               (thumb-place column (dec row) web-post-tl)
               (thumb-place column (dec row) web-post-tr)))))
-   (let [plate-height (/ (- sa-double-length mount-height) 2)
-         thumb-tl (->> web-post-tl
-                       (translate [0 plate-height 0]))
-         thumb-bl (->> web-post-bl
-                       (translate [0 (- plate-height) 0]))
-         thumb-tr (->> web-post-tr
-                       (translate [0 plate-height 0]))
-         thumb-br (->> web-post-br
-                       (translate [0 (- plate-height) 0]))]
+
      (union
 
       ;;Connecting lower left four keys diagonally
@@ -424,7 +477,7 @@
 		      (thumb-place 1 1 web-post-tr)
                       (key-place -1 2 web-post-br)
 		      (thumb-place 1 1 (web-post-td-transform web-post-tr)))
-      ))))
+      )))
 
 (def thumb
   (union
@@ -526,16 +579,16 @@
                      (key-place (- x 1) 4 web-post-br)))))
      (hull (place right-wall-column 4 (translate [0 1 1] wall-sphere-bottom-front))
            (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))           
-           (key-place 5 4 web-post-bl)
-           (key-place 5 4 web-post-br))
+           (key-place 5 (+ 3 1/2) long-bl)
+           (key-place 5 (+ 3 1/2) long-br))
      (hull (place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
            (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (key-place 4 4 web-post-br)
-           (key-place 5 4 web-post-bl))
+	   (key-place 4 4 web-post-br)
+	   (key-place 5 (+ 3 1/2) long-bl))
      (hull (place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
            (place 1.7 4 (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 1 4 web-post-bl)
-           (key-place 1 4 web-post-br)))))
+	   (key-place 1 4 web-post-br)))))
 
 (def back-wall
   (let [step wall-step
@@ -588,7 +641,7 @@
      )))
 
 (def right-wall
-  (let [place case-place]
+     (let [place case-place]
     (union
      (apply union
             (map (partial apply hull)
@@ -600,24 +653,33 @@
 
           (apply union
             (concat
-             (for [x (range 0 5)]
+             (for [x (range 0 3)]
                (union
-                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))                     
+                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                       (key-place 5 x web-post-br)
                       (key-place 5 x web-post-tr))))
-             (for [x (range 0 4)]
+             (for [x (range 0 2)]
                (union
                 (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                       (place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                       (key-place 5 x web-post-br)
                       (key-place 5 (inc x) web-post-tr))))
              [(union
-               (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
-                     (key-place 5 0 web-post-tr))
-               (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
-                     (key-place 5 4 web-post-br)))])))))
+	       (hull (place right-wall-column 2 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+		     (place right-wall-column 3 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+		     (key-place 5 2 web-post-br)
+		     (key-place 5 (+ 3 1/2) long-tr))
+	       (hull (place right-wall-column 3 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+		     (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+		     (key-place 5 (+ 3 1/2) long-br)
+		     (key-place 5 (+ 3 1/2) long-tr))
+	       (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+		     (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+		     (key-place 5 0 web-post-tr))
+	       (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+		     (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
+		     (key-place 5 (+ 3 1/2) long-br))
+	       )])))))
 
 (def left-wall
   (let [place case-place]
@@ -696,16 +758,7 @@
 (def thumb-front-wall
   (let [step wall-step ;;0.1
         wall-sphere-top-fronttep 0.05 ;;0.05
-        place thumb-place
-        plate-height (/ (- sa-double-length mount-height) 2)
-        thumb-tl (->> web-post-tl
-                      (translate [0 plate-height 0]))
-        thumb-bl (->> web-post-bl
-                      (translate [0 (- plate-height) 0]))
-        thumb-tr (->> web-post-tr
-                      (translate [-0 plate-height 0]))
-        thumb-br (->> web-post-br
-                      (translate [-0 (- plate-height) 0]))]
+        place thumb-place]
     (union
      (apply union
             (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
@@ -723,7 +776,7 @@
 
      (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
            (key-place 1 4 web-post-bl)
-           (place 0 -1/2 thumb-br)
+           (place 0 -1/2 long-br)
            (place 0 -1/2 web-post-br)
            (case-place 0.7 4 wall-sphere-bottom-front))
 
@@ -734,13 +787,13 @@
 
      (hull (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 0 -1/2 thumb-br))
+           (place 0 -1/2 long-bl)
+           (place 0 -1/2 long-br))
      (hull (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-br)
+           (place 0 -1/2 long-bl)
+           (place 1 -1/2 long-bl)
+           (place 1 -1/2 long-br)
            (place 2 -1 web-post-br)))))
 
 (def new-case  
@@ -749,7 +802,7 @@
          back-wall
          left-wall
          thumb-left-wall
-         thumb-front-wall))
+	 thumb-front-wall))
 
 ;;;;;;;;;;;;
 ;; Bottom ;;
