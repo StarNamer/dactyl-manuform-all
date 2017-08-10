@@ -18,7 +18,7 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-#_(def single-plate
+(def mx-single-plate
     (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                         (translate [0
                                     (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -45,7 +45,7 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+(def alps-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
@@ -168,7 +168,7 @@
                row rows
                :when (or (not= column 0)
                          (not= row 4))]
-           (->> single-plate
+           (->> mx-single-plate
                 (key-place column row)))))
 
 (def caps
@@ -413,7 +413,7 @@
 (def thumb
 
   (union
-   (thumb-layout (rotate (/ Math/PI 2) [0 0 1] single-plate))
+   (thumb-layout (rotate (/ Math/PI 2) [0 0 1] mx-single-plate))
    (color [1 0 0] thumb-connectors)
 
    #_(thumb-place 0 -1/2 (extended-plates 2))
@@ -1125,6 +1125,7 @@
   (union
    (key-place (+ 4 1/2) 3/2 screw-hole)
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
+   (key-place (+ 1 1/4) 3/2 screw-hole)
    (thumb-place 2 0 screw-hole)))
 
 (defn circuit-cover [width length height]
@@ -1268,73 +1269,49 @@
    (union key-holes
           connectors
           thumb
-          new-case
-          teensy-support
-          #_caps)
+          new-case)
    trrs-hole-just-circle
-   screw-holes))
+   screw-holes)
+   )
 
 (def dactyl-bottom-right
-  (difference
-   (union
-    teensy-cover
-    (difference
-     bottom-plate
-     (hull teensy-cover)
-     new-case
-     teensy-cover
-     trrs-cutout
-     (->> (cube 1000 1000 10) (translate [0 0 -5]))
-     screw-holes))
-   usb-cutout
-   dactyl-top-right))
-
+    (union
+       io-exp-cover
+       (difference
+        bottom-plate
+        (hull io-exp-cover)
+        new-case
+        io-exp-cover
+        trrs-cutout
+        (->> (cube 1000 1000 10) (translate [0 0 -5]))
+        screw-holes))
+)
+           
 (def dactyl-bottom-left
   (mirror [-1 0 0]
-          (union
-           io-exp-cover
-           (difference
-            bottom-plate
-            (hull io-exp-cover)
-            new-case
-            io-exp-cover
-            trrs-cutout
-            (->> (cube 1000 1000 10) (translate [0 0 -5]))
-            screw-holes))))
+    (difference
+       (union
+        teensy-cover
+        (difference
+         bottom-plate
+         (hull teensy-cover)
+         new-case
+         teensy-cover
+         trrs-cutout
+         (->> (cube 1000 1000 10) (translate [0 0 -5]))
+         screw-holes))
+       usb-cutout
+       dactyl-top-right)))
 
+           
+(spit "things/lightcycle-top-right.scad"
+    (write-scad dactyl-top-right))
 
+(spit "things/lightcycle-top-left.scad"
+    (write-scad (mirror [-1 0 0] dactyl-top-right)))
 
-(def dactyl-top-left
-  (mirror [-1 0 0]
-          (difference
-           (union key-holes
-                  connectors
-                  thumb
-                  new-case)
-           trrs-hole-just-circle
-           screw-holes)))
+(spit "things/lightcycle-bottom-right.scad"
+    (write-scad dactyl-bottom-right))
 
-(comment
-  (spit "things/lightcycle-cherry-top-right.scad"
-        (write-scad dactyl-top-right))
-
-  (spit "things/lightcycle-cherry-bottom-right.scad"
-        (write-scad dactyl-bottom-right))
-
-  (spit "things/lightcycle-cherry-top-left.scad"
-        (write-scad dactyl-top-left))
-
-  (spit "things/lightcycle-cherry-bottom-left.scad"
-        (write-scad dactyl-bottom-left)))
-
-(spit "things/lightcycle-matias-top-right.scad"
-      (write-scad dactyl-top-right))
-
-(spit "things/lightcycle-matias-bottom-right.scad"
-      (write-scad dactyl-bottom-right))
-
-(spit "things/lightcycle-matias-top-left.scad"
-      (write-scad dactyl-top-left))
-
-(spit "things/lightcycle-matias-bottom-left.scad"
-      (write-scad dactyl-bottom-left))
+(spit "things/lightcycle-bottom-left.scad"
+    (write-scad dactyl-bottom-left))
