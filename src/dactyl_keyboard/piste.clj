@@ -247,8 +247,8 @@
                             (Math/sin (/ β 2)))
                          cap-top-height)
         #_(+ (/ (/ (+ pillar-width 5) 2)
-                            (Math/sin (/ β 2)))
-                         cap-top-height)]
+                (Math/sin (/ β 2)))
+             cap-top-height)]
     (->> shape
          (translate [0 0 (- row-radius)])
          (rotate (* α row) [1 0 0])
@@ -262,10 +262,10 @@
          (translate [-52 -45 40]))))
 
 (defn thumb-2x-column [shape]
-  (thumb-place 0 -1/2 shape))
+  (thumb-place 0 -1/2 (rotate (/ π 2) [0 0 1] shape)))
 
 (defn thumb-2x+1-column [shape]
-  (union (thumb-place 1 -1/2 shape)
+  (union (thumb-place 1 -1/2 (rotate (/ π 2) [0 0 1] shape))
          (thumb-place 1 1 shape)))
 
 (defn thumb-1x-column [shape]
@@ -273,12 +273,10 @@
          (thumb-place 2 0 shape)
          (thumb-place 2 1 shape)))
 
-(defn thumb-layout [shape]
-  (union
-   (thumb-2x-column shape)
-   (thumb-2x+1-column shape)
-   (thumb-1x-column shape)))
 
+
+(= (* 2 sa-length)
+   sa-double-length)
 (def double-plates
   (let [plate-height (/ (- sa-double-length mount-height) 2)
         top-plate (->> (cube mount-width plate-height web-thickness)
@@ -290,8 +288,41 @@
                                  (->> (cube 16 3.5 web-thickness)
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
                                       (color [1 0 0 1/2])))
-        top-plate (difference top-plate stabilizer-cutout)]
-    (union top-plate (mirror [0 1 0] top-plate))))
+        ;;top-plate (difference top-plate stabilizer-cutout)
+        ]
+    (color [1 0 0] (union top-plate (mirror [0 1 0] top-plate)))))
+
+(defn extended-plate-height [size] (/ (- (* (+ 1 sa-length) size) mount-height) 2))
+
+(defn extended-plates [size]
+  (let [plate-height (extended-plate-height size)
+        top-plate (->> (cube mount-width plate-height web-thickness)
+                       (translate [0 (/ (+ plate-height mount-height) 2)
+                                   (- plate-thickness (/ web-thickness 2))]))]
+    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))
+    ))
+
+(defn thumb-layout [shape]
+  (union
+   (thumb-place 0 -1/2 (union shape (extended-plates 2)))
+
+   (thumb-place 1 7/8 (union shape (extended-plates 1.25)))
+   (thumb-place 1 -5/8 (union shape (extended-plates 1.75)))
+
+   (thumb-place 2 -3/4 (union shape (extended-plates 1.5)))
+   (thumb-place 2 3/4 (union shape (extended-plates 1.5)))
+   ))
+
+(defn thumb-layout-bottom [shape]
+  (union
+   (thumb-place 0 -1/2 shape)
+
+   (thumb-place 1 7/8 shape)
+   (thumb-place 1 -5/8 shape)
+
+   (thumb-place 2 -3/4 shape)
+   (thumb-place 2 3/4 shape)
+   ))
 
 (def thumbcaps
   (union
@@ -302,89 +333,91 @@
 
 (def thumb-connectors
   (union
-   (apply union
-          (concat
-           (for [column [2] row [1]]
-             (triangle-hulls (thumb-place column row web-post-br)
-                             (thumb-place column row web-post-tr)
-                             (thumb-place (dec column) row web-post-bl)
-                             (thumb-place (dec column) row web-post-tl)))
-           (for [column [2] row [0 1]]
-             (triangle-hulls
-              (thumb-place column row web-post-bl)
-              (thumb-place column row web-post-br)
-              (thumb-place column (dec row) web-post-tl)
-              (thumb-place column (dec row) web-post-tr)))))
-   (let [plate-height (/ (- sa-double-length mount-height) 2)
-         thumb-tl (->> web-post-tl
-                       (translate [0 plate-height 0]))
-         thumb-bl (->> web-post-bl
-                       (translate [0 (- plate-height) 0]))
-         thumb-tr (->> web-post-tr
-                       (translate [0 plate-height 0]))
-         thumb-br (->> web-post-br
-                       (translate [0 (- plate-height) 0]))]
+   #_(apply union
+            (concat
+             (for [column [2] row [1]]
+               (triangle-hulls (thumb-place column row web-post-br)
+                               (thumb-place column row web-post-tr)
+                               (thumb-place (dec column) row web-post-bl)
+                               (thumb-place (dec column) row web-post-tl)))
+             (for [column [2] row [0 1]]
+               (triangle-hulls
+                (thumb-place column row web-post-bl)
+                (thumb-place column row web-post-br)
+                (thumb-place column (dec row) web-post-tl)
+                (thumb-place column (dec row) web-post-tr)))))
+   (let [thumb-tl #(->> web-post-tl
+                        (translate [0 (extended-plate-height %) 0]))
+         thumb-bl #(->> web-post-bl
+                        (translate [0 (- (extended-plate-height %)) 0]))
+         thumb-tr #(->> web-post-tr
+                        (translate [0 (extended-plate-height %) 0]))
+         thumb-br #(->> web-post-br
+                        (translate [0 (- (extended-plate-height %)) 0]))]
      (union
 
-      ;;Connecting the two doubles
-      (triangle-hulls (thumb-place 0 -1/2 thumb-tl)
-                      (thumb-place 0 -1/2 thumb-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 -1/2 thumb-br))
+      ;;Connecting the double to 1.75
+      (triangle-hulls (thumb-place 0 -1/2 (thumb-tl 2))
+                      (thumb-place 0 -1/2 (thumb-bl 2))
+                      (thumb-place 1 -5/8 (thumb-br 1.75))
+                      (thumb-place 0 -1/2 (thumb-tl 2))
+                      (thumb-place 1 -5/8 (thumb-tr 1.75))
+                      (thumb-place 1 7/8 (thumb-br 1.25)))
 
-      ;;Connecting the double to the one above it
-      (triangle-hulls (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 -1/2 thumb-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-bl))
+      (triangle-hulls (thumb-place 1 7/8 (thumb-br 1.25))
+                      (thumb-place 1 7/8 (thumb-bl 1.25))
+                      (thumb-place 1 -5/8 (thumb-tr 1.75))
+                      (thumb-place 1 -5/8 (thumb-tl 1.75)))
 
-      ;;Connecting the 4 with the double in the bottom left
-      (triangle-hulls (thumb-place 1 1 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tl)
-                      (thumb-place 2 1 web-post-br)
-                      (thumb-place 2 0 web-post-tr))
+      (triangle-hulls (thumb-place 2 3/4 (thumb-br 1.5))
+                      (thumb-place 2 3/4 (thumb-bl 1.5))
+                      (thumb-place 2 -3/4 (thumb-tr 1.5))
+                      (thumb-place 2 -3/4 (thumb-tl 1.5)))
 
-      ;;Connecting the two singles with the middle double
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 1 -1/2 thumb-bl)
-            (thumb-place 2 0 web-post-br)
-            (thumb-place 2 -1 web-post-tr))
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 2 0 web-post-tr)
-            (thumb-place 2 0 web-post-br))
-      (hull (thumb-place 1 -1/2 thumb-bl)
-            (thumb-place 2 -1 web-post-tr)
-            (thumb-place 2 -1 web-post-br))
+      (triangle-hulls (thumb-place 2 3/4 (thumb-br 1.5))
+                      (thumb-place 2 3/4 (thumb-bl 1.5))
+                      (thumb-place 2 -3/4 (thumb-tr 1.5))
+                      (thumb-place 2 -3/4 (thumb-tl 1.5)))
+
+      (triangle-hulls (thumb-place 2 -3/4 (thumb-br 1.5))
+                      (thumb-place 1 -5/8 (thumb-bl 1.75))
+                      (thumb-place 2 -3/4 (thumb-tr 1.5))
+                      (thumb-place 1 -5/8 (thumb-tl 1.75))
+                      (thumb-place 2 3/4 (thumb-br 1.5))
+                      (thumb-place 1 7/8 (thumb-bl 1.25))
+                      (thumb-place 2 3/4 (thumb-tr 1.5))
+                      (thumb-place 1 7/8 (thumb-tl 1.25))
+                      )
+
 
       ;;Connecting the thumb to everything
-      (triangle-hulls (thumb-place 0 -1/2 thumb-br)
+      (triangle-hulls (thumb-place 0 -1/2 (thumb-br 2))
                       (key-place 1 4 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 (thumb-tr 2))
                       (key-place 1 4 web-post-tl)
                       (key-place 1 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 (thumb-tr 2))
                       (key-place 0 3 web-post-br)
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
-                      (thumb-place 0 -1/2 thumb-tl)
+                      (thumb-place 0 -1/2 (thumb-tr 2))
+                      (thumb-place 0 -1/2 (thumb-tl 2))
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 1 web-post-br)
+                      (thumb-place 1 -5/8 (thumb-tr 1.75))
+                      (thumb-place 1 7/8 (thumb-br 1.25))
                       (key-place 0 3 web-post-bl)
                       (key-place 0 3 web-post-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-tr))
-      (hull (thumb-place 0 -1/2 web-post-tr)
-            (thumb-place 0 -1/2 thumb-tr)
-            (key-place 1 4 web-post-bl)
-            (key-place 1 4 web-post-tl))))))
+                      (thumb-place 1 7/8 (thumb-br 1.25))
+                      (thumb-place 1 7/8 (thumb-tr 1.25))
+                      )))))
 
 (def thumb
+
   (union
-   thumb-connectors
-   (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))
-   (thumb-place 0 -1/2 double-plates)
-   (thumb-place 1 -1/2 double-plates)))
+   (thumb-layout (rotate (/ Math/PI 2) [0 0 1] single-plate))
+   (color [1 0 0] thumb-connectors)
+
+   #_(thumb-place 0 -1/2 (extended-plates 2))
+   #_(thumb-place 1 -1/2 double-plates)))
 
 ;;;;;;;;;;
 ;; Case ;;
@@ -435,9 +468,9 @@
 (def wall-sphere-top-front (wall-sphere-top 0))
 
 (defn top-case-cover [place-fn sphere
-                 x-start x-end
-                 y-start y-end
-                 step]
+                      x-start x-end
+                      y-start y-end
+                      step]
   (apply union
          (for [x (range-inclusive x-start (- x-end step) step)
                y (range-inclusive y-start (- y-end step) step)]
@@ -734,7 +767,7 @@
                           (not= row 4))]
             (->> bottom-key-guard
                  (key-place column row))))
-   (thumb-layout (rotate (/ π 2) [0 0 1] bottom-key-guard))
+   (thumb-layout-bottom (rotate (/ π 2) [0 0 1] bottom-key-guard))
    (apply union
           (for [column columns
                 row [(last rows)] ;;
@@ -860,63 +893,58 @@
                       (hull (place left-wall-column 1.6666  (translate [1 0 1] wall-sphere-bottom-front))
                             (key-place 0 2 web-post-bl)
                             (key-place 0 3 web-post-tl))])
-         thumbs [(hull (thumb-place 0 -1/2 web-post-bl)
-                       (thumb-place 0 -1/2 web-post-tl)
-                       (thumb-place 1 -1/2 web-post-tr)
-                       (thumb-place 1 -1/2 web-post-br))
-                 (hull (thumb-place 1 -1/2 web-post-tr)
-                       (thumb-place 1 -1/2 web-post-tl)
-                       (thumb-place 1 1 web-post-bl)
-                       (thumb-place 1 1 web-post-br))
-                 (hull (thumb-place 2 -1 web-post-tr)
-                       (thumb-place 2 -1 web-post-tl)
-                       (thumb-place 2 0 web-post-bl)
-                       (thumb-place 2 0 web-post-br))
-                 (hull (thumb-place 2 0 web-post-tr)
-                       (thumb-place 2 0 web-post-tl)
-                       (thumb-place 2 1 web-post-bl)
-                       (thumb-place 2 1 web-post-br))
-                 (triangle-hulls (thumb-place 2 1 web-post-tr)
-                                 (thumb-place 1 1 web-post-tl)
-                                 (thumb-place 2 1 web-post-br)
-                                 (thumb-place 1 1 web-post-bl)
-                                 (thumb-place 2 0 web-post-tr)
-                                 (thumb-place 1 -1/2 web-post-tl)
-                                 (thumb-place 2 0 web-post-br)
-                                 (thumb-place 1 -1/2 web-post-bl)
-                                 (thumb-place 2 -1 web-post-tr)
-                                 (thumb-place 2 -1 web-post-br))
-                 (hull (thumb-place 2 -1 web-post-br)
-                       (thumb-place 1 -1/2 web-post-bl)
-                       (thumb-place 1 -1 web-post-bl))
-                 (hull (thumb-place 1 -1/2 web-post-bl)
-                       (thumb-place 1 -1 web-post-bl)
-                       (thumb-place 1 -1/2 web-post-br)
-                       (thumb-place 1 -1 web-post-br))
-                 (hull (thumb-place 0 -1/2 web-post-bl)
-                       (thumb-place 0 -1 web-post-bl)
-                       (thumb-place 0 -1/2 web-post-br)
-                       (thumb-place 0 -1 web-post-br))
-                 (hull (thumb-place 0 -1/2 web-post-bl)
-                       (thumb-place 0 -1 web-post-bl)
-                       (thumb-place 1 -1/2 web-post-br)
-                       (thumb-place 1 -1 web-post-br))]
+         thumb-tl #(->> web-post-tl
+                        (translate [0 (extended-plate-height %) 0]))
+         thumb-bl #(->> web-post-bl
+                        (translate [0 (- (extended-plate-height %)) 0]))
+         thumb-tr #(->> web-post-tr
+                        (translate [0 (extended-plate-height %) 0]))
+         thumb-br #(->> web-post-br
+                        (translate [0 (- (extended-plate-height %)) 0]))
+
+         thumbs [(triangle-hulls (thumb-place 0 -1/2 web-post-tl)
+                                 (thumb-place 0 -1/2 web-post-bl)
+                                 (thumb-place 1 -5/8 web-post-tr)
+                                 (thumb-place 1 -5/8 web-post-br))
+                 (hull (thumb-place 1 -5/8 web-post-tr)
+                       (thumb-place 1 -5/8 web-post-tl)
+                       (thumb-place 1 7/8 web-post-bl)
+                       (thumb-place 1 7/8 web-post-br))
+                 (hull (thumb-place 2 -3/4 web-post-tr)
+                       (thumb-place 2 -3/4 web-post-tl)
+                       (thumb-place 2 3/4 web-post-bl)
+                       (thumb-place 2 3/4 web-post-br))
+                 (triangle-hulls (thumb-place 2 3/4 web-post-tr)
+                                 (thumb-place 1 7/8 web-post-tl)
+                                 (thumb-place 2 3/4 web-post-br)
+                                 (thumb-place 1 7/8 web-post-bl)
+                                 (thumb-place 2 -3/4 web-post-tr)
+                                 (thumb-place 1 -5/8 web-post-tl)
+                                 (thumb-place 2 -3/4 web-post-br)
+                                 (thumb-place 1 -5/8 web-post-bl)
+                                 )]
          thumb-back-wall [(hull
                            (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-                           (thumb-place 1 1 web-post-tr)
+                           (thumb-place 1 7/8 web-post-tr)
                            (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-                           (thumb-place 1 1 web-post-tl))
+                           (thumb-place 1 7/8 web-post-tl))
 
                           (hull
                            (thumb-place (+ 5/2 0.05) thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
                            (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-                           (thumb-place 1 1 web-post-tl)
-                           (thumb-place 2 1 web-post-tl))
+                           (thumb-place 1 7/8 web-post-tl)
+                           (thumb-place 2 3/4 web-post-tr))
+
+                          (hull
+                           (thumb-place (+ 5/2 0.05) thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
+                           (thumb-place 2 3/4 web-post-tl)
+                           (thumb-place 2 3/4 web-post-tr))
+
                           (hull
                            (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
                            (case-place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
                            (key-place 0 3 web-post-tl)
-                           (thumb-place 1 1 web-post-tr))
+                           (thumb-place 1 7/8 web-post-tr))
                           ]
          thumb-left-wall [(hull
                            (thumb-place thumb-left-wall-column thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
@@ -943,24 +971,26 @@
                            (thumb-place 2 -1 web-post-bl))]
          thumb-front-wall [(hull (thumb-place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
                                  (thumb-place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 2 -1 web-post-bl)
-                                 (thumb-place 2 -1 web-post-br))
+                                 (thumb-place 2 -3/4 web-post-bl)
+                                 (thumb-place 2 -3/4 web-post-br))
+
                            (hull (thumb-place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 0 -1 web-post-bl)
-                                 (thumb-place 1 -1 web-post-bl)
-                                 (thumb-place 1 -1 web-post-br)
-                                 (thumb-place 2 -1 web-post-br))
+                                 (thumb-place 1 -5/8 web-post-bl)
+                                 (thumb-place 1 -5/8 web-post-br)
+                                 (thumb-place 2 -3/4 web-post-br))
+
                            (hull (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
                                  (thumb-place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 0 -1 web-post-bl)
-                                 (thumb-place 0 -1 web-post-br))]
+                                 (thumb-place 0 -1/2 web-post-bl)
+                                 (thumb-place 1 -5/8 web-post-br)
+                                 (thumb-place 0 -1/2 web-post-br))]
          thumb-inside [(triangle-hulls
-                        (thumb-place 1 1 web-post-tr)
+                        (thumb-place 1 7/8 web-post-tr)
                         (key-place 0 3 web-post-tl)
-                        (thumb-place 1 1 web-post-br)
+                        (thumb-place 1 7/8 web-post-br)
                         (key-place 0 3 web-post-bl)
-                        (thumb-place 1 -1/2 web-post-tr)
+                        (thumb-place 1 -5/8 web-post-tr)
                         (thumb-place 0 -1/2 web-post-tl)
                         (key-place 0 3 web-post-bl)
                         (thumb-place 0 -1/2 web-post-tr)
@@ -982,12 +1012,19 @@
                         (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front)))
 
                        (hull
-                        (thumb-place 0 -1 web-post-br)
                         (thumb-place 0 -1/2 web-post-br)
                         (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
-                        (key-place 1 4 (translate [0 0 8.5] web-post-bl))
                         (key-place 1 4 half-post-bl)
-                        )]
+                        )
+
+                       (hull
+                        (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
+                        (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
+                        (thumb-place 0 -1/2 web-post-br)
+                        (thumb-place 0 -1/2 web-post-tr)
+                        )
+                       ]
+
          stands (let [bumper-diameter 9.6
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
@@ -1030,7 +1067,7 @@
    (key-place 1/2 1/2 screw-hole)
    (key-place (+ 4 1/2) 1/2 screw-hole)
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
-   (thumb-place 2 -1/2 screw-hole)))
+   (thumb-place 2 0 screw-hole)))
 
 (defn circuit-cover [width length height]
   (let [cover-sphere-radius 1
