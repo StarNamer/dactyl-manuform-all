@@ -467,18 +467,6 @@
 (def wall-sphere-bottom-front (wall-sphere-bottom 0))
 (def wall-sphere-top-front (wall-sphere-top 0))
 
-(defn top-case-cover [place-fn sphere
-                      x-start x-end
-                      y-start y-end
-                      step]
-  (apply union
-         (for [x (range-inclusive x-start (- x-end step) step)
-               y (range-inclusive y-start (- y-end step) step)]
-           (hull (place-fn x y sphere)
-                 (place-fn (+ x step) y sphere)
-                 (place-fn x (+ y step) sphere)
-                 (place-fn (+ x step) (+ y step) sphere)))))
-
 (def front-wall
   (let [step wall-step ;;0.1
         wall-step 0.05 ;;0.05
