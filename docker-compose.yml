@@ -5,4 +5,4 @@ services:
   clojure:
     build: .
     volumes:
-      - ./things-new:/dactyl/things
+      - ./things:/dactyl/things

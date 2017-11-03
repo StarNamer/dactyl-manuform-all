@@ -18,7 +18,7 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def old-single-plate
+(def single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -45,7 +45,7 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+#_(def single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
@@ -427,7 +427,7 @@
                     (+ (/ mount-height -2) -3.5)
                     (+ (/ mount-height 2) 3.5)
                     front-to-back-scale)
-                   10]))
+                   3.5]))
 
 (def wall-sphere-top-back (wall-sphere-top 1))
 (def wall-sphere-bottom-back (wall-sphere-bottom 1))
@@ -449,11 +449,7 @@
 (def front-wall
   (let [step wall-step ;;0.1
         wall-step 0.05 ;;0.05
-        place case-place
-        top-cover (fn [x-start x-end y-start y-end]
-                    (top-case-cover place wall-sphere-top-front
-                                    x-start x-end y-start y-end
-                                    wall-step))]
+        place case-place]
     (union
      (apply union
             (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
@@ -466,9 +462,6 @@
               (hull (place x 4 wall-sphere-top-front)
                     (place (+ x step) 4 wall-sphere-top-front)
                     (place 0.7 4 wall-sphere-bottom-front))))
-     (top-cover 0.5 1.7 3.6 4)
-     (top-cover 1.59 2.41 3.35 4) ;; was 3.32
-     (top-cover 2.39 3.41 3.6 4)
      (apply union
             (for [x (range 2 5)]
               (union
@@ -495,15 +488,7 @@
 (def back-wall
   (let [step wall-step
         wall-sphere-top-backtep 0.05
-        place case-place
-        front-top-cover (fn [x-start x-end y-start y-end]
-                          (apply union
-                                 (for [x (range-inclusive x-start (- x-end wall-sphere-top-backtep) wall-sphere-top-backtep)
-                                       y (range-inclusive y-start (- y-end wall-sphere-top-backtep) wall-sphere-top-backtep)]
-                                   (hull (place x y wall-sphere-top-back)
-                                         (place (+ x wall-sphere-top-backtep) y wall-sphere-top-back)
-                                         (place x (+ y wall-sphere-top-backtep) wall-sphere-top-back)
-                                         (place (+ x wall-sphere-top-backtep) (+ y wall-sphere-top-backtep) wall-sphere-top-back)))))]
+        place case-place]
     (union
      (apply union
             (for [x (range-inclusive left-wall-column (- right-wall-column step) step)]
@@ -511,10 +496,6 @@
                     (place (+ x step) back-y wall-sphere-top-back)
                     (place x back-y wall-sphere-bottom-back)
                     (place (+ x step) back-y wall-sphere-bottom-back))))
-     (front-top-cover 1.56 2.44 back-y 0.1)
-     (front-top-cover 3.56 4.44 back-y 0.13)
-     (front-top-cover 4.3 right-wall-column back-y 0.13)
-
 
      (hull (place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
            (place (+ left-wall-column 1) 0  (translate [0 -1 1] wall-sphere-bottom-back))
@@ -611,14 +592,6 @@
 (def thumb-back-wall
   (let [step wall-step
         top-step 0.05
-        front-top-cover (fn [x-start x-end y-start y-end]
-                          (apply union
-                                 (for [x (range-inclusive x-start (- x-end top-step) top-step)
-                                       y (range-inclusive y-start (- y-end top-step) top-step)]
-                                   (hull (thumb-place x y wall-sphere-top-back)
-                                         (thumb-place (+ x top-step) y wall-sphere-top-back)
-                                         (thumb-place x (+ y top-step) wall-sphere-top-back)
-                                         (thumb-place (+ x top-step) (+ y top-step) wall-sphere-top-back)))))
         back-y thumb-back-y]
     (union
      (apply union
@@ -1054,6 +1027,7 @@
 
 (def screw-holes
   (union
+   (key-place 1/2 1/2 screw-hole)
    (key-place (+ 4 1/2) 1/2 screw-hole)
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
    (thumb-place 2 -1/2 screw-hole)))
@@ -1196,54 +1170,53 @@
 
 (def dactyl-bottom-right
   (difference
-    (union
-      teensy-cover
-      (difference
-        bottom-plate
-        (hull teensy-cover)
-        new-case
-        teensy-cover
-        trrs-cutout
-        (->> (cube 1000 1000 10) (translate [0 0 -5]))
-        screw-holes))
-    usb-cutout))
+   (union
+    teensy-cover
+    (difference
+     bottom-plate
+     (hull teensy-cover)
+     new-case
+     teensy-cover
+     trrs-cutout
+     (->> (cube 1000 1000 10) (translate [0 0 -5]))
+     screw-holes))
+   usb-cutout))
 
 (def dactyl-bottom-left
   (mirror [-1 0 0]
-    (union
-      io-exp-cover
-      (difference
-        bottom-plate
-        (hull io-exp-cover)
-        new-case
-        io-exp-cover
-        trrs-cutout
-        (->> (cube 1000 1000 10) (translate [0 0 -5]))
-        screw-holes))))
+          (union
+           io-exp-cover
+           (difference
+            bottom-plate
+            (hull io-exp-cover)
+            new-case
+            io-exp-cover
+            trrs-cutout
+            (->> (cube 1000 1000 10) (translate [0 0 -5]))
+            screw-holes))))
 
 (def dactyl-top-right
   (difference
-    (union
-      key-holes
-      connectors
-      thumb
-      new-case
-      teensy-support)
-    trrs-hole-just-circle
-    screw-holes))
+   (union key-holes
+          connectors
+          thumb
+          new-case
+          teensy-support)
+   trrs-hole-just-circle
+   screw-holes))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
-    (difference
-      (union key-holes
-        connectors
-        thumb
-        new-case)
-      trrs-hole-just-circle
-      screw-holes)))
+          (difference
+           (union key-holes
+                  connectors
+                  thumb
+                  new-case)
+           trrs-hole-just-circle
+           screw-holes)))
 
-; (spit "things/piste-top-right.scad"
-;       (write-scad dactyl-top-right))
+(spit "things/piste-top-right.scad"
+      (write-scad dactyl-top-right))
 
 (spit "things/piste-bottom-right.scad"
       (write-scad dactyl-bottom-right))
