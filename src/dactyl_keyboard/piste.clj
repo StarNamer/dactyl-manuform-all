@@ -469,16 +469,16 @@
 
 (def front-wall
   (let [step wall-step ;;0.1
-        wall-step 0.05 ;;0.05
+        ; wall-step 0.05 ;;0.05
         place case-place]
     (union
-     (apply union
+     #_(apply union
             (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
               (hull (place x 4 wall-sphere-top-front)
                     (place (+ x step) 4 wall-sphere-top-front)
                     (place x 4 wall-sphere-bottom-front)
                     (place (+ x step) 4 wall-sphere-bottom-front))))
-     (apply union
+     #_(apply union
             (for [x (range-inclusive 0.5 0.7 0.01)]
               (hull (place x 4 wall-sphere-top-front)
                     (place (+ x step) 4 wall-sphere-top-front)
@@ -511,7 +511,7 @@
         wall-sphere-top-backtep 0.05
         place case-place]
     (union
-     (apply union
+     #_(apply union
             (for [x (range-inclusive left-wall-column (- right-wall-column step) step)]
               (hull (place x back-y wall-sphere-top-back)
                     (place (+ x step) back-y wall-sphere-top-back)
@@ -546,7 +546,7 @@
 (def right-wall
   (let [place case-place]
     (union
-     (apply union
+     #_(apply union
             (map (partial apply hull)
                  (partition 2 1
                             (for [scale (range-inclusive 0 1 0.01)]
@@ -578,13 +578,13 @@
 (def left-wall
   (let [place case-place]
     (union
-     (apply union
+     #_(apply union
             (for [x (range-inclusive -1 (- 1.6666 wall-step) wall-step)]
               (hull (place left-wall-column x wall-sphere-top-front)
                     (place left-wall-column (+ x wall-step) wall-sphere-top-front)
                     (place left-wall-column x wall-sphere-bottom-front)
                     (place left-wall-column (+ x wall-step) wall-sphere-bottom-front))))
-     (hull (place left-wall-column -1 wall-sphere-top-front)
+     #_(hull (place left-wall-column -1 wall-sphere-top-front)
            (place left-wall-column -1 wall-sphere-bottom-front)
            (place left-wall-column 0.02 wall-sphere-top-back)
            (place left-wall-column 0.02 wall-sphere-bottom-back))
@@ -615,16 +615,16 @@
         top-step 0.05
         back-y thumb-back-y]
     (union
-     (apply union
+     #_(apply union
             (for [x (range-inclusive 1/2 (- (+ 5/2 0.05) step) step)]
               (hull (thumb-place x back-y wall-sphere-top-back)
                     (thumb-place (+ x step) back-y wall-sphere-top-back)
                     (thumb-place x back-y wall-sphere-bottom-back)
                     (thumb-place (+ x step) back-y wall-sphere-bottom-back))))
-     (hull (thumb-place 1/2 back-y wall-sphere-top-back)
+     #_(hull (thumb-place 1/2 back-y wall-sphere-top-back)
            (thumb-place 1/2 back-y wall-sphere-bottom-back)
            (case-place left-wall-column 1.6666 wall-sphere-top-front))
-     (hull (thumb-place 1/2 back-y wall-sphere-bottom-back)
+     #_(hull (thumb-place 1/2 back-y wall-sphere-bottom-back)
            (case-place left-wall-column 1.6666 wall-sphere-top-front)
            (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
      (hull
@@ -642,13 +642,13 @@
   (let [step wall-step
         place thumb-place]
     (union
-     (apply union
+     #_(apply union
             (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
               (hull (place thumb-left-wall-column x wall-sphere-top-front)
                     (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
                     (place thumb-left-wall-column x wall-sphere-bottom-front)
                     (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))))
-     (hull (place thumb-left-wall-column 1.95 wall-sphere-top-front)
+     #_(hull (place thumb-left-wall-column 1.95 wall-sphere-top-front)
            (place thumb-left-wall-column 1.95 wall-sphere-bottom-front)
            (place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
            (place thumb-left-wall-column thumb-back-y wall-sphere-bottom-back))
@@ -691,21 +691,22 @@
         thumb-br (->> web-post-br
                       (translate [-0 (- plate-height) 0]))]
     (union
-     (apply union
+     #_(apply union
             (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
               (hull (place x thumb-front-row wall-sphere-top-front)
                     (place (+ x step) thumb-front-row wall-sphere-top-front)
                     (place x thumb-front-row wall-sphere-bottom-front)
                     (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
 
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-top-front)
+     #_(hull (place thumb-right-wall thumb-front-row wall-sphere-top-front)
            (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
            (case-place 0.5 4 wall-sphere-top-front))
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+     #_(hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
            (case-place 0.5 4 wall-sphere-top-front)
            (case-place 0.7 4 wall-sphere-bottom-front))
 
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+     ; (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+     (hull (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 1 4 web-post-bl)
            (place 0 -1/2 thumb-br)
            (place 0 -1/2 web-post-br)
@@ -1057,6 +1058,7 @@
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
    (thumb-place 2 0 screw-hole)))
 
+(def circuit-cover-offset-x 0.35)
 (def circuit-cover-offset-y 0.1)
 (defn circuit-cover [width length height]
   (let [cover-sphere-radius 1
@@ -1067,36 +1069,36 @@
         cover-sphere-y (+ (/ length 2) (+ cover-sphere-radius))
         cover-sphere-tl (->> cover-sphere
                              (translate [(- cover-sphere-x) (- cover-sphere-y) cover-sphere-z])
-                             (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                             (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
         cover-sphere-tr (->> cover-sphere
                              (translate [cover-sphere-x (- cover-sphere-y) cover-sphere-z])
-                             (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                             (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
         cover-sphere-br (->> cover-sphere
                              (translate [cover-sphere-x cover-sphere-y cover-sphere-z])
-                             (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                             (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
         cover-sphere-bl (->> cover-sphere
                              (translate [(- cover-sphere-x) cover-sphere-y cover-sphere-z])
-                             (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                             (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
 
         lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5.5)] %)
-        bl (->> cover-sphere lower-to-bottom (key-place 0 (+ 1/2 circuit-cover-offset-y)))
-        br (->> cover-sphere lower-to-bottom (key-place 1 (+ 1/2 circuit-cover-offset-y)))
-        tl (->> cover-sphere lower-to-bottom (key-place 0 (+ 5/2 circuit-cover-offset-y)))
-        tr (->> cover-sphere lower-to-bottom (key-place 1 (+ 5/2 circuit-cover-offset-y)))
+        bl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ 1/2 circuit-cover-offset-y)))
+        br (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ 1/2 circuit-cover-offset-y)))
+        tl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ 5/2 circuit-cover-offset-y)))
+        tr (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ 5/2 circuit-cover-offset-y)))
 
         mlb (->> cover-sphere
                  (translate [(- cover-sphere-x) 0 (+ (- height) -1)])
-                 (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                 (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
         mrb (->> cover-sphere
                  (translate [cover-sphere-x 0 (+ (- height) -1)])
-                 (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                 (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
 
         mlt (->> cover-sphere
                  (translate [(+ (- cover-sphere-x) -4) 0 -6])
-                 (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))
+                 (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
         mrt (->> cover-sphere
                  (translate [(+ cover-sphere-x 4) 0 -6])
-                 (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))]
+                 (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))]
     (union
      (hull cover-sphere-bl cover-sphere-br cover-sphere-tl cover-sphere-tr)
      (hull cover-sphere-br cover-sphere-bl bl br)
@@ -1120,18 +1122,19 @@
 (def trrs-diameter 6.6)
 (def trrs-radius (/ trrs-diameter 2))
 (def trrs-hole-depth 10)
+(def trrs-offset-z -0.1)
 
 (def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
                            (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
                                 (translate [0 (/ (+ trrs-radius 5) 2) 0])))
                     (rotate (/ π 2) [1 0 0])
-                    (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+                    (translate [0 (+ (/ mount-height 2) 4) (+ (- trrs-radius) trrs-offset-z)])
                     (with-fn 50)))
 
 (def trrs-hole-just-circle
   (->> (cylinder trrs-radius trrs-hole-depth)
        (rotate (/ π 2) [1 0 0])
-       (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+       (translate [0 (+ (/ mount-height 2) 4) (+ (- trrs-radius) trrs-offset-z)])
        (with-fn 50)
        (key-place 1/2 0)))
 
@@ -1142,7 +1145,7 @@
 (def trrs-cutout
   (->> (union trrs-hole
               trrs-box-hole)
-       (key-place 1/2 0)))
+       (key-place (+ 1/2 circuit-cover-offset-x) 0)))
 
 (def teensy-pcb-thickness 1.6)
 (def teensy-offset-height 5)
@@ -1188,11 +1191,22 @@
          (translate [0 (/ teensy-length 2) (- side-radius)])
          (translate [0 0 (- 1)])
          (translate [0 0 (- teensy-offset-height)])
-         (key-place 1/2 (+ 3/2 circuit-cover-offset-y)))))
+         (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; Final Export ;;
 ;;;;;;;;;;;;;;;;;;
+
+(def dactyl-top-right
+  (difference
+   (union key-holes
+          connectors
+          thumb
+          new-case
+          teensy-support
+          #_caps)
+   trrs-hole-just-circle
+   screw-holes))
 
 (def dactyl-bottom-right
   (difference
@@ -1208,6 +1222,16 @@
      screw-holes))
    usb-cutout))
 
+(def dactyl-top-left
+  (mirror [-1 0 0]
+          (difference
+           (union key-holes
+                  connectors
+                  thumb
+                  new-case)
+           trrs-hole-just-circle
+           screw-holes)))
+
 (def dactyl-bottom-left
   (mirror [-1 0 0]
           (union
@@ -1220,26 +1244,6 @@
             trrs-cutout
             (->> (cube 1000 1000 10) (translate [0 0 -5]))
             screw-holes))))
-
-(def dactyl-top-right
-  (difference
-   (union key-holes
-          connectors
-          thumb
-          new-case
-          teensy-support)
-   trrs-hole-just-circle
-   screw-holes))
-
-(def dactyl-top-left
-  (mirror [-1 0 0]
-          (difference
-           (union key-holes
-                  connectors
-                  thumb
-                  new-case)
-           trrs-hole-just-circle
-           screw-holes)))
 
 (spit "things/piste-top-right.scad"
       (write-scad dactyl-top-right))
