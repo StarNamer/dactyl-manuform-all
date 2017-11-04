@@ -469,7 +469,6 @@
 
 (def front-wall
   (let [step wall-step ;;0.1
-        ; wall-step 0.05 ;;0.05
         place case-place]
     (union
      #_(apply union
@@ -493,7 +492,7 @@
                (hull (place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                      (key-place x 4 web-post-bl)
                      (key-place (- x 1) 4 web-post-br)))))
-     (hull (place right-wall-column 4 (translate [0 1 1] wall-sphere-bottom-front))
+     (hull (place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
            (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 5 4 web-post-bl)
            (key-place 5 4 web-post-br))
@@ -524,7 +523,7 @@
            (key-place 0 0 web-post-tr))
 
      (hull (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
-           (place right-wall-column 0 (translate [0 -1 1] wall-sphere-bottom-back))
+           (place right-wall-column 0 (translate [-1 -1 1] wall-sphere-bottom-back))
            (key-place 5 0 web-post-tl)
            (key-place 5 0 web-post-tr))
 
@@ -569,7 +568,7 @@
                       (key-place 5 (inc x) web-post-tr))))
              [(union
                (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+                     (place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
                      (key-place 5 0 web-post-tr))
                (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                      (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
