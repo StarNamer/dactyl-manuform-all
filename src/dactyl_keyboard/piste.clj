@@ -494,21 +494,24 @@
   (union
     (apply union
       (concat
-       (for [x (range 0 5)]
+       [(hull (case-place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+              (case-place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+              (key-place 5 0 web-post-tr))]
+       (for [x (range 0 4)]
          (union
           (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                (key-place 5 x web-post-br)
-                (key-place 5 x web-post-tr))))
+                (key-place 5 x web-post-tr)
+                (key-place 5 x web-post-br))))
        (for [x (range 0 4)]
          (union
           (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                 (case-place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                (key-place 5 x web-post-br)
-                (key-place 5 (inc x) web-post-tr))))
+                (key-place 5 (inc x) web-post-tr)
+                (key-place 5 x web-post-br))))
        [(union
-         (hull (case-place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-               (case-place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
-               (key-place 5 0 web-post-tr))
+         (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+               (key-place 5 4 web-post-tr)
+               (key-place 5 4 web-post-br))
          (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                (case-place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
                (key-place 5 4 web-post-br)))]))))
@@ -738,29 +741,29 @@
                             (key-place 4 4 half-post-br)
                             (key-place 5 4 half-post-bl))
                       (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-                            (case-place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
+                            (case-place right-wall-column 4 (translate [0 1 1] (wall-sphere-bottom 0)))
                             (key-place 5 4 half-post-bl)
                             (key-place 5 4 half-post-br))])
          right-wall (concat
+                     [(hull (case-place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                            (case-place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+                            (key-place 5 0 web-post-tr))]
                      (for [x (range 0 4)]
-                       (hull (case-place (- right-wall-column shrink) x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (key-place 5 x web-post-br)
-                             (key-place 5 x web-post-tr)))
+                       (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                             (key-place 5 x web-post-tr)
+                             (key-place 5 x web-post-br)))
                      (for [x (range 0 4)]
-                       (hull (case-place (- right-wall-column shrink) x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place (- right-wall-column shrink) (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (key-place 5 x web-post-br)
-                             (key-place 5 (inc x) web-post-tr)))
+                       (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                             (case-place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                             (key-place 5 (inc x) web-post-tr)
+                             (key-place 5 x web-post-br)))
                      [(union
-                       (hull (case-place (- right-wall-column shrink) 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place (- right-wall-column shrink) 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
-                             (key-place 5 0 web-post-tr))
-                       (hull (case-place (- right-wall-column shrink) 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place (- right-wall-column shrink) 4 (translate [0 1 1] (wall-sphere-bottom 0)))
+                       (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                             (key-place 5 4 web-post-tr)
                              (key-place 5 4 half-post-br))
-                       (hull (case-place (- right-wall-column shrink) 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (key-place 5 4 half-post-br)
-                             (key-place 5 4 web-post-tr)))])
+                       (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                             (case-place right-wall-column 4 (translate [0 1 1] (wall-sphere-bottom 0)))
+                             (key-place 5 4 half-post-br)))])
          back-wall (concat
                     [(hull (case-place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
                            (case-place (- 5 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
