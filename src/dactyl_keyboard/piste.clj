@@ -437,42 +437,28 @@
 (def wall-sphere-top-front (wall-sphere-top 0))
 
 (def front-wall
-  (let [step wall-step ;;0.1
-        place case-place]
-    (union
-     #_(apply union
-            (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
-              (hull (place x 4 wall-sphere-top-front)
-                    (place (+ x step) 4 wall-sphere-top-front)
-                    (place x 4 wall-sphere-bottom-front)
-                    (place (+ x step) 4 wall-sphere-bottom-front))))
-     #_(apply union
-            (for [x (range-inclusive 0.5 0.7 0.01)]
-              (hull (place x 4 wall-sphere-top-front)
-                    (place (+ x step) 4 wall-sphere-top-front)
-                    (place 0.7 4 wall-sphere-bottom-front))))
-     (apply union
-            (for [x (range 2 5)]
-              (union
-               (hull (place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-                     (place (+ x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-                     (key-place x 4 web-post-bl)
-                     (key-place x 4 web-post-br))
-               (hull (place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-                     (key-place x 4 web-post-bl)
-                     (key-place (- x 1) 4 web-post-br)))))
-     (hull (place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
-           (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (key-place 5 4 web-post-bl)
-           (key-place 5 4 web-post-br))
-     (hull (place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (key-place 4 4 web-post-br)
-           (key-place 5 4 web-post-bl))
-     (hull (place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (place 1.7 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (key-place 1 4 web-post-bl)
-           (key-place 1 4 web-post-br)))))
+  (union
+    (hull (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
+          (case-place 1.5 4 (translate [0 1 1] wall-sphere-bottom-front))
+          (key-place 1 4 web-post-bl)
+          (key-place 1 4 web-post-br))
+    (apply union
+           (for [x (range 2 5)]
+             (union
+              (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+                    (case-place (+ x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+                    (key-place x 4 web-post-bl)
+                    (key-place x 4 web-post-br))
+              (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+                    (key-place x 4 web-post-bl)
+                    (key-place (- x 1) 4 web-post-br)))))
+    (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+          (key-place 4 4 web-post-br)
+          (key-place 5 4 web-post-bl))
+    (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+          (case-place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
+          (key-place 5 4 web-post-bl)
+          (key-place 5 4 web-post-br))))
 
 (def back-wall
   (let [step wall-step
@@ -633,8 +619,7 @@
       (thumb-place 2 -1/2 thumb-bl)))))
 
 (def thumb-front-wall
-  (let [step wall-step ;;0.1
-        plate-height (/ (- sa-double-length mount-height) 2)
+  (let [plate-height (/ (- sa-double-length mount-height) 2)
         thumb-tl (->> web-post-tl
                       (translate [0 plate-height 0]))
         thumb-bl (->> web-post-bl
@@ -644,12 +629,6 @@
         thumb-br (->> web-post-br
                       (translate [-0 (- plate-height) 0]))]
     (union
-     (hull (thumb-place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (key-place 1 4 web-post-bl)
-           (thumb-place 0 -1/2 thumb-br)
-           (thumb-place 0 -1/2 web-post-br)
-           (case-place 0.7 4 wall-sphere-bottom-front))
-
      (hull (thumb-place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (thumb-place 0.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (thumb-place 0 -1/2 thumb-br)
@@ -669,7 +648,11 @@
            (thumb-place 2 -1/2 thumb-br)
            (thumb-place 2 -1/2 thumb-bl))
 
-     )))
+     (hull (thumb-place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+           (key-place 1 4 web-post-bl)
+           (thumb-place 0 -1/2 thumb-br)
+           (thumb-place 0 -1/2 web-post-br)
+           (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))))))
 
 (def new-case
   (union front-wall
@@ -768,21 +751,20 @@
          front-wall (concat
                      (for [x (range 2 5)]
                        (union
-                        (hull (case-place (- x 1/2) (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
-                              (case-place (+ x 1/2) (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
+                        (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+                              (case-place (+ x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                               (key-place x 4 half-post-bl)
                               (key-place x 4 half-post-br))
-                        (hull (case-place (- x 1/2) (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
+                        (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                               (key-place x 4 half-post-bl)
                               (key-place (- x 1) 4 half-post-br))))
-                     [(hull (case-place right-wall-column (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
-                            (case-place (- right-wall-column 1) (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
-                            (key-place 5 4 half-post-bl)
-                            (key-place 5 4 half-post-br))
-                      (hull (case-place (+ 4 1/2) (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
-                            (case-place (- right-wall-column 1) (- 4 shrink) (translate [0 1 1] wall-sphere-bottom-front))
+                     [(hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                             (key-place 4 4 half-post-br)
-                            (key-place 5 4 half-post-bl))])
+                            (key-place 5 4 half-post-bl))
+                      (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
+                            (case-place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
+                            (key-place 5 4 half-post-bl)
+                            (key-place 5 4 half-post-br))])
          right-wall (concat
                      (for [x (range 0 4)]
                        (hull (case-place (- right-wall-column shrink) x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
@@ -964,12 +946,14 @@
                         (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front)))
 
                        (hull
+                        (key-place 1 4 half-post-bl)
                         (thumb-place 0 -1 web-post-br)
                         (thumb-place 0 -1/2 web-post-br)
+                        (thumb-place 0 -1/2 web-post-tr)
                         (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
-                        (key-place 1 4 (translate [0 0 8.5] web-post-bl))
-                        (key-place 1 4 half-post-bl)
-                        )]
+                        (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
+                       )
+                       ]
          stands (let [bumper-diameter 9.6
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
