@@ -498,16 +498,14 @@
               (case-place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
               (key-place 5 0 web-post-tr))]
        (for [x (range 0 4)]
-         (union
-          (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                (key-place 5 x web-post-tr)
-                (key-place 5 x web-post-br))))
+        (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+              (key-place 5 x web-post-tr)
+              (key-place 5 x web-post-br)))
        (for [x (range 0 4)]
-         (union
-          (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                (case-place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                (key-place 5 (inc x) web-post-tr)
-                (key-place 5 x web-post-br))))
+        (hull (case-place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+              (case-place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+              (key-place 5 (inc x) web-post-tr)
+              (key-place 5 x web-post-br)))
        [(union
          (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
                (key-place 5 4 web-post-tr)
@@ -670,7 +668,6 @@
             (->> bottom-front-key-guard
                  (key-place column row))))
    (let [shift #(translate [0 0 (+ (- web-thickness) -5)] %)
-         shrink 0.02
          web-post-tl (shift web-post-tl)
          web-post-tr (shift web-post-tr)
          web-post-br (shift web-post-br)
@@ -741,7 +738,7 @@
                             (key-place 4 4 half-post-br)
                             (key-place 5 4 half-post-bl))
                       (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
-                            (case-place right-wall-column 4 (translate [0 1 1] (wall-sphere-bottom 0)))
+                            (case-place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
                             (key-place 5 4 half-post-bl)
                             (key-place 5 4 half-post-br))])
          right-wall (concat
@@ -762,7 +759,7 @@
                              (key-place 5 4 web-post-tr)
                              (key-place 5 4 half-post-br))
                        (hull (case-place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place right-wall-column 4 (translate [0 1 1] (wall-sphere-bottom 0)))
+                             (case-place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
                              (key-place 5 4 half-post-br)))])
          back-wall (concat
                     [(hull (case-place right-wall-column 0 (translate [-1 -1 1] (wall-sphere-bottom 1)))
@@ -891,21 +888,21 @@
                            (thumb-place 2 -1.7 web-post-tl)
                            (thumb-place 2 -1/2 web-post-bl))]
          thumb-front-wall [(hull (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 0.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place 1/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 0 -1 web-post-br)
                                  (thumb-place 0 -1 web-post-bl))
-                           (hull (thumb-place 0.50 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                           (hull (thumb-place 1/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 0 -1 web-post-bl)
                                  (thumb-place 1 -1 web-post-br))
-                           (hull (thumb-place 0.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 1.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                           (hull (thumb-place 1/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place 3/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 1 -1 web-post-br)
                                  (thumb-place 1 -1 web-post-bl))
-                           (hull (thumb-place 1.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                           (hull (thumb-place 3/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 1 -1 web-post-bl)
                                  (thumb-place 2 -1 web-post-br))
-                           (hull (thumb-place 1.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 2.5 thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
+                           (hull (thumb-place 3/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place 5/2 thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
                                  (thumb-place 2 -1 web-post-br)
                                  (thumb-place 2 -1 web-post-bl))]
          thumb-inside [(triangle-hulls
@@ -987,7 +984,7 @@
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
    (thumb-place 3/2 1/2 screw-hole)))
 
-(def circuit-cover-offset-x 0.35)
+(def circuit-cover-offset-x 0.0)
 (def circuit-cover-offset-y 0.1)
 (defn circuit-cover [width length height]
   (let [cover-sphere-radius 1
@@ -1118,7 +1115,7 @@
                (mirror [-1 0 0] side-cylinder))
          (rotate (/ π 2) [1 0 0])
          (translate [0 (/ teensy-length 2) (- side-radius)])
-         (translate [0 0 (- 1)])
+         (translate [0 0 -2]) ;;-1
          (translate [0 0 (- teensy-offset-height)])
          (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))))
 
@@ -1145,11 +1142,12 @@
     (difference
      bottom-plate
      (hull teensy-cover)
-     #_new-case
+     new-case
      teensy-cover
      trrs-cutout
      (->> (cube 1000 1000 10) (translate [0 0 -5]))
-     screw-holes))
+     screw-holes)
+    #_dactyl-top-right)
    usb-cutout))
 
 (def dactyl-top-left
