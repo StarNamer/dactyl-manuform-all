@@ -935,7 +935,7 @@
                         (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
                        )
                        ]
-         stands (let [bumper-diameter 9.6
+         stands (let [bumper-diameter 9.0
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
                       stand-radius (/ stand-diameter 2)
@@ -949,7 +949,7 @@
                                             (->> (sphere bumper-radius)
                                                  (translate [0 0 (+ (/ stand-radius -2) -4.5)])
                                                  %
-                                                 (bottom 1.5)))]
+                                                 (bottom 0.5)))]
                   [(stand-at #(key-place 0 1 %))
                    (stand-at #(thumb-place 1 -1/2 %))
                    (stand-at #(key-place 5 0 %))
