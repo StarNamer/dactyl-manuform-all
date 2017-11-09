@@ -640,7 +640,6 @@
 ;; Bottom ;;
 ;;;;;;;;;;;;
 
-
 (def bottom-key-guard (->> (cube mount-width mount-height web-thickness)
                            (translate [0 0 (+ (- (/ web-thickness 2)) -4.5)])))
 (def bottom-front-key-guard (->> (cube mount-width (/ mount-height 2) web-thickness)
@@ -650,7 +649,7 @@
   (union
    (apply union
           (for [column columns
-                row (drop-last rows) ;;
+                row (drop-last rows)
                 :when (or (not= column 0)
                           (not= row 4))]
             (->> bottom-key-guard
@@ -1125,7 +1124,6 @@
           connectors
           thumb
           new-case
-          teensy-support
           #_caps
           #_thumbcaps)
    trrs-hole-just-circle
@@ -1138,23 +1136,20 @@
     (difference
      bottom-plate
      (hull teensy-cover)
-     new-case
+     (->> dactyl-top-right (translate [0 0 0.2]))
+     (->> (cube 21 2 2)
+          (key-place 2 0)
+          (translate [1.5 4.5 10.0])) ;; clean up trash
      teensy-cover
      trrs-cutout
-     (->> (cube 1000 1000 10) (translate [0 0 -5]))
+     (->> (cube 200 200 10) (translate [0 0 -5]))
      screw-holes)
     #_dactyl-top-right)
    usb-cutout))
 
 (def dactyl-top-left
   (mirror [-1 0 0]
-          (difference
-           (union key-holes
-                  connectors
-                  thumb
-                  new-case)
-           trrs-hole-just-circle
-           screw-holes)))
+          dactyl-top-right))
 
 (def dactyl-bottom-left
   (mirror [-1 0 0]
@@ -1163,10 +1158,13 @@
            (difference
             bottom-plate
             (hull io-exp-cover)
-            new-case
+            (->> dactyl-top-right (translate [0 0 0.2]))
+            (->> (cube 21 2 2)
+                 (key-place 2 0)
+                 (translate [1.5 4.5 10.0])) ;; clean up trash
             io-exp-cover
             trrs-cutout
-            (->> (cube 1000 1000 10) (translate [0 0 -5]))
+            (->> (cube 200 200 10) (translate [0 0 -5]))
             screw-holes))))
 
 (spit "things/piste-top-right.scad"
