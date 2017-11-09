@@ -471,7 +471,6 @@
    (hull (case-place (- 5 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
          (key-place 5 0 web-post-tl)
          (key-place 4 0 web-post-tr))
-
    (apply union
       (for [x (range 1 5)]
         (union
@@ -482,13 +481,10 @@
          (hull (case-place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
                (key-place x 0 web-post-tl)
                (key-place (- x 1) 0 web-post-tr)))))
-
-   (hull (case-place (+ 1 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
+   (hull (case-place (- 1 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
          (case-place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
          (key-place 0 0 web-post-tr)
-         (key-place 0 0 web-post-tl))
-
-   ))
+         (key-place 0 0 web-post-tl))))
 
 (def right-wall
   (union
@@ -778,7 +774,7 @@
                        (hull (case-place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
                              (key-place x 0 web-post-tl)
                              (key-place (- x 1) 0 web-post-tr))))
-                    [(hull (case-place (+ 1 1/2) 0  (translate [0 -1 1] wall-sphere-bottom-back))
+                    [(hull (case-place (- 1 1/2) 0  (translate [0 -1 1] wall-sphere-bottom-back))
                            (case-place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
                            (key-place 0 0 web-post-tr)
                            (key-place 0 0 web-post-tl))])
