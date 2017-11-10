@@ -460,7 +460,7 @@
               (hull (case-place (- x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                     (case-place (+ x 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
                     (key-place x 4 web-post-bl)
-                    (key-place x 4 web-post-br))
+                    (key-place x 4 web-post-br)))))
 
     (hull (case-place (+ 3 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
           (key-place 3 4 web-post-br)
@@ -468,7 +468,6 @@
     (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
           (key-place 4 4 web-post-br)
           (key-place 5 4 web-post-bl))
-
     (hull (case-place (+ 4 1/2) 4 (translate [0 1 1] wall-sphere-bottom-front))
           (case-place right-wall-column 4 (translate [-1 1 1] wall-sphere-bottom-front))
           (key-place 5 4 web-post-bl)
