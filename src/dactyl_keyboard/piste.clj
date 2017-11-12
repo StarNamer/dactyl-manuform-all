@@ -346,12 +346,12 @@
 
       ;;Connecting the two singles with the middle double
       (hull (thumb-place 1 -1/2 thumb-tl)
+            (thumb-place 2 0 web-post-tr)
+            (thumb-place 2 0 web-post-br))
+      (hull (thumb-place 1 -1/2 thumb-tl)
             (thumb-place 1 -1/2 thumb-bl)
             (thumb-place 2 0 web-post-br)
             (thumb-place 2 -1 web-post-tr))
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 2 0 web-post-tr)
-            (thumb-place 2 0 web-post-br))
       (hull (thumb-place 1 -1/2 thumb-bl)
             (thumb-place 2 -1 web-post-tr)
             (thumb-place 2 -1 web-post-br))
@@ -590,13 +590,22 @@
       (thumb-place 2 1 web-post-bl))
      (hull
       (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
-      (thumb-place 2 -1/2 thumb-tl)
+      (thumb-place 2 0 web-post-tl)
       (thumb-place 2 1 web-post-bl))
      (hull
       (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
-      (thumb-place 5/2 thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
-      (thumb-place 2 -1/2 thumb-tl)
-      (thumb-place 2 -1/2 thumb-bl)))))
+      (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
+      (thumb-place 2 0 web-post-tl)
+      (thumb-place 2 0 web-post-bl))
+     (hull
+      (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
+      (thumb-place 2 -1 web-post-tl)
+      (thumb-place 2 0 web-post-bl))
+     (hull
+      (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
+      (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
+      (thumb-place 2 -1 web-post-tl)
+      (thumb-place 2 -1 web-post-bl)))))
 
 (def thumb-front-wall
   (let [plate-height (/ (- sa-double-length mount-height) 2)
@@ -622,11 +631,11 @@
            (thumb-place 1 -1/2 thumb-bl))
      (hull (thumb-place 1.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (thumb-place 1 -1/2 thumb-bl)
-           (thumb-place 2 -1/2 thumb-br))
+           (thumb-place 2 -1 web-post-br))
      (hull (thumb-place 1.5 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (thumb-place 2.5 thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
-           (thumb-place 2 -1/2 thumb-br)
-           (thumb-place 2 -1/2 thumb-bl))
+           (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
+           (thumb-place 2 -1 web-post-bl)
+           (thumb-place 2 -1 web-post-br))
 
      (hull (thumb-place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
            (key-place 1 4 web-post-bl)
