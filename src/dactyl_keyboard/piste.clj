@@ -391,12 +391,12 @@
 ;;;;;;;;;;
 
 ;; In column units
-(def right-wall-column (+ (last columns) 0.55))
+(def right-wall-column (+ (last columns) 1/2))
 (def left-wall-column (- (first columns) 1/2))
-(def thumb-back-y 0.93)
+(def thumb-back-y 1)
 (def thumb-right-wall (- -1/2 0.05))
-(def thumb-front-row (+ -1 0.07))
-(def thumb-left-wall-column (+ 5/2 0.05))
+(def thumb-front-row -1)
+(def thumb-left-wall-column 5/2)
 (def back-y 0.02)
 
 (defn range-inclusive [start end step]
@@ -603,7 +603,7 @@
       (thumb-place 2 0 web-post-bl))
      (hull
       (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
-      (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
+      (thumb-place thumb-left-wall-column -1 (translate [1 1 1] wall-sphere-bottom-front))
       (thumb-place 2 -1 web-post-tl)
       (thumb-place 2 -1 web-post-bl)))))
 
@@ -633,7 +633,7 @@
            (thumb-place 1 -1/2 thumb-bl)
            (thumb-place 2 -1 web-post-br))
      (hull (thumb-place 3/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
+           (thumb-place thumb-left-wall-column -1 (translate [1 1 1] wall-sphere-bottom-front))
            (thumb-place 2 -1 web-post-bl)
            (thumb-place 2 -1 web-post-br))
 
@@ -894,7 +894,7 @@
                            (thumb-place 2 0 web-post-bl))
                           (hull
                            (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
-                           (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
+                           (thumb-place thumb-left-wall-column -1 (translate [1 1 1] wall-sphere-bottom-front))
                            (thumb-place 2 -1 web-post-tl)
                            (thumb-place 2 -1 web-post-bl))]
          thumb-front-wall [(hull (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
@@ -912,7 +912,7 @@
                                  (thumb-place 1 -1 web-post-bl)
                                  (thumb-place 2 -1 web-post-br))
                            (hull (thumb-place 3/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
+                                 (thumb-place thumb-left-wall-column -1 (translate [1 1 1] wall-sphere-bottom-front))
                                  (thumb-place 2 -1 web-post-br)
                                  (thumb-place 2 -1 web-post-bl))]
          thumb-inside [(triangle-hulls
@@ -1159,7 +1159,7 @@
      trrs-cutout
      (->> (cube 200 200 10) (translate [0 0 -5]))
      screw-holes)
-    #_(->> dactyl-top-right (translate [0 0 0.2])))
+    (->> dactyl-top-right (translate [0 0 0.2])))
    usb-cutout))
 
 (def dactyl-top-left
