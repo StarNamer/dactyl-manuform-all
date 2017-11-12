@@ -875,23 +875,28 @@
                            (thumb-place 2 1 web-post-tr)
                            (thumb-place 2 1 web-post-tl))]
          thumb-left-wall [(hull
-                          (thumb-place thumb-left-wall-column thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
-                          (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
+                           (thumb-place thumb-left-wall-column thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
+                           (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
                            (thumb-place 2 1 web-post-tl)
                            (thumb-place 2 1 web-post-bl))
                           (hull
                            (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
-                           (thumb-place 2 -1/2 web-post-tl)
+                           (thumb-place 2 0 web-post-tl)
                            (thumb-place 2 1 web-post-bl))
                           (hull
                            (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
-                           (thumb-place 2 -1/2 web-post-tl)
-                           (thumb-place 2 -1/2 web-post-bl))
+                           (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
+                           (thumb-place 2 0 web-post-tl)
+                           (thumb-place 2 0 web-post-bl))
                           (hull
-                           (thumb-place thumb-left-wall-column 0 (translate [1 0 1] wall-sphere-bottom-back))
+                           (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
+                           (thumb-place 2 -1 web-post-tl)
+                           (thumb-place 2 0 web-post-bl))
+                          (hull
+                           (thumb-place thumb-left-wall-column -1 (translate [1 0 1] wall-sphere-bottom-back))
                            (thumb-place thumb-left-wall-column (+ -1 0.07) (translate [1 1 1] wall-sphere-bottom-front))
-                           (thumb-place 2 -1.7 web-post-tl)
-                           (thumb-place 2 -1/2 web-post-bl))]
+                           (thumb-place 2 -1 web-post-tl)
+                           (thumb-place 2 -1 web-post-bl))]
          thumb-front-wall [(hull (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
                                  (thumb-place 1/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 0 -1 web-post-br)
@@ -1154,7 +1159,7 @@
      trrs-cutout
      (->> (cube 200 200 10) (translate [0 0 -5]))
      screw-holes)
-    #_dactyl-top-right)
+    #_(->> dactyl-top-right (translate [0 0 0.2])))
    usb-cutout))
 
 (def dactyl-top-left
