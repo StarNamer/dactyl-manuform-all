@@ -162,16 +162,11 @@
     (->> placed-shape
          (rotate (/ π 12) [0 1 0])
          (translate [0 0 13]))))
-(defn case-place-side [column row shape]
-      (case-place column row shape [0 -4.5 5.64]))
-(defn case-place-right [column row shape]
-      (case-place column row shape [0 -4.5 7.00]))
-(defn case-place-left [column row shape]
-      (case-place column row shape [0 -4.5 5.64]))
-(defn case-place-front [column row shape]
-      (case-place column row shape [0 -2.2 5.64]))
-(defn case-place-back [column row shape]
-      (case-place column row shape [0 -6.2 5.64]))
+(def case-place-side #(case-place %1 %2 %3 [0 -4.5 5.64]))
+(def case-place-right #(case-place %1 %2 %3 [0 -4.5 5.40]))
+(def case-place-left #(case-place %1 %2 %3 [0 -4.5 5.64]))
+(def case-place-front #(case-place %1 %2 %3 [0 -2.8 4.0]))
+(def case-place-back #(case-place %1 %2 %3 [0 -3.2 5.64]))
 
 (def key-holes
   (apply union
@@ -1156,6 +1151,8 @@
 ;; Final Export ;;
 ;;;;;;;;;;;;;;;;;;
 
+(def top-plate-diff [0 0 0.1])
+
 (def dactyl-top-right
   (difference
    (union key-holes
@@ -1174,15 +1171,15 @@
     (difference
      bottom-plate
      (hull teensy-cover)
-     (->> dactyl-top-right (translate [0 0 0.2]))
-     (->> (cube 21 2 2)
+     (->> dactyl-top-right (translate top-plate-diff))
+     #_(->> (cube 21 2 2)
           (key-place 2 0)
           (translate [1.5 4.5 10.0])) ;; clean up trash
      teensy-cover
      trrs-cutout
      (->> (cube 200 200 10) (translate [0 0 -5]))
      screw-holes)
-    #_(->> dactyl-top-right (translate [0 0 0.2])))
+    #_(->> dactyl-top-right (translate top-plate-diff)))
    usb-cutout))
 
 (def dactyl-top-left
@@ -1196,8 +1193,8 @@
            (difference
             bottom-plate
             (hull io-exp-cover)
-            (->> dactyl-top-right (translate [0 0 0.2]))
-            (->> (cube 21 2 2)
+            (->> dactyl-top-right (translate top-plate-diff))
+            #_(->> (cube 21 2 2)
                  (key-place 2 0)
                  (translate [1.5 4.5 10.0])) ;; clean up trash
             io-exp-cover
