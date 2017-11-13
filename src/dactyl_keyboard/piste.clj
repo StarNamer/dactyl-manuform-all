@@ -1007,15 +1007,16 @@
 
 (def screw-holes
   (union
-   (key-place 1/2 1/2 screw-hole)
-   (key-place (+ 4 1/2) 1/2 screw-hole)
-   (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
+   (key-place 0 1/2 screw-hole)
+   (key-place 5 1/2 screw-hole)
+   (key-place 5 (+ 3 1/2) screw-hole)
    (thumb-place 2 -1/2 screw-hole)))
 
-(def circuit-cover-offset-x 0.0)
-(def circuit-cover-offset-y 0.1)
+(def circuit-cover-offset-x 0)
+(def circuit-cover-offset-y 0)
 (defn circuit-cover [width length height]
-  (let [cover-sphere-radius 1
+  (let [cover-slope-y 0.14
+        cover-sphere-radius 1
         cover-sphere (->> (sphere cover-sphere-radius)
                           (with-fn 20))
         cover-sphere-z (+ (- height) (- cover-sphere-radius))
@@ -1035,10 +1036,10 @@
                              (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
 
         lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5.5)] %)
-        bl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ 1/2 circuit-cover-offset-y)))
-        br (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ 1/2 circuit-cover-offset-y)))
-        tl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ 5/2 circuit-cover-offset-y)))
-        tr (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ 5/2 circuit-cover-offset-y)))
+        bl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ (+ 1/2 cover-slope-y) circuit-cover-offset-y)))
+        br (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ (+ 1/2 cover-slope-y) circuit-cover-offset-y)))
+        tl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ (- 5/2 cover-slope-y) circuit-cover-offset-y)))
+        tr (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ (- 5/2 cover-slope-y) circuit-cover-offset-y)))
 
         mlb (->> cover-sphere
                  (translate [(- cover-sphere-x) 0 (+ (- height) -1)])
@@ -1066,9 +1067,9 @@
 (def io-exp-height 8)
 (def io-exp-length 36)
 
-(def teensy-width 20)
+(def teensy-width 22)
 (def teensy-height 12)
-(def teensy-length 33)
+(def teensy-length 30)
 
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
@@ -1142,7 +1143,7 @@
     (->> (hull side-cylinder
                (mirror [-1 0 0] side-cylinder))
          (rotate (/ π 2) [1 0 0])
-         (translate [0 (/ teensy-length 2) (- side-radius)])
+         (translate [0 (- teensy-length 10) (- side-radius)])
          (translate [0 0 -2]) ;;-1
          (translate [0 0 (- teensy-offset-height)])
          (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))))
@@ -1172,9 +1173,6 @@
      bottom-plate
      (hull teensy-cover)
      (->> dactyl-top-right (translate top-plate-diff))
-     #_(->> (cube 21 2 2)
-          (key-place 2 0)
-          (translate [1.5 4.5 10.0])) ;; clean up trash
      teensy-cover
      trrs-cutout
      (->> (cube 200 200 10) (translate [0 0 -5]))
@@ -1194,13 +1192,13 @@
             bottom-plate
             (hull io-exp-cover)
             (->> dactyl-top-right (translate top-plate-diff))
-            #_(->> (cube 21 2 2)
-                 (key-place 2 0)
-                 (translate [1.5 4.5 10.0])) ;; clean up trash
             io-exp-cover
             trrs-cutout
             (->> (cube 200 200 10) (translate [0 0 -5]))
             screw-holes))))
+
+(spit "things/piste-teensy-cover.scad"
+      (write-scad teensy-cover))
 
 (spit "things/piste-top-right.scad"
       (write-scad dactyl-top-right))
