@@ -626,11 +626,11 @@
                       (translate [-0 (- plate-height) 0]))]
     (union
      (hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
-           (thumb-place 0 -1/2 thumb-br)
-           (key-place 1 4 web-post-bl))
+           (thumb-place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+           (thumb-place 0 -1/2 thumb-br))
      (hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
            (thumb-place 0 -1/2 thumb-br)
-           (thumb-place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))))))
+           (key-place 1 4 web-post-bl)))))
 
 (def thumb-front-wall
   (let [plate-height (/ (- sa-double-length mount-height) 2)
@@ -921,7 +921,16 @@
                            (thumb-place thumb-left-wall-column thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
                            (thumb-place 2 -1 web-post-tl)
                            (thumb-place 2 -1 web-post-bl))]
-         thumb-front-wall [(hull (thumb-place thumb-right-wall-column thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
+         thumb-right-wall [(hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place 0 -1 web-post-br))
+                           (hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place 0 -1 web-post-br)
+                                 (thumb-place 0 -1/2 web-post-br))
+                           (hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
+                                 (thumb-place 0 -1/2 web-post-br)
+                                 (key-place 1 4 half-post-bl))]
+         thumb-front-wall [(hull (thumb-place thumb-right-wall-column thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 1/2 thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
                                  (thumb-place 0 -1 web-post-br)
                                  (thumb-place 0 -1 web-post-bl))
@@ -939,15 +948,6 @@
                                  (thumb-place thumb-left-wall-column thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
                                  (thumb-place 2 -1 web-post-br)
                                  (thumb-place 2 -1 web-post-bl))]
-         thumb-right-wall [(hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place thumb-right-wall-column thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 0 -1 web-post-br))
-                           (hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 0 -1 web-post-br)
-                                 (thumb-place 0 -1/2 web-post-br))
-                           (hull (case-place-front front-min-column 4 (translate [0 1 1] wall-sphere-bottom-front))
-                                 (thumb-place 0 -1/2 web-post-br)
-                                 (key-place 1 4 half-post-bl))]
          thumb-inside [(triangle-hulls
                         (thumb-place 1 1 web-post-tr)
                         (key-place 0 3 web-post-tl)
@@ -1195,7 +1195,8 @@
             io-exp-cover
             trrs-cutout
             (->> (cube 200 200 10) (translate [0 0 -5]))
-            screw-holes))))
+            screw-holes)
+           #_(->> dactyl-top-right (translate top-plate-diff)))))
 
 (spit "things/piste-teensy-cover.scad"
       (write-scad teensy-cover))
