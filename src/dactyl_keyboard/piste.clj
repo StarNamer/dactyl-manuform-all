@@ -1035,7 +1035,7 @@
                              (translate [(- cover-sphere-x) cover-sphere-y cover-sphere-z])
                              (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
 
-        lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5.5)] %)
+        lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5)] %)
         bl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ (+ 1/2 cover-slope-y) circuit-cover-offset-y)))
         br (->> cover-sphere lower-to-bottom (key-place (+ 1 circuit-cover-offset-x) (+ (+ 1/2 cover-slope-y) circuit-cover-offset-y)))
         tl (->> cover-sphere lower-to-bottom (key-place (+ 0 circuit-cover-offset-x) (+ (- 5/2 cover-slope-y) circuit-cover-offset-y)))
@@ -1049,10 +1049,10 @@
                  (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
 
         mlt (->> cover-sphere
-                 (translate [(+ (- cover-sphere-x) -4) 0 -6])
+                 (translate [(+ (- cover-sphere-x) -4) 0 -5.5])
                  (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))
         mrt (->> cover-sphere
-                 (translate [(+ cover-sphere-x 4) 0 -6])
+                 (translate [(+ cover-sphere-x 4) 0 -5.5])
                  (key-place (+ 1/2 circuit-cover-offset-x) (+ 3/2 circuit-cover-offset-y)))]
     (union
      (hull cover-sphere-bl cover-sphere-br cover-sphere-tl cover-sphere-tr)
