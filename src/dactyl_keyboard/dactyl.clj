@@ -5,7 +5,7 @@
             [unicode-math.core :refer :all]))
 
 
-(def nrows 6)
+(def nrows 5)
 (def ncols 6)                           ; it's not set up to change this
 (def lastrow (dec nrows))
 (def cornerrow (dec lastrow))
@@ -20,8 +20,8 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.4) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.4)
+(def keyswitch-height 13) ;; Was 14.1, then 14.25
+(def keyswitch-width 15.6)
 
 (def sa-profile-key-height 12.7)
 
@@ -29,7 +29,33 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
+(def alps-width 15.6)
+(def alps-notch-width 15.5)
+(def alps-notch-height 1)
+(def alps-height 13)
+
 (def single-plate
+  (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
+                      (translate [0
+                                  (+ (/ 2.2 2) (/ alps-height 2))
+                                  (/ plate-thickness 2)]))
+        left-wall (union (->> (cube 1.5 (+ keyswitch-height 3) plate-thickness)
+                              (translate [(+ (/ 1.5 2) (/ 15.6 2))
+                                          0
+                                          (/ plate-thickness 2)]))
+                         (->> (cube 1.5 (+ keyswitch-height 3) 1.0)
+                              (translate [(+ (/ 1.5 2) (/ alps-notch-width 2))
+                                          0
+                                          (- plate-thickness
+                                             (/ alps-notch-height 2))]))
+                         )
+        plate-half (union top-wall left-wall)]
+    (union plate-half
+           (->> plate-half
+                (mirror [1 0 0])
+                (mirror [0 1 0])))))
+
+(def mx-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -116,11 +142,12 @@
                               (rotate (* α (- centerrow row)) [1 0 0])      
                               (translate [0 0 row-radius]))
         column-offset (cond
-                        (= column 2) [0 2.82 -4.5]
-                        (>= column 4) [0 -5.8 5.64]
+                        (= column 2) [0 2.82 1.5]
+                        (= column 3) [0 0 -0.5]
+                        (>= column 4) [0 -5.8 -0.5]
                         ; (= column 22) [0 2.82 -4.5]
                         ; (>= column 24) [0 -5.8 5.64]
-                        :else [0 0 0])
+                        :else [0 0 4])
         column-angle (* β (- centercol column))   
         placed-shape (->> row-placed-shape
                           (translate [0 0 (- column-radius)])
@@ -288,8 +315,8 @@
 
 (def thumb
   (union
-   (thumb-1x-layout single-plate)
-   (thumb-15x-layout single-plate)
+   (thumb-1x-layout mx-single-plate)
+   (thumb-15x-layout mx-single-plate)
    (thumb-15x-layout larger-plate)
    ))
 
@@ -514,11 +541,12 @@
                    connectors
                    thumb
                    thumb-connectors
-                   (difference case-walls rj9-space usb-cutout)
-                   rj9-holder
-                   (if (= nrows 4) teensy-holder)
-                  ;  thumbcaps
-                  ;  caps
+                   (difference case-walls usb-cutout)
+                   ; rj9-holder
+                   ; (if (= nrows 4) teensy-holder)
+                   teensy-holder
+                   ; thumbcaps
+                   ; caps
                    )))
                    
 
