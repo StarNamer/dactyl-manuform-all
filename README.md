@@ -1,4 +1,4 @@
-# The Dactyl-ManuForm Keyboard
+# The Dactyl-ManuForm Keyboard - Modified for Kailh switches
 This is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard), a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
 ![Imgur](http://i.imgur.com/LdjEhrR.jpg)
