@@ -3,7 +3,8 @@
   (:require [scad-clj.scad :refer :all]
             [scad-clj.model :refer :all]
             [unicode-math.core :refer :all]
-            [clojure.core.matrix.operators :refer [+ - / *]]))
+			[unicode-math.core :refer :all]))
+            ;[clojure.core.matrix.operators :refer [+ - / *]]))
 
 (def ^:const LEFT 1)
 (def ^:const RIGHT 2)
@@ -23,11 +24,12 @@
 (def key-height 10.4) ; was 12.7, then 10.4
 (def dsa-profile-key-height 7.4)
 (def key-z (+ plate-thickness 3)) ; 3 is pressed, 7 is released
+(def sa-profile-key-height 12.7)
 
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def single-plate
+(def old-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -49,6 +51,32 @@
                 (mirror [1 0 0])
                 (mirror [0 1 0])))))
 
+				
+(def alps-width 15.6)
+(def alps-notch-width 15.5)
+(def alps-notch-height 1)
+(def alps-height 13)
+
+(def single-plate
+  (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
+                      (translate [0
+                                  (+ (/ 2.2 2) (/ alps-height 2))
+                                  (/ plate-thickness 2)]))
+        left-wall (union (->> (cube 1.5 (+ keyswitch-height 3) plate-thickness)
+                              (translate [(+ (/ 1.5 2) (/ 15.6 2))
+                                          0
+                                          (/ plate-thickness 2)]))
+                         (->> (cube 1.5 (+ keyswitch-height 3) 1.0)
+                              (translate [(+ (/ 1.5 2) (/ alps-notch-width 2))
+                                          0
+                                          (- plate-thickness
+                                             (/ alps-notch-height 2))]))
+                         )
+        plate-half (union top-wall left-wall)]
+    (union plate-half
+           (->> plate-half
+                (mirror [1 0 0])
+                (mirror [0 1 0])))))
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
 ;;;;;;;;;;;;;;;;
@@ -304,30 +332,63 @@
          (rotate (/ π 12) [1 1 0])
          (translate [-52 -45 40]))))
 
+
+(def thumb-cluster-spacing 2) ; key spacing for flat thumb cluster
+
+(defn thumb-place2 [column row heightfudge shape]
+  (let [cap-top-height (+ plate-thickness sa-profile-key-height)
+        α (/ π 12)
+        row-radius (+ (/ (/ (+ mount-height 1) 2)
+                         (Math/sin (/ α 2)))
+                      cap-top-height)
+        β (/ π 36)
+        column-radius (+ (/ (/ (+ mount-width 2) 2)
+                            (Math/sin (/ β 2)))
+                         cap-top-height)
+        #_(+ (/ (/ (+ pillar-width 5) 2)
+                            (Math/sin (/ β 2)))
+                         cap-top-height)
+		
+		zoffset0 (+ 40 heightfudge)]
+						 
+    (->> shape
+        
+         ;(rotate (* α row) [1 0 0])
+         ;(translate [0 0 row-radius])
+         ;(translate [0 0 (- column-radius)])
+         ;(rotate (* column β) [0 1 0])
+         ;(translate [0 0 column-radius])
+         (translate [mount-width 0 0])
+		 (translate [  (* (- (+ mount-width thumb-cluster-spacing)) column) (* (+ mount-width thumb-cluster-spacing) row) 0])
+         (rotate (* π (- 1/4 3/16)) [0 0 1])
+         (rotate (/ π 12) [1 1 0])
+         (translate [-52 -45 zoffset0]))))		 
+		 
 (defn thumb-2x-column [shape]
-  (thumb-place 0 -1/2 shape))
+  (thumb-place2 0 -1/2 0 shape))
 
 (defn thumb-2x+1-column [shape]
-  (union (thumb-place 1 -1/2 shape)
-         (thumb-place 1 1 shape)))
+  (union (thumb-place2 1 -1/2 0 shape)
+         (thumb-place2 1 1 6 shape)))
 
 (defn thumb-1x-column [shape]
-  (union (thumb-place 2 -1 shape)
-         (thumb-place 2 0 shape)
-         (thumb-place 2 1 shape)))
+  (union (thumb-place2 2 -1 -2 shape)
+         (thumb-place2 2 0  2 shape)
+         (thumb-place2 2 1 6 shape)))
 
 (defn thumb-layout [shape]
   (union
    (thumb-2x-column shape)
    (thumb-2x+1-column shape)
    (thumb-1x-column shape)))
+   
+
 
 (def double-plates
   (let [plate-height (/ (- sa-double-length mount-height) 2)
         top-plate (->> (cube mount-width plate-height web-thickness)
                        (translate [0 (/ (+ plate-height mount-height) 2)
                                    (- plate-thickness (/ web-thickness 2))]))
-        ; Costar or WASD stabilizers
         stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
                                       (color [1 0 0 1/2]))
@@ -340,8 +401,8 @@
 (def thumbcaps
   (union
    (thumb-2x-column (sa-cap 2))
-   (thumb-place 1 -1/2 (sa-cap 2))
-   (thumb-place 1 1 (sa-cap 1))
+   (thumb-place2 1 -1/2 0 (sa-cap 2))
+   (thumb-place2 1 1 6 (sa-cap 1))
    (thumb-1x-column (sa-cap 1))))
 
 (def thumb-connectors
@@ -349,16 +410,16 @@
    (apply union
           (concat
            (for [column [2] row [1]]
-             (triangle-hulls (thumb-place column row web-post-br)
-                             (thumb-place column row web-post-tr)
-                             (thumb-place (dec column) row web-post-bl)
-                             (thumb-place (dec column) row web-post-tl)))
+             (triangle-hulls (thumb-place2 column row 0 web-post-br)
+                             (thumb-place2 column row  0 web-post-tr)
+                             (thumb-place2 (dec column) row  0 web-post-bl)
+                             (thumb-place2 (dec column) row  0 web-post-tl)))
            (for [column [2] row [0 1]]
              (triangle-hulls
-              (thumb-place column row web-post-bl)
-              (thumb-place column row web-post-br)
-              (thumb-place column (dec row) web-post-tl)
-              (thumb-place column (dec row) web-post-tr)))))
+              (thumb-place2 column row 0 web-post-bl)
+              (thumb-place2 column row 0 web-post-br)
+              (thumb-place2 column (dec row) 0 web-post-tl)
+              (thumb-place2 column (dec row) 0 web-post-tr)))))
    (let [plate-height (/ (- sa-double-length mount-height) 2)
          thumb-tl (->> web-post-tl
                        (translate [0 plate-height 0]))
@@ -427,8 +488,14 @@
   (union
    thumb-connectors
    (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))
-   (thumb-place 0 -1/2 double-plates)
-   (thumb-place 1 -1/2 double-plates)))
+   (thumb-place2 0 -1/2 0 double-plates)
+   (thumb-place2 1 -1/2 0 double-plates)))
+   
+   
+   
+   
+ (spit "things/debug.scad"
+      (write-scad (union caps key-holes thumb)))
 
 ;;;;;;;;;;
 ;; Case ;;
@@ -1304,178 +1371,6 @@
           (place [0 (* 2 -t) -t] thumb-front-wall))))))
 
 
-;;;;;;;;;;;;;;;;
-;; Palm Rests ;;
-;;;;;;;;;;;;;;;;
-
-(defn bezier-conic [p0 p1 p2 steps]
-  (let [step1 (/ (- p1 p0) steps)
-        step2 (/ (- p2 p1) steps)]
-    (for [i (range steps)]
-      (let [point1 (+ p0 (* step1 i))
-            point2 (+ p1 (* step2 i))
-            point3 (+ p0 (* step1 (+ i 1)))
-            point4 (+ p1 (* step2 (+ i 1)))
-            bpoint1 (+ point1 (* (- point2 point1) (/ i steps)))
-            bpoint2 (+ point3 (* (- point4 point3) (/ (+ i 1) steps)))]
-        (polygon [bpoint1 bpoint2 p1])))))
-
-(defn bezier-cone [d h curve steps & {:keys [curve2] :or {curve2 (/ h 2)}}]
-  (let [p0 [(/ d 2) 0]
-        p1 [(+ curve (/ d 4)) curve2]
-        p2 [0 h]]
-  (cond
-     (< (nth p1 0) (/ d 4)) ; concave
-       (do (->> (union (polygon [[0 0] p0 p1 p2 [0 h]])
-                       (bezier-conic p0 p1 p2 steps))
-                (extrude-rotate {:fn steps})))
-     (> (nth p1 0) (/ d 4)) ; convex
-       (do (->> (difference (polygon [[0 0] p0 p1 p2 [0 h]])
-                            (bezier-conic p0 p1 p2 steps))
-                (extrude-rotate {:fn steps}))))))
-
-(defn front-palm-rest-rotate [shape]
-  (->> shape
-    (rotate (/ π 1) [1 0 0])
-    (rotate (/ π 2) [0 0 1])
-    (rotate (/ π 4) [-1 0 0])
-    (rotate (/ π 6.8) [0 1 0])))
-
-(def palm-rest
-  (let [p0 [15 0]
-        p1 [25 14]
-        p2 [7 30]
-        stand-diameter 9.6
-        rest-sphere-n (if FAST_RENDER 20 170)
-        profile-sphere-n (* rest-sphere-n 2)
-        floor (->> (cube 300 300 50)
-                   (translate [0 0 -25]))
-
-        profile-cyl (->> (cylinder 200 50)
-                         (with-fn profile-sphere-n))
-
-        rest-place #(->> % (rotate (/ π 40) [0 1 1])
-                           (rotate (/ π 11) [1 0 0])
-                           (rotate (/ π 12) [0 1 0])
-                           (translate [22 -100 7]))
-
-        front-profile (->> (difference profile-cyl
-                                       (scale [1.4 0.81 1.1] profile-cyl))
-                           (scale [1 1.4 1])
-                           (translate [0 -225 55])
-                           (rotate (/ π 3.2) [-1 -0.2 -0.2]))
-
-        bottom-profile (->> (cylinder 100 200)
-                            (with-fn profile-sphere-n)
-                            (rotate (/ π 2.3) [0 1 0])
-                            (translate [0 0 -65])
-                            (scale [1 1.1 1]))
-
-        base-shape (->> (bezier-cone 80 100 43 rest-sphere-n :curve2 43)
-                        (rotate (/ π 2) [-1 0 0])
-                        (translate [0 -10 0])
-                        (scale [1.1 1 1]))
-
-        base-rest-shape (difference
-                          (rest-place
-                           (difference base-shape
-                                       front-profile
-                                       bottom-profile
-                                       (scale [0.93 0.93 0.93] base-shape)))
-                         floor)
-
-        shape-profile (->> (project base-rest-shape)
-                           (extrude-linear {:height 20}))
-
-        side-profile (->> (difference (scale [1.1 1.1 1] shape-profile)
-                                      (translate [3 -12 0]
-                                        (scale [0.97 0.97 1.2] shape-profile)))
-                          (rotate (/ π 26) [0 1 0])
-                          (translate [-2 9 50]))
-
-        rest-shape (difference base-rest-shape
-                               side-profile)
-
-        inner-rest #(intersection
-                      % (intersection
-                        (rest-place base-shape)
-                        (->> (project rest-shape)
-                             (extrude-linear {:height 100})
-                             (translate [0 0 (/ 100 2)]))))
-
-        stand-place #(translate [24 -60 0] %)
-
-        front-rect (->> (prism 15 9 50 5 -2)
-                        front-palm-rest-rotate
-                        (translate [15.5 15 35])
-                        stand-place)
-
-        front-rect-diff (->> (cube 100 30 30)
-                             (rotate (/ π 4) [1 0 0])
-                             (rotate (/ π 20) [0 0 -1])
-                             (translate [0 -37 31]))
-
-        back-neg-rect (->> (prism 20.3 8 43 3 1)
-                           (rotate (/ π 3.5) [1 0 0])
-                           (translate [-10.15 -35 -5])
-                           stand-place)
-
-        back-neg-rect-diff (->> (cube 30 30 30)
-                                (rotate (/ π 6) [-1 0 0])
-                                (translate [-7.3 -80.6 28])
-                                stand-place)
-
-        back-pos-rect-1 (->> (prism 12 10 60 3 4)
-                             (rotate (/ π 2) [0 0 1])
-                             (rotate (/ π 9) [-1 0 0])
-                             (translate [5 -56 11.8])
-                             stand-place
-                             inner-rest)
-
-        back-pos-rect-2 (->> (prism 15 5 31 3 -2)
-                             (rotate (/ π 6.8) [-1 0 0])
-                             (translate [-7.5 -66 23.5])
-                             stand-place)
-
-        inner-support (->> (bezier-cone 90 12 -10 rest-sphere-n)
-                           (rotate (/ π 1.01) [-1 0 0])
-                           (rotate (/ π 20) [0 1 0])
-                           (translate [3 -57 54])
-                           stand-place
-                           inner-rest)
-
-        bottom-rect (->> (cube 30 20 7)
-                         (rotate (/ π 2) [0 0 1])
-                         (translate [0 -19.3 1])
-                         stand-place)
-        stands (difference
-                 (union front-rect
-                        (translate [48 0 0] (mirror [-1 0 0] front-rect))
-                        bottom-rect
-                        inner-support
-                        back-neg-rect
-                        back-pos-rect-1
-                        back-pos-rect-2)
-               back-neg-rect-diff
-               bottom-plate
-               (if RESTS_SEPERATE
-                 (do case-tolerance
-                     (translate [0 (- tolerance) 0] bottom-plate)))
-               front-rect-diff
-               floor)]
-    (union stands
-           rest-shape)))
-
-(def rest-alignment
-  (let [shape (->> (cylinder 2 20)
-                   front-palm-rest-rotate
-                   (translate [13.5 0 0])
-                   (with-fn 20))]
-
-    (translate [24 -51 18]
-      (union
-        (translate [-0.8 -1.75 -1.75] shape)
-        (mirror [-1 0 0] shape)))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; Final Export ;;
@@ -1499,14 +1394,6 @@
                  (stands-diff (key-place 0 1 (cube 10 10 10)))
                  (stands-diff (key-place 0 1 (translate [0 0 -5] (cube 15 15 15) )))))))
 
-(def dactyl-rest-left
-  (mirror [-1 0 0]
-    (difference palm-rest
-                (if RESTS_SEPERATE rest-alignment))))
-
-(def dactyl-rest-right
-  (difference palm-rest
-                (if RESTS_SEPERATE rest-alignment)))
 
 (def dactyl-keycaps-left
   (mirror [-1 0 0]
@@ -1517,7 +1404,6 @@
 
 (def dactyl-bottom-right
   (union
-    (if-not RESTS_SEPERATE dactyl-rest-right)
     (if-not STANDS_SEPERATE dactyl-stands-right)
     (difference
       (union teensy-cover
@@ -1534,7 +1420,6 @@
 
 (def dactyl-bottom-left
   (union
-    (if-not RESTS_SEPERATE dactyl-rest-left)
     (if-not STANDS_SEPERATE dactyl-stands-left)
     (mirror [-1 0 0]
       (difference
@@ -1576,7 +1461,7 @@
 ;;;;;;;;;;;;;
 ;; Outputs ;;
 ;;;;;;;;;;;;;
-
+(comment
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
 
@@ -1595,14 +1480,6 @@
 (spit "things/dactyl-keycaps-right.scad"
       (write-scad dactyl-keycaps-right))
 
-(if RESTS_SEPERATE
-  (do
-    (spit "things/dactyl-rest-left.scad"
-          (write-scad dactyl-rest-left))
-
-    (spit "things/dactyl-rest-right.scad"
-          (write-scad dactyl-rest-right))))
-
 (if STANDS_SEPERATE
   (do
    (spit "things/dactyl-stands-left.scad"
@@ -1610,3 +1487,4 @@
 
    (spit "things/dactyl-stands-right.scad"
          (write-scad dactyl-stands-right))))
+)
