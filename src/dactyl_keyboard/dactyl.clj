@@ -145,10 +145,10 @@
         column-row-offset (cond
                         (= column 2) [0 2.4 -4.5]
                         (= column 4) [0 -5.8 5.64]
-                        (and (= column 5) (not= row 4)) [5.2 -5.8 7.01]
+                        (and (= column 5) (not= row 4)) [0.5 -5.8 7.01]
                         (and (= column 5) (= row 4)) [0.5 -5.8 5.7]
-                        (and (= column 6) (= row 4)) [8.9 -5.8 8] ; extended connector
-                        (= column 6) [9 -5.8 8] ; extended connector
+                        (and (= column 6) (= row 4)) [1 -5.8 6.2] ; extended connector
+                        (= column 6) [1.1 -5.8 7.2] ; extended connector
                         :else [0 0 0])
         column-angle (* β (- 2 column))
         placed-shape (->> row-placed-shape
@@ -222,7 +222,7 @@
                row rows
                :when (or (not= column 0)
                          (not= row 4))]
-           (->> (sa-cap (if (and (= column 5) (not= row 4)) 1.5 1))
+           (->> (sa-cap (if (and (= column 5) (not= row 4)) 1 1))
                 (key-place column row)))))
 
 (defn prism [w l h taper-1 taper-2]
@@ -507,10 +507,6 @@
    (thumb-place2 1 -1/2 0 double-plates)))
    
    
-   
-   
- (spit "things/debug.scad"
-      (write-scad (union caps key-holes thumb)))
 
 ;;;;;;;;;;
 ;; Case ;;
@@ -825,6 +821,10 @@
            thumb-inside-wall
            thumb-front-wall))
 
+		   
+		   
+ (spit "things/debug.scad"
+      (write-scad (union key-holes thumb connectors new-case)))
 ;;;;;;;;;;;;
 ;; Bottom ;;
 ;;;;;;;;;;;;
