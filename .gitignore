@@ -7,4 +7,6 @@
 .lein-*
 *.gcode
 *.scad
+*.class
+*.jar
 /target
