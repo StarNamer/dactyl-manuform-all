@@ -5,6 +5,7 @@
 .nrepl-*
 
 .lein-*
-
+*.gcode
+*.scad
 /target
 things-new
