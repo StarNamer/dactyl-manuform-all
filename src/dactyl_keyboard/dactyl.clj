@@ -783,3 +783,5 @@
                                           screw-insert-outers)
                                    (translate [0 0 -10] screw-insert-screw-holes))
                   ))))
+
+(defn -main [dum] 1) ; dummy to make it easier to batch
