@@ -688,9 +688,9 @@
 (def model-right (difference 
                    (union
                     key-holes
-                    connectors
+                    ; connectors
                     thumb
-                    thumb-connectors
+                    ; thumb-connectors
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
