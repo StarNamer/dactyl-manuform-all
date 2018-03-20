@@ -700,8 +700,8 @@
                                 screw-insert-holes)
                     rj9-holder
                     ; wire-posts
-                    thumbcaps
-                    caps
+                    ; thumbcaps
+                    ; caps
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
