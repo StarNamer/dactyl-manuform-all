@@ -688,9 +688,9 @@
 (def model-right (difference 
                    (union
                     key-holes
-                    ; connectors
+                    connectors
                     thumb
-                    ; thumb-connectors
+                    thumb-connectors
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
@@ -699,7 +699,7 @@
                                 usb-holder-hole
                                 screw-insert-holes)
                     rj9-holder
-                    wire-posts
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
