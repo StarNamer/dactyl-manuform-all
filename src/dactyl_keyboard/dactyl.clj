@@ -738,7 +738,7 @@
                                 teensy-screw-insert-holes
                                 screw-insert-holes)
                     rj9-holder
-                    wire-posts
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
