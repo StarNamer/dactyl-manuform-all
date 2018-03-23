@@ -590,42 +590,50 @@
                               (union (translate [0 2 0] (cube 10.78  9 18.38))
                                      (translate [0 0 5] (cube 10.78 13  5))))))
 
-(def teensy-width 20)  
+(def teensy-width 20)
 (def teensy-height 12)
 (def teensy-length 33)
 (def teensy2-length 53)
-(def teensy-pcb-thickness 1.6) 
+(def teensy-pcb-thickness 1.6)
 (def teensy-holder-width  (+ 7 teensy-pcb-thickness))
 (def teensy-holder-height (+ 6 teensy-width))
 (def teensy-offset-height 5)
 (def teensy-holder-length 72)
 (def teensy-holder-offset (/ teensy-holder-length -2))
 (def teensy-holder-top-length 18)
+(def teensy-holder-top-offset (/ teensy-holder-top-length -2))
+(def teensy-holder-bot-length (+ teensy-length 4))
+(def teensy-holder-bot-offset (/ teensy-holder-bot-length -2))
 (def teensy-top-xy (key-position 0 0 (map + (wall-locate3  0 1) [(/ mount-width -2) (/ mount-height  2) 0])))
 (def teensy-bot-xy (map + (key-position 0 2 (map + (wall-locate3 -1 0) [(/ mount-width -2)  (/ mount-height  2) 0]))
                           [(* 1 teensy-holder-width) 0 0]))
-(def teensy-holder-top-offset (/ teensy-holder-top-length -2))
 (def teensy-holder-angle (Math/atan2 (- (first teensy-top-xy) (first teensy-bot-xy)) (- (second teensy-top-xy) (second teensy-bot-xy))))
  
 (def teensy-holder 
     (->> 
         (union 
+          ; wall
           (->> (cube 3 teensy-holder-length (+ 6 teensy-width))
                (translate [1.5 teensy-holder-offset 0]))
-          (->> (cube teensy-pcb-thickness teensy-holder-length 3)
-               (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
-          (->> (cube 4 teensy-holder-length 4)
-               (translate [(+ teensy-pcb-thickness 5) teensy-holder-offset (-  -1 (/ teensy-width 2))]))
+          ; bottom inner
+          (->> (cube teensy-pcb-thickness teensy-holder-bot-length 3)
+               (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-bot-offset (- -1.5 (/ teensy-width 2))]))
+          ; bottom outer
+          (->> (cube 4 teensy-holder-bot-length 4)
+               (translate [(+ teensy-pcb-thickness 5) teensy-holder-bot-offset (- -1 (/ teensy-width 2))]))
+          ; top inner
           (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)
                (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
+          ; top outer
           (->> (cube 4 teensy-holder-top-length 4)
                (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))]))
+          ; usb cutout wall
           (->> (cube teensy-holder-width 2 teensy-holder-height)
                (translate [(+ (/ teensy-holder-width 2)) -1 0])))
         (translate [(- teensy-holder-width) 0 0])
         (rotate teensy-holder-angle [0 0 -1])
         (translate [(first teensy-top-xy) 
-                    (- (second teensy-top-xy) 1) 
+                    (- (second teensy-top-xy) 1)
                     (/ (+ 6 teensy-width) 2)])
            ))
 
