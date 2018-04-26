@@ -31,7 +31,7 @@
   :else [0 0 0]))
 
 ;(def thumb-offsets [6 -3 7])
-(def thumb-offsets [-10 -3 7])
+(def thumb-offsets [-20 -10 7])
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -424,19 +424,19 @@
              (thumb-tr-place thumb-post-br)) 
 ;;      TODO LH thumb connectors are in here
       (triangle-hulls    ; top two to the main keyboard, starting on the left
-             (thumb-tl-place thumb-post-tl)
-             (key-place 0 cornerrow web-post-bl)
-             (thumb-tl-place thumb-post-tr)
-             (key-place 0 cornerrow web-post-br)
-             (thumb-tr-place thumb-post-tl)
-             (key-place 1 cornerrow web-post-bl)
+             ;; (thumb-tl-place thumb-post-tl)
+             ;; (key-place 0 cornerrow web-post-bl)
+             ;; (thumb-tl-place thumb-post-tr)
+             ;; (key-place 0 cornerrow web-post-br)
+             ;; (thumb-tr-place thumb-post-tl)
+             ;; (key-place 1 cornerrow web-post-bl)
              ;; (thumb-tr-place thumb-post-tr)
              ;; (key-place 1 cornerrow web-post-br)
              ;; (key-place 2 lastrow web-post-tl)
              ;; (key-place 2 lastrow web-post-bl)
              ;; (thumb-tr-place thumb-post-tr)
              ;; (key-place 2 lastrow web-post-bl)
-             ;; from here on
+;;             from here on
              ;; (thumb-tr-place thumb-post-br)
              ;; (key-place 2 lastrow web-post-br)
              ;; (key-place 3 lastrow web-post-bl)
@@ -446,17 +446,48 @@
              ;; (key-place 3 lastrow web-post-tr)
              ;; (key-place 3 cornerrow web-post-br)
              ;; (key-place 4 cornerrow web-post-bl)
-             
-             ;;(thumb-tr-place thumb-post-br)
-             (key-place 0 lastrow web-post-br)
+
+
+             (thumb-tl-place thumb-post-tl)
+             (key-place 0 cornerrow web-post-bl)
+             (thumb-tl-place thumb-post-tr)
+             (key-place 0 cornerrow web-post-br)
+             (thumb-tr-place thumb-post-tl)
+             (key-place 0 cornerrow web-post-bl)
+             (thumb-tr-place thumb-post-tr)
+             (key-place 0 cornerrow web-post-br)
+
+             (key-place 1 lastrow web-post-tl)
              (key-place 1 lastrow web-post-bl)
+             (thumb-tr-place thumb-post-tr)
+             (key-place 1 lastrow web-post-bl)
+             (thumb-tr-place thumb-post-br)
+             (key-place 0 lastrow web-post-tl)
+             (key-place 1 lastrow web-post-bl)
+             (key-place 0 lastrow web-post-tr)
+
+
+             ;; (key-place 1 lastrow web-post-tl)
+             ;;  (key-place 1 lastrow  web-post-bl)
              ;; (key-place 1 lastrow web-post-tr)
-             ;; (key-place 2 lastrow web-post-tl)
-             ;; (key-place 3 cornerrow web-post-bl)
-             ;; (key-place 3 lastrow web-post-tr)
-             ;; (key-place 3 cornerrow web-post-br)
-             ;; (key-place 4 cornerrow web-post-bl)
+             ;;  (key-place 1 lastrow web-post-br)
+             ;;  (key-place 2 lastrow web-post-bl)
+
              )
+      ;; (triangle-hulls
+      ;;  (thumb-tr-place thumb-post-br)
+      ;;  (key-place 1 lastrow web-post-bl)
+      ;;  (key-place 1 lastrow web-post-br)
+       
+      ;;  )
+      ;; (triangle-hulls
+      ;;  (thumb-tr-place thumb-post-br)
+      ;;  (key-place 2 lastrow web-post-bl)
+      ;;  (key-place 2 lastrow web-post-br)
+      ;;  (key-place 3 lastrow web-post-bl)
+      ;;  (key-place 3 lastrow web-post-bl)
+      ;;  (key-place 3 lastrow web-post-br)
+      ;;  )
       (triangle-hulls 
              (key-place 1 cornerrow web-post-br)
              (key-place 2 lastrow web-post-tl)
@@ -547,6 +578,15 @@
    ; front wall
 ; TODO LH this is where the extra keys need to be joined in, most of the logic is around setting cornew row or last row
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
+
+   (key-wall-brace 1 lastrow   0 -1 web-post-bl 0 lastrow 0 -1 web-post-br)
+   (key-wall-brace 1 lastrow   0 -1 web-post-bl 1 lastrow 0 -1 web-post-br)
+   
+
+   (key-wall-brace 2 lastrow   0 -1 web-post-bl 1 lastrow 0 -1 web-post-br)
+   (key-wall-brace 2 lastrow   0 -1 web-post-bl 2 lastrow 0 -1 web-post-br)
+   (key-wall-brace 2 lastrow   0 -1 web-post-br 3 lastrow 0 -1 web-post-bl)
+   
    (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
    (key-wall-brace 3 lastrow 0 -1 web-post-br 4 lastrow 0 -1 web-post-bl)
    (key-wall-brace 4 lastrow 0 -1 web-post-bl 4 lastrow 0 -1 web-post-br)
@@ -570,7 +610,7 @@
    (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
    (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
    (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
-   (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
+   (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 1 lastrow)  0 -1 web-post-bl)
    ; clunky bit on the top left thumb connection  (normal connectors don't work well)
    (bottom-hull
      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
