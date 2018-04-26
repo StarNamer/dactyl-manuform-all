@@ -13,8 +13,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 5)
+(def nrows 5)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -30,7 +30,8 @@
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
-(def thumb-offsets [6 -3 7])
+;(def thumb-offsets [6 -3 7])
+(def thumb-offsets [-10 -3 7])
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -57,6 +58,7 @@
 
 (def lastrow (dec nrows))
 (def cornerrow (dec lastrow))
+;(def cornerrow lastrow)
 (def lastcol (dec ncols))
 
 ;;;;;;;;;;;;;;;;;
@@ -216,7 +218,7 @@
   (apply union
          (for [column columns
                row rows
-               :when (or (.contains [2 3] column)
+               :when (or (.contains [1 2 3 4 5] column)
                          (not= row lastrow))]
            (->> single-plate
                 (key-place column row)))))
@@ -225,7 +227,7 @@
   (apply union
          (for [column columns
                row rows
-               :when (or (.contains [2 3] column)
+               :when (or (.contains [1 2 3 4 5] column)
                          (not= row lastrow))]
            (->> (sa-cap (if (= column 5) 1 1))
                 (key-place column row)))))
@@ -259,7 +261,7 @@
          (concat
           ;; Row connections
           (for [column (range 0 (dec ncols))
-                row (range 0 lastrow)]
+                row (range 0 (inc lastrow))]
             (triangle-hulls
              (key-place (inc column) row web-post-tl)
              (key-place column row web-post-tr)
@@ -268,7 +270,7 @@
 
           ;; Column connections
           (for [column columns
-                row (range 0 cornerrow)]
+                row (range 0 lastrow)]
             (triangle-hulls
              (key-place column row web-post-bl)
              (key-place column row web-post-br)
@@ -277,7 +279,7 @@
 
           ;; Diagonal connections
           (for [column (range 0 (dec ncols))
-                row (range 0 cornerrow)]
+                row (range 0 lastrow)]
             (triangle-hulls
              (key-place column row web-post-br)
              (key-place column (inc row) web-post-tr)
@@ -420,6 +422,7 @@
              (thumb-tr-place thumb-post-bl)
              (thumb-mr-place web-post-br)
              (thumb-tr-place thumb-post-br)) 
+;;      TODO LH thumb connectors are in here
       (triangle-hulls    ; top two to the main keyboard, starting on the left
              (thumb-tl-place thumb-post-tl)
              (key-place 0 cornerrow web-post-bl)
@@ -427,21 +430,33 @@
              (key-place 0 cornerrow web-post-br)
              (thumb-tr-place thumb-post-tl)
              (key-place 1 cornerrow web-post-bl)
-             (thumb-tr-place thumb-post-tr)
-             (key-place 1 cornerrow web-post-br)
-             (key-place 2 lastrow web-post-tl)
-             (key-place 2 lastrow web-post-bl)
-             (thumb-tr-place thumb-post-tr)
-             (key-place 2 lastrow web-post-bl)
-             (thumb-tr-place thumb-post-br)
-             (key-place 2 lastrow web-post-br)
-             (key-place 3 lastrow web-post-bl)
-             (key-place 2 lastrow web-post-tr)
-             (key-place 3 lastrow web-post-tl)
-             (key-place 3 cornerrow web-post-bl)
-             (key-place 3 lastrow web-post-tr)
-             (key-place 3 cornerrow web-post-br)
-             (key-place 4 cornerrow web-post-bl))
+             ;; (thumb-tr-place thumb-post-tr)
+             ;; (key-place 1 cornerrow web-post-br)
+             ;; (key-place 2 lastrow web-post-tl)
+             ;; (key-place 2 lastrow web-post-bl)
+             ;; (thumb-tr-place thumb-post-tr)
+             ;; (key-place 2 lastrow web-post-bl)
+             ;; from here on
+             ;; (thumb-tr-place thumb-post-br)
+             ;; (key-place 2 lastrow web-post-br)
+             ;; (key-place 3 lastrow web-post-bl)
+             ;; (key-place 2 lastrow web-post-tr)
+             ;; (key-place 3 lastrow web-post-tl)
+             ;; (key-place 3 cornerrow web-post-bl)
+             ;; (key-place 3 lastrow web-post-tr)
+             ;; (key-place 3 cornerrow web-post-br)
+             ;; (key-place 4 cornerrow web-post-bl)
+             
+             ;;(thumb-tr-place thumb-post-br)
+             (key-place 0 lastrow web-post-br)
+             (key-place 1 lastrow web-post-bl)
+             ;; (key-place 1 lastrow web-post-tr)
+             ;; (key-place 2 lastrow web-post-tl)
+             ;; (key-place 3 cornerrow web-post-bl)
+             ;; (key-place 3 lastrow web-post-tr)
+             ;; (key-place 3 cornerrow web-post-br)
+             ;; (key-place 4 cornerrow web-post-bl)
+             )
       (triangle-hulls 
              (key-place 1 cornerrow web-post-br)
              (key-place 2 lastrow web-post-tl)
@@ -454,7 +469,8 @@
              (key-place 3 lastrow web-post-tr)
              (key-place 3 lastrow web-post-br)
              (key-place 3 lastrow web-post-tr)
-             (key-place 4 cornerrow web-post-bl))
+             (key-place 4 cornerrow web-post-bl)
+             )
   ))
 
 ;;;;;;;;;;
@@ -512,9 +528,9 @@
    (for [x (range 1 ncols)] (key-wall-brace x 0 0 1 web-post-tl (dec x) 0 0 1 web-post-tr))
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
    ; right wall
-   (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
-   (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
-   (key-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 1 0 web-post-br)
+   (for [y (range 0 (inc lastrow))] (key-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
+   (for [y (range 1 (inc lastrow))] (key-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
+   (key-wall-brace lastcol lastrow 0 -1 web-post-br lastcol lastrow 1 0 web-post-br)
    ; left wall
    (for [y (range 0 lastrow)] (union (wall-brace (partial left-key-place y 1)       -1 0 web-post (partial left-key-place y -1) -1 0 web-post)
                                      (hull (key-place 0 y web-post-tl)
@@ -529,11 +545,16 @@
    (wall-brace (partial key-place 0 0) 0 1 web-post-tl (partial left-key-place 0 1) 0 1 web-post)
    (wall-brace (partial left-key-place 0 1) 0 1 web-post (partial left-key-place 0 1) -1 0 web-post)
    ; front wall
+; TODO LH this is where the extra keys need to be joined in, most of the logic is around setting cornew row or last row
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
    (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-   (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
-   (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
-   (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+   (key-wall-brace 3 lastrow 0 -1 web-post-br 4 lastrow 0 -1 web-post-bl)
+   (key-wall-brace 4 lastrow 0 -1 web-post-bl 4 lastrow 0 -1 web-post-br)
+   ;(key-wall-brace 4 lastrow 0.5 -1 web-post-br 5 lastrow 1 -1 web-post-bl)
+   (key-wall-brace 5 lastrow 0 -1 web-post-bl 4 lastrow 0 -1 web-post-br)
+   (key-wall-brace 5 lastrow 0 -1 web-post-bl 5 lastrow 0 -1 web-post-br)
+   ;(for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl x        0 -1 web-post-br))
+   ;(for [x (range 5 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
    ; thumb walls
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
