@@ -14,7 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (def nrows 4)
-(def ncols 7)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -573,19 +573,26 @@
 
 (def offset-xl 5)
 (def offset-xr 5)
-(def offset-yb 5)
+(def offset-yb 10)
 (def offset-yt 5)
 (def offset-z 5)
 (def key-pitch 19.05)
 (def key-hole-size 14)
-(def tenting-angle (/ π 12))
+(def tenting-angle-lr (/ π 12)) ; 30 degrees
+(def tenting-angle-bf (/ π 48)) ; 7.5 degrees
+(def columnar-offsets [0.5 0.5 0.75 0.5 0 0])
+(def ncols-thumb 2)
+(def nrows-thumb 2)
+
+(defn unit2mm [unit]
+  (* unit key-pitch))
 
 (defn key-place [col row]
   [(+ offset-xl
       (* col key-pitch))
    (+ offset-yb
-      (* row key-pitch))
-   0])
+      (* row key-pitch)
+      (unit2mm (nth columnar-offsets col)))])
 
 (defn key-hole [vec]
   (->> (square key-hole-size key-hole-size :center false)
@@ -603,8 +610,7 @@
        key-hole-size
        offset-xr))
 (def plate-y-len
-    (+ offset-yb
-       (* (- nrows 1) key-pitch)
+    (+ (nth (key-place 2 3) 1)
        key-hole-size
        offset-yt))
 (def plate
@@ -617,9 +623,39 @@
       key-holes)))
 
 (def plate-3d-left-z-len
-  (+ offset-z (* plate-x-len (Math/sin tenting-angle))))
+  (+ offset-z (* plate-x-len (Math/sin tenting-angle-lr))))
 (def plate-3d-right-x-len
-  (* plate-x-len (Math/cos tenting-angle)))
+  (* plate-x-len (Math/cos tenting-angle-lr)))
+
+(defn key-place-thumb [col row]
+  [(+ offset-xl
+      (* col key-pitch))
+   (+ offset-yb
+      (* row key-pitch))])
+(def key-holes-thumb
+  (apply union
+         (for [col (range 0 ncols-thumb)
+               row (range 0 nrows-thumb)]
+           (key-hole (key-place-thumb col row)))))
+(def plate-thumb-x-len
+    (+ offset-xl
+       (* (- ncols-thumb 1) key-pitch)
+       key-hole-size
+       offset-xr))
+(def plate-thumb-y-len
+    (+ offset-yb
+       (* (- nrows-thumb 1) key-pitch)
+       key-hole-size
+       offset-yt))
+(def plate-thumb
+  (->
+    (square
+      plate-thumb-x-len
+      plate-thumb-y-len
+      :center false)
+    (difference
+      key-holes-thumb)))
+
 (def wall-left-x-len
   plate-3d-left-z-len)
 (def wall-left
@@ -639,8 +675,18 @@
   (->>
     plate
     (extrude-linear {:height 1 :center false})
-    (rotate tenting-angle [0 1 0])
+    (rotate tenting-angle-lr [0 1 0])
     (translate [0 0 plate-3d-left-z-len])))
+(def plate-thumb-3d
+  (->>
+    plate-thumb
+    (extrude-linear {:height 1 :center false})
+    (rotate (/ π 2) [0 0 1])
+    (translate [plate-thumb-y-len 0 0])
+    (rotate (/ π 4) [1 0 0])
+    (translate [0 (* plate-thumb-x-len (Math/cos (/ π 5)) -1) 0])
+    (rotate (/ π -8) [0 0 1])
+    (translate [0 20 0])))
 (def wall-left-3d
   (->>
     wall-left
@@ -657,6 +703,7 @@
 (def model-right
   (union
     plate-3d
+    plate-thumb-3d
     wall-left-3d
     wall-right-3d
     ))
