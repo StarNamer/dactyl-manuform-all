@@ -8,8 +8,8 @@ index d8861fb..e58302f 100644
  
 -(def nrows 4)
 -(def ncols 5)
-+(def nrows 5)
-+(def ncols 6)
++(def nrows 6)
++(def ncols 7)
  
  (def α (/ π 12))                        ; curvature of the columns
  (def β (/ π 36))                        ; curvature of the rows
