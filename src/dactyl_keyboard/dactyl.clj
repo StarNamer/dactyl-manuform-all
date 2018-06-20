@@ -20,19 +20,20 @@
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
-(def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
-;(def tenting-angle 0)            ; or, change this for more precise tenting control
+;(def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
+(def tenting-angle 0)            ; or, change this for more precise tenting control
 (def column-style 
   ;(if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
  (def column-style :standard))
 
 (defn column-offset [column] (cond
-  (= column 2) [0 2.82 -4.5]
+  ;(= column 2) [0 2.82 -4.5]
+  (= column 2) [0 2.82 -8]
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
 ;(def thumb-offsets [6 -3 7])
-(def thumb-offsets [-12 -3 7])
+(def thumb-offsets [-16 -3 7])
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -466,7 +467,7 @@
              ;(key-place 0 lastrow web-post-tl)
              (key-place 1 lastrow web-post-bl)
              ;(key-place 0 lastrow web-post-tr)
-
+             
 
              ;; (key-place 1 lastrow web-post-tl)
              ;;  (key-place 1 lastrow  web-post-bl)
@@ -475,6 +476,9 @@
              ;;  (key-place 2 lastrow web-post-bl)
 
              )
+      (triangle-hulls
+       (thumb-tr-place thumb-post-tl)
+       (key-place 0 cornerrow web-post-bl))
       ;; (triangle-hulls
       ;;  (thumb-tr-place thumb-post-br)
       ;;  (key-place 1 lastrow web-post-bl)
@@ -761,14 +765,15 @@
                     thumb
                     thumb-connectors
                     (difference (union case-walls 
-                                       screw-insert-outers 
-                                       teensy-holder
+                                       ;screw-insert-outers 
+                                       ;teensy-holder
                                        usb-holder)
                                 rj9-space 
                                 usb-holder-hole
-                                screw-insert-holes)
+                                ;screw-insert-holes
+                                )
                     rj9-holder
-                    wire-posts
+                    ;wire-posts
                     ; thumbcaps
                     ; caps
                     )
