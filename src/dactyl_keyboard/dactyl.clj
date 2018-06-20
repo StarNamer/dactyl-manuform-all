@@ -35,7 +35,7 @@
 ;(def thumb-offsets [6 -3 7])
 (def thumb-offsets [-16 -3 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 15)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -339,7 +339,8 @@
        (rotate (deg2rad -33) [0 1 0])
        (rotate (deg2rad  54) [0 0 1])
        (translate thumborigin)
-       (translate [-37.8 -55.3 -25.3])
+       (translate [-29 -40 -13])
+       ;(translate [-37.8 -55.3 -25.3])
        ))
 (defn thumb-bl-place [shape]
   (->> shape
@@ -347,7 +348,8 @@
        (rotate (deg2rad -35) [0 1 0])
        (rotate (deg2rad  52) [0 0 1])
        (translate thumborigin)
-       (translate [-56.3 -43.3 -23.5])
+              (translate [-51 -25 -12])
+       ;(translate [-56.3 -43.3 -23.5])
        ))
 
 (defn thumb-1x-layout [shape]
