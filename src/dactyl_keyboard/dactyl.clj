@@ -349,15 +349,16 @@
        (rotate (deg2rad  52) [0 0 1])
        (translate thumborigin)
               (translate [-51 -25 -12])
-       ;(translate [-56.3 -43.3 -23.5])
+;       (translate [-56.3 -43.3 -23.5])
        ))
 
 (defn thumb-1x-layout [shape]
   (union
    (thumb-mr-place shape)
    (thumb-ml-place shape)
-   (thumb-br-place shape)
-   (thumb-bl-place shape)))
+   ;(thumb-br-place shape)
+   ;(thumb-bl-place shape)
+   ))
 
 (defn thumb-15x-layout [shape]
   (union
@@ -398,20 +399,20 @@
              (thumb-tr-place thumb-post-tl)
              (thumb-tr-place thumb-post-bl))
       (triangle-hulls    ; bottom two on the right
-             (thumb-br-place web-post-tr)
-             (thumb-br-place web-post-br)
+             ;(thumb-br-place web-post-tr)
+             ;(thumb-br-place web-post-br)
              (thumb-mr-place web-post-tl)
              (thumb-mr-place web-post-bl))
       (triangle-hulls    ; bottom two on the left
-             (thumb-bl-place web-post-tr)
-             (thumb-bl-place web-post-br)
+             ;(thumb-bl-place web-post-tr)
+             ;(thumb-bl-place web-post-br)
              (thumb-ml-place web-post-tl)
              (thumb-ml-place web-post-bl))
       (triangle-hulls    ; centers of the bottom four
-             (thumb-br-place web-post-tl)
-             (thumb-bl-place web-post-bl)
-             (thumb-br-place web-post-tr)
-             (thumb-bl-place web-post-br)
+             ;(thumb-br-place web-post-tl)
+             ;(thumb-bl-place web-post-bl)
+             ;(thumb-br-place web-post-tr)
+             ;(thumb-bl-place web-post-br)
              (thumb-mr-place web-post-tl)
              (thumb-ml-place web-post-bl)
              (thumb-mr-place web-post-tr)
@@ -604,20 +605,25 @@
    ;(for [x (range 5 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
    ; thumb walls
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
+
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
-   (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
+   
+   ;(wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
+   
    (wall-brace thumb-ml-place -0.3  1 web-post-tr thumb-ml-place  0  1 web-post-tl)
-   (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl)
+
+   ;(wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl);doubled up left bottom wall
+   
    (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl)
    (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl)
    ; thumb corners
    (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
    (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
    ; thumb tweeners
-   (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
-   (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
+   ;(wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
+   ;(wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
    (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
-   (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 1 lastrow)  0 -1 web-post-bl)
+   ;(wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 1 lastrow)  0 -1 web-post-bl)
    ; clunky bit on the top left thumb connection  (normal connectors don't work well)
    (bottom-hull
      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
