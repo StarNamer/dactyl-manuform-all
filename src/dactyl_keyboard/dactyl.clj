@@ -839,3 +839,15 @@
 
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
+
+ ;;  translate ([0, 0, -20]) {
+;;     cube ([350, 350, 40], center=true);
+;;   }
+
+;; translate([100,0,0]) {
+;;       cube ([200,200,100],center=true);
+;;   } 
+;;  translate([-140,80,0]) {
+;;       cube ([200,200,100],center=true);
+;;   }
+
