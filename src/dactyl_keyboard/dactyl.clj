@@ -92,7 +92,11 @@
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
                                              (/ plate-thickness 2)]))))
-        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
+        plate-half (union
+                    top-wall
+                    left-wall
+                   ; (with-fn 100 side-nub)
+                    )]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -465,11 +469,14 @@
              (key-place 1 lastrow web-post-tl)
              (key-place 1 lastrow web-post-bl)
              (thumb-tr-place thumb-post-tr)
-             (key-place 1 lastrow web-post-bl)
+             (key-place 0 lastrow web-post-br)
              (thumb-tr-place thumb-post-br)
-             ;(key-place 0 lastrow web-post-tl)
-             (key-place 1 lastrow web-post-bl)
-             ;(key-place 0 lastrow web-post-tr)
+             
+
+
+             (key-place 1 lastrow web-post-tl)
+
+                                        ;(key-place 0 lastrow web-post-tr)
              
 
              ;; (key-place 1 lastrow web-post-tl)
@@ -587,6 +594,7 @@
 ; TODO LH this is where the extra keys need to be joined in, most of the logic is around setting cornew row or last row
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
 
+   ;TODO LH these two connect to tow thumbpart
    (key-wall-brace 1 lastrow   0 -1 web-post-bl 0 lastrow 0 -1 web-post-br)
    (key-wall-brace 1 lastrow   0 -1 web-post-bl 1 lastrow 0 -1 web-post-br)
    
@@ -604,7 +612,7 @@
    ;(for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl x        0 -1 web-post-br))
    ;(for [x (range 5 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
    ; thumb walls
-   (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
+   (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 web-post-br)
 
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
    
@@ -667,18 +675,20 @@
 (def rj9-space  (translate rj9-position rj9-cube))
 (def rj9-holder (translate rj9-position
                   (difference rj9-cube
-                              (union (translate [0 2 0] (cube 10.78  9 18.38))
-                                     (translate [0 0 5] (cube 10.78 13  5))))))
+                              (union (translate [0 2 0] (cube 10.78  10 18.38))
+                                     (translate [0 -0.01 5] (cube 10.78 14  5))))))
 
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
 (def usb-holder-thickness 4)
+(def usb-holder-hole-size [6.5 11 13.6])
+(def usb-holder-hole-thickness 5)
 (def usb-holder
     (->> (cube (+ (first usb-holder-size) usb-holder-thickness) (second usb-holder-size) (+ (last usb-holder-size) usb-holder-thickness))
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
 (def usb-holder-hole
-    (->> (apply cube usb-holder-size)
-         (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+    (->> (apply cube usb-holder-hole-size)
+         (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-hole-size) usb-holder-hole-thickness) 2)])))
 
 (def teensy-width 20)  
 (def teensy-height 12)
