@@ -1110,8 +1110,8 @@
      (hull cover-sphere-br br mrb mrt))))
 
 (def teensy-width 30)
-(def teensy-height 13)
-(def teensy-length 33)
+(def teensy-height 11)
+(def teensy-length 40)
 
 (def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
 
@@ -1174,7 +1174,7 @@
         (color [1 0 0]))))
 
 (def usb-cutout
-  (let [hole-height 6.2
+  (let [hole-height 5.0
         side-radius (/ hole-height 2)
         hole-width 10.75
         side-cylinder (->> (cylinder side-radius teensy-length)
@@ -1204,6 +1204,7 @@
      trrs-cutout
      (->> (cube 1000 1000 10) (translate [0 0 -6]))
      screw-holes))
+   (->> (cube 1000 1000 10) (translate [0 0 -6]))
    usb-cutout))
 
 (def dactyl-bottom-left
