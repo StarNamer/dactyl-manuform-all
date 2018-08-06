@@ -117,7 +117,7 @@
 (def columns (range 0 6))
 (def rows (range 0 5))
 
-(def α (/ π 10))
+(def α (/ π 11))
 (def β (/ π 32))
 (def slope-row 2.7)
 (def slope-col 1)
@@ -240,7 +240,7 @@
 
 (defn thumb-place [column row shape]
   (let [cap-top-height (+ plate-thickness sa-profile-key-height)
-        α (/ π 10)
+        α (/ π 11)
         row-radius (+ (/ (/ (+ mount-height 1) 2)
                          (Math/sin (/ α 2)))
                       cap-top-height)
@@ -261,7 +261,7 @@
          (translate [mount-width 0 0])
          (rotate (* π (- 1/4 3/16)) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (translate [-30 -30 20]))))
+         (translate [-38 -30 20]))))
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
@@ -1112,8 +1112,8 @@
 (def io-exp-height 8)
 (def io-exp-length 36)
 
-(def teensy-width 20)
-(def teensy-height 12)
+(def teensy-width 30)
+(def teensy-height 13)
 (def teensy-length 33)
 
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
@@ -1206,7 +1206,7 @@
      new-case
      teensy-cover
      trrs-cutout
-     (->> (cube 1000 1000 10) (translate [0 0 -5]))
+     (->> (cube 1000 1000 10) (translate [0 0 -6]))
      screw-holes))
    usb-cutout))
 
@@ -1220,7 +1220,7 @@
             new-case
             io-exp-cover
             trrs-cutout
-            (->> (cube 1000 1000 10) (translate [0 0 -5]))
+            (->> (cube 1000 1000 10) (translate [0 0 -6]))
             screw-holes))))
 
 (def dactyl-top-right
