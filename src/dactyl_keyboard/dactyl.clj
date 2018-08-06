@@ -18,7 +18,7 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def old-single-plate
+(def single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -45,7 +45,7 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+(def old-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
@@ -117,8 +117,10 @@
 (def columns (range 0 6))
 (def rows (range 0 5))
 
-(def α (/ π 12))
-(def β (/ π 36))
+(def α (/ π 10))
+(def β (/ π 32))
+(def slope-row 2.7)
+(def slope-col 1)
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height 1/2) 2)
                       (Math/sin (/ α 2)))
@@ -130,13 +132,13 @@
 (defn key-place [column row shape]
   (let [row-placed-shape (->> shape
                               (translate [0 0 (- row-radius)])
-                              (rotate (* α (- 2 row)) [1 0 0])
+                              (rotate (* α (- slope-row row)) [1 0 0])
                               (translate [0 0 row-radius]))
         column-offset (cond
                         (= column 2) [0 2.82 -3.0] ;;was moved -4.5
                         (>= column 4) [0 -5.8 5.64]
                         :else [0 0 0])
-        column-angle (* β (- 2 column))
+        column-angle (* β (- slope-col column))
         placed-shape (->> row-placed-shape
                           (translate [0 0 (- column-radius)])
                           (rotate column-angle [0 1 0])
@@ -149,10 +151,10 @@
 (defn case-place [column row shape]
   (let [row-placed-shape (->> shape
                               (translate [0 0 (- row-radius)])
-                              (rotate (* α (- 2 row)) [1 0 0])
+                              (rotate (* α (- slope-row row)) [1 0 0])
                               (translate [0 0 row-radius]))
         column-offset [0 -4.35 5.64]
-        column-angle (* β (- 2 column))
+        column-angle (* β (- slope-col column))
         placed-shape (->> row-placed-shape
                           (translate [0 0 (- column-radius)])
                           (rotate column-angle [0 1 0])
@@ -238,11 +240,11 @@
 
 (defn thumb-place [column row shape]
   (let [cap-top-height (+ plate-thickness sa-profile-key-height)
-        α (/ π 12)
+        α (/ π 10)
         row-radius (+ (/ (/ (+ mount-height 1) 2)
                          (Math/sin (/ α 2)))
                       cap-top-height)
-        β (/ π 36)
+        β (/ π 32)
         column-radius (+ (/ (/ (+ mount-width 2) 2)
                             (Math/sin (/ β 2)))
                          cap-top-height)
@@ -259,7 +261,7 @@
          (translate [mount-width 0 0])
          (rotate (* π (- 1/4 3/16)) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (translate [-52 -45 40]))))
+         (translate [-30 -30 20]))))
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
@@ -1226,8 +1228,7 @@
    (union key-holes
           connectors
           thumb
-          new-case
-          teensy-support)
+          new-case)
    trrs-hole-just-circle
    screw-holes))
 
