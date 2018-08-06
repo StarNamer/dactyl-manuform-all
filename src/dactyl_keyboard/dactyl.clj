@@ -119,7 +119,7 @@
 
 (def α (/ π 11))
 (def β (/ π 32))
-(def slope-row 2.7)
+(def slope-row 3.0)
 (def slope-col 1)
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height 1/2) 2)
@@ -261,7 +261,7 @@
          (translate [mount-width 0 0])
          (rotate (* π (- 1/4 3/16)) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (translate [-38 -30 20]))))
+         (translate [-36 -25 20]))))
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
