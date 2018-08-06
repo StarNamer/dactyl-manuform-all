@@ -1017,7 +1017,7 @@
                         (key-place 1 4 (translate [0 0 8.5] web-post-bl))
                         (key-place 1 4 half-post-bl)
                         )]
-         stands (let [bumper-diameter 9.6
+         stands (let [bumper-diameter 13.0
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
                       stand-radius (/ stand-diameter 2)
@@ -1031,10 +1031,10 @@
                                             (->> (sphere bumper-radius)
                                                  (translate [0 0 (+ (/ stand-radius -2) -4.5)])
                                                  %
-                                                 (bottom 1.5)))]
+                                                 (bottom 0.5)))]
                   [(stand-at #(key-place 0 1 %))
                    (stand-at #(thumb-place 1 -1/2 %))
-                   (stand-at #(key-place 5 0 %))
+                   (stand-at #(key-place 5 0.3 %))  ;; avoid screw holes
                    (stand-at #(key-place 5 3 %))])]
      (apply union
             (concat
@@ -1056,8 +1056,9 @@
 
 (def screw-holes
   (union
+   (key-place -0.2 1/2 screw-hole)
    (key-place (+ 4 1/2) 1/2 screw-hole)
-   (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
+   (key-place 5 (+ 3 1/2) screw-hole)
    (thumb-place 2 -1/2 screw-hole)))
 
 (defn circuit-cover [width length height]
@@ -1108,15 +1109,10 @@
      (hull cover-sphere-tr tr mrb mrt)
      (hull cover-sphere-br br mrb mrt))))
 
-(def io-exp-width 10)
-(def io-exp-height 8)
-(def io-exp-length 36)
-
 (def teensy-width 30)
 (def teensy-height 13)
 (def teensy-length 33)
 
-(def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
 
 (def trrs-diameter 6.6)
@@ -1211,17 +1207,7 @@
    usb-cutout))
 
 (def dactyl-bottom-left
-  (mirror [-1 0 0]
-          (union
-           io-exp-cover
-           (difference
-            bottom-plate
-            (hull io-exp-cover)
-            new-case
-            io-exp-cover
-            trrs-cutout
-            (->> (cube 1000 1000 10) (translate [0 0 -6]))
-            screw-holes))))
+  (mirror [-1 0 0] dactyl-bottom-right))
 
 (def dactyl-top-right
   (difference
