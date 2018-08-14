@@ -18,7 +18,7 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def old-single-plate
+(def cherry-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -45,7 +45,7 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+(def alps-single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
@@ -65,6 +65,8 @@
            (->> plate-half
                 (mirror [1 0 0])
                 (mirror [0 1 0])))))
+
+(def single-plate cherry-single-plate)
 
 
 ;;;;;;;;;;;;;;;;
@@ -1196,54 +1198,31 @@
 
 (def dactyl-bottom-right
   (difference
-   (union
-    teensy-cover
-    (difference
      bottom-plate
-     (hull teensy-cover)
      new-case
-     teensy-cover
-     trrs-cutout
      (->> (cube 1000 1000 10) (translate [0 0 -5]))
      screw-holes))
-   usb-cutout))
 
 (def dactyl-bottom-left
-  (mirror [-1 0 0]
-          (union
-           io-exp-cover
-           (difference
-            bottom-plate
-            (hull io-exp-cover)
-            new-case
-            io-exp-cover
-            trrs-cutout
-            (->> (cube 1000 1000 10) (translate [0 0 -5]))
-            screw-holes))))
+  (mirror [-1 0 0] dactyl-bottom-right))
 
 (def dactyl-top-right
   (difference
-   (union key-holes
-          connectors
-          thumb
-          new-case
-          teensy-support)
-   trrs-hole-just-circle))
+    (union key-holes
+           connectors
+           thumb
+           new-case)
+    usb-cutout
+    trrs-cutout))
 
 (def dactyl-top-left
-  (mirror [-1 0 0]
-          (difference
-           (union key-holes
-                  connectors
-                  thumb
-                  new-case)
-           trrs-hole-just-circle)))
+  (mirror [-1 0 0] dactyl-top-right))
 
-(spit "things/switch-hole.scad"
-      (write-scad single-plate))
+; (spit "things/switch-hole.scad"
+;       (write-scad single-plate))
 
-(spit "things/alps-holes.scad"
-      (write-scad (union connectors key-holes)))
+; (spit "things/alps-holes.scad"
+;       (write-scad (union connectors key-holes)))
 
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
@@ -1257,8 +1236,8 @@
 (spit "things/dactyl-bottom-left.scad"
       (write-scad dactyl-bottom-left))
 
-(spit "things/dactyl-top-left-with-teensy.scad"
-      (write-scad (mirror [-1 0 0] dactyl-top-right)))
+; (spit "things/dactyl-top-left-with-teensy.scad"
+;       (write-scad (mirror [-1 0 0] dactyl-top-right)))
 
-(spit "things/dactyl-bottom-left-with-teensy.scad"
-      (write-scad (mirror [-1 0 0] dactyl-bottom-right)))
+; (spit "things/dactyl-bottom-left-with-teensy.scad"
+;       (write-scad (mirror [-1 0 0] dactyl-bottom-right)))
