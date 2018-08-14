@@ -18,7 +18,7 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-#_(def single-plate
+(def single-plate
     (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                         (translate [0
                                     (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -45,7 +45,7 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+#_(def single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
