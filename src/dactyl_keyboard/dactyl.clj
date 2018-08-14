@@ -656,6 +656,7 @@
                     (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
                     (place thumb-left-wall-column x wall-sphere-bottom-front)
                     (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))))
+
      (hull (place thumb-left-wall-column 1.95 wall-sphere-top-front)
            (place thumb-left-wall-column 1.95 wall-sphere-bottom-front)
            (place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
@@ -1192,6 +1193,8 @@
          (translate [0 0 (- teensy-offset-height)])
          (key-place 1/2 3/2))))
 
+(def desk (->> (cube 1000 1000 1000) (translate [-500 -500 -500])))
+
 ;;;;;;;;;;;;;;;;;;
 ;; Final Export ;;
 ;;;;;;;;;;;;;;;;;;
@@ -1207,13 +1210,10 @@
   (mirror [-1 0 0] dactyl-bottom-right))
 
 (def dactyl-top-right
-  (difference
     (union key-holes
            connectors
            thumb
-           new-case)
-    usb-cutout
-    trrs-cutout))
+           new-case))
 
 (def dactyl-top-left
   (mirror [-1 0 0] dactyl-top-right))
@@ -1227,14 +1227,14 @@
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
 
-(spit "things/dactyl-bottom-right.scad"
-      (write-scad dactyl-bottom-right))
+; (spit "things/dactyl-bottom-right.scad"
+;       (write-scad dactyl-bottom-right))
 
-(spit "things/dactyl-top-left.scad"
-      (write-scad dactyl-top-left))
+; (spit "things/dactyl-top-left.scad"
+;       (write-scad dactyl-top-left))
 
-(spit "things/dactyl-bottom-left.scad"
-      (write-scad dactyl-bottom-left))
+; (spit "things/dactyl-bottom-left.scad"
+;       (write-scad dactyl-bottom-left))
 
 ; (spit "things/dactyl-top-left-with-teensy.scad"
 ;       (write-scad (mirror [-1 0 0] dactyl-top-right)))
