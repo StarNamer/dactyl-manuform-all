@@ -1314,27 +1314,26 @@
            trrs-hole-just-circle
            screw-holes)))
 
-(comment
-  (spit "things/lightcycle-cherry-top-right.scad"
-        (write-scad dactyl-top-right))
+; (spit "things/lightcycle-cherry-top-right.scad"
+;       (write-scad dactyl-top-right))
 
-  (spit "things/lightcycle-cherry-bottom-right.scad"
-        (write-scad dactyl-bottom-right))
-
-  (spit "things/lightcycle-cherry-top-left.scad"
-        (write-scad dactyl-top-left))
-
-  (spit "things/lightcycle-cherry-bottom-left.scad"
-        (write-scad dactyl-bottom-left)))
-
-(spit "things/lightcycle-matias-top-right.scad"
-      (write-scad dactyl-top-right))
-
-(spit "things/lightcycle-matias-bottom-right.scad"
+(spit "things/lightcycle-cherry-bottom-right.scad"
       (write-scad dactyl-bottom-right))
 
-(spit "things/lightcycle-matias-top-left.scad"
-      (write-scad dactyl-top-left))
+; (spit "things/lightcycle-cherry-top-left.scad"
+;       (write-scad dactyl-top-left))
 
-(spit "things/lightcycle-matias-bottom-left.scad"
-      (write-scad dactyl-bottom-left))
+; (spit "things/lightcycle-cherry-bottom-left.scad"
+;       (write-scad dactyl-bottom-left))
+
+; (spit "things/lightcycle-matias-top-right.scad"
+;       (write-scad dactyl-top-right))
+
+; (spit "things/lightcycle-matias-bottom-right.scad"
+;       (write-scad dactyl-bottom-right))
+
+; (spit "things/lightcycle-matias-top-left.scad"
+;       (write-scad dactyl-top-left))
+
+; (spit "things/lightcycle-matias-bottom-left.scad"
+;       (write-scad dactyl-bottom-left))
