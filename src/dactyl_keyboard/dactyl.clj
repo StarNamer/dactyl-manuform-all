@@ -405,7 +405,7 @@
   (concat (range start end step) [end]))
 
 (def wall-step 0.2)
-(def wall-sphere-n 20) ;;Sphere resolution, lower for faster renders
+(def wall-sphere-n 2) ;;Sphere resolution, lower for faster renders
 
 (defn wall-sphere-at [coords]
   (->> (sphere 1)
@@ -656,7 +656,14 @@
                     (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
                     (place thumb-left-wall-column x wall-sphere-bottom-front)
                     (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))))
-
+     (apply union
+            (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
+              (hull (->> (place thumb-left-wall-column x wall-sphere-top-front)
+                         (translate [0 0 (- 200)]))
+                    (->> (place thumb-left-wall-column (+ x step) wall-sphere-top-front)
+                         (translate [0 0 (- 200)]))
+                    (place thumb-left-wall-column x wall-sphere-bottom-front)
+                    (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))))
      (hull (place thumb-left-wall-column 1.95 wall-sphere-top-front)
            (place thumb-left-wall-column 1.95 wall-sphere-bottom-front)
            (place thumb-left-wall-column thumb-back-y wall-sphere-top-back)
@@ -704,6 +711,14 @@
             (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
               (hull (place x thumb-front-row wall-sphere-top-front)
                     (place (+ x step) thumb-front-row wall-sphere-top-front)
+                    (place x thumb-front-row wall-sphere-bottom-front)
+                    (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
+     (apply union
+            (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
+              (hull (->> (place x thumb-front-row wall-sphere-bottom-front)
+                         (translate [0 0 (- 200)]))
+                    (->> (place (+ x step) thumb-front-row wall-sphere-bottom-front)
+                         (translate [0 0 (- 200)]))
                     (place x thumb-front-row wall-sphere-bottom-front)
                     (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
 
@@ -1210,10 +1225,12 @@
   (mirror [-1 0 0] dactyl-bottom-right))
 
 (def dactyl-top-right
+  (difference
     (union key-holes
            connectors
            thumb
-           new-case))
+           new-case)
+    desk))
 
 (def dactyl-top-left
   (mirror [-1 0 0] dactyl-top-right))
