@@ -465,26 +465,30 @@
                                     x-start x-end y-start y-end
                                     wall-step))]
     (union
+      ;; main wall
       (apply union
         (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
           (hull (place x 4 wall-sphere-top-front)
                 (place (+ x step) 4 wall-sphere-top-front)
                 (place x 4 wall-sphere-bottom-front)
                 (place (+ x step) 4 wall-sphere-bottom-front))))
+      ;; left side up to thumb cluster wall
+      (apply union
+        (for [x (range-inclusive 0.5 0.7 0.01)]
+          (hull (place x 4 wall-sphere-top-front)
+                (place (+ x step) 4 wall-sphere-top-front)
+                (place 0.7 4 wall-sphere-bottom-front))))
+      ;; wall to desk
       (apply union
         (for [x (range-inclusive 0.7 (- right-wall-column step) step)]
           (hull (desk-case-place x 4 wall-sphere-bottom-front)
                 (desk-case-place (+ x step) 4 wall-sphere-bottom-front)
                 (place x 4 wall-sphere-bottom-front)
                 (place (+ x step) 4 wall-sphere-bottom-front))))
-      ; (apply union
-      ;   (for [x (range-inclusive 0.5 0.7 0.01)]
-      ;     (hull (place x 4 wall-sphere-top-front)
-      ;           (place (+ x step) 4 wall-sphere-top-front)
-      ;           (place 0.7 4 wall-sphere-bottom-front))))
       (top-cover 0.5 1.7 3.6 4)
       (top-cover 1.59 2.41 3.35 4) ;; was 3.32
       (top-cover 2.39 3.41 3.6 4)
+      ;; key plate to wall (columns 2 to 5)
       (apply union
         (for [x (range 2 5)]
           (union
@@ -503,6 +507,7 @@
             (place (- right-wall-column 1) 4 (translate [0 1 1] wall-sphere-bottom-front))
             (key-place 4 4 web-post-br)
             (key-place 5 4 web-post-bl))
+      ;; key plate to wall (column 1)
       (hull (place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
             (place 1.7 4 (translate [0 1 1] wall-sphere-bottom-front))
             (key-place 1 4 web-post-bl)
