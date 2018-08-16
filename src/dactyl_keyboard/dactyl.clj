@@ -746,47 +746,52 @@
         thumb-br (->> web-post-br
                       (translate [-0 (- plate-height) 0]))]
     (union
-     (apply union
-            (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
-              (hull (place x thumb-front-row wall-sphere-top-front)
-                    (place (+ x step) thumb-front-row wall-sphere-top-front)
-                    (place x thumb-front-row wall-sphere-bottom-front)
-                    (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
-     (apply union
-            (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
-              (hull (desk-thumb-place x thumb-front-row wall-sphere-bottom-front)
-                    (desk-thumb-place (+ x step) thumb-front-row wall-sphere-bottom-front)
-                    (place x thumb-front-row wall-sphere-bottom-front)
-                    (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
-
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-top-front)
-           (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
-           (case-place 0.5 4 wall-sphere-top-front))
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
-           (case-place 0.5 4 wall-sphere-top-front)
-           (case-place 0.7 4 wall-sphere-bottom-front))
-
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
-           (key-place 1 4 web-post-bl)
-           (place 0 -1/2 thumb-br)
-           (place 0 -1/2 web-post-br)
-           (case-place 0.7 4 wall-sphere-bottom-front))
-
-     (hull (place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
-           (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 2 -1 web-post-bl)
-           (place 2 -1 web-post-br))
-
-     (hull (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 0 -1/2 thumb-br))
-     (hull (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-br)
-           (place 2 -1 web-post-br)))))
+      ;; main wall
+      (apply union
+        (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
+          (hull (place x thumb-front-row wall-sphere-top-front)
+                (place (+ x step) thumb-front-row wall-sphere-top-front)
+                (place x thumb-front-row wall-sphere-bottom-front)
+                (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
+      ;; thumb front wall to front wall
+      (hull (place thumb-right-wall thumb-front-row wall-sphere-top-front)
+            (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+            (case-place 0.5 4 wall-sphere-top-front))
+      (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+            (case-place 0.5 4 wall-sphere-top-front)
+            (case-place 0.7 4 wall-sphere-bottom-front))
+      ;; wall to desk
+      (apply union
+        (for [x (range-inclusive thumb-right-wall (- (+ 5/2 0.05) step) step)]
+          (hull (desk-thumb-place x thumb-front-row wall-sphere-bottom-front)
+                (desk-thumb-place (+ x step) thumb-front-row wall-sphere-bottom-front)
+                (place x thumb-front-row wall-sphere-bottom-front)
+                (place (+ x step) thumb-front-row wall-sphere-bottom-front))))
+      (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+            (desk-case-place 0.7 4 wall-sphere-bottom-front)
+            (case-place 0.7 4 wall-sphere-bottom-front)
+            (desk-thumb-place thumb-right-wall thumb-front-row wall-sphere-bottom-front))
+      ;; between thumb key plate, wall, and case-plate
+      (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front)
+            (key-place 1 4 web-post-bl)
+            (place 0 -1/2 thumb-br)
+            (place 0 -1/2 web-post-br)
+            (case-place 0.7 4 wall-sphere-bottom-front))
+      ;; from thumb-key plate to wall
+      (hull (place (+ 5/2 0.05) thumb-front-row (translate [1 1 1] wall-sphere-bottom-front))
+            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+            (place 2 -1 web-post-bl)
+            (place 2 -1 web-post-br))
+      (hull (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+            (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+            (place 0 -1/2 thumb-bl)
+            (place 0 -1/2 thumb-br))
+      (hull (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+            (place (+ 3/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front))
+            (place 0 -1/2 thumb-bl)
+            (place 1 -1/2 thumb-bl)
+            (place 1 -1/2 thumb-br)
+            (place 2 -1 web-post-br)))))
 
 (def new-case
   (union front-wall
