@@ -793,6 +793,10 @@
             (place 1 -1/2 thumb-br)
             (place 2 -1 web-post-br)))))
 
+(def arduino-width 18)
+(def arduino-length 35)
+(def arduino-height 5)
+
 (def new-case
   (union front-wall
          right-wall
