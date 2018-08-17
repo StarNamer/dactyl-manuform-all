@@ -619,7 +619,7 @@
                 (place left-wall-column (+ x wall-step) wall-sphere-bottom-front))))
       ;; wall to desk
       (apply union
-        (for [x (range-inclusive -1 (- 1.6666 wall-step) wall-step)]
+        (for [x (range-inclusive (- -1 0.05) (- 1.69 wall-step) wall-step)]
           (hull (desk-case-place left-wall-column x wall-sphere-bottom-front)
                 (desk-case-place left-wall-column (+ x wall-step) wall-sphere-bottom-front)
                 (place left-wall-column x wall-sphere-bottom-front)
@@ -669,7 +669,7 @@
                 (thumb-place (+ x step) back-y wall-sphere-bottom-back))))
       ;; wall to desk
       (apply union
-        (for [x (range-inclusive 1/2 (- (+ 5/2 0.05) step) step)]
+        (for [x (range-inclusive (- 1/2 0.07) (- (+ 5/2 0.05) step) step)]
           (hull (desk-thumb-place x back-y wall-sphere-bottom-back)
                 (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back)
                 (thumb-place x back-y wall-sphere-bottom-back)
@@ -703,7 +703,7 @@
                 (place thumb-left-wall-column (+ x step) wall-sphere-bottom-front))))
       ;; wall to desk
       (apply union
-        (for [x (range-inclusive (+ -1 0.07) (- 1.95 step) step)]
+        (for [x (range-inclusive (+ -1 0.07) (- 1.98 step) step)]
           (hull (desk-thumb-place thumb-left-wall-column x wall-sphere-bottom-front)
                 (desk-thumb-place thumb-left-wall-column (+ x step) wall-sphere-bottom-front)
                 (place thumb-left-wall-column x wall-sphere-bottom-front)
