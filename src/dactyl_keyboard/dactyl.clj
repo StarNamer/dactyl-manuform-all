@@ -413,7 +413,7 @@
   (concat (range start end step) [end]))
 
 (def wall-step 0.2)
-(def wall-sphere-n 20) ;;Sphere resolution, lower for faster renders
+(def wall-sphere-n 2) ;;Sphere resolution, lower for faster renders
 
 (defn wall-sphere-at [coords]
   (->> (sphere 1)
