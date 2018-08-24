@@ -804,6 +804,34 @@
 (def arduino-length 35)
 (def arduino-height 5)
 
+(def arduino-holder
+  (union
+    (hull (translate [0 0 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 0 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 0 0] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
+          (translate [0 0 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 0] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back)))
+    (hull (translate [0 (- -2 arduino-length) 8] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -2 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -2 arduino-length) 8] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
+          (translate [0 (- -2 arduino-length) 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 8] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 8] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back)))
+    (hull (translate [0 0 0] (desk-case-place left-wall-column 0.5 wall-sphere-bottom-front))
+          (translate [0 0 2] (desk-case-place left-wall-column 0.5 wall-sphere-bottom-front))
+          (translate [0 0 0] (desk-case-place left-wall-column 0.2 wall-sphere-bottom-front))
+          (translate [0 0 2] (desk-case-place left-wall-column 0.2 wall-sphere-bottom-front))
+          (translate [0 (- 8 arduino-length) 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- 8 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
+          (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back)))
+    ))
+
 (def new-case
   (union front-wall
          right-wall
@@ -811,7 +839,8 @@
          left-wall
          thumb-back-wall
          thumb-left-wall
-         thumb-front-wall))
+         thumb-front-wall
+         arduino-holder))
 
 ;;;;;;;;;;;;
 ;; Bottom ;;
@@ -1250,16 +1279,14 @@
   (let [hole-height 6.2
         side-radius (/ hole-height 2)
         hole-width 10.75
-        side-cylinder (->> (cylinder side-radius teensy-length)
+        side-cylinder (->> (cylinder side-radius arduino-length)
                            (with-fn 20)
                            (translate [(/ (- hole-width hole-height) 2) 0 0]))]
-    (->> (hull side-cylinder
-               (mirror [-1 0 0] side-cylinder))
-         (rotate (/ π 2) [1 0 0])
-         (translate [0 (/ teensy-length 2) (- side-radius)])
-         (translate [0 0 (- 1)])
-         (translate [0 0 (- teensy-offset-height)])
-         (key-place 1/2 3/2))))
+        (->> (hull side-cylinder
+                  (mirror [-1 0 0] side-cylinder))
+          (rotate (/ π 2) [1 0 0])
+          (rotate (/ π 2) [0 1 0])
+          (translate [(- 30) (- 54 (/ arduino-length 2)) (+ (/ arduino-width 2) 4)]))))
 
 ;;;;;;;;;;;;;;;;;;
 ;; Final Export ;;
@@ -1281,6 +1308,8 @@
            connectors
            thumb
            new-case)
+    ; (union back-wall
+    ;         arduino-holder)
     usb-cutout))
 
 (def dactyl-top-left
