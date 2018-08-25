@@ -832,6 +832,30 @@
           (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back)))
     ))
 
+(def trrs-holder
+  (let [x 0.5
+        step 0.7
+        trrs-length 13
+        back-y thumb-back-y]
+    (union
+      (hull (translate [0 0 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [0 0 2] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [0 (- trrs-length) 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [0 (- trrs-length) 2] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [0 0 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [0 0 2] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 2] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back)))
+      (hull (translate [0 (- trrs-length) 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [0 (- trrs-length) 4] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 4] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [0 (- (- trrs-length) 2) 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [0 (- (- trrs-length) 2) 4] (desk-thumb-place x back-y wall-sphere-bottom-back))
+            (translate [5 (- (- trrs-length) 1.2) 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [5 (- (- trrs-length) 1.2) 4] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back)))
+    )))
+
 (def new-case
   (union front-wall
          right-wall
@@ -840,7 +864,8 @@
          thumb-back-wall
          thumb-left-wall
          thumb-front-wall
-         arduino-holder))
+         arduino-holder
+         trrs-holder))
 
 ;;;;;;;;;;;;
 ;; Bottom ;;
@@ -1304,12 +1329,12 @@
 
 (def dactyl-top-right
   (difference
-    (union key-holes
-           connectors
-           thumb
-           new-case)
-    ; (union back-wall
-    ;         arduino-holder)
+    ; (union key-holes
+    ;        connectors
+    ;        thumb
+    ;        new-case)
+    (union thumb-back-wall
+            trrs-holder)
     usb-cutout))
 
 (def dactyl-top-left
