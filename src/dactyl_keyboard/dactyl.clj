@@ -1252,11 +1252,10 @@
 (def trrs-radius (/ trrs-diameter 2))
 (def trrs-hole-depth 10)
 
-(def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
-                           (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
-                                (translate [0 (/ (+ trrs-radius 5) 2) 0])))
+(def trrs-hole (->> (cylinder trrs-radius trrs-hole-depth)
+                    (rotate (/ π 14) [0 1 0])
                     (rotate (/ π 2) [1 0 0])
-                    (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+                    (translate [-60 -15 (+ trrs-radius 3.5)])
                     (with-fn 50)))
 
 (def trrs-hole-just-circle
@@ -1335,12 +1334,13 @@
 
 (def dactyl-top-right
   (difference
-    ; (union key-holes
-    ;        connectors
-    ;        thumb
-    ;        new-case)
-    (union back-wall
-           arduino-holder)
+    (union key-holes
+           connectors
+           thumb
+           new-case)
+    ; (union thumb-back-wall
+    ;        trrs-holder)
+    trrs-hole
     usb-cutout))
 
 (def dactyl-top-left
