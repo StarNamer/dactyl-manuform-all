@@ -805,55 +805,61 @@
 (def arduino-height 5)
 
 (def arduino-holder
-  (union
-    (hull (translate [0 0 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 0 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 0 0] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
-          (translate [0 0 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 0] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back)))
-    (hull (translate [0 (- -2 arduino-length) 8] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -2 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -2 arduino-length) 8] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
-          (translate [0 (- -2 arduino-length) 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 8] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 8] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 2] (desk-case-place (+ left-wall-column 1) back-y wall-sphere-bottom-back)))
-    (hull (translate [0 0 0] (desk-case-place left-wall-column 0.5 wall-sphere-bottom-front))
-          (translate [0 0 2] (desk-case-place left-wall-column 0.5 wall-sphere-bottom-front))
-          (translate [0 0 0] (desk-case-place left-wall-column 0.2 wall-sphere-bottom-front))
-          (translate [0 0 2] (desk-case-place left-wall-column 0.2 wall-sphere-bottom-front))
-          (translate [0 (- 8 arduino-length) 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- 8 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 0] (desk-case-place left-wall-column back-y wall-sphere-bottom-back))
-          (translate [0 (- -3 arduino-length) 2] (desk-case-place left-wall-column back-y wall-sphere-bottom-back)))
-    ))
+  (let [x left-wall-column
+        trrs-length 13
+        place desk-case-place
+        back-left (place x back-y wall-sphere-bottom-back)
+        back-right (place (+ x 1) back-y wall-sphere-bottom-back)]
+    (union
+      (hull (translate [0 0 0] back-left)
+            (translate [0 0 2] back-left)
+            (translate [0 0 0] back-right)
+            (translate [0 0 2] back-right)
+            (translate [0 (- -3 arduino-length) 0] back-left)
+            (translate [0 (- -3 arduino-length) 2] back-left)
+            (translate [0 (- -3 arduino-length) 0] back-right)
+            (translate [0 (- -3 arduino-length) 2] back-right))
+      (hull (translate [0 (- -2 arduino-length) 8] back-left)
+            (translate [0 (- -2 arduino-length) 2] back-left)
+            (translate [0 (- -2 arduino-length) 8] back-right)
+            (translate [0 (- -2 arduino-length) 2] back-right)
+            (translate [0 (- -3 arduino-length) 8] back-left)
+            (translate [0 (- -3 arduino-length) 2] back-left)
+            (translate [0 (- -3 arduino-length) 8] back-right)
+            (translate [0 (- -3 arduino-length) 2] back-right))
+      (hull (translate [0 0 0] (place x 0.5 wall-sphere-bottom-front))
+            (translate [0 0 2] (place x 0.5 wall-sphere-bottom-front))
+            (translate [0 0 0] (place x 0.2 wall-sphere-bottom-front))
+            (translate [0 0 2] (place x 0.2 wall-sphere-bottom-front))
+            (translate [0 (- 8 arduino-length) 0] back-left)
+            (translate [0 (- 8 arduino-length) 2] back-left)
+            (translate [0 (- -3 arduino-length) 0] back-left)
+            (translate [0 (- -3 arduino-length) 2] back-left))
+    )))
 
 (def trrs-holder
   (let [x 0.5
         step 0.7
         trrs-length 13
-        back-y thumb-back-y]
+        back-y thumb-back-y
+        place desk-thumb-place]
     (union
-      (hull (translate [0 0 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [0 0 2] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [0 (- trrs-length) 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [0 (- trrs-length) 2] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [0 0 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
-            (translate [0 0 2] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
-            (translate [4 (- 0.8 trrs-length) 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
-            (translate [4 (- 0.8 trrs-length) 2] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back)))
-      (hull (translate [0 (- trrs-length) 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [0 (- trrs-length) 4] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [4 (- 0.8 trrs-length) 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
-            (translate [4 (- 0.8 trrs-length) 4] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
-            (translate [0 (- (- trrs-length) 2) 0] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [0 (- (- trrs-length) 2) 4] (desk-thumb-place x back-y wall-sphere-bottom-back))
-            (translate [5 (- (- trrs-length) 1.2) 0] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back))
-            (translate [5 (- (- trrs-length) 1.2) 4] (desk-thumb-place (+ x step) back-y wall-sphere-bottom-back)))
+      (hull (translate [0 0 0] (place x back-y wall-sphere-bottom-back))
+            (translate [0 0 2] (place x back-y wall-sphere-bottom-back))
+            (translate [0 (- trrs-length) 0] (place x back-y wall-sphere-bottom-back))
+            (translate [0 (- trrs-length) 2] (place x back-y wall-sphere-bottom-back))
+            (translate [0 0 0] (place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [0 0 2] (place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 0] (place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 2] (place (+ x step) back-y wall-sphere-bottom-back)))
+      (hull (translate [0 (- trrs-length) 0] (place x back-y wall-sphere-bottom-back))
+            (translate [0 (- trrs-length) 4] (place x back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 0] (place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [4 (- 0.8 trrs-length) 4] (place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [0 (- (- trrs-length) 2) 0] (place x back-y wall-sphere-bottom-back))
+            (translate [0 (- (- trrs-length) 2) 4] (place x back-y wall-sphere-bottom-back))
+            (translate [5 (- (- trrs-length) 1.2) 0] (place (+ x step) back-y wall-sphere-bottom-back))
+            (translate [5 (- (- trrs-length) 1.2) 4] (place (+ x step) back-y wall-sphere-bottom-back)))
     )))
 
 (def new-case
@@ -1333,8 +1339,8 @@
     ;        connectors
     ;        thumb
     ;        new-case)
-    (union thumb-back-wall
-            trrs-holder)
+    (union back-wall
+           arduino-holder)
     usb-cutout))
 
 (def dactyl-top-left
