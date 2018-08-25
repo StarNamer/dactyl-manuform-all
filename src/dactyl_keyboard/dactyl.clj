@@ -1179,15 +1179,44 @@
              thumb-inside
              stands)))))
 
-(def screw-hole (->> (cylinder 1.5 60)
-                     (translate [0 0 3/2])
-                     (with-fn wall-sphere-n)))
-
-(def screw-holes
+(def bolt-hole
   (union
-   (key-place (+ 4 1/2) 1/2 screw-hole)
-   (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
-   (thumb-place 2 -1/2 screw-hole)))
+    (->>  (cylinder 1.2 20)
+          (with-fn 50))
+    (->>  (cylinder 2.25 10)
+          (translate [0 0 6.5])
+          (with-fn 6))
+  ))
+
+(def bolt-holes
+  (union
+    (translate [-75 -80 0] bolt-hole)
+    (translate [68 -54 0] bolt-hole)
+    (translate [68 47 0] bolt-hole)
+    (translate [-44 0 0] bolt-hole)
+  ))
+
+(def bolt-plates
+  (let [x left-wall-column
+        trrs-length 13
+        place desk-case-place
+        back-left (place x back-y wall-sphere-bottom-back)
+        back-right (place (+ x 1) back-y wall-sphere-bottom-back)]
+    (union
+      (->>  (polygon [[-50 8] [-38 7] [-38 -7] [-50 -8]])
+            (extrude-linear {:height 4 :twist 0 :convexity 0})
+            (translate [0 0 2]))
+      (->>  (polygon [[64 53] [74 52] [75 43] [64 43]])
+            (extrude-linear {:height 4 :twist 0 :convexity 0})
+            (translate [0 0 2]))
+      (->>  (polygon [[63 -60] [63 -48] [74.5 -48] [74 -60]])
+            (extrude-linear {:height 4 :twist 0 :convexity 0})
+            (translate [0 0 2]))
+      (->>  (polygon [[-68 -83] [-80 -86] [-82 -76] [-72 -76]])
+            (extrude-linear {:height 4 :twist 0 :convexity 0})
+            (translate [0 0 2]))
+    )
+  ))
 
 (defn circuit-cover [width length height]
   (let [cover-sphere-radius 1
@@ -1255,7 +1284,7 @@
 (def trrs-hole (->> (cylinder trrs-radius trrs-hole-depth)
                     (rotate (/ π 14) [0 1 0])
                     (rotate (/ π 2) [1 0 0])
-                    (translate [-60 -15 (+ trrs-radius 3.5)])
+                    (translate [-60 -15 (+ trrs-radius 4)])
                     (with-fn 50)))
 
 (def trrs-hole-just-circle
@@ -1326,8 +1355,7 @@
   (difference
      bottom-plate
      new-case
-     (->> (cube 1000 1000 10) (translate [0 0 -5]))
-     screw-holes))
+     (->> (cube 1000 1000 10) (translate [0 0 -5]))))
 
 (def dactyl-bottom-left
   (mirror [-1 0 0] dactyl-bottom-right))
@@ -1337,9 +1365,12 @@
     (union key-holes
            connectors
            thumb
-           new-case)
+           new-case
+           bolt-plates
+           )
     ; (union thumb-back-wall
     ;        trrs-holder)
+    bolt-holes
     trrs-hole
     usb-cutout))
 
