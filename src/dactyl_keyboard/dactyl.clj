@@ -29,7 +29,7 @@
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
-(def nhumb-offsets [6 -3 7])
+(def thumb-offsets [6 -3 7])
 
 (def keyboard-z-offset 15.8)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -718,35 +718,24 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
                   
-(spit "things/right-test.scad"
-      (write-scad 
-                   (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    case-walls 
-                    thumbcaps
-                    caps
-                    teensy-holder
-                    rj9-holder
-                    usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers 
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout 
-                    ;             rj9-space 
-                                ; wire-posts
-                  )))
 
 (spit "things/right-plate.scad"
       (write-scad 
                    (cut
                      (translate [0 0 -0.1]
                        (difference (union case-walls
-                                          teensy-holder
+                                          ; teensy-holder
+                                          ; rj9-holder
+                                          screw-insert-outers)
+                                   (translate [0 0 -10] screw-insert-screw-holes))
+                  ))))
+
+(spit "things/left-plate.scad"
+      (write-scad 
+                   (cut
+                     (translate [0 0 -0.1]
+                       (difference (union case-walls
+                                          ; teensy-holder
                                           ; rj9-holder
                                           screw-insert-outers)
                                    (translate [0 0 -10] screw-insert-screw-holes))
