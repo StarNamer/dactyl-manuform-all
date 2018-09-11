@@ -592,15 +592,19 @@
                               (union (translate [0 2 0] (cube 10.78  9 18.38))
                                      (translate [0 0 5] (cube 10.78 13  5))))))
 
-(def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [13.6 6.0 6.5])
 (def usb-holder-thickness 4)
+(def usb-holder-position (
+    let [wall-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0]))]
+    (->> [(first wall-position) (second wall-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])
+  )
+)
 (def usb-holder
     (->> (cube (+ (first usb-holder-size) usb-holder-thickness) (second usb-holder-size) (+ (last usb-holder-size) usb-holder-thickness))
-         (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+         (translate usb-holder-position)))
 (def usb-holder-hole
     (->> (apply cube usb-holder-size)
-         (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+         (translate usb-holder-position)))
 
 (def teensy-width 20)  
 (def teensy-height 12)
