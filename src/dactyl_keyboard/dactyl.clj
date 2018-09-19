@@ -18,14 +18,15 @@
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
-(def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 4)                       ; controls left-right tilt / tenting (higher number is more tenting)
-(def tenting-angle (/ π 8))            ; or, change this for more precise tenting control
+(def centerrow (- nrows 2))             ; controls front-back tilt
+(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def tenting-angle 0) ;(/ π 16))            ; or, change this for more precise tenting control
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
 
 (defn column-offset [column] (cond
+  (= column 0) [0 -2.82 0]
   (= column 2) [0 2.82 -4.5]
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
@@ -291,61 +292,57 @@
 ;;;;;;;;;;;;
 
 (def thumborigin
-  (map + (key-position 1 cornerrow [(/ mount-width 2) (- (/ mount-height 2)) 0])
+  (map + (key-position 0 cornerrow [(/ mount-width 2) (- (/ mount-height 2)) 0])
          thumb-offsets))
 ; (pr thumborigin)
 
+
+
 (defn thumb-tr-place [shape]
   (->> shape
-      ;  (rotate (deg2rad  10) [1 0 0])
-      ;  (rotate (deg2rad -23) [0 1 0])
-      ;  (rotate (deg2rad  -3) [0 0 1])
-       (rotate (deg2rad  10) [1 0 0])
-       (rotate (deg2rad -23) [0 1 0])
-       (rotate (deg2rad  10) [0 0 1])
+       (rotate (deg2rad  0) [1 0 0])
+       (rotate (deg2rad -30) [0 1 0])
+       (rotate (deg2rad  45) [0 0 1])
        (translate thumborigin)
-       (translate [-12 -16 3])
+       (translate [-12 -16 0])
        ))
 (defn thumb-tl-place [shape]
   (->> shape
-      ;  (rotate (deg2rad  10) [1 0 0])
-      ;  (rotate (deg2rad -23) [0 1 0])
-      ;  (rotate (deg2rad  -3) [0 0 1])
-       (rotate (deg2rad  10) [1 0 0])
-       (rotate (deg2rad -23) [0 1 0])
-       (rotate (deg2rad  10) [0 0 1])
+       (rotate (deg2rad  0) [1 0 0])
+       (rotate (deg2rad -30) [0 1 0])
+       (rotate (deg2rad  45) [0 0 1])
        (translate thumborigin)
-       (translate [-32 -15 -2])))
+       (translate [-32 -16 0])))
 (defn thumb-mr-place [shape]
   (->> shape
-       (rotate (deg2rad  -6) [1 0 0])
-       (rotate (deg2rad -34) [0 1 0])
-       (rotate (deg2rad  48) [0 0 1])
+       (rotate (deg2rad  0) [1 0 0])
+       (rotate (deg2rad -30) [0 1 0])
+       (rotate (deg2rad  45) [0 0 1])
        (translate thumborigin)
-       (translate [-29 -40 -13])
+       (translate [-29 -32 -12])
        ))
 (defn thumb-ml-place [shape]
   (->> shape
-       (rotate (deg2rad   6) [1 0 0])
-       (rotate (deg2rad -34) [0 1 0])
-       (rotate (deg2rad  40) [0 0 1])
+       (rotate (deg2rad   0) [1 0 0])
+       (rotate (deg2rad -30) [0 1 0])
+       (rotate (deg2rad  45) [0 0 1])
        (translate thumborigin)
-       (translate [-51 -25 -12])))
+       (translate [-51 -32 -12])))
 (defn thumb-br-place [shape]
   (->> shape
-       (rotate (deg2rad -16) [1 0 0])
-       (rotate (deg2rad -33) [0 1 0])
-       (rotate (deg2rad  54) [0 0 1])
+       (rotate (deg2rad 0) [1 0 0])
+       (rotate (deg2rad -30) [0 1 0])
+       (rotate (deg2rad  45) [0 0 1])
        (translate thumborigin)
-       (translate [-37.8 -55.3 -25.3])
+       (translate [-37.8 -48 -25])
        ))
 (defn thumb-bl-place [shape]
   (->> shape
-       (rotate (deg2rad  -4) [1 0 0])
-       (rotate (deg2rad -35) [0 1 0])
-       (rotate (deg2rad  52) [0 0 1])
+       (rotate (deg2rad  0) [1 0 0])
+       (rotate (deg2rad -30) [0 1 0])
+       (rotate (deg2rad  45) [0 0 1])
        (translate thumborigin)
-       (translate [-56.3 -43.3 -23.5])
+       (translate [-56.3 -48 -25])
        ))
 
 (defn thumb-1x-layout [shape]
@@ -371,14 +368,14 @@
 (def thumbcaps
   (union
    (thumb-1x-layout (sa-cap 1))
-   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))))
+   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1)))))
 
 
 (def thumb
   (union
    (thumb-1x-layout single-plate)
    (thumb-15x-layout single-plate)
-   (thumb-15x-layout larger-plate)
+   (thumb-15x-layout single-plate)
    ))
 
 (def thumb-post-tr (translate [(- (/ mount-width 2) post-adj)  (- (/ mount-height  1.15) post-adj) 0] web-post))
