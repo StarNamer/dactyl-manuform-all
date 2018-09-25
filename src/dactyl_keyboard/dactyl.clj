@@ -18,7 +18,53 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def old-single-plate
+(defn inch2mm [inch]
+  (* inch 25.4))
+
+; kailh hot-swap socket
+(def kailh-hotswap-mx-socket
+  (let [cherry-mx-depth (inch2mm 0.197)
+        top-wall (->> (cube (+ keyswitch-width 3) 1.5 cherry-mx-depth)
+                      (translate [0
+                                  (+ (/ 1.5 2) (/ keyswitch-height 2))
+                                  (/ cherry-mx-depth -2)])
+                      (translate [0 0 plate-thickness]))
+        left-wall (->> (cube 1.5 (+ keyswitch-height 3) cherry-mx-depth)
+                       (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
+                                   0
+                                   (/ cherry-mx-depth -2)])
+                       (translate [0 0 plate-thickness]))
+        side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
+                      (rotate (/ π 2) [1 0 0])
+                      (translate [(+ (/ keyswitch-width 2)) 0 1])
+                      (hull (->> (cube 1.5 2.75 plate-thickness)
+                                 (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
+                                             0
+                                             (/ plate-thickness 2)]))))
+        plate-half (union top-wall left-wall (with-fn 100 side-nub))
+        bottom-face (->> (cube (+ keyswitch-width 3) (+ keyswitch-height 3) (inch2mm 0.06))
+                         (translate [0 0 (/ (inch2mm 0.06) 2)]))
+        socket-phi 3.0
+        socket-halfradius (/ socket-phi 2)
+        socket-height (+ (inch2mm 0.06) 0.1)
+        a-socket-hole (->> (binding [*fn* 100] (cylinder socket-halfradius (+ socket-height 0.2)))
+                    (translate [0 0 (/ (+ socket-height 0.1) 2)]))
+        c-hole (->> (binding [*fn* 100] (cylinder 2 (+ socket-height 0.2)))
+                    (translate [0 0 (/ (+ socket-height 0.1) 2)]))
+        left-hole (->> a-socket-hole
+                       (translate [(* -3 (inch2mm 0.05)) (* 2 (inch2mm 0.05)) 0]))
+        right-hole (->> a-socket-hole
+                        (translate [(* -3 (inch2mm 0.05)) (* 2 (inch2mm 0.05)) 0])  ; position of left-hole
+                        (translate [6.35 2.54 0]))               ; relative-position from left-hole
+        center-hole (->> c-hole)
+        bottom-wall (->> (difference bottom-face left-hole right-hole center-hole)
+                         (translate [0 0 (/ cherry-mx-depth -2)]))
+        a-plate (union plate-half (->> plate-half (mirror [1 0 0]) (mirror [0 1 0])) bottom-wall)
+       ]
+  a-plate))
+
+; Cherry MX switch
+(def cherry-mx-switch
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
@@ -45,7 +91,8 @@
 (def alps-notch-height 1)
 (def alps-height 13)
 
-(def single-plate
+; ALPS switch
+(def alps-switch
   (let [top-wall (->> (cube (+ keyswitch-width 3) 2.2 plate-thickness)
                       (translate [0
                                   (+ (/ 2.2 2) (/ alps-height 2))
@@ -65,6 +112,10 @@
            (->> plate-half
                 (mirror [1 0 0])
                 (mirror [0 1 0])))))
+
+(def single-plate kailh-hotswap-mx-socket)
+; (def single-plate cherry-mx-switch)
+; (def single-plate alps-switch)
 
 
 ;;;;;;;;;;;;;;;;
