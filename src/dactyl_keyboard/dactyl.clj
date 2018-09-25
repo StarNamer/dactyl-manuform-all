@@ -258,7 +258,9 @@
          (map (partial apply hull)
               (partition 3 1 shapes))))
 
-; TODO?
+; TODO this would probably be better if the main part was defined by an array of
+; column sizes and an array of column offsets
+
 (def connectors
   (apply union
          (concat
@@ -513,9 +515,9 @@
    (for [x (range 1 ncols)] (key-wall-brace x 0 0 1 web-post-tl (dec x) 0 0 1 web-post-tr))
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
    ; right wall
-   (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
-   (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
-   (key-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 1 0 web-post-br)
+   (for [y (range 0 nrows)] (key-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
+   (for [y (range 1 nrows)] (key-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
+   (key-wall-brace lastcol lastrow 0 -1 web-post-br lastcol lastrow 1 0 web-post-br)
    ; left wall
    (for [y (range 0 lastrow)] (union (wall-brace (partial left-key-place y 1)       -1 0 web-post (partial left-key-place y -1) -1 0 web-post)
                                      (hull (key-place 0 y web-post-tl)
@@ -531,11 +533,8 @@
    (wall-brace (partial left-key-place 0 1) 0 1 web-post (partial left-key-place 0 1) -1 0 web-post)
    ; front wall
    ; TODO
-   ;(key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
-   ;(key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-   ;(key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
-   ;(for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
-   ;(for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+   (for [x (range 3 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl x       lastrow 0 -1 web-post-br))
+   (for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
    ; thumb walls
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
@@ -730,7 +729,7 @@
                     connectors
                     ;thumb
                     ;thumb-connectors
-                    ;case-walls
+                    case-walls
                     ;thumbcaps
                     caps
                     ;teensy-holder
