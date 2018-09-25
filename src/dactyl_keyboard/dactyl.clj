@@ -18,9 +18,9 @@
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
-(def centerrow (- nrows 2))             ; controls front-back tilt
-(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
-(def tenting-angle 0) ;(/ π 16))            ; or, change this for more precise tenting control
+(def centerrow (- nrows 2))             ; 0-indexed. controls front-back tilt
+(def centercol 2)                       ; 0-indexed. controls left-right tilt / tenting (higher number is more tenting)
+(def tenting-angle 0) ;(/ π 16))        ; or, change this for more precise tenting control
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
@@ -31,12 +31,13 @@
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
-(def thumb-offsets [6 -3 -6])
+; (def thumb-offsets [6 -3 -6])
+(def thumb-offsets [0 0 0])
 
-(def keyboard-z-offset 7)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 20)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 1.0)                  ; original= 0.5
+(def extra-width 2)                   ; extra space between the base of keys; original= 2
+(def extra-height 0.5)                  ; original= 0.5
 
 (def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 8)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
@@ -247,31 +248,32 @@
                                       plate-thickness)])))
 
 (def post-adj (/ post-size 2))
-(def web-post-tr (translate [(- (/ mount-width 2) post-adj) (- (/ mount-height 2) post-adj) 0] web-post))
-(def web-post-tl (translate [(+ (/ mount-width -2) post-adj) (- (/ mount-height 2) post-adj) 0] web-post))
+(def web-post-tr (translate [(- (/ mount-width  2) post-adj) (- (/ mount-height  2) post-adj) 0] web-post))
+(def web-post-tl (translate [(+ (/ mount-width -2) post-adj) (- (/ mount-height  2) post-adj) 0] web-post))
 (def web-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
-(def web-post-br (translate [(- (/ mount-width 2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
+(def web-post-br (translate [(- (/ mount-width  2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 
 (defn triangle-hulls [& shapes]
   (apply union
          (map (partial apply hull)
               (partition 3 1 shapes))))
 
+; TODO?
 (def connectors
   (apply union
          (concat
           ;; Row connections
           (for [column (range 0 (dec ncols))
-                row (range 0 lastrow)]
+                row    (range 0 nrows)]
             (triangle-hulls
              (key-place (inc column) row web-post-tl)
-             (key-place column row web-post-tr)
+             (key-place      column  row web-post-tr)
              (key-place (inc column) row web-post-bl)
-             (key-place column row web-post-br)))
+             (key-place      column  row web-post-br)))
 
           ;; Column connections
           (for [column columns
-                row (range 0 cornerrow)]
+                row (range 0 lastrow)]
             (triangle-hulls
              (key-place column row web-post-bl)
              (key-place column row web-post-br)
@@ -280,7 +282,7 @@
 
           ;; Diagonal connections
           (for [column (range 0 (dec ncols))
-                row (range 0 cornerrow)]
+                row (range 0 lastrow)]
             (triangle-hulls
              (key-place column row web-post-br)
              (key-place column (inc row) web-post-tr)
@@ -528,11 +530,12 @@
    (wall-brace (partial key-place 0 0) 0 1 web-post-tl (partial left-key-place 0 1) 0 1 web-post)
    (wall-brace (partial left-key-place 0 1) 0 1 web-post (partial left-key-place 0 1) -1 0 web-post)
    ; front wall
-   (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
-   (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-   (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
-   (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
-   (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+   ; TODO
+   ;(key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
+   ;(key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
+   ;(key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
+   ;(for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
+   ;(for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
    ; thumb walls
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
@@ -591,6 +594,7 @@
                               (union (translate [0 2 0] (cube 10.78  9 18.38))
                                      (translate [0 0 5] (cube 10.78 13  5))))))
 
+; TODO??
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
 (def usb-holder-thickness 4)
@@ -601,6 +605,7 @@
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
 
+; TODO change to make a feather-holder instead
 (def teensy-width 20)
 (def teensy-height 12)
 (def teensy-length 33)
@@ -690,7 +695,7 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
-
+; TODO include usb 
 (def model-right (difference
                    (union
                     key-holes
@@ -723,12 +728,12 @@
                    (union
                     key-holes
                     connectors
-                    thumb
-                    thumb-connectors
-                    case-walls
-                    thumbcaps
+                    ;thumb
+                    ;thumb-connectors
+                    ;case-walls
+                    ;thumbcaps
                     caps
-                    teensy-holder
+                    ;teensy-holder
                     ; rj9-holder
                     ; usb-holder-hole
                     ; usb-holder-hole
