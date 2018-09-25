@@ -17,8 +17,7 @@ There's a talk about the motivation and design of the Dactyl that helps provide 
 * [Install OpenSCAD](http://www.openscad.org/)
 
 **Generating the design**
-* Run `lein repl`
-* Load the file `(load-file "src/dactyl_keyboard/dactyl.clj")`
+* Run `lein run`, or `docker build . -t dactyl && docker run -v $(pwd)/src:/dactyl/src -v $(pwd)/things:/dactyl/things dactyl`
 * This will regenerate the `things/*.scad` files
 * Use OpenSCAD to open a `.scad` file.
 * Make changes to design, repeat `load-file`, OpenSCAD will watch for changes and rerender.
