@@ -290,25 +290,33 @@
              (key-place (inc column) row web-post-bl)
              (key-place (inc column) (inc row) web-post-tl))))))
 
+; TODO: reduce to 2 or 3 thumb keys, placed so that at least 2 can be hit together?
+; only need 2 thumb keys right now but one extra would give a lot of future flexibility...
+
+; TODO include PSP joystick! First need to measure it, then make a rectangular holder and a hole and make sure the hull is thin enough.
 ;;;;;;;;;;;;
 ;; Thumbs ;;
 ;;;;;;;;;;;;
 
 (def thumborigin
-  (map + (key-position 0 lastrow [(/ mount-width 2) (- (/ mount-height 2)) 0])
+  (map + (key-position 0 lastrow [(/ mount-width -2) (- (/ mount-height 2)) 0])
          thumb-offsets))
 ; (pr thumborigin)
 
 (defn thumb-place [row col shape]
   (->> shape
       ; TODO use actual key measurements and spacing
-       (translate [-30 0 0])
+       (translate [-40 0 0])
        (translate [(* col -20) (* row -20) 0])
        (translate thumborigin)
        (rotate (deg2rad  0) [1 0 0])
        (rotate (deg2rad  -10) [0 1 0])
-       (rotate (deg2rad  20) [0 0 1])
+       ;(rotate (deg2rad  20) [0 0 1])
+       (rotate (deg2rad 35) [0 0 1])
        ))
+
+(def thumb-nrows 2)
+(def thumb-ncols 3)
 
 (defn thumb-tr-place [shape]
   (thumb-place 1 0 shape))
@@ -329,14 +337,12 @@
   (thumb-place 0 2 shape))
 
 (defn thumb-1x-layout [shape]
-  (union
-   (thumb-mr-place shape)
-   (thumb-ml-place shape)
-   (thumb-br-place shape)
-   (thumb-bl-place shape)
-   (thumb-tr-place shape)
-   (thumb-tl-place shape)))
-
+  (apply union
+         (concat
+           (for [column (range 0 thumb-ncols)
+                 row    (range 0 thumb-nrows)]
+              (thumb-place row column shape)))))
+  
 (def larger-plate
   (let [plate-height (/ (- sa-double-length mount-height) 3)
         top-plate (->> (cube mount-width plate-height web-thickness)
@@ -345,6 +351,8 @@
         ]
     (union top-plate (mirror [0 1 0] top-plate))))
 
+; TODO bottom plate is probably incorrect now
+
 (def thumbcaps
   (thumb-1x-layout (sa-cap 1)))
 
@@ -352,14 +360,14 @@
   (union
    (thumb-1x-layout single-plate)
    ; show thumborigin
-   ; (translate thumborigin (cylinder [3 3] 100))
+   (translate thumborigin (cylinder [1 1] 100))
    ))
 
 ; TODO figure out what the 'thumb posts' are - might just be positions used without
 ; a feature there.
 ; TODO how do all these hulls work?
 
-; why do these exist? 
+; why do these exist? seem to be further out than the web-post corners.
 (def thumb-post-tr (translate [(- (/ mount-width 2) post-adj)  (- (/ mount-height  1.15) post-adj) 0] web-post))
 (def thumb-post-tl (translate [(+ (/ mount-width -2) post-adj) (- (/ mount-height  1.15) post-adj) 0] web-post))
 (def thumb-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -1.15) post-adj) 0] web-post))
@@ -369,20 +377,20 @@
 (def thumb-connectors
   (union
       (triangle-hulls    ; top two
-             (thumb-tl-place web-post-bl)
-             (thumb-tl-place web-post-br)
-             (thumb-tr-place web-post-tl)
-             (thumb-tr-place web-post-tr))
+             (thumb-place 0 0 web-post-bl)
+             (thumb-place 0 0 web-post-br)
+             (thumb-place 1 0 web-post-tl)
+             (thumb-place 1 0 web-post-tr))
       (triangle-hulls    ; mid two
-             (thumb-ml-place web-post-bl)
-             (thumb-ml-place web-post-br)
-             (thumb-mr-place web-post-tl)
-             (thumb-mr-place web-post-tr))
+             (thumb-place 0 1 web-post-bl)
+             (thumb-place 0 1 web-post-br)
+             (thumb-place 1 1 web-post-tl)
+             (thumb-place 1 1 web-post-tr))
       (triangle-hulls    ; bottom two
-             (thumb-bl-place web-post-bl)
-             (thumb-bl-place web-post-br)
-             (thumb-br-place web-post-tl)
-             (thumb-br-place web-post-tr))
+             (thumb-place 0 2 web-post-bl)
+             (thumb-place 0 2 web-post-br)
+             (thumb-place 1 2 web-post-tl)
+             (thumb-place 1 2 web-post-tr))
 
       (triangle-hulls    ; top to mid
              (thumb-tl-place web-post-tl)
