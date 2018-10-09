@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="171mm"
+   height="156mm"
+   viewBox="-113 -69 171 156"
+   version="1.1"
+   id="svg64"
+   sodipodi:docname="right-plate-relief-edit.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata70">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>OpenSCAD Model</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs68" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2146"
+     inkscape:window-height="1375"
+     id="namedview66"
+     showgrid="false"
+     inkscape:zoom="1.8113782"
+     inkscape:cx="325.1806"
+     inkscape:cy="317.34544"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg64" />
+  <title
+     id="title60">OpenSCAD Model</title>
+  <g
+     id="g4619">
+    <path
+       d="m -30.887285,-68.442141 -3.264916,2.819983 h -3.910356 v 2.913517 h -10.500135 v -2.913517 h -7.480162 v 5.681307 h -14.779977 v -5.681307 h -0.291973 l -8.215,4.793506 -5.000212,5.000211 -2.251544,15.068848 -0.545703,5.089094 -1.165301,16.807243 -0.186553,5.461167 V 3.8981443 l 0.186553,5.4611666 1.165301,16.8072431 v 0.09973 l -15.519977,9.503296 -8.69663,7.297745 0.10904,2.780192 -0.10904,3.445269 11.548126,12.84056 2.27118,0.761709 9.548259,4.108794 12.502078,12.05921 5.651336,0.0186 0.83199,0.06149 8.428942,-9.36067 8.211386,-10.096023 h -2.662888 l -0.271817,-1.818495 0.784447,-1.750279 h 5.052923 l 1.515152,-1.862418 1.220597,-0.832509 0.09095,-0.01601 0.499195,2.01228 -0.543118,0.698667 h 12.414745 l 3.263368,-2.819985 h 17.333825 l 3.289204,2.819985 H 9.4358341 l 0.9999399,1.732192 v 1.836582 h -2.52181 l 2.310971,8.431527 h 37.436472 l 5.357813,-4.32997 1.493448,-14.895732 0.569992,-7.925096 0.773081,-16.614489 0.194302,-8.504907 V -1.3521731 L 55.855741,-9.85708 55.08266,-26.471053 54.512668,-34.396149 53.01922,-49.291881 47.661407,-53.621849 H 10.125198 L 6.8359933,-65.622158 H -10.464243 l -3.288686,-2.819983 z"
+       style="fill:#d3d3d3;stroke:#000000;stroke-width:0.5"
+       id="path62"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+  </g>
+</svg>
