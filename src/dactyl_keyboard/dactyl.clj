@@ -843,17 +843,27 @@
                   ;; ))
        (let [case (cut
                    (translate [0 0 -0.1]
-                              (union case-walls)))]
-         ;(difference
-          case
-          ;; (hull
-          ;;  case
-           
-          ;;  (square 30 30))
+                              (union case-walls)))
+              marker (circle 3)]
+         ;; (difference
           
-       ;   )
+           ;; (hull
+            ;; case
+           
+            ;; (square 30 30))
+         (union 
+          case
+          (difference
+           (square 60 60)
+           (union marker
+                  (translate [5 5 0] marker)
+                  (translate [5 -5 0] marker)
+                  (translate [-5 5 0] marker)
+                  (translate [-5 -5 0] marker))))
+
+          )
        )
-                   ))
+                   )
 
 (spit "things/right-plate-relief.scad"
       (write-scad 
@@ -872,15 +882,24 @@
              slice (cut
                    (translate [0 0 -0.1];
                               case))
-             fill (square 30 30)
+             fill (square 60 60)
+             marker (circle 3)
              interior (scale [0.5 0.5 0.5] slice)]
-         (difference
-          (hull
+         (union 
+          (difference
+           (hull
+            slice
+            fill)
            slice
-           fill)
-          slice
-          interior
-       )
+           fill
+           )
+          marker
+          (translate [5 5 0] marker)
+          (translate [5 -5 0] marker)
+          (translate [-5 5 0] marker)
+          (translate [-5 -5 0] marker)
+
+          )
                    )))
 
 (spit "things/test.scad"
