@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="171mm"
+   height="156mm"
+   viewBox="-113 -69 171 156"
+   version="1.1"
+   id="svg174"
+   sodipodi:docname="right-plate-relief3-edit.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata180">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>OpenSCAD Model</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs178" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2160"
+     inkscape:window-height="1329"
+     id="namedview176"
+     showgrid="false"
+     inkscape:zoom="2.2642526"
+     inkscape:cx="323.14961"
+     inkscape:cy="341.29949"
+     inkscape:window-x="0"
+     inkscape:window-y="55"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg174" />
+  <title
+     id="title170">OpenSCAD Model</title>
+  <path
+     d="m -58.798,74.5343 6.34508,-7.800919 c -6.56982,-9.155505 8.042176,-12.991477 10.382321,-5.863481 h 9.584099 l 3.2635,-2.82 h 17.3337 l 3.28931,2.82 H 7.2411106 C 15.764796,53.816205 19.90814,65.180334 10.334436,66.83347 L 11.9889,72.8699 H 49.4252 L 54.7834,68.5398 56.2767,53.6441 56.8468,45.719 57.6198,29.1049 57.8142,20.6 V 3.39999 l -0.1944,-8.50488 -0.773,-16.61411 -0.5701,-7.9251 -1.4933,-14.8957 -5.3582,-4.3301 H 11.8893 l -3.28931,-12 H -8.7 l -3.2889,-2.82 h -17.1345 l -3.2646,2.82 h -1.970341 c 6.223431,14.405084 -40.001832,25.571621 -37.91725,1.706595 l -5.290309,3.086905 -5,5 -2.2518,15.0689 -0.5456,5.0891 -0.738493,10.64944 -0.427007,6.15766 -0.1861,5.46131 V 8.64999 l 0.1861,5.46131 1.1655,16.8071 v 0.1 l -15.5197,9.5033 -8.697,7.2975 0.109,2.7802 -0.109,3.4452 11.5482,12.8407 2.271,0.762 9.5483,4.1086 12.5022,12.0594 5.6516,0.0185 0.832,0.0615 z m -10.347551,5.244819 -14.182534,-10.611896 -20.726345,-15.138901 -1.50652,-5.165804 23.459378,-15.868086 -1.305481,-19.413292 1.322154,-26.488962 0.430474,-6.659677 1.875306,-29.012031 5.620525,-6.293332 6.017502,10.232187 15.205711,2.268386 16.930766,-5.756614 7.952769,-12.209095 34.1054902,3.412097 4.1563978,10.775744 39.771717,0.842494 3.285109,28.084614 0.429163,24.2963421 -0.0017,32.3709979 -3.011458,26.546245 -7.344816,3.720994 -25.562402,-0.629917 0.10855,-5.571036 -0.711005,-4.905265 -4.461979,-3.067315 -7.579608,2.025741 -9.1827573,-0.358379 -4.0170713,-2.066155 -22.2002724,0.0027 -3.388733,2.687987 -8.549294,-1.19157 -4.096234,-1.473165 -6.270033,0.680605 -3.534768,4.083508 0.04619,5.309573 -2.247787,4.013518 z M 7.42705,-3.23663 8,-5 7.42705,-6.76335 l -1.5,-1.08981 H 4.07294 l -1.5,1.08981 L 2,-5 l 0.57294,1.76337 1.5,1.08981 h 1.85411 z m -9.99999,0 L -2,-5 l -0.57294,-1.76335 -1.5,-1.08981 h -1.85411 l -1.5,1.08981 L -8,-5 l 0.57295,1.76337 1.5,1.08981 h 1.85411 z M 2.42705,1.76335 3,0 2.42705,-1.76335 0.927048,-2.85316 H -0.927048 L -2.42705,-1.76335 -3,0 l 0.57295,1.76335 1.500002,1.08981 h 1.854096 z m 5,5 L 8,5 7.42705,3.23663 5.92705,2.14682 H 4.07294 l -1.5,1.08981 L 2,5 l 0.57294,1.76335 1.5,1.08981 h 1.85411 z m -9.99999,0 L -2,5 -2.57294,3.23663 l -1.5,-1.08981 h -1.85411 l -1.5,1.08981 L -8,5 l 0.57295,1.76335 1.5,1.08981 h 1.85411 z"
+     id="path172"
+     inkscape:connector-curvature="0"
+     style="fill:#d3d3d3;stroke:#000000;stroke-width:0.5"
+     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+</svg>
