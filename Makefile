@@ -71,8 +71,9 @@ docs: doc/options-main.md doc/options-clusters.md doc/options-nested.md doc/opti
 test:
 	lein test
 
-# The “all” target is intended for code sanity checking before pushing a commit.
-all: test docs vis mutual dmote_62key
+# “all” will overwrite its own outputs.
+# Intended for code sanity checking before pushing a commit.
+all: test docs default threaded-visualization orthographic flat threaded solid
 
 clean:
 	-rm things/scad/*.scad
@@ -80,3 +81,6 @@ clean:
 	-rm things/stl/*.stl
 	-rmdir things/stl/
 	lein clean
+
+%.stl: %.scad
+	openscad -o $@ $<
