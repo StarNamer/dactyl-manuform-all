@@ -13,8 +13,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 5)
+(def nrows 5)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -583,14 +583,14 @@
   ))
 
 
-(def rj9-start  (map + [0 -3  0] (key-position 0 0 (map + (wall-locate3 0 1) [0 (/ mount-height  2) 0]))))
-(def rj9-position  [(first rj9-start) (second rj9-start) 11])
-(def rj9-cube   (cube 14.78 13 22.38))
-(def rj9-space  (translate rj9-position rj9-cube))
-(def rj9-holder (translate rj9-position
-                  (difference rj9-cube
-                              (union (translate [0 2 0] (cube 10.78  9 18.38))
-                                     (translate [0 0 5] (cube 10.78 13  5))))))
+(def trrs-start  (map + [0 -3  0] (key-position 0 0 (map + (wall-locate3 0 1) [0 (/ mount-height  2) 0]))))
+(def trrs-position  [(first trrs-start) (second trrs-start) 11])
+(def trrs-cylinder   (rotate (deg2rad 90) [1 0 0] (cylinder 1.75 9)))
+(def trrs-space  (translate trrs-position trrs-cylinder))
+;(def trrs-holder (translate trrs-position
+;                  (difference trrs-cylinder
+;                              (union (rotate (deg2rad 90) [1 0 0] (translate [0 5 0] (cylinder 1.75 -20)))
+;                                     (rotate (deg2rad 90) [1 0 0] (translate [0 0 7] (cylinder 1.55 -10)))))))
 
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
@@ -663,10 +663,10 @@
          (screw-insert lastcol 1   bottom-radius top-radius height)
          ))
 (def screw-insert-height 3.8)
-(def screw-insert-bottom-radius (/ 5.31 2))
-(def screw-insert-top-radius (/ 5.1 2))
+(def screw-insert-bottom-radius (/ 5.50 2))
+(def screw-insert-top-radius (/ 5.02 2))
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
-(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
+(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.9) (+ screw-insert-top-radius 1.9) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
 
 (def wire-post-height 7)
@@ -702,13 +702,13 @@
                                        screw-insert-outers 
                                        teensy-holder
                                        usb-holder)
-                                rj9-space 
+                                trrs-space 
                                 usb-holder-hole
                                 screw-insert-holes)
-                    rj9-holder
+                    ;trrs-holder
                     wire-posts
-                    ; thumbcaps
-                    ; caps
+                    ;thumbcaps
+                    ;caps
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
@@ -730,7 +730,7 @@
                     thumbcaps
                     caps
                     teensy-holder
-                    rj9-holder
+                    ;trrs-holder
                     usb-holder-hole
                     ; usb-holder-hole
                     ; ; teensy-holder-hole
@@ -738,7 +738,7 @@
                     ;             teensy-screw-insert-holes
                     ;             teensy-screw-insert-outers
                     ;             usb-cutout 
-                    ;             rj9-space 
+                    ;             trrs-space 
                                 ; wire-posts
                   )))
 
@@ -748,7 +748,7 @@
                      (translate [0 0 -0.1]
                        (difference (union case-walls
                                           teensy-holder
-                                          ; rj9-holder
+                                          ;trrs-holder
                                           screw-insert-outers)
                                    (translate [0 0 -10] screw-insert-screw-holes))
                   ))))
