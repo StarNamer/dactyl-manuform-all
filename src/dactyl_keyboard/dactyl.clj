@@ -691,50 +691,68 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
-(def usb-mini
-  (let [wall-thick 1.5
-        pcb-thick 1.8
-        connector-height 4.6
-        connector-width 9
-        connector-overhang 1
+(def usb-mini-dimensions {
+                          :connector-height 4.6
+                          :connector-width 9
+                          :connector-overhang 1
+                          :connector-offset 9
+                          :pcb-thick 1.8
+                          :pcb-depth 19
+                          :hole-r (/ 3.3 2)
+                          :hole-back-offset 0.9
+                          :hole-side-offset 1.2
+                          }
+  )
+(def usb-a-dimensions {
+                          :connector-height 7.5
+                          :connector-width 14.4
+                          :connector-overhang 2.6
+                          :connector-offset 6
+                          :pcb-thick 1.8
+                          :pcb-depth 20.3
+                          :hole-r (/ 3.3 2)
+                          :hole-back-offset 0.8
+                          :hole-side-offset 1.2
+                          }
+  )
+(defn usb-breakout [dim]
+  (let [
+        wall-thick 1.5
         depth 5
-        height (+ connector-height pcb-thick wall-thick wall-thick)
-        connector-offset 9
-        pcb-side (+ (* 2 connector-offset) connector-width)
-        pcb-depth 19
-        outer (+ pcb-side (* 2 wall-thick))
-        hole-back-offset 0.9
-        hole-side-offset 1.2
-        hole-r (/ 3.3 2)
         brace-thick 3
-        brace-depth (- (+ pcb-depth hole-back-offset) depth)
         brace-width 7
+        height (+ (dim :connector-height) (dim :pcb-thick) wall-thick wall-thick)
+        pcb-side (+ (* 2 (dim :connector-offset)) (dim :connector-width))
+        outer (+ pcb-side (* 2 wall-thick))
+        depth1 (- depth (dim :connector-overhang))
+        brace-depth (+ (dim :pcb-depth) (dim :connector-overhang))
         ]
     (union
      (difference
       (translate [0 0 (/ height 2)]
                  (cube outer depth height))
-      (translate [0 0 (+ (/ connector-height 2) wall-thick pcb-thick)]
-                 (cube connector-width depth connector-height))
-      (translate [0 connector-overhang (+ (/ pcb-thick 2) wall-thick)]
-                 (cube pcb-side depth pcb-thick))
+      (translate [0 0 (+ (/ (dim :connector-height) 2) wall-thick (dim :pcb-thick))]
+                 (cube (dim :connector-width) depth (dim :connector-height)))
+      (translate [0 (dim :connector-overhang) (+ (/ (dim :pcb-thick) 2) wall-thick)]
+                 (cube pcb-side depth (dim :pcb-thick)))
       )
      (difference
-      (translate [(/ (- outer brace-width) 2) (/ (+ brace-depth depth) 2)
-                  (+ (/ brace-thick 2) wall-thick pcb-thick)]
+      (translate [(/ (- outer brace-width) 2) (/ (- brace-depth depth) 2)
+                  (+ (/ brace-thick 2) wall-thick (dim :pcb-thick))]
                  (cube brace-width brace-depth brace-thick)
                  )
-      (translate [(- (+ (/ connector-width 2) connector-offset) hole-r hole-side-offset)
-                  (- pcb-depth (- (/ depth 2) connector-overhang) hole-r hole-back-offset)
+      (translate [(- (+ (/ (dim :connector-width) 2) (dim :connector-offset)) (dim :hole-r) (dim :hole-side-offset))
+                  (- brace-depth (/ depth 2) (dim :hole-r) (dim :hole-back-offset))
                   (/ height 2)]
-                 (with-fn 100 (cylinder hole-r height))
+                 (with-fn 100 (cylinder (dim :hole-r) height))
                  )
       )
-     (translate [0 0 (+ wall-thick pcb-thick (/ connector-height 2)) ]
-                (rotate (/ pi 2) [0 1 0]
-                        (with-fn 50 (cylinder 1 (- connector-width 0.2)))
-                        )
-                )
+            (translate [0 0 (+ wall-thick (dim :pcb-thick) (/ (dim :connector-height) 2)) ]
+                              (rotate (/ pi 2) [0 1 0]
+                                      (with-fn 50 (cube (/ depth 2)  (/ (dim :connector-height) 2)
+                                                        (- (dim :connector-width) 0.2)))
+                                      )
+                              )
      )
     )
   )
@@ -756,7 +774,8 @@
                     ; wire-posts
                     ; thumbcaps
                     ; caps
-                     usb-mini
+                     ;(usb-breakout usb-mini-dimensions)
+                     (usb-breakout usb-a-dimensions)
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
