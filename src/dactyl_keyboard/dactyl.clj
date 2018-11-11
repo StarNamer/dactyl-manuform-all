@@ -691,24 +691,72 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
+(def usb-mini
+  (let [wall-thick 1.5
+        pcb-thick 1.8
+        connector-height 4.6
+        connector-width 9
+        connector-overhang 1
+        depth 5
+        height (+ connector-height pcb-thick wall-thick wall-thick)
+        connector-offset 9
+        pcb-side (+ (* 2 connector-offset) connector-width)
+        pcb-depth 19
+        outer (+ pcb-side (* 2 wall-thick))
+        hole-back-offset 0.9
+        hole-side-offset 1.2
+        hole-r (/ 3.3 2)
+        brace-thick 3
+        brace-depth (- (+ pcb-depth hole-back-offset) depth)
+        brace-width 7
+        ]
+    (union
+     (difference
+      (translate [0 0 (/ height 2)]
+                 (cube outer depth height))
+      (translate [0 0 (+ (/ connector-height 2) wall-thick pcb-thick)]
+                 (cube connector-width depth connector-height))
+      (translate [0 connector-overhang (+ (/ pcb-thick 2) wall-thick)]
+                 (cube pcb-side depth pcb-thick))
+      )
+     (difference
+      (translate [(/ (- outer brace-width) 2) (/ (+ brace-depth depth) 2)
+                  (+ (/ brace-thick 2) wall-thick pcb-thick)]
+                 (cube brace-width brace-depth brace-thick)
+                 )
+      (translate [(- (+ (/ connector-width 2) connector-offset) hole-r hole-side-offset)
+                  (- pcb-depth (- (/ depth 2) connector-overhang) hole-r hole-back-offset)
+                  (/ height 2)]
+                 (with-fn 100 (cylinder hole-r height))
+                 )
+      )
+     (translate [0 0 (+ wall-thick pcb-thick (/ connector-height 2)) ]
+                (rotate (/ pi 2) [0 1 0]
+                        (with-fn 50 (cylinder 1 (- connector-width 0.2)))
+                        )
+                )
+     )
+    )
+  )
 
 (def model-right (difference 
                    (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    (difference (union case-walls 
-                                       screw-insert-outers 
-                                       teensy-holder
-                                       usb-holder)
-                                rj9-space 
-                                usb-holder-hole
-                                screw-insert-holes)
-                    rj9-holder
-                    wire-posts
+                    ;key-holes
+                    ;connectors
+                    ;thumb
+                    ;thumb-connectors
+                    ;(difference (union case-walls 
+                    ;                   screw-insert-outers 
+                    ;                   teensy-holder
+                    ;                   usb-holder)
+                    ;            rj9-space 
+                    ;            usb-holder-hole
+                    ;            screw-insert-holes)
+                    ;rj9-holder
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
+                     usb-mini
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
