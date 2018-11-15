@@ -75,7 +75,7 @@ key-wall-brace	src/dactyl_keyboard/dactyl.clj	/^(defn key-wall-brace [x1 y1 dx1 
 left-key-place	src/dactyl_keyboard/dactyl.clj	/^(defn left-key-place [row direction shape]$/;"	f	namespace:dactyl-keyboard.dactyl
 left-key-position	src/dactyl_keyboard/dactyl.clj	/^(defn left-key-position [row direction]$/;"	f	namespace:dactyl-keyboard.dactyl
 range-inclusive	src/dactyl_keyboard/lightcycle.clj	/^(defn range-inclusive [start end step]$/;"	f	namespace:dactyl-keyboard.lightcycle
-revision	target/classes/META-INF/maven/dactyl-keyboard/dactyl-keyboard/pom.properties	/^revision=19bf0a3e05d2341e6f28cd5f8c86bffe22c6c25b$/;"	k
+revision	target/classes/META-INF/maven/dactyl-keyboard/dactyl-keyboard/pom.properties	/^revision=de4450abc3c7465c33ca44b1eae2b289fe625ea2$/;"	k
 rotate-around-x	src/dactyl_keyboard/dactyl.clj	/^(defn rotate-around-x [angle position]$/;"	f	namespace:dactyl-keyboard.dactyl
 rotate-around-y	src/dactyl_keyboard/dactyl.clj	/^(defn rotate-around-y [angle position]$/;"	f	namespace:dactyl-keyboard.dactyl
 scale-to-range	src/dactyl_keyboard/lightcycle.clj	/^(defn scale-to-range [start end x]$/;"	f	namespace:dactyl-keyboard.lightcycle
