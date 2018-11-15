@@ -3,7 +3,6 @@
   (:require [clojure.core.matrix :refer [array matrix mmul]]
             [scad-clj.scad :refer :all]
             [scad-clj.model :refer :all]
-            [dactyl-keyboard.util :refer :all]
             [unicode-math.core :refer :all]))
 
 
@@ -277,6 +276,11 @@
 (def web-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 (def web-post-br (translate [(- (/ mount-width 2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 
+(defn triangle-hulls [& shapes]
+  (apply union
+         (map (partial apply hull)
+              (partition 3 1 shapes))))
+
 (def connectors
   (apply union
          (concat
@@ -393,6 +397,7 @@
   (union
    (thumb-1x-layout (sa-cap 1))
    (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))))
+
 
 (def thumb
   (union

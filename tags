@@ -1,6 +1,110 @@
 !_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
 !_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
-!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
-!_TAG_PROGRAM_NAME	Exuberant Ctags	//
-!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/d0807887/
+-13,13 +13,13	4x6.patch	/^@@ -13,13 +13,13 @@$/;"	h	modifiedFile:a/src/dactyl_keyboard/dactyl.clj
+-13,13 +13,13	5x6.patch	/^@@ -13,13 +13,13 @@$/;"	h	modifiedFile:a/src/dactyl_keyboard/dactyl.clj
+-13,13 +13,13	6x6.patch	/^@@ -13,13 +13,13 @@$/;"	h	modifiedFile:a/src/dactyl_keyboard/dactyl.clj
+-32,7 +32,7	4x6.patch	/^@@ -32,7 +32,7 @@$/;"	h	modifiedFile:a/src/dactyl_keyboard/dactyl.clj
+-32,7 +32,7	5x6.patch	/^@@ -32,7 +32,7 @@$/;"	h	modifiedFile:a/src/dactyl_keyboard/dactyl.clj
+-32,7 +32,7	6x6.patch	/^@@ -32,7 +32,7 @@$/;"	h	modifiedFile:a/src/dactyl_keyboard/dactyl.clj
+-main	src/dactyl_keyboard/dactyl.clj	/^(defn -main [dum] 1)  ; dummy to make it easier to batch$/;"	f	namespace:dactyl-keyboard.dactyl
+Alternative row-driven wiring diagram for ProMicro:	README.md	/^#### Alternative row-driven wiring diagram for ProMicro:$/;"	t
+An aside on LEDs	qmk-guide/README.md	/^#### An aside on LEDs$/;"	t
+Assembly	README.md	/^## Assembly$/;"	s
+Backlight Wiring	backlight-guide/README.md	/^# Backlight Wiring$/;"	c
+Closing up the case	qmk-guide/README.md	/^## Closing up the case$/;"	s
+Columns	qmk-guide/README.md	/^### Columns$/;"	S
+Connecting to the MCP23018	qmk-guide/README.md	/^### Connecting to the MCP23018$/;"	S
+Done!	qmk-guide/README.md	/^## Done!$/;"	s
+Ergodox Compatibility Inner Columns	qmk-guide/README.md	/^### Ergodox Compatibility Inner Columns$/;"	S
+Firmware	README.md	/^### Firmware$/;"	S
+Generating a Design	README.md	/^### Generating a Design$/;"	S
+Introduction to dactyl-cave	doc/intro.md	/^# Introduction to dactyl-cave$/;"	c
+LEDs	qmk-guide/README.md	/^### LEDs$/;"	S
+Left side	qmk-guide/README.md	/^### Left side$/;"	S
+License	README.md	/^## License$/;"	s
+Load QMK on your Teensy	qmk-guide/README.md	/^## Load QMK on your Teensy$/;"	s
+Printing	README.md	/^### Printing$/;"	S
+Right side	qmk-guide/README.md	/^### Right side$/;"	S
+Rows	qmk-guide/README.md	/^### Rows$/;"	S
+Separated Wiring Diagrams	backlight-guide/README.md	/^## Separated Wiring Diagrams$/;"	s
+Shopping List	qmk-guide/README.md	/^## Shopping List$/;"	s
+The Dactyl-ManuForm Keyboard	README.md	/^# The Dactyl-ManuForm Keyboard$/;"	c
+The EZ Way to QMK	qmk-guide/README.md	/^# The EZ Way to QMK$/;"	c
+The Matrix Has You	qmk-guide/README.md	/^## The Matrix Has You$/;"	s
+The TRRS Jack	qmk-guide/README.md	/^### The TRRS Jack$/;"	S
+Thingiverse	README.md	/^### Thingiverse$/;"	S
+Things From Amazon	qmk-guide/README.md	/^### Things From Amazon$/;"	S
+Things you can order from Digikey	qmk-guide/README.md	/^### Things you can order from Digikey$/;"	S
+Things you'll have to find yourself:	qmk-guide/README.md	/^### Things you'll have to find yourself:$/;"	S
+Unified Wiring Diagram	backlight-guide/README.md	/^## Unified Wiring Diagram$/;"	s
+Wiring	README.md	/^### Wiring$/;"	S
+Wiring The Left Half	qmk-guide/README.md	/^## Wiring The Left Half$/;"	s
+Wiring The Right Half	qmk-guide/README.md	/^## Wiring The Right Half$/;"	s
+Wiring the Teensy	qmk-guide/README.md	/^### Wiring the Teensy$/;"	S
+Wiring up the Matrix	qmk-guide/README.md	/^## Wiring up the Matrix$/;"	s
+a/src/dactyl_keyboard/dactyl.clj	4x6.patch	/^--- a\/src\/dactyl_keyboard\/dactyl.clj$/;"	m
+a/src/dactyl_keyboard/dactyl.clj	5x6.patch	/^--- a\/src\/dactyl_keyboard\/dactyl.clj$/;"	m
+a/src/dactyl_keyboard/dactyl.clj	6x6.patch	/^--- a\/src\/dactyl_keyboard\/dactyl.clj$/;"	m
+apply-key-geometry	src/dactyl_keyboard/dactyl.clj	/^(defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+artifactId	target/classes/META-INF/maven/dactyl-keyboard/dactyl-keyboard/pom.properties	/^artifactId=dactyl-keyboard$/;"	k
+bottom	src/dactyl_keyboard/dactyl.clj	/^(defn bottom [height p]$/;"	f	namespace:dactyl-keyboard.dactyl
+bottom	src/dactyl_keyboard/util.clj	/^(defn bottom [height p]$/;"	f	namespace:dactyl-keyboard.util
+bottom-hull	src/dactyl_keyboard/dactyl.clj	/^(defn bottom-hull [& p]$/;"	f	namespace:dactyl-keyboard.dactyl
+bottom-hull	src/dactyl_keyboard/util.clj	/^(defn bottom-hull [p]$/;"	f	namespace:dactyl-keyboard.util
+case-place	src/dactyl_keyboard/lightcycle.clj	/^(defn case-place [column row shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+circuit-cover	src/dactyl_keyboard/lightcycle.clj	/^(defn circuit-cover [width length height]$/;"	f	namespace:dactyl-keyboard.lightcycle
+column-offset	src/dactyl_keyboard/dactyl.clj	/^(defn column-offset [column] (cond$/;"	f	namespace:dactyl-keyboard.dactyl
+dactyl-cave.core-test	test/dactyl_cave/core_test.clj	/^(ns dactyl-cave.core-test$/;"	n
+dactyl-keyboard.dactyl	src/dactyl_keyboard/dactyl.clj	/^(ns dactyl-keyboard.dactyl$/;"	n
+dactyl-keyboard.lightcycle	src/dactyl_keyboard/lightcycle.clj	/^(ns dactyl-keyboard.lightcycle$/;"	n
+dactyl-keyboard.util	src/dactyl_keyboard/util.clj	/^(ns dactyl-keyboard.util$/;"	n
+dactyl-keyboard.wrist	src/dactyl_keyboard/wrist.clj	/^(ns dactyl-keyboard.wrist$/;"	n
+deg2rad	src/dactyl_keyboard/dactyl.clj	/^(defn deg2rad [degrees]$/;"	f	namespace:dactyl-keyboard.dactyl
+extended-plate-height	src/dactyl_keyboard/lightcycle.clj	/^(defn extended-plate-height [size] (\/ (- (* (+ 1 sa-length) size) mount-height) 2))$/;"	f	namespace:dactyl-keyboard.lightcycle
+extended-plates	src/dactyl_keyboard/lightcycle.clj	/^(defn extended-plates [size]$/;"	f	namespace:dactyl-keyboard.lightcycle
+groupId	target/classes/META-INF/maven/dactyl-keyboard/dactyl-keyboard/pom.properties	/^groupId=dactyl-keyboard$/;"	k
+key-place	src/dactyl_keyboard/dactyl.clj	/^(defn key-place [column row shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+key-place	src/dactyl_keyboard/lightcycle.clj	/^(defn key-place [column row shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+key-position	src/dactyl_keyboard/dactyl.clj	/^(defn key-position [column row position]$/;"	f	namespace:dactyl-keyboard.dactyl
+key-wall-brace	src/dactyl_keyboard/dactyl.clj	/^(defn key-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2]$/;"	f	namespace:dactyl-keyboard.dactyl
+left-key-place	src/dactyl_keyboard/dactyl.clj	/^(defn left-key-place [row direction shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+left-key-position	src/dactyl_keyboard/dactyl.clj	/^(defn left-key-position [row direction]$/;"	f	namespace:dactyl-keyboard.dactyl
+range-inclusive	src/dactyl_keyboard/lightcycle.clj	/^(defn range-inclusive [start end step]$/;"	f	namespace:dactyl-keyboard.lightcycle
+revision	target/classes/META-INF/maven/dactyl-keyboard/dactyl-keyboard/pom.properties	/^revision=19bf0a3e05d2341e6f28cd5f8c86bffe22c6c25b$/;"	k
+rotate-around-x	src/dactyl_keyboard/dactyl.clj	/^(defn rotate-around-x [angle position]$/;"	f	namespace:dactyl-keyboard.dactyl
+rotate-around-y	src/dactyl_keyboard/dactyl.clj	/^(defn rotate-around-y [angle position]$/;"	f	namespace:dactyl-keyboard.dactyl
+scale-to-range	src/dactyl_keyboard/lightcycle.clj	/^(defn scale-to-range [start end x]$/;"	f	namespace:dactyl-keyboard.lightcycle
+screw-insert	src/dactyl_keyboard/dactyl.clj	/^(defn screw-insert [column row bottom-radius top-radius height]$/;"	f	namespace:dactyl-keyboard.dactyl
+screw-insert-all-shapes	src/dactyl_keyboard/dactyl.clj	/^(defn screw-insert-all-shapes [bottom-radius top-radius height]$/;"	f	namespace:dactyl-keyboard.dactyl
+screw-insert-shape	src/dactyl_keyboard/dactyl.clj	/^(defn screw-insert-shape [bottom-radius top-radius height]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-15x-layout	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-15x-layout [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-1x-column	src/dactyl_keyboard/lightcycle.clj	/^(defn thumb-1x-column [shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+thumb-1x-layout	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-1x-layout [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-2x+1-column	src/dactyl_keyboard/lightcycle.clj	/^(defn thumb-2x+1-column [shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+thumb-2x-column	src/dactyl_keyboard/lightcycle.clj	/^(defn thumb-2x-column [shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+thumb-bl-place	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-bl-place [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-br-place	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-br-place [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-layout	src/dactyl_keyboard/lightcycle.clj	/^(defn thumb-layout [shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+thumb-layout-bottom	src/dactyl_keyboard/lightcycle.clj	/^(defn thumb-layout-bottom [shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+thumb-ml-place	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-ml-place [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-mr-place	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-mr-place [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-place	src/dactyl_keyboard/lightcycle.clj	/^(defn thumb-place [column row shape]$/;"	f	namespace:dactyl-keyboard.lightcycle
+thumb-tl-place	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-tl-place [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+thumb-tr-place	src/dactyl_keyboard/dactyl.clj	/^(defn thumb-tr-place [shape]$/;"	f	namespace:dactyl-keyboard.dactyl
+top-case-cover	src/dactyl_keyboard/lightcycle.clj	/^(defn top-case-cover [place-fn sphere$/;"	f	namespace:dactyl-keyboard.lightcycle
+triangle-hulls	src/dactyl_keyboard/dactyl.clj	/^(defn triangle-hulls [& shapes]$/;"	f	namespace:dactyl-keyboard.dactyl
+triangle-hulls	src/dactyl_keyboard/util.clj	/^(defn triangle-hulls [& shapes]$/;"	f	namespace:dactyl-keyboard.util
+version	target/classes/META-INF/maven/dactyl-keyboard/dactyl-keyboard/pom.properties	/^version=0.1.0-SNAPSHOT$/;"	k
+wall-brace	src/dactyl_keyboard/dactyl.clj	/^(defn wall-brace [place1 dx1 dy1 post1 place2 dx2 dy2 post2]$/;"	f	namespace:dactyl-keyboard.dactyl
+wall-locate1	src/dactyl_keyboard/dactyl.clj	/^(defn wall-locate1 [dx dy] [(* dx wall-thickness) (* dy wall-thickness) -1])$/;"	f	namespace:dactyl-keyboard.dactyl
+wall-locate2	src/dactyl_keyboard/dactyl.clj	/^(defn wall-locate2 [dx dy] [(* dx wall-xy-offset) (* dy wall-xy-offset) wall-z-offset])$/;"	f	namespace:dactyl-keyboard.dactyl
+wall-locate3	src/dactyl_keyboard/dactyl.clj	/^(defn wall-locate3 [dx dy] [(* dx (+ wall-xy-offset wall-thickness)) (* dy (+ wall-xy-offset wal/;"	f	namespace:dactyl-keyboard.dactyl
+wall-sphere-at	src/dactyl_keyboard/lightcycle.clj	/^(defn wall-sphere-at [coords]$/;"	f	namespace:dactyl-keyboard.lightcycle
+wall-sphere-bottom	src/dactyl_keyboard/lightcycle.clj	/^(defn wall-sphere-bottom [front-to-back-scale]$/;"	f	namespace:dactyl-keyboard.lightcycle
+wall-sphere-top	src/dactyl_keyboard/lightcycle.clj	/^(defn wall-sphere-top [front-to-back-scale]$/;"	f	namespace:dactyl-keyboard.lightcycle
+wire-post	src/dactyl_keyboard/dactyl.clj	/^(defn wire-post [direction offset]$/;"	f	namespace:dactyl-keyboard.dactyl
