@@ -63,8 +63,8 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.4) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.4)
+(def keyswitch-height 14) ;; Was 14.1, then 14.25
+(def keyswitch-width 14)
 
 (def sa-profile-key-height 12.7)
 
@@ -94,6 +94,25 @@
                 (mirror [1 0 0])
                 (mirror [0 1 0])))))
 
+(def single-plate-kaihl
+  (let [outer-width (+ keyswitch-width 3)
+        outer (->> (cube outer-width outer-width plate-thickness)
+                   (translate [0 0 (/ plate-thickness 2)])
+                   )
+        hole (->> (cube keyswitch-width keyswitch-width plate-thickness)
+                  (translate [0 0 (/ plate-thickness 2)])
+                  )
+        cutout-width 6
+        cutout-depth 0.6
+        plate-thickness-kaihl 1.6
+        cutout-thickness (- plate-thickness plate-thickness-kaihl)
+        cutout (->> (cube cutout-width cutout-depth cutout-thickness)
+                    (translate [0 (+ (/ keyswitch-width 2) (/ cutout-depth 2)) (/ cutout-thickness 2)])
+                    )
+                   ]
+    (difference outer hole cutout (mirror [0 1 0] cutout))
+    )
+  )
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
 ;;;;;;;;;;;;;;;;
@@ -775,7 +794,8 @@
                     ; thumbcaps
                     ; caps
                      ;(usb-breakout usb-mini-dimensions)
-                     (usb-breakout usb-a-dimensions)
+                     ;(usb-breakout usb-a-dimensions)
+                    single-plate-rev
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
