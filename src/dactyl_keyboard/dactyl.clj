@@ -9,6 +9,14 @@
 (defn deg2rad [degrees]
   (* (/ degrees 180) pi))
 
+(defn x [pos]
+  (first pos))
+
+(defn y [pos]
+  (second pos))
+
+(defn z [pos]
+  (first (rest (rest pos))))
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -63,8 +71,8 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14) ;; Was 14.1, then 14.25
-(def keyswitch-width 14)
+(def keyswitch-height 14.0) ;; Was 14.1, then 14.25
+(def keyswitch-width 14.0)
 
 (def sa-profile-key-height 12.7)
 
@@ -102,15 +110,23 @@
         hole (->> (cube keyswitch-width keyswitch-width plate-thickness)
                   (translate [0 0 (/ plate-thickness 2)])
                   )
-        cutout-width 6
-        cutout-depth 0.6
-        plate-thickness-kaihl 1.6
+        cutout-width 4.8
+        cutout-depth 0.4
+        plate-thickness-kaihl 1.4
         cutout-thickness (- plate-thickness plate-thickness-kaihl)
         cutout (->> (cube cutout-width cutout-depth cutout-thickness)
                     (translate [0 (+ (/ keyswitch-width 2) (/ cutout-depth 2)) (/ cutout-thickness 2)])
                     )
+        nub-width 4.8
+        nub-depth 0.2
+        nub (->> (cube nub-width nub-depth plate-thickness-kaihl)
+                 (translate [0 (- (/ keyswitch-width 2) (/ nub-depth 2))
+                             (+ cutout-thickness (/ plate-thickness-kaihl 2))])
+                 )
                    ]
-    (difference outer hole cutout (mirror [0 1 0] cutout))
+    (union (difference outer hole cutout (mirror [0 1 0] cutout))
+           nub (mirror [0 1 0] nub)
+           )
     )
   )
 
@@ -609,7 +625,7 @@
                           :connector-width 9
                           :connector-overhang 1
                           :connector-offset 9
-                          :pcb-thick 1.8
+                          :pcb-thick 1.9
                           :pcb-depth 19
                           :hole-r (/ 3.3 2)
                           :hole-back-offset 0.9
@@ -629,6 +645,8 @@
                           }
   )
 
+(def usb-breakout-depth 9.5)
+
 (defn usb-breakout-pcb-side [dim]
   (+ (* 2 (dim :connector-offset)) (dim :connector-width))
      )
@@ -644,14 +662,13 @@
 (defn usb-breakout [dim]
   (let [
         wall-thick usb-breakout-wall-thickness
-        depth 10
+        depth usb-breakout-depth
         brace-thick 3
-        brace-width 7
         pcb-side (usb-breakout-pcb-side dim)
         outer (usb-breakout-outer dim)
+        brace-width (/ (- outer (dim :connector-width)) 2)
         height (usb-breakout-height dim)
-        depth1 (- depth (dim :connector-overhang))
-        brace-depth (+ (dim :pcb-depth) (dim :connector-overhang))
+        brace-depth (+ (dim :pcb-depth) (dim :connector-overhang) 2)
         ]
     (union
      (difference
@@ -668,18 +685,19 @@
                  (cube brace-width brace-depth brace-thick)
                  )
       (translate [(- (+ (/ (dim :connector-width) 2) (dim :connector-offset)) (dim :hole-r) (dim :hole-side-offset))
-                  (- brace-depth (/ depth 2) (dim :hole-r) (dim :hole-back-offset))
+                  (- (+ (dim :pcb-depth) (dim :connector-overhang))
+                     (dim :hole-side-offset) (dim :hole-r) (/ depth 2) )
                   (/ height 2)]
                  (with-fn 100 (cylinder (dim :hole-r) height))
                  )
       )
      ; 3d print support for connector hole
-            (translate [0 0 (+ wall-thick (dim :pcb-thick) (/ (dim :connector-height) 2)) ]
-                              (rotate (/ pi 2) [0 1 0]
-                                      (with-fn 50 (cube (/ (dim :connector-height) 2) (* depth 3/4)
-                                                        (- (dim :connector-width) 0.2)))
-                                      )
-                              )
+            ;(translate [0 0 (+ wall-thick (dim :pcb-thick) (/ (dim :connector-height) 2)) ]
+            ;                  (rotate (/ pi 2) [0 1 0]
+            ;                          (with-fn 50 (cube (/ (dim :connector-height) 2) (* depth 3/4)
+            ;                                            (- (dim :connector-width) 0.2)))
+            ;                          )
+            ;                  )
      )
     )
   )
@@ -706,19 +724,23 @@
 
 (def usb-a-height (usb-breakout-height usb-a-dimensions))
 (def usb-a-outer (usb-breakout-outer usb-a-dimensions))
-(def usb-a-start  (map + rj9-start [-1.4 0 0]))
+(def usb-a-start  (map + rj9-start [-4.4 -2 0]))
 (def usb-a-position  [(first usb-a-start) (second usb-a-start) (/ usb-a-outer 2)])
 (def usb-a-space  (translate usb-a-position
-                             (cube usb-a-height 10 usb-a-outer)
+                             (cube usb-a-height (* usb-breakout-depth 2) usb-a-outer)
                              )
   )
 
 (def usb-mini-height (usb-breakout-height usb-mini-dimensions))
 (def usb-mini-outer (usb-breakout-outer usb-mini-dimensions))
-(def usb-mini-position [(+ (first usb-a-start) (/ usb-a-height 2) (/ usb-mini-height 2))
-                        (second usb-a-start) (/ usb-mini-outer 2)])
+(def usb-mini-position [
+                           (+ (x usb-a-start) (/ usb-a-height 2) (/ usb-mini-height 2))
+                             (+ (y usb-a-start) 3)
+                             (/ usb-mini-outer 2)
+                             ]
+  )
 (def usb-mini-space (translate usb-mini-position
-                            (cube usb-b-height 10 usb-b-outer)
+                            (cube usb-b-height usb-breakout-depth usb-b-outer)
                             )
   )
 
@@ -843,7 +865,7 @@
                     thumb-connectors
                     (difference (union case-walls 
                                        screw-insert-outers 
-                                       teensy-holder
+                                       ;teensy-holder
                                        ;usb-holder
                                        )
                                 ; rj9-space 
