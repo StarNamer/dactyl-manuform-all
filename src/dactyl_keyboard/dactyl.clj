@@ -668,7 +668,7 @@
         outer (usb-breakout-outer dim)
         brace-width (/ (- outer (dim :connector-width)) 2)
         height (usb-breakout-height dim)
-        brace-depth (+ (dim :pcb-depth) (dim :connector-overhang) 2)
+        brace-depth (+ (dim :pcb-depth) (dim :connector-overhang) 1)
         ]
     (union
      (difference
@@ -724,7 +724,7 @@
 
 (def usb-a-height (usb-breakout-height usb-a-dimensions))
 (def usb-a-outer (usb-breakout-outer usb-a-dimensions))
-(def usb-a-start  (map + rj9-start [-4.4 -2 0]))
+(def usb-a-start  (map + rj9-start [-7 -2 0]))
 (def usb-a-position  [(first usb-a-start) (second usb-a-start) (/ usb-a-outer 2)])
 (def usb-a-space  (translate usb-a-position
                              (cube usb-a-height (* usb-breakout-depth 2) usb-a-outer)
@@ -735,7 +735,7 @@
 (def usb-mini-outer (usb-breakout-outer usb-mini-dimensions))
 (def usb-mini-position [
                            (+ (x usb-a-start) (/ usb-a-height 2) (/ usb-mini-height 2))
-                             (+ (y usb-a-start) 3)
+                             (+ (y usb-a-start) 3.6)
                              (/ usb-mini-outer 2)
                              ]
   )
