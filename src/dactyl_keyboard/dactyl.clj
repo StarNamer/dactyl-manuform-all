@@ -527,23 +527,10 @@
                                          (place x (+ y wall-sphere-top-backtep) wall-sphere-top-back)
                                          (place (+ x wall-sphere-top-backtep) (+ y wall-sphere-top-backtep) wall-sphere-top-back)))))]
     (union
-     (comment
-     (apply union
-            (for [x (range-inclusive left-wall-column (- right-wall-column step) step)]
-              (hull (place x back-y wall-sphere-top-back)
-                    (place (+ x step) back-y wall-sphere-top-back)
-                    (place x back-y wall-sphere-bottom-back)
-                    (place (+ x step) back-y wall-sphere-bottom-back))))
-     (front-top-cover 1.56 2.44 back-y 0.1)
-     (front-top-cover 3.56 4.44 back-y 0.13)
-     (front-top-cover 4.3 right-wall-column back-y 0.13)
-     )
-
-
      (hull (place left-wall-column 0 (translate [1 -1 1] wall-sphere-bottom-back))
            (place (+ left-wall-column 1) 0  (translate [0 -1 1] wall-sphere-bottom-back))
-           (key-place 0 0 web-post-tl)
-           (key-place 0 0 web-post-tr))
+           (key-place -1 0 web-post-tl)
+           (key-place -1 0 web-post-tr))
 
      (hull (place 5 0 (translate [0 -1 1] wall-sphere-bottom-back))
            (place right-wall-column 0 (translate [0 -1 1] wall-sphere-bottom-back))
