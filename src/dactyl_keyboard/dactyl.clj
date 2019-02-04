@@ -114,7 +114,7 @@
 ;; Placement Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def columns (range 0 6))
+(def columns (range -1 6))
 (def rows (range 0 5))
 
 (def α (/ π 12))
@@ -133,6 +133,7 @@
                               (rotate (* α (- 2 row)) [1 0 0])
                               (translate [0 0 row-radius]))
         column-offset (cond
+                        (= column -1) [0 -3 2.8]
                         (= column 2) [0 2.82 -3.0] ;;was moved -4.5
                         (>= column 4) [0 -5.8 5.64]
                         :else [0 0 0])
@@ -172,8 +173,8 @@
   (apply union
          (for [column columns
                row rows
-               :when (or (not= column 0)
-                         (not= row 4))]
+               :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+               ]
            (->> old-single-plate
                 (key-place column row)))))
 
@@ -181,8 +182,8 @@
   (apply union
          (for [column columns
                row rows
-               :when (or (not= column 0)
-                         (not= row 4))]
+               :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+               ]
            (->> (sa-cap (if (= column 5) 1 1))
                 (key-place column row)))))
 
@@ -208,8 +209,8 @@
           ;; Row connections
           (for [column (drop-last columns)
                 row rows
-                :when (or (not= column 0)
-                          (not= row 4))]
+                :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+                ]
             (triangle-hulls
              (key-place (inc column) row web-post-tl)
              (key-place column row web-post-tr)
@@ -219,8 +220,8 @@
           ;; Column connections
           (for [column columns
                 row (drop-last rows)
-                :when (or (not= column 0)
-                          (not= row 3))]
+                :when (and (not (and (= column -1) (>= row 2))) (not (and (= column 0) (= row 4))))
+                ]
             (triangle-hulls
              (key-place column row web-post-bl)
              (key-place column row web-post-br)
@@ -230,8 +231,8 @@
           ;; Diagonal connections
           (for [column (drop-last columns)
                 row (drop-last rows)
-                :when (or (not= column 0)
-                          (not= row 3))]
+                :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+                ]
             (triangle-hulls
              (key-place column row web-post-br)
              (key-place column (inc row) web-post-tr)
@@ -304,7 +305,6 @@
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
                                       (color [1 0 0 1/2])))
         top-plate (difference top-plate)]
-        ;]
     (union top-plate (mirror [0 1 0] top-plate))))
 
 (def thumbcaps
@@ -547,7 +547,7 @@
            (key-place 5 0 web-post-tr))
 
      (apply union
-            (for [x (range 1 5)]
+            (for [x (range 0 5)]
               (union
                (hull (place (- x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
                      (place (+ x 1/2) 0 (translate [0 -1 1] wall-sphere-bottom-back))
