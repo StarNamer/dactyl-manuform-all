@@ -656,7 +656,7 @@
            (case-place left-wall-column 1.6666 wall-sphere-bottom-front))
         )
      (hull
-      (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
+      (key-place -1 2 web-post-bl)
       (thumb-place 1 1 web-post-tr)
       (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
       (thumb-place 1 1 web-post-tl))
