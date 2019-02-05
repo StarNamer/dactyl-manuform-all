@@ -279,6 +279,9 @@
   (union (thumb-place 1 -1/2 shape)
          (thumb-place 1 1 shape)))
 
+(defn thumb-2x+1-bottom-column [shape]
+  (thumb-place 1 -1/2 shape))
+
 (defn thumb-1x-column [shape]
   (union (thumb-place 2 -1 shape)
          (thumb-place 2 0 shape)
@@ -288,6 +291,12 @@
   (union
    (thumb-2x-column shape)
    (thumb-2x+1-column shape)
+   (thumb-1x-column shape)))
+
+(defn thumb-bottom-layout [shape]
+  (union
+   (thumb-2x-column shape)
+   (thumb-2x+1-bottom-column shape)
    (thumb-1x-column shape)))
 
 (def double-plates
@@ -777,7 +786,7 @@
                           (not= row 4))]
             (->> bottom-key-guard
                  (key-place column row))))
-   (thumb-layout (rotate (/ π 2) [0 0 1] bottom-key-guard))
+   (thumb-bottom-layout (rotate (/ π 2) [0 0 1] bottom-key-guard))
    (apply union
           (for [column columns
                 row [(last rows)] ;;
@@ -941,22 +950,12 @@
                        (thumb-place 0 -1 web-post-bl)
                        (thumb-place 1 -1/2 web-post-br)
                        (thumb-place 1 -1 web-post-br))]
-         thumb-back-wall [(hull
-                           (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-                           (thumb-place 1 1 web-post-tr)
-                           (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-                           (thumb-place 1 1 web-post-tl))
-
+         thumb-back-wall [
                           (hull
                            (thumb-place (+ 5/2 0.05) thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
                            (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
                            (thumb-place 1 1 web-post-tl)
                            (thumb-place 2 1 web-post-tl))
-                          (hull
-                           (thumb-place 1/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-                           (case-place left-wall-column 1.6666 (translate [1 0 1] wall-sphere-bottom-front))
-                           (key-place 0 3 web-post-tl)
-                           (thumb-place 1 1 web-post-tr))
                           ]
          thumb-left-wall [(hull
                            (thumb-place thumb-left-wall-column thumb-back-y (translate [1 -1 1] wall-sphere-bottom-back))
@@ -996,7 +995,6 @@
                                  (thumb-place 0 -1 web-post-bl)
                                  (thumb-place 0 -1 web-post-br))]
          thumb-inside [(triangle-hulls
-                        (thumb-place 1 1 web-post-tr)
                         (key-place 0 3 web-post-tl)
                         (thumb-place 1 1 web-post-br)
                         (key-place 0 3 web-post-bl)
