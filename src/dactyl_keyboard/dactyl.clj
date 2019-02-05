@@ -1149,12 +1149,15 @@
 (def trrs-radius (/ trrs-diameter 2))
 (def trrs-hole-depth 10)
 
-(def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
-                           (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
-                                (translate [0 (/ (+ trrs-radius 5) 2) 0])))
-                    (rotate (/ π 2) [1 0 0])
-                    (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
-                    (with-fn 50)))
+(def trrs-hole (->> (
+  union
+    (cube 6.5 5.5 12.5)
+      (->>
+        (cylinder trrs-radius trrs-hole-depth)
+        (translate [ 0 0 -5])))
+          (rotate (/ π 2) [1 0 0])
+          (translate [0 4 (- (+ trrs-radius 0.1))])
+          (with-fn 50)))
 
 (def trrs-hole-just-circle
   (->> (cylinder trrs-radius trrs-hole-depth)
@@ -1168,8 +1171,7 @@
 
 
 (def trrs-cutout
-  (->> (union trrs-hole
-              trrs-box-hole)
+  (->> (union trrs-hole)
        (key-place 1/2 0)))
 
 (def teensy-pcb-thickness 1.6)
