@@ -1057,7 +1057,7 @@
                                                  (translate [0 0 (+ (/ stand-radius -2) -0.5)])
                                                  %
                                                  (bottom 1.5)))]
-                  [(stand-at #(key-place 0 0 %))
+                  [(stand-at #(key-place -1 0 %))
                    (stand-at #(thumb-place 1.5 -1/2 %))
                    (stand-at #(key-place 5 0 %))
                    (stand-at #(key-place 5 4 %))])]
