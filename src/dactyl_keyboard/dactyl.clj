@@ -805,8 +805,7 @@
                              (key-place column row web-post-br)))
                           (for [column (drop-last columns)
                                 row [(last rows)]
-                                :when (or (not= column 0)
-                                          (not= row 4))]
+                                  :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (>= row 3))))]
                             (triangle-hulls
                              (key-place (inc column) row web-post-tl)
                              (key-place column row web-post-tr)
@@ -814,8 +813,7 @@
                              (key-place column row half-post-br))))
          column-connections (for [column columns
                                   row (drop-last rows)
-                                  :when (or (not= column 0)
-                                            (not= row 3))]
+                                  :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 3))))]
                               (triangle-hulls
                                (key-place column row web-post-bl)
                                (key-place column row web-post-br)
@@ -823,8 +821,7 @@
                                (key-place column (inc row) web-post-tr)))
          diagonal-connections (for [column (drop-last columns)
                                     row (drop-last rows)
-                                    :when (or (not= column 0)
-                                              (not= row 3))]
+                                  :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 3))))]
                                 (triangle-hulls
                                  (key-place column row web-post-br)
                                  (key-place column (inc row) web-post-tr)
