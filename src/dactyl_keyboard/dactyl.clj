@@ -1075,7 +1075,7 @@
 (def screw-holes
   (union
    (key-place (+ 4 1/2) 1/2 screw-hole)
-   (key-place (+ 0 1/2) 1/2 screw-hole)
+   (key-place -1 1/2 screw-hole)
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
    (thumb-place 2 -1/2 screw-hole)))
 
