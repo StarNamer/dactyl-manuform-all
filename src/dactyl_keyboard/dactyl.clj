@@ -1035,9 +1035,8 @@
                         (thumb-place 0 -1 web-post-br)
                         (thumb-place 0 -1/2 web-post-br)
                         (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
-                        (key-place 1 4 (translate [0 0 8.5] web-post-bl))
-                        (key-place 1 4 half-post-bl)
-                        )]
+                        (case-place 0.7 4 (translate [0 1 1] wall-sphere-bottom-front))
+                        (key-place 1 4 half-post-bl))]
          stands (let [bumper-diameter 9.6
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
