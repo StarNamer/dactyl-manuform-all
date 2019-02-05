@@ -782,15 +782,15 @@
    (apply union
           (for [column columns
                 row (drop-last rows) ;;
-                :when (or (not= column 0)
-                          (not= row 4))]
+                :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+                ]
             (->> bottom-key-guard
                  (key-place column row))))
    (thumb-bottom-layout (rotate (/ π 2) [0 0 1] bottom-key-guard))
    (apply union
           (for [column columns
                 row [(last rows)] ;;
-                :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+                :when (and (not (and (= column -1) (>= row 4))) (not (and (= column 0) (= row 4))))
                 ]
             (->> bottom-front-key-guard
                  (key-place column row))))
@@ -805,8 +805,8 @@
          row-connections (concat
                           (for [column (drop-last columns)
                                 row (drop-last rows)
-                                :when (or (not= column 0)
-                                          (not= row 4))]
+                :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
+                                ]
                             (triangle-hulls
                              (key-place (inc column) row web-post-tl)
                              (key-place column row web-post-tr)
@@ -995,6 +995,11 @@
                                  (thumb-place 0 -1 web-post-bl)
                                  (thumb-place 0 -1 web-post-br))]
          thumb-inside [(triangle-hulls
+                        (key-place -1 3 web-post-tl)
+                        (key-place -1 3 web-post-tr)
+                        (thumb-place 1 1 web-post-bl)
+                        (thumb-place 1 1 web-post-br)
+                        (key-place -1 3 web-post-tr)
                         (key-place 0 3 web-post-tl)
                         (thumb-place 1 1 web-post-br)
                         (key-place 0 3 web-post-bl)
@@ -1006,7 +1011,14 @@
                         (key-place 1 3 web-post-bl)
                         (thumb-place 0 -1/2 web-post-tr)
                         (key-place 1 4 web-post-tl)
-                        (key-place 1 4 half-post-bl))
+                        (key-place 1 4 half-post-bl)
+                        )
+
+                       (hull
+                         (thumb-place 1 1 web-post-tl)
+                         (thumb-place 1 1 web-post-bl)
+                         (key-place -1 3 web-post-tl)
+                         (key-place -1 2 web-post-bl))
 
                        (hull
                         (thumb-place 0 -1/2 web-post-tr)
@@ -1061,7 +1073,8 @@
              thumb-left-wall
              thumb-front-wall
              thumb-inside
-             stands)))))
+             stands
+             )))))
 
 (def screw-hole (->> (cylinder 1.5 60)
                      (translate [0 0 19])
