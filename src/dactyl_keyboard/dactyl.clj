@@ -602,6 +602,18 @@
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
 
+(def reset-position (key-position 2 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
+(def reset-size [7.0 6.0 7.0])
+(def reset-thickness 4)
+(def reset-holder
+    (->> (cube (+ (first reset-size) reset-thickness) (second reset-size) (+ (last reset-size) reset-thickness))
+         (translate [(first reset-position) (second reset-position) (/ (+ (last reset-size) reset-thickness) 2)])))
+(def reset-hole
+    (->>
+        (->> (cylinder 3.5 7.0)
+             (rotate (/ π 2) [1 0 0])
+        (translate [(first reset-position) (second reset-position) (/ (+ (last reset-size) reset-thickness) 2)]))))
+
 (def teensy-width 20)  
 (def teensy-height 12)
 (def teensy-length 33)
@@ -701,9 +713,11 @@
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
+                                       reset-holder
                                        usb-holder)
                                 rj9-space 
                                 usb-holder-hole
+                                reset-hole
                                 screw-insert-holes)
                     rj9-holder
                     wire-posts
