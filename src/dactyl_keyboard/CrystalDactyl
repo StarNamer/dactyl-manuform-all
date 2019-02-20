@@ -38,7 +38,7 @@
 (def switch-type 1)							;;;0= box 1=cherry 2= Alps		-88
 (def bottom-side-width 1.2) 					;Default 1.2  Originally 1 ;;Width of the bottom sides
 (def top-case-thickness 1.25)					;Default 1.25  Originally 1
-(def sidewall-height 10)						;;;;controls height of sidewalls on top.  low profile Defaults 5-lightcycle 	10-dactyl	high profile
+(def sidewall-height 5)						;;;;controls height of sidewalls on top.  low profile Defaults 5-lightcycle 	10-dactyl	high profile
 (def top-z-offset 0)						;;;Controls the z/height offset of the case.  Default is 0 higher raises the case (dont forget to compensate the screw mounts)
 (def top-z-offset-thumb 0)					;;Controls thumb offset.  Generally speaking should be the same as the z offset	default 0
 (def case-text '"")
@@ -63,10 +63,10 @@
 (def thumb-front-back-curve (deg2rad 15))		;default 15 Key curve
 (def thumb-left-right-curve (deg2rad 5))		;;default 5 Key curve
 (def thumb-extra-width-column 2)				;;default 2
-(def left-right-thumb-tilt 15)					;;default 15 degrees  Serious down tilt =-45 which is about the limit this can go
+(def left-right-thumb-tilt -25)					;;default 15 degrees  Serious down tilt =-45 which is about the limit this can go
 (def front-back-thumb-tilt 15)   		 		;default 14 for better bottom fit originally 15
 (def  thumb-extra-width-row 1)					;;default 1
-(def top-z-offset-thumb 0)						;;The z offset of the thumb cluster.  Seperate from main offset
+(def top-z-offset-thumb -18)						;;The z offset of the thumb cluster.  Seperate from main offset
 (def z-thumb-rotation (deg2rad 3.5))			;;default of 3.5
 
 
