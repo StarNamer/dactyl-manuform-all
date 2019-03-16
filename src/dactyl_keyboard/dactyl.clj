@@ -432,34 +432,36 @@
 (def wall-step 0.2)
 (def wall-sphere-n 20) ;;Sphere resolution, lower for faster renders
 
-(defn wall-sphere-at [coords]
-  (->> (sphere 1)
-       (translate coords)
+(defn wall-sphere-at [x y z size]
+  (->> (sphere size)
+       (translate [x y z])
        (with-fn wall-sphere-n)))
 
 (defn scale-to-range [start end x]
   (+ start (* (- end start) x)))
 
-(defn wall-sphere-bottom [front-to-back-scale]
-  (wall-sphere-at [0
+(defn wall-sphere-bottom [front-to-back-scale size]
+  (wall-sphere-at 0
                    (scale-to-range
                     (+ (/ mount-height -2) -3.5)
                     (+ (/ mount-height 2) 5.0)
                     front-to-back-scale)
-                   -6]))
+                   -6
+                   size))
 
-(defn wall-sphere-top [front-to-back-scale]
-  (wall-sphere-at [0
+(defn wall-sphere-top [front-to-back-scale size]
+  (wall-sphere-at 0
                    (scale-to-range
                     (+ (/ mount-height -2) -3.5)
                     (+ (/ mount-height 2) 3.5)
                     front-to-back-scale)
-                   10]))
+                   10
+                   size))
 
-(def wall-sphere-top-back (wall-sphere-top 1))
-(def wall-sphere-bottom-back (wall-sphere-bottom 1))
-(def wall-sphere-bottom-front (wall-sphere-bottom 0))
-(def wall-sphere-top-front (wall-sphere-top 0))
+(def wall-sphere-top-back (wall-sphere-top 1 1))
+(def wall-sphere-bottom-back (wall-sphere-bottom 1 1))
+(def wall-sphere-bottom-front (wall-sphere-bottom 0 1))
+(def wall-sphere-top-front (wall-sphere-top 0 1))
 
 (defn top-case-cover [place-fn sphere
                  x-start x-end
@@ -570,28 +572,28 @@
                  (partition 2 1
                             (for [scale (range-inclusive 0 1 0.01)]
                               (let [x (scale-to-range 4 0.02 scale)]
-                                (hull (place right-wall-column x (wall-sphere-top scale))
-                                      (place right-wall-column x (wall-sphere-bottom scale))))))))
+                                (hull (place right-wall-column x (wall-sphere-top scale 1))
+                                      (place right-wall-column x (wall-sphere-bottom scale 1))))))))
           )
           (apply union
             (concat
              (for [x (range 0 5)]
                (union
-                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2 1)))
                       (key-place 5 x web-post-br)
                       (key-place 5 x web-post-tr))))
              (for [x (range 0 4)]
                (union
-                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                      (place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2)))
+                (hull (place right-wall-column x (translate [-1 0 1] (wall-sphere-bottom 1/2 1)))
+                      (place right-wall-column (inc x) (translate [-1 0 1] (wall-sphere-bottom 1/2 1)))
                       (key-place 5 x web-post-br)
                       (key-place 5 (inc x) web-post-tr))))
              [(union
-               (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1)))
+               (hull (place right-wall-column 0 (translate [-1 0 1] (wall-sphere-bottom 1/2 1)))
+                     (place right-wall-column 0.02 (translate [-1 -1 1] (wall-sphere-bottom 1 1)))
                      (key-place 5 0 web-post-tr))
-               (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2)))
-                     (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0)))
+               (hull (place right-wall-column 4 (translate [-1 0 1] (wall-sphere-bottom 1/2 1)))
+                     (place right-wall-column 4 (translate [-1 1 1] (wall-sphere-bottom 0 1)))
                      (key-place 5 4 web-post-br)))])))))
 
 (def left-wall
@@ -859,24 +861,24 @@
                             (key-place 5 4 half-post-bl))])
          right-wall (concat
                      (for [x (range 0 4)]
-                       (hull (case-place right-wall-column x (translate [-1.5 0 1] (wall-sphere-bottom 1/2)))
+                       (hull (case-place right-wall-column x (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
                              (key-place 5 x web-post-br)
                              (key-place 5 x web-post-tr)))
                      (for [x (range 0 4)]
-                       (hull (case-place right-wall-column x (translate [-1.5 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place right-wall-column (inc x) (translate [-1.5 0 1] (wall-sphere-bottom 1/2)))
+                       (hull (case-place right-wall-column x (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
+                             (case-place right-wall-column (inc x) (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
                              (key-place 5 x web-post-br)
                              (key-place 5 (inc x) web-post-tr)))
                      [(union
-                       (hull (case-place right-wall-column 0 (translate [-1.5 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place right-wall-column 0.02 (translate [-1.5 -1 1] (wall-sphere-bottom 1)))
+                       (hull (case-place right-wall-column 0 (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
+                             (case-place right-wall-column 0.02 (translate [-1.5 -1 1] (wall-sphere-bottom 1 1)))
                              (key-place 5 0 web-post-tr)
                              )
-                       (hull (case-place right-wall-column 4 (translate [-1.5 0 1] (wall-sphere-bottom 1/2)))
-                             (case-place right-wall-column 4 (translate [-1.5 1 1] (wall-sphere-bottom 0)))
+                       (hull (case-place right-wall-column 4 (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
+                             (case-place right-wall-column 4 (translate [-1.5 1 1] (wall-sphere-bottom 0 1)))
                              (key-place 5 4 half-post-br)
                              )
-                       (hull (case-place right-wall-column 4 (translate [-1.5 0 1] (wall-sphere-bottom 1/2)))
+                       (hull (case-place right-wall-column 4 (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
                              (key-place 5 4 half-post-br)
                              (key-place 5 4 web-post-tr)))])
          back-wall (concat
@@ -1319,17 +1321,17 @@
 (spit "things/connectors.scad"
       (write-scad connectors))
 
+)
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
 
 (spit "things/dactyl-top-right-case.scad"
       (write-scad dactyl-top-right-case))
 
-)
+(comment
 (spit "things/dactyl-bottom-right.scad"
       (write-scad dactyl-bottom-right))
 
-(comment
 (spit "things/dactyl-top-left.scad"
       (write-scad dactyl-top-left))
 
