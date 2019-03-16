@@ -1079,12 +1079,40 @@
                      (translate [0 0 19])
                      (with-fn wall-sphere-n)))
 
+(def screw-hole-holder (->> (hull (cylinder 2.5 4.5)
+                                  (translate [0 0 -3] (cylinder 8 0.001))
+                                  )
+                     (translate [0 0 -3])
+                     (with-fn wall-sphere-n)))
+
+(def nut-cube (->> (cube 4.2 2.5 7)))
+
+(def screw-nut-hole (->> (union
+                           (rotate (* 2 (/ π 3)) [0 0 1] nut-cube)
+                           (rotate (/ π 3) [0 0 1] nut-cube)
+                           nut-cube)
+                     (translate [0 0 -6])))
+
 (def screw-holes
   (union
    (key-place (+ 4 1/2) 1/2 screw-hole)
    (key-place -1 1/2 screw-hole)
    (key-place (+ 4 1/2) (+ 3 1/2) screw-hole)
    (thumb-place 2 -1/2 screw-hole)))
+
+(def screw-hole-holders
+  (union
+   (key-place (+ 4 1/2) 1/2 screw-hole-holder)
+   (key-place -1 1/2 screw-hole-holder)
+   (key-place (+ 4 1/2) (+ 3 1/2) screw-hole-holder)
+   (thumb-place 2 -1/2 screw-hole-holder)))
+
+(def screw-nut-holes
+  (union
+   (key-place (+ 4 1/2) 1/2 screw-nut-hole)
+   (key-place -1 1/2 screw-nut-hole)
+   (key-place (+ 4 1/2) (+ 3 1/2) screw-nut-hole)
+   (thumb-place 2 -1/2 screw-nut-hole)))
 
 (defn circuit-cover [width length height]
   (let [cover-sphere-radius 1
@@ -1230,11 +1258,15 @@
    (union
     teensy-cover
     (difference
+      (union
      bottom-plate
+    screw-hole-holders
+        )
      (hull teensy-cover)
      new-case
      teensy-cover
      trrs-cutout
+     screw-nut-holes
      screw-holes))
      (->> (cube 1000 1000 10) (translate [0 0 -5.8]))
    usb-cutout))
@@ -1287,13 +1319,13 @@
 (spit "things/connectors.scad"
       (write-scad connectors))
 
-)
 (spit "things/dactyl-top-right.scad"
       (write-scad dactyl-top-right))
 
 (spit "things/dactyl-top-right-case.scad"
       (write-scad dactyl-top-right-case))
 
+)
 (spit "things/dactyl-bottom-right.scad"
       (write-scad dactyl-bottom-right))
 
