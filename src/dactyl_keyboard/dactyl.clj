@@ -1116,40 +1116,40 @@
         cover-sphere (->> (sphere cover-sphere-radius)
                           (with-fn 20))
         cover-sphere-z (+ (- height) (- cover-sphere-radius))
-        cover-sphere-x (+ (/ width 2) cover-sphere-radius)
-        cover-sphere-y (+ (/ length 2) (+ cover-sphere-radius))
+        cover-sphere-x (- (+ (/ width 2) cover-sphere-radius) 0.35)
+        cover-sphere-y (- (+ (/ length 2) (+ cover-sphere-radius)) 0.36)
         cover-sphere-tl (->> cover-sphere
                              (translate [(- cover-sphere-x) (- cover-sphere-y) cover-sphere-z])
-                             (key-place 1 3/2)); bottom lower left
+                             (key-place 1/2 3/2))
         cover-sphere-tr (->> cover-sphere
                              (translate [cover-sphere-x (- cover-sphere-y) cover-sphere-z])
-                             (key-place 0.9 3/2)); bottom lower right
+                             (key-place 1/2 3/2))
         cover-sphere-br (->> cover-sphere
                              (translate [cover-sphere-x cover-sphere-y cover-sphere-z])
-                             (key-place 0.9 3/2)); bottom upper right
+                             (key-place 1/2 3/2))
         cover-sphere-bl (->> cover-sphere
                              (translate [(- cover-sphere-x) cover-sphere-y cover-sphere-z])
-                             (key-place 1 3/2)); bottom upper left
+                             (key-place 1/2 3/2))
 
         lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5.5)] %)
-        bl (->> cover-sphere lower-to-bottom (key-place 0.4 0.6)); top upper left
-        br (->> cover-sphere lower-to-bottom (key-place 1.4 0.6)); top upper right
-        tl (->> cover-sphere lower-to-bottom (key-place 0.4 2.3)); top lower left
-        tr (->> cover-sphere lower-to-bottom (key-place 1.4 2.3)); top lower right
+        bl (->> (translate [0 -5.5 0.4] cover-sphere) lower-to-bottom (key-place 0 1/2))
+        br (->> (translate [0 -5.5 0.4] cover-sphere) lower-to-bottom (key-place 1 1/2))
+        tl (->> (translate [0 5.5 0.4] cover-sphere) lower-to-bottom (key-place 0 5/2))
+        tr (->> (translate [0 5.5 0.4] cover-sphere) lower-to-bottom (key-place 1 5/2))
 
         mlb (->> cover-sphere
                  (translate [(- cover-sphere-x) 0 (+ (- height) -1)])
-                 (key-place 1 3/2)); middle left bottom
+                 (key-place 1/2 3/2))
         mrb (->> cover-sphere
-                 (translate [(- cover-sphere-x 3) 0 (+ (- height) -1)])
-                 (key-place 1 3/2)); middle right bottom
+                 (translate [cover-sphere-x 0 (+ (- height) -1)])
+                 (key-place 1/2 3/2))
 
         mlt (->> cover-sphere
                  (translate [(+ (- cover-sphere-x) -4) 0 -6])
-                 (key-place 1.1 3/2)); middle left top
+                 (key-place 1/2 3/2))
         mrt (->> cover-sphere
                  (translate [(+ cover-sphere-x 4) 0 -6])
-                 (key-place 0.7 3/2))]; middle right top
+                 (key-place 1/2 3/2))]
     (union
      (hull cover-sphere-bl cover-sphere-br cover-sphere-tl cover-sphere-tr)
      (hull cover-sphere-br cover-sphere-bl bl br)
@@ -1163,9 +1163,13 @@
 (def io-exp-height 8)
 (def io-exp-length 36)
 
-(def teensy-width 20)
+(def teensy-width 18.7)
 (def teensy-height 12)
-(def teensy-length 33)
+(def teensy-length 33.5)
+
+(defn teensy-pos [shape]
+  (->> (key-place 0.5 1.5 (translate [0 0 -5] shape)))
+)
 
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (translate [0 0 0.8] (circuit-cover teensy-width teensy-length teensy-height)))
@@ -1200,7 +1204,7 @@
        (key-place 1/2 0)))
 
 (def teensy-pcb-thickness 1.6)
-(def teensy-offset-height 5)
+(def teensy-offset-height 3.5)
 
 (def teensy-pcb (->> (cube 18 30.5 teensy-pcb-thickness)
                      (translate [0 0 (+ (/ teensy-pcb-thickness -2) (- teensy-offset-height))])
@@ -1208,27 +1212,14 @@
                      (color [1 0 0])))
 
 (def teensy-support
-  (difference
-   (union
-    (->> (cube 3 3 9)
-         (translate [0 0 -2])
-         (key-place 1/2 3/2)
-         (color [0 1 0]))
-    (hull (->> (cube 3 6 9)
-               (translate [0 0 -2])
-               (key-place 1/2 2)
-               (color [0 0 1]))
-          (->> (cube 3 3 (+ teensy-pcb-thickness 3))
-               (translate [0 (/ 30.5 -2) (+ (- teensy-offset-height)
-                                            #_(/ (+ teensy-pcb-thickness 3) -2)
-                                            )])
-               (key-place 1/2 3/2)
-               (color [0 0 1]))))
-   teensy-pcb
-   (->> (cube 18 30.5 teensy-pcb-thickness)
-        (translate [0 1.5 (+ (/ teensy-pcb-thickness -2) (- teensy-offset-height) -1)])
-        (key-place 1/2 3/2)
-        (color [1 0 0]))))
+  (->>
+    (union
+      (teensy-pos (translate [0 -15.5 -5.15] (cube 7.2 2.3 2.5)))
+      (teensy-pos (translate [7.5 16 -5.15] (cube 6.5 2.3 2.5)))
+      (teensy-pos (translate [-7.5 16 -5.15] (cube 6.5 2.3 2.5)))
+    )
+  )
+)
 
 (def usb-cutout
   (let [hole-height 6.2
@@ -1238,11 +1229,10 @@
                            (with-fn 20)
                            (translate [(/ (- hole-width hole-height) 2) 0 0]))]
     (->> (hull side-cylinder
-         (mirror [-1 0 0] side-cylinder))
-         (translate [8 0 0])
+               (mirror [-1 0 0] side-cylinder))
          (rotate (/ π 2) [1 0 0])
          (translate [0 (/ teensy-length 2) (- side-radius)])
-         (translate [0 0 (- 1)])
+         (translate [0 0 (- 2.5)])
          (translate [0 0 (- teensy-offset-height)])
          (key-place 1/2 3/2))))
 
@@ -1254,6 +1244,7 @@
   (difference
    (union
     teensy-cover
+    teensy-support
     (difference
       (union
      bottom-plate
@@ -1261,7 +1252,6 @@
         )
      (hull teensy-cover)
      new-case
-     ;(hull (translate [0 0 1] teensy-cover))
      teensy-cover
      trrs-cutout
      screw-nut-holes
