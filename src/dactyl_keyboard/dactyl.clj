@@ -992,29 +992,71 @@
                         (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
                         (case-place 0.7 4 (translate [0 1 0] wall-sphere-bottom-front))
                         (key-place 1 4 half-post-bl))]
-         stands (let [bumper-diameter 9.6
+         stands (let [bumper-diameter 8.4
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
                       stand-radius (/ stand-diameter 2)
+                      stand-top #(->>
+                                  (sphere (+ stand-radius 2))
+                                  (with-fn 100)
+                                  (translate [0 0 (+ (/ stand-radius -2) -0.5)])
+                                  %
+                                  )
+                      stand-cut #(union
+                                   (->> (cube (+ 9 stand-diameter) (+ 9 stand-diameter) (+ 7 stand-radius))
+                                        (translate [0 0 (+ 2.5 (/ stand-radius -2))])
+                                        %)
+                                   (->> (cube (+ 9 stand-diameter) (+ 9 stand-diameter) (+ 7 stand-radius))
+                                        (translate [0 0 (+ 2.5 (/ stand-radius -2))])
+                                       %)
+                                 )
+                      stand-bump-cut #(->> (sphere bumper-radius)
+                                           (with-fn 100)
+                                                 (translate [0 0 (+ (/ stand-radius -2) -0.5)])
+                                                 %
+                                                 (bottom 1)
+                                        )
                       stand-at #(
                                  difference (->> (sphere stand-radius)
+                                                 (with-fn 100)
                                                  (translate [0 0 (+ (/ stand-radius -2) -0.5)])
                                                  %
-                                                 (bottom-hull))
-                                            (->> (cube (+ 5 stand-diameter) (+ 6 stand-diameter) (+ 3 stand-radius))
-                                                 (translate [0 0 (+ 0.5 (/ stand-radius -2))])
-                                                 %)
-                                            (->> (cube (+ 5 stand-diameter) (+ 6 stand-diameter) (+ 3 stand-radius))
-                                                 (translate [0 0 (+ 1.5 (/ stand-radius -2))])
-                                                 %)
-                                            (->> (sphere bumper-radius)
-                                                 (translate [0 0 (+ (/ stand-radius -2) -0.5)])
-                                                 %
-                                                 (bottom 1.5)))]
-                  [(stand-at #(key-place -1 0 %))
-                   (stand-at #(thumb-place 1.5 -1/2 %))
-                   (stand-at #(key-place 5 0 %))
-                   (stand-at #(key-place 5 4 %))])]
+                                                 (bottom 0.1))
+                                            )]
+                  [
+                   (difference
+                     (hull
+                       (stand-at #(key-place -2 -0.1 %))
+                       (stand-top #(key-place -1 1 %))
+                     )
+                     (stand-cut #(key-place -1 1 %))
+                     (stand-bump-cut #(key-place -2 -0.1 %))
+                   )
+                   (difference
+                     (hull
+                       (stand-at #(thumb-place 2 -1 %))
+                       (stand-top #(thumb-place 1.5 -1/2 %))
+                     )
+                     (stand-cut #(thumb-place 1.5 -1/2 %))
+                     (stand-bump-cut #(thumb-place 2 -1 %))
+                   )
+                   (difference
+                     (hull
+                       (stand-at #(key-place 5.1 0 %))
+                       (stand-top #(key-place 4.9 0.5 %))
+                     )
+                     (stand-cut #(key-place 4.9 0.5 %))
+                     (stand-bump-cut #(key-place 5.1 0 %))
+                   )
+                   (difference
+                     (hull
+                       (stand-at #(key-place 5.1 4.2 %))
+                       (stand-top #(key-place 5 4 %))
+                     )
+                     (stand-cut #(key-place 5 4 %))
+                     (stand-bump-cut #(key-place 5.1 4.2 %))
+                   )
+                   ])]
      (apply union
             (concat
              main-keys-bottom
@@ -1099,8 +1141,8 @@
                  (translate [(- cover-sphere-x) 0 (+ (- height) -1)])
                  (key-place 1 3/2)); middle left bottom
         mrb (->> cover-sphere
-                 (translate [cover-sphere-x 0 (+ (- height) -1)])
-                 (key-place 0.9 3/2)); middle right bottom
+                 (translate [(- cover-sphere-x 3) 0 (+ (- height) -1)])
+                 (key-place 1 3/2)); middle right bottom
 
         mlt (->> cover-sphere
                  (translate [(+ (- cover-sphere-x) -4) 0 -6])
@@ -1126,7 +1168,7 @@
 (def teensy-length 33)
 
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
-(def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
+(def teensy-cover (translate [0 0 0.8] (circuit-cover teensy-width teensy-length teensy-height)))
 
 (def trrs-diameter 6.6)
 (def trrs-radius (/ trrs-diameter 2))
@@ -1219,6 +1261,7 @@
         )
      (hull teensy-cover)
      new-case
+     ;(hull (translate [0 0 1] teensy-cover))
      teensy-cover
      trrs-cutout
      screw-nut-holes
