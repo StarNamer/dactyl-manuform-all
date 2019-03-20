@@ -16,8 +16,8 @@
 (def nrows 5)
 (def ncols 6)
 
-(def α (/ π 24))                        ; curvature of the columns
-(def β (/ π 48))                        ; curvature of the rows
+(def α (/ π 36))                        ; curvature of the columns
+(def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
@@ -25,15 +25,15 @@
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 
 (defn column-offset [column] (cond
-  (= column 2) [0 2.82 -4.5]
-  (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
+  (= column 2) [0 5 -3]
+  (>= column 4) [0 -5 4]
   :else [0 0 0]))
 
 (def thumb-offsets [6 -3 7])
 
 (def keyboard-z-offset 16)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 2.5)                   ; extra space between the base of keys; original= 2
+(def extra-width 2)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
 
 (def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
@@ -766,4 +766,4 @@
 
 
 
-(defn -main [dum] 1)  ; dummy to make it easier to batch
+(defn -main [] 1)  ; dummy to make it easier to batch
