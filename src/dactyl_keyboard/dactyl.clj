@@ -713,7 +713,7 @@
                                 usb-holder-hole
                                 screw-insert-holes)
                     rj9-holder
-                    wire-posts
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
