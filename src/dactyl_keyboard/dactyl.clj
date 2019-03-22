@@ -27,7 +27,7 @@
 
 (defn column-offset [column] (cond
                                (= column 2) [0 2.82 -4.5]
-                               (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
+                               (>= column 4) [0 -17 5.64]            ; original [0 -5.8 5.64]
                                :else [0 0 0]))
 
 (def thumb-offsets [6 -3 7])
@@ -736,14 +736,20 @@
 
         (translate [0 0 -20] (cube 350 350 40)))))
 
-(spit "things/right-plate.scad"
-      (write-scad
-       (cut
-        (translate [0 0 -0.1]
+(def plate-shape
+  (translate [0 0 -0.1]
                    (difference (union case-walls
                                       pinky-walls
                                       screw-insert-outers)
-                               (translate [0 0 -10] screw-insert-screw-holes))))))
+                               (translate [0 0 -10] screw-insert-screw-holes))))
+(def plate-base
+  (cube 200 200 0.1))
+
+(spit "things/right-plate.scad"
+      (write-scad
+       (cut (difference plate-base plate-shape))
+        ;(cut plate-base)
+       ))
 
 (spit "things/test.scad"
       (write-scad
