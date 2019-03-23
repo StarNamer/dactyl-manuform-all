@@ -1295,6 +1295,12 @@
            trrs-hole-just-circle
            screw-holes)))
 
+(def teensy-parts
+  (intersection dactyl-bottom-right 
+    (teensy-pos (cube (+ teensy-width 9) (+ teensy-length 17) (+ teensy-height 10)))
+  )
+)
+
 (comment
 (spit "things/sa-cap.scad"
       (write-scad (sa-cap 1)))
@@ -1316,6 +1322,9 @@
 
 (spit "things/dactyl-bottom-right.scad"
       (write-scad dactyl-bottom-right))
+
+(spit "things/teensy-parts.scad"
+      (write-scad teensy-parts))
 
 (comment
 (spit "things/dactyl-top-left.scad"
