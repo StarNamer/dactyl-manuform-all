@@ -1,3 +1,7 @@
+# NOTE: The repo has moved to https://github.com/aleung/mini-thumb-dactyl-keyboard. This one is archived.
+
+---
+
 # The Mini Thumb Dactyl Keyboard
 This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard), a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
