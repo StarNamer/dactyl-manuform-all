@@ -25,7 +25,7 @@ We built some original Dactyls and some [[https://github.com/tshort/dactyl-keybo
  - two 4P4C telephone jacks and a spiral cord
  - enameled wire
 
-*** Generating a Design
+*** Generating a design
     
 *Setting up the Clojure environment*
 
@@ -33,15 +33,13 @@ We built some original Dactyls and some [[https://github.com/tshort/dactyl-keybo
 - [[http://leiningen.org/][Install the Leiningen project manager]]
 - [[http://www.openscad.org/][Install OpenSCAD]]
 
-**Generating the design**
+*Generating the design*
 - Run `lein repl`
 - Load the file `(load-file "src/dactyl_keyboard/dactyl.clj")`
 - This will regenerate the `things/*.scad` files
 - Use OpenSCAD to open a `.scad` file.
 - Make changes to design, repeat `load-file`, OpenSCAD will watch for changes and rerender.
 - When done, use OpenSCAD to export STL files
-
-**Tips**
 
 *Tips*
 - [[http://stackoverflow.com/a/28213489][Some other ways to evaluate the clojure design file]]
