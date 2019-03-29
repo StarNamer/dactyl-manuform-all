@@ -1,0 +1,74 @@
+* Daktil Keyboard
+
+Daktil is a fork of [[https://github.com/adereth/dactyl-keyboard][the Dactyl]], a parameterized, split-hand, concave, columnar, ergonomic keyboard.
+A number of them were built at [[http://ljudmila.org/][Ljudmila]], at the [[https://wiki.ljudmila.org/Tipkovnica_dactyl][PIFlab workshop]].
+
+[[file:resources/keyboards.jpg]]
+
+There's a [[https://www.youtube.com/watch?v=uk3A41U0iO4][very interesting talk]] about the motivation and design of the original Dactyl by Matt Addereth, its creator:
+
+** Differences from the original design
+
+The generated model has not changed, but we used an Arudino ProMicro instead of a Teensy Arduino controller. We also did the wiring in columns instead of rows and connected the left and right parts with a spiral telephone cord with 4P4C connectors/cords.
+
+We built some original Dactyls and some [[https://github.com/tshort/dactyl-keyboard][Dactyl Manuforms]].
+
+** Assembly
+
+*** Parts / materials
+ - Cherry MX switches
+ - Arduino Pro Micro (you can / we did / use a clone)
+ - IO expander (MCP23008)
+ - 3d print material
+ - 1N41 diodes (1 for each key / approx. 60)
+ - two 2,2 kΩ resistors
+ - two 4P4C telephone jacks and a spiral cord
+ - enameled wire
+
+*** Generating a Design
+    
+*Setting up the Clojure environment*
+
+- [[https://clojure.org][Install the Clojure runtime]]
+- [[http://leiningen.org/][Install the Leiningen project manager]]
+- [[http://www.openscad.org/][Install OpenSCAD]]
+
+**Generating the design**
+- Run `lein repl`
+- Load the file `(load-file "src/dactyl_keyboard/dactyl.clj")`
+- This will regenerate the `things/*.scad` files
+- Use OpenSCAD to open a `.scad` file.
+- Make changes to design, repeat `load-file`, OpenSCAD will watch for changes and rerender.
+- When done, use OpenSCAD to export STL files
+
+**Tips**
+
+*Tips*
+- [[http://stackoverflow.com/a/28213489][Some other ways to evaluate the clojure design file]]
+- [[http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure/][Example designing with clojure]]
+
+*** Printing
+    
+Pregenerated STL files are available in the [[things/][things]] directory.
+
+[[things/daktil_dlan_2.stl][Handrests]] prototyped at PIFcamp 2018 were designed with Blender.
+
+*** Wiring
+    
+*TODO*
+
+*** Firmware setup
+
+*TODO*
+
+[[https://github.com/g1smo/qmk_firmware][Our QMK repo fork]]
+
+** Original documentation
+   
+You can find scans of original documents we used in the [[doc/][doc]] folder.
+
+** License
+
+Copyright © 2015 Matthew Adereth
+
+The source code for generating the models (everything excluding the [[things/][things]] and [[resources/][resources]] directories is distributed under the [[LICENSE][GNU AFFERO GENERAL PUBLIC LICENSE Version 3]].  The generated models and PCB designs are distributed under the [[LICENSE-models][Creative Commons Attribution-ShareAlike License Version 4.0]].
