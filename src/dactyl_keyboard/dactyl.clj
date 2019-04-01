@@ -502,8 +502,20 @@
       (place2 (translate (wall-locate3 dx2 dy2) post2)))
       ))
 
+(defn new-wall-brace [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
+    (bottom-hull
+    (place1 (translate (wall-locate2 dx1 dy1) post1))
+    (place1 (translate (wall-locate3 dx1 dy1) post1))
+    (place2 (translate (wall-locate2 dx2 dy2) post2))
+    (place2 (translate (wall-locate3 dx2 dy2) post2)))
+)
+
 (defn key-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2]
   (wall-brace (partial key-place x1 y1) dx1 dy1 post1
+              (partial key-place x2 y2) dx2 dy2 post2))
+
+(defn key-new-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2]
+  (new-wall-brace (partial key-place x1 y1) dx1 dy1 post1
               (partial key-place x2 y2) dx2 dy2 post2))
 
 (def case-walls
@@ -583,6 +595,82 @@
      (thumb-tl-place thumb-post-tl))
   ))
 
+(def case-walls-partial
+  (union
+   ; back wall
+   (for [x (range 0 ncols)] (key-new-wall-brace x 0 0 1 web-post-tl x       0 0 1 web-post-tr))
+   (for [x (range 1 ncols)] (key-new-wall-brace x 0 0 1 web-post-tl (dec x) 0 0 1 web-post-tr))
+   (key-new-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
+   ; right wall
+   (for [y (range 0 (inc lastrow))] (key-new-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
+   (for [y (range 1 (inc lastrow))] (key-new-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
+   (key-new-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 1 0 web-post-br)
+   ; left wall
+   (for [y (range 0 (inc lastrow))] (union (new-wall-brace (partial left-key-place y 1)       -1 0 web-post (partial left-key-place y -1) -1 0 web-post)
+                                     #_(hull (key-place 0 y web-post-tl)
+                                           (key-place 0 y web-post-bl)
+                                           (left-key-place y  1 web-post)
+                                           (left-key-place y -1 web-post))))
+   (for [y (range 1 (inc lastrow))] (union (new-wall-brace (partial left-key-place (dec y) -1) -1 0 web-post (partial left-key-place y  1) -1 0 web-post)
+                                     #_(hull (key-place 0 y       web-post-tl)
+                                           (key-place 0 (dec y) web-post-bl)
+                                           (left-key-place y        1 web-post)
+                                           (left-key-place (dec y) -1 web-post))))
+   (new-wall-brace (partial key-place 0 0) 0 1 web-post-tl (partial left-key-place 0 1) 0 1 web-post)
+   (new-wall-brace (partial left-key-place 0 1) 0 1 web-post (partial left-key-place 0 1) -1 0 web-post)
+   ; front wall
+   (key-new-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
+   (key-new-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
+   (key-new-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
+   (for [x (range 4 ncols)] (key-new-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
+   (for [x (range 5 ncols)] (key-new-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+   ; thumb walls
+   (new-wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
+   (new-wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
+   (new-wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
+   (new-wall-brace thumb-ml-place -0.3  1 web-post-tr thumb-ml-place  0  1 web-post-tl)
+   (new-wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl)
+   (new-wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl)
+   (new-wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl)
+   ; thumb corners
+   (new-wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
+   (new-wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
+   ; thumb tweeners
+   (new-wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
+   (new-wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
+   (new-wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
+   (new-wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
+   ; clunky bit on the top left thumb connection  (normal connectors don't work well)
+   (bottom-hull
+     (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
+     (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
+     (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
+     (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr)))
+   (hull
+     (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
+     (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
+     (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
+     (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr))
+     (thumb-tl-place thumb-post-tl))
+   (hull
+     (left-key-place cornerrow -1 web-post)
+     (left-key-place cornerrow -1 (translate (wall-locate1 -1 0) web-post))
+     (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
+     (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
+     (thumb-tl-place thumb-post-tl))
+   (hull
+     (left-key-place cornerrow -1 web-post)
+     (left-key-place cornerrow -1 (translate (wall-locate1 -1 0) web-post))
+     (key-place 0 cornerrow web-post-bl)
+     (key-place 0 cornerrow (translate (wall-locate1 -1 0) web-post-bl))
+     (thumb-tl-place thumb-post-tl))
+   (hull
+     (thumb-ml-place web-post-tr)
+     (thumb-ml-place (translate (wall-locate1 -0.3 1) web-post-tr))
+     (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
+     (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr))
+     (thumb-tl-place thumb-post-tl))
+  ))
 
 (def rj9-start  (map + [0 -3  0] (key-position 0 0 (map + (wall-locate3 0 1) [0 (/ mount-height  2) 0]))))
 (def rj9-position  [(first rj9-start) (second rj9-start) 11])
@@ -718,6 +806,15 @@
 
 (spit "things/right.scad"
       (write-scad model-right))
+
+(spit "things/left-partial-walls.scad"
+      (write-scad (mirror [-1 0 0] case-walls-partial)))
+
+(spit "things/left-partial-plate.scad"
+      (write-scad (mirror [-1 0 0] (difference model-right case-walls-partial))))
+
+(spit "things/right-partial-walls.scad"
+      (write-scad case-walls-partial))
 
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
