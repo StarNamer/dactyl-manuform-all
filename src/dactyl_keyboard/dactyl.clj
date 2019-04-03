@@ -43,7 +43,7 @@
 
 (def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def wall-thickness 3.5)                  ; wall thickness parameter; originally 5
+(def wall-thickness 4)                  ; wall thickness parameter; originally 5
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -71,8 +71,8 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.2) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.2)
+(def keyswitch-height 14.1) ;; Was 14.1, then 14.25
+(def keyswitch-width 14.1)
 
 (def sa-profile-key-height 12.7)
 
@@ -653,13 +653,13 @@
          (translate (map + offset [(first position) (second position) (/ height 2)])))))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0 0         bottom-radius top-radius height [11 11 0])
-         (screw-insert 0 lastrow   bottom-radius top-radius height [0 2.5 0])
+  (union (screw-insert 0 0         bottom-radius top-radius height [12 12 0])
+         (screw-insert 0 lastrow   bottom-radius top-radius height [0 3 0])
         ;  (screw-insert lastcol lastrow  bottom-radius top-radius height [-5 13 0])
         ;  (screw-insert lastcol 0         bottom-radius top-radius height [-3 6 0])
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [-4.5 12.5 0])
-         (screw-insert lastcol 0         bottom-radius top-radius height [-3.5 7 0])
-         (screw-insert 1 lastrow         bottom-radius top-radius height [0 -16 0])))
+         (screw-insert lastcol lastrow  bottom-radius top-radius height [-3.5 11 0])
+         (screw-insert lastcol 0         bottom-radius top-radius height [-3 9 0])
+         (screw-insert 1 lastrow         bottom-radius top-radius height [1 -17 0])))
 
 ; Hole Depth Y: 4.4
 (def screw-insert-height 4)
@@ -746,13 +746,10 @@
                                       pinky-walls
                                       screw-insert-outers)
                                (translate [0 0 -10] screw-insert-screw-holes))))
-(def plate-base
-  (cube 200 200 0.1))
 
 (spit "things/right-plate.scad"
       (write-scad
-       (cut (difference plate-base plate-shape))
-        ;(cut plate-base)
+       (cut plate-shape)
        ))
 
 (spit "things/test.scad"
