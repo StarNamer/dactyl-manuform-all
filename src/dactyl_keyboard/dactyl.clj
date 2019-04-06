@@ -63,8 +63,15 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
+;; Cherry MX switches
 (def keyswitch-height 14.4) ;; Was 14.1, then 14.25
 (def keyswitch-width 14.4)
+
+;; Alps / Matias switches
+(def alps-width 15.6)
+(def alps-notch-width 15.5)
+(def alps-notch-height 1)
+(def alps-height 13)
 
 (def sa-profile-key-height 12.7)
 
@@ -746,6 +753,9 @@
 (spit "things/test.scad"
       (write-scad
          (difference usb-holder usb-holder-hole)))
+
+(spit "things/alps-holes.scad"
+      (write-scad (union connectors key-holes)))
 
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
