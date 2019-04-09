@@ -610,10 +610,13 @@
 (def teensy-holder-width  (+ 7 teensy-pcb-thickness))
 (def teensy-holder-height (+ 6 teensy-width))
 (def teensy-offset-height 5)
-(def teensy-holder-top-length 18)
+;;;; mod: extend length of teensy-top-holder
+;; (def teensy-holder-top-length 18)
 (def teensy-top-xy (key-position 0 (- centerrow 1) (wall-locate3 -1 0)))
 (def teensy-bot-xy (key-position 0 (+ centerrow 1) (wall-locate3 -1 0)))
 (def teensy-holder-length (- (second teensy-top-xy) (second teensy-bot-xy)))
+;;;; mod: extend length of teensy-top-holder
+(def teensy-holder-top-length (- (second teensy-top-xy) (second teensy-bot-xy)))
 (def teensy-holder-offset (/ teensy-holder-length -2))
 (def teensy-holder-top-offset (- (/ teensy-holder-top-length 2) teensy-holder-length))
  
@@ -627,11 +630,11 @@
           (->> (cube 4 teensy-holder-length 4)
                (translate [(+ teensy-pcb-thickness 5) teensy-holder-offset (-  -1 (/ teensy-width 2))]))
           ;;;; mod: remove teensy-holder-top edge for STM32F103C8T6 PCB
-          ;; (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)
-          ;;      (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
-          ;; (->> (cube 4 teensy-holder-top-length 4)
-          ;;      (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
-          )
+          (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)
+               (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
+          (->> (cube 4 teensy-holder-top-length 4)
+               (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
+          ;; )
         (translate [(- teensy-holder-width) 0 0])
         (translate [-1.4 0 0])
         (translate [(first teensy-top-xy) 
