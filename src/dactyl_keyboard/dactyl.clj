@@ -703,10 +703,13 @@
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
-                                       usb-holder)
+                                       ;;;; mod: remove usb-holder
+                                       ;; usb-holder
+                                       )
                                 ;;;; mod: remove rj9-holder
                                 ;; rj9-space 
-                                usb-holder-hole
+                                ;;;; mod: remove usb-holder
+                                ;; usb-holder-hole
                                 screw-insert-holes)
                     ;;;; mod: remove rj9-holder
                     ;; rj9-holder
