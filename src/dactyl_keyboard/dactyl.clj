@@ -629,11 +629,12 @@
                (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
           (->> (cube 4 teensy-holder-length 4)
                (translate [(+ teensy-pcb-thickness 5) teensy-holder-offset (-  -1 (/ teensy-width 2))]))
-          ;;;; mod: remove teensy-holder-top edge for STM32F103C8T6 PCB
+          ;;;; disabled mod: remove teensy-holder-top edge for STM32F103C8T6 PCB
           (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)
                (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
           (->> (cube 4 teensy-holder-top-length 4)
                (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
+          ;;;; disabled mod: remove teensy-holder-top edge for STM32F103C8T6 PCB
           ;; )
         (translate [(- teensy-holder-width) 0 0])
         (translate [-1.4 0 0])
