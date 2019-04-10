@@ -71,8 +71,8 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.1) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.1)
+(def keyswitch-height 14.2) ;; Was 14.1, then 14.25
+(def keyswitch-width 14.2)
 
 (def sa-profile-key-height 12.7)
 
@@ -594,9 +594,9 @@
 (def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
 
 (def usb-holder-position (map + [17 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
-(def usb-holder-cube   (cube 15 12 2))
-(def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
-(def usb-holder-holder (translate usb-holder-position (cube 19 12 4)))
+(def usb-holder-cube   (cube 15 (+ 9.5 wall-thickness) 2))
+(def usb-holder-space  (translate (map + usb-holder-position [0 0 1]) usb-holder-cube))
+(def usb-holder-holder (translate usb-holder-position (cube 19 8 4)))
 
 (def usb-jack (translate (map + usb-holder-position [0 10 3]) (cube 8.1 20 3.1)))
 
