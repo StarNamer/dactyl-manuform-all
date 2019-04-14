@@ -5,7 +5,7 @@ A number of them were built at [[http://ljudmila.org/][Ljudmila]], at the [[http
 
 [[file:resources/keyboards.jpg]]
 
-There's a [[https://www.youtube.com/watch?v=uk3A41U0iO4][very interesting talk]] about the motivation and design of the original Dactyl by Matt Addereth, its creator:
+There's a [[https://www.youtube.com/watch?v=uk3A41U0iO4][very interesting talk]] about the motivation and design of the original Dactyl by Matt Addereth, its creator.
 
 ** Differences from the original design
 
@@ -51,22 +51,29 @@ Pregenerated STL files are available in the [[things/][things]] directory.
 
 [[things/daktil_dlan_2.stl][Handrests]] prototyped at PIFcamp 2018 were designed with Blender.
 
-*** Wiring
+*** Building
     
-*TODO*
+After you've printed the case (either original or manuform), you tuck keyboard switches into the holes.
+The switches need to be wired together in each half of the keyboard; in principle it is possible to wire it in two different ways. Each switch has two pins, let's call them pin A and pin B. One way of wiring is soldering all pins A in a single row together and all pins B in each column through diodes together. The other way is soldering all pins A in a single row through columns together and all pins B in each column together directly. What we did is soldering rows directly and columns through diodes. The following picture show the wiring that we used:
+
+[[file:doc/switch-wiring.jpg]]
+
+The schematic shows only 4 rows, but you can have more (or even less) if you want; keep in mind that the thumb cluster is its' own row (the bottom-most). Wiring the thumb cluster is a bit weird and arbitrary, we'll add an example we used soon (TODO). If you screw up the wiring order for the thumb cluster, you can fix it in the matrix (better) or layout of the QMK source before you build the firmware.
 
 *** Firmware setup
 
-*TODO*
+1. Clone [[https://github.com/g1smo/qmk_firmware][our QMK repo fork]]
+2. Install dependencies (described in readme.md of the repository)
+3. Run `make handwired/daktil:default`
+4. Run `make handwired/daktil:default:avrdude`
+5. Press the reset switch of your keyboard (connect the reset pin and ground)
 
-[[https://github.com/g1smo/qmk_firmware][Our QMK repo fork]]
+If flashing failed, it's possible that you don't have a proper (pre-8) version of gcc or some dependencies are missing. Also note that these instructions are for the 5V Arduino ProMicro (clone). It's possible to use a 3.3V one but adjustments need to be made (haven't tried so can't say which exactly).
 
 ** Original documentation
    
-You can find scans of original documents we used in the [[doc/][doc]] folder.
+You can find scans of original documents we used in the [[doc/scan][doc]] folder.
 
 ** License
-
-Copyright © 2015 Matthew Adereth
 
 The source code for generating the models (everything excluding the [[things/][things]] and [[resources/][resources]] directories is distributed under the [[LICENSE][GNU AFFERO GENERAL PUBLIC LICENSE Version 3]].  The generated models and PCB designs are distributed under the [[LICENSE-models][Creative Commons Attribution-ShareAlike License Version 4.0]].
