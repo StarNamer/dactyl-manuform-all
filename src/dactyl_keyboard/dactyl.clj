@@ -26,6 +26,7 @@
 (def pinky-15u true)
 
 (defn column-offset [column] (cond
+                               (= column 0) [0 -4 0]
                                (= column 2) [0 2.82 -4.5]
                                (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
                                :else [0 0 0]))
