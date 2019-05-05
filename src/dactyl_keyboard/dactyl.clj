@@ -673,7 +673,7 @@
       (translate (map + offset [(first position) (second position) (/ height 2)])))))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0       0        bottom-radius top-radius height [8.8 8.8 0])
+  (union (screw-insert 0       0        bottom-radius top-radius height [4.3 7.8 0])
          (screw-insert 0       lastrow  bottom-radius top-radius height [-1 0 0])
          (screw-insert lastcol lastrow  bottom-radius top-radius height [-4.2 14 0])
          (screw-insert lastcol 0        bottom-radius top-radius height [-4.8 7.4 0])
@@ -756,9 +756,8 @@
                   ))))
 
 (spit "things/test.scad"
-      (write-scad 
-         (difference usb-holder usb-holder-hole)))
-
+      (write-scad
+       (difference trrs-holder trrs-holder-hole)))
 
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
