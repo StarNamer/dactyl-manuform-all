@@ -675,7 +675,7 @@
 ;; Arduino Pro Micro reset button holder
 (def reset-button-width 6.5)
 (def reset-button-position (replace-last
-   (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0]))
+   (key-position 0 0 (map + (wall-locate2 0 0.5) [5 (/ mount-height 2) 0]))
    reset-button-width))
 (def reset-button-hole
   (->> (cube reset-button-width 10 reset-button-width)
@@ -683,6 +683,40 @@
 (def reset-button-holder
   (->> (cube (+ reset-button-width 4) 1.5 (- reset-button-width 2))
        (translate (map + [0 (- 0.5 wall-thickness) 0] reset-button-position))))
+
+;; TRRS holder
+(def trrs-holder-width 6.2)
+(def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
+(def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
+(def trrs-holder-position (replace-last
+   (key-position 1 0 (map + (wall-locate2 0 1) [0 0 0]))
+   trrs-holder-width))
+
+(def trrs-holder-thickness 2)
+(def trrs-holder-thickness-2x (* 2 trrs-holder-thickness))
+(def trrs-holder
+  (union
+   (->> (cube (+ (first trrs-holder-size) trrs-holder-thickness-2x) (+ trrs-holder-thickness (second trrs-holder-size)) (+ (last trrs-holder-size) trrs-holder-thickness))
+        (translate [(first trrs-holder-position) (second trrs-holder-position) (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2)]))))
+
+;; TRRS hole 
+(def trrs-holder-hole
+  (union
+   (->>
+    (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
+    (rotate (deg2rad  90) [1 0 0])
+    (translate [(first trrs-holder-position) (+ (second trrs-holder-position) (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2)) (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
+
+  ; rectangular trrs holder
+   (->> (apply cube trrs-holder-hole-size) (translate [(first trrs-holder-position) (+ (/ trrs-holder-thickness -2) (second trrs-holder-position)) (+ (/ (last trrs-holder-hole-size) 2) trrs-holder-thickness)]))))
+
+
+(defn screw-insert-shape [bottom-radius top-radius height]
+  (union
+   (->> (binding [*fn* 30]
+          (cylinder [bottom-radius top-radius] height)))
+   (translate [0 0 (/ height 2)] (->> (binding [*fn* 30] (sphere top-radius))))))
+
 
 
 (defn screw-insert-shape [bottom-radius top-radius height] 
@@ -769,13 +803,15 @@
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        arduino-holder
+                                       trrs-holder
                                        ; teensy-holder
                                        ; usb-holder
                                        )
                                 ; rj9-space 
+                                ; usb-holder-hole
                                 usb-holder-hole
                                 reset-button-hole
-                                ; usb-holder-hole
+                                trrs-holder-hole
                                 (translate [0 0 -0.01] screw-insert-holes) )
                     ; rj9-holder
                     reset-button-holder
