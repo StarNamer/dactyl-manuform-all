@@ -31,7 +31,7 @@
                                (>= column 4) [0 -5.8 5.64]            ; original [0 -5.8 5.64]
                                :else [0 0 0]))
 
-(def thumb-offsets [6 -3 7])
+(def thumb-offsets [-3 -3 7])
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -440,7 +440,6 @@
     (thumb-tr-place thumb-post-tr)
     (key-place 1 cornerrow web-post-br)
     (key-place 2 lastrow web-post-tl)
-    (key-place 2 lastrow web-post-bl)
     (thumb-tr-place thumb-post-tr)
     (key-place 2 lastrow web-post-bl)
     (thumb-tr-place thumb-post-br)
