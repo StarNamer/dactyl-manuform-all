@@ -9,6 +9,8 @@
 (defn deg2rad [degrees]
   (* (/ degrees 180) pi))
 
+(defn replace-last [coll x]
+(concat (butlast coll) [x]))
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -19,7 +21,7 @@
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tentig)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style 
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
@@ -27,7 +29,8 @@
 
 (defn column-offset [column] (cond
   (= column 2) [0 2.82 -4.5]
-  (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
+  (= column 4) [0 -9 1.04]            ; 列4と5を少し上に
+  (= column 5) [0 -14 2.64]            ; 列4と5を少し上に
   :else [0 0 0]))
 
 (def thumb-offsets [6 -3 7])
@@ -81,18 +84,12 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
-                      (rotate (/ π 2) [1 0 0])
-                      (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 plate-thickness)
-                                 (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
-                                             0
-                                             (/ plate-thickness 2)]))))
         plate-half (union top-wall left-wall)]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
                 (mirror [0 1 0])))))
+    ;; TODO Kailh swap socket
 
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
@@ -152,7 +149,7 @@
                          (Math/sin (/ β 2)))
                       cap-top-height))
 (def column-x-delta (+ -1 (- (* column-radius (Math/sin β)))))
-(def column-base-angle (* β (- centercol 2)))
+(def column-base-angle (* β (- centercol 4)))
 
 (defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]
   (let [column-angle (* β (- centercol column))   
@@ -216,7 +213,7 @@
   (apply union
          (for [column columns
                row rows
-               :when (or (.contains [2 3] column)
+               :when (or (.contains [2 3] column) ; rowの数だけキーを入れるcolumnのインデックス
                          (not= row lastrow))]
            (->> single-plate
                 (key-place column row)))))
@@ -586,7 +583,7 @@
 (def arduino-holder-thickness 4)
 (def usb-hole-size [8 10 13])
 (def usb-hole-position (replace-last
-   (map + [-8 2 0] (key-position 0 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
+   (map + [-15 -5 0] (key-position 0 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
    (+ (/ (last usb-hole-size) 2) 3)
 ))
 (def arduino-length 34)
@@ -673,11 +670,12 @@
       (translate (map + offset [(first position) (second position) (/ height 2)])))))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0       0        bottom-radius top-radius height [4.3 7.8 0])
-         (screw-insert 0       lastrow  bottom-radius top-radius height [-1 0 0])
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [-4.2 14 0])
-         (screw-insert lastcol 0        bottom-radius top-radius height [-4.8 7.4 0])
-         (screw-insert 1       lastrow  bottom-radius top-radius height [-0.7 -15.5 0])))
+  (union (screw-insert 0       0        bottom-radius top-radius height [15.3 15.3 0]) ;right back
+
+         (screw-insert 0       lastrow  bottom-radius top-radius height [-1 0 0]) ; right front
+         (screw-insert lastcol lastrow  bottom-radius top-radius height [-5.2 18 0]); left front
+         (screw-insert lastcol 0        bottom-radius top-radius height [-4.8 4 0]) ; left back 
+         (screw-insert 1       lastrow  bottom-radius top-radius height [-0.7 -15.5 0]))) ;center front
 
 (def screw-insert-height 3.8)
 (def screw-insert-bottom-radius (/ 5.31 2))
