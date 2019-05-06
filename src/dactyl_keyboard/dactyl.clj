@@ -29,8 +29,8 @@
 
 (defn column-offset [column] (cond
   (= column 2) [0 2.82 -4.5]
-  (= column 4) [0 -9 1.04]            ; 列4と5を少し上に
-  (= column 5) [0 -14 2.64]            ; 列4と5を少し上に
+  (>= column 4) [0 -9 1.04]            ; 列4と5を少し上に
+  ; (= column 5) [0 -14 2.64]            ; 列4と5を少し上に
   :else [0 0 0]))
 
 (def thumb-offsets [6 -3 7])
@@ -673,8 +673,8 @@
   (union (screw-insert 0       0        bottom-radius top-radius height [15.3 15.3 0]) ;right back
 
          (screw-insert 0       lastrow  bottom-radius top-radius height [-1 0 0]) ; right front
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [-5.2 18 0]); left front
-         (screw-insert lastcol 0        bottom-radius top-radius height [-4.8 4 0]) ; left back 
+         (screw-insert (dec lastcol ) lastrow  bottom-radius top-radius height [-6 24 0]); left front
+         (screw-insert lastcol 0        bottom-radius top-radius height [-4 7 0]) ; left back 
          (screw-insert 1       lastrow  bottom-radius top-radius height [-0.7 -15.5 0]))) ;center front
 
 (def screw-insert-height 3.8)
