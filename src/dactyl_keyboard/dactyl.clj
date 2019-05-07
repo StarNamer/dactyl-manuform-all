@@ -592,7 +592,7 @@
 (def usb-holder-position (map + [-10 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
 (def usb-holder-cube   (cube 15 12 2))
 (def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
-(def usb-holder-holder (translate (map + usb-holder-position [-0.5 -10 -2]) (cube 10 22 2)))
+(def usb-holder-holder (translate (map + usb-holder-position [-0.5 -16.2 -2]) (cube 10 35 2)))
 
 (def usb-jack (translate (map + usb-holder-position [0 10 10]) (cube 6 20 11)))
 
