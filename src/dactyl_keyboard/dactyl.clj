@@ -594,6 +594,8 @@
 (def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
 (def usb-holder-holder (translate (map + usb-holder-position [-0.5 -57.2 -2]) (cube 10 117 2)))
 
+(def pinky-holder (translate (map + usb-holder-position [105 -34.6 -2]) (cube 10 64 2)))
+
 (def usb-jack (translate (map + usb-holder-position [0 10 10]) (cube 6 20 11)))
 
 (def pro-micro-position (map + (key-position 0 1 (wall-locate3 -1 0)) [-6 2 -15]))
@@ -705,7 +707,9 @@
                    thumb-connectors
                    (difference (union case-walls
                                       usb-holder-holder
-                                      trrs-holder)
+                                      trrs-holder
+                                      pinky-holder
+                                      )
                                usb-jack
                                trrs-holder-hole
                                ))
