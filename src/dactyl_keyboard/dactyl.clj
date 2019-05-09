@@ -596,6 +596,25 @@
 
 (def pinky-holder (translate (map + usb-holder-position [91 -36.8 -2]) (cube 10 64 2)))
 
+(def thumb-holder
+  (union
+    ( ->>
+      (translate
+       (map + usb-holder-position [-50.7 -49.1 -2])
+       (cube 10 48.4 2)
+       )
+      (rotate (/ π 5) [0 0 1])
+    )
+    ( ->>
+      (translate
+       (map + usb-holder-position [-52 -49.1 -2])
+       (cube 10 40 2)
+       )
+      (rotate (/ π 5) [0 0 1])
+    )
+  )
+)
+
 (def usb-jack (translate (map + usb-holder-position [0 10 2]) (cube 11 20 6)))
 
 (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
@@ -696,6 +715,7 @@
                                       usb-holder-holder
                                       trrs-holder
                                       pinky-holder
+                                      thumb-holder
                                       )
                                usb-holder-space
                                usb-jack
