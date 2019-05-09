@@ -594,7 +594,7 @@
 (def usb-holder-space  (translate (map + usb-holder-position [0 -14.8 1]) usb-holder-cube))
 (def usb-holder-holder (translate (map + usb-holder-position [0 -15.2 -2]) (cube 21 36 8)))
 
-(def pinky-holder (translate (map + usb-holder-position [105 -34.6 -2]) (cube 10 64 2)))
+(def pinky-holder (translate (map + usb-holder-position [91 -36.8 -2]) (cube 10 64 2)))
 
 (def usb-jack (translate (map + usb-holder-position [0 10 2]) (cube 11 20 6)))
 
@@ -612,7 +612,7 @@
 
   ; circle trrs hole
    (->>
-    (->> (binding [*fn* 30] (cylinder 3 20))) ; 5mm trrs jack
+    (->> (binding [*fn* 30] (cylinder 3.4 20))) ; 5mm trrs jack
     (rotate (deg2rad  90) [1 0 0])
     (translate [(first trrs-holder-position) (+ (second trrs-holder-position) (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2)) (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
 
