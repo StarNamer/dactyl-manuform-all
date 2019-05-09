@@ -435,7 +435,7 @@
     (key-place 0 cornerrow web-post-bl)
     (thumb-tl-place web-post-tr)
     (key-place 0 cornerrow web-post-br)
-    (thumb-tr-place thumb-post-tl)
+    (thumb-tr-place thumb-post-tr)
     (key-place 1 cornerrow web-post-bl)
     (thumb-tr-place thumb-post-tr)
     (key-place 1 cornerrow web-post-br)
