@@ -532,7 +532,7 @@
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
    (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
    (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
-   (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
+   (for [x (range 4 ncols)] (key-wall-brace x cornerrow 1 -1 web-post-bl x       cornerrow 0 -1 web-post-br))   ; mod
    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
    ; thumb walls
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
@@ -731,28 +731,28 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
                   
-(spit "things/right-test.scad"
-      (write-scad 
-                   (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    case-walls 
-                    thumbcaps
-                    caps
-                    teensy-holder
-                    rj9-holder
-                    usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers 
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout 
-                    ;             rj9-space 
-                                ; wire-posts
-                  )))
+;; (spit "things/right-test.scad"
+;;       (write-scad 
+;;                    (union
+;;                     key-holes
+;;                     connectors
+;;                     thumb
+;;                     thumb-connectors
+;;                     case-walls 
+;;                     thumbcaps
+;;                     caps
+;;                     teensy-holder
+;;                     rj9-holder
+;;                     usb-holder-hole
+;;                     ; usb-holder-hole
+;;                     ; ; teensy-holder-hole
+;;                     ;             screw-insert-outers 
+;;                     ;             teensy-screw-insert-holes
+;;                     ;             teensy-screw-insert-outers
+;;                     ;             usb-cutout 
+;;                     ;             rj9-space 
+;;                                 ; wire-posts
+;;                   )))
 
 (spit "things/right-plate.scad"
       (write-scad 
@@ -765,9 +765,9 @@
                                    (translate [0 0 -10] screw-insert-screw-holes))
                   ))))
 
-(spit "things/test.scad"
-      (write-scad 
-         (difference usb-holder usb-holder-hole)))
+;; (spit "things/test.scad"
+;;       (write-scad 
+;;          (difference usb-holder usb-holder-hole)))
 
 
 

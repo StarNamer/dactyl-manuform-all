@@ -9073,7 +9073,7 @@ projection (cut = true) {
                           translate ([0, 0, 87.18393769497159]) {
                             rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                               translate ([0, 0, -87.18393769497159]) {
-                                translate ([0, -2, -1]) {
+                                translate ([2, -2, -1]) {
                                   translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                     translate ([0, 0, 2.25]) {
                                       cube ([0.1, 0.1, 3.5], center=true);
@@ -9098,7 +9098,7 @@ projection (cut = true) {
                           translate ([0, 0, 87.18393769497159]) {
                             rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                               translate ([0, 0, -87.18393769497159]) {
-                                translate ([0, -5, -15]) {
+                                translate ([5, -5, -15]) {
                                   translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                     translate ([0, 0, 2.25]) {
                                       cube ([0.1, 0.1, 3.5], center=true);
@@ -9123,7 +9123,7 @@ projection (cut = true) {
                           translate ([0, 0, 87.18393769497159]) {
                             rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                               translate ([0, 0, -87.18393769497159]) {
-                                translate ([0, -7, -15]) {
+                                translate ([7, -7, -15]) {
                                   translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                     translate ([0, 0, 2.25]) {
                                       cube ([0.1, 0.1, 3.5], center=true);
@@ -9248,7 +9248,7 @@ projection (cut = true) {
                           translate ([0, 0, 87.18393769497159]) {
                             rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                               translate ([0, 0, -87.18393769497159]) {
-                                translate ([0, -5, -15]) {
+                                translate ([5, -5, -15]) {
                                   translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                     translate ([0, 0, 2.25]) {
                                       cube ([0.1, 0.1, 3.5], center=true);
@@ -9273,7 +9273,7 @@ projection (cut = true) {
                           translate ([0, 0, 87.18393769497159]) {
                             rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                               translate ([0, 0, -87.18393769497159]) {
-                                translate ([0, -7, -15]) {
+                                translate ([7, -7, -15]) {
                                   translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                     translate ([0, 0, 2.25]) {
                                       cube ([0.1, 0.1, 3.5], center=true);
@@ -9351,7 +9351,7 @@ projection (cut = true) {
                                 translate ([0, 0, 87.18393769497159]) {
                                   rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                                     translate ([0, 0, -87.18393769497159]) {
-                                      translate ([0, -5, -15]) {
+                                      translate ([5, -5, -15]) {
                                         translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                           translate ([0, 0, 2.25]) {
                                             cube ([0.1, 0.1, 3.5], center=true);
@@ -9376,7 +9376,7 @@ projection (cut = true) {
                                 translate ([0, 0, 87.18393769497159]) {
                                   rotate (a=-14.999999999999998, v=[1, 0, 0]) {
                                     translate ([0, 0, -87.18393769497159]) {
-                                      translate ([0, -7, -15]) {
+                                      translate ([7, -7, -15]) {
                                         translate ([-8.649999999999999, -8.649999999999999, 0]) {
                                           translate ([0, 0, 2.25]) {
                                             cube ([0.1, 0.1, 3.5], center=true);
