@@ -215,14 +215,16 @@
 (def key-holes
   (apply union
          (for [column columns
-               row rows]
+               row rows
+               :when (not= row lastrow)]
            (->> single-plate
                 (key-place column row)))))
 
 (def caps
   (apply union
          (for [column columns
-               row rows]
+               row rows
+               :when (not= row lastrow)]
            (->> (sa-cap (if (= column 5) 1 1))
                 (key-place column row)))))
 
