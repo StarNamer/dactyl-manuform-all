@@ -647,7 +647,7 @@
 
 (defn screw-insert-shape [bottom-radius top-radius height] 
    (union (binding [*fn* smooth] (cylinder [bottom-radius top-radius] height))
-          (translate [0 0 (/ height 2)] (sphere top-radius))))
+          (translate [0 0 (/ height 2)] (binding [*fn* smooth] (sphere top-radius)))))
 
 (defn screw-insert [column row bottom-radius top-radius height offset] 
   (let [shift-right   (= column lastcol)
