@@ -547,7 +547,10 @@
    (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
    (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
    (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
-   (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
+   (color [0, 0, 1] (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br))
+   ; NOTE this line specifically is correct; the other thumb walls, corners and tweeners will need correcting
+   ; for the removed thumb keys.
+   (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 cornerrow)  0 -1 web-post-bl)
    ; clunky bit on the top left thumb connection  (normal connectors don't work well)
    (bottom-hull
      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))

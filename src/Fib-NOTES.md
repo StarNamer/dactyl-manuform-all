@@ -32,3 +32,5 @@ can wrap a form with (color [1, 0, 0] ...) to have it show up in red.
 I think one of the 'front' sections is actually a 'back' section, I removed it since it was actually a duplicate.
 
 I edited the case/shell between column indexes 3 and 4, now need to do the part between the thumbs and column index 3. One of the screw inserts also lives along this wall and so will need to move.
+
+Okay, did a fix to the thumb wall, now some commented-out lines need fixing
