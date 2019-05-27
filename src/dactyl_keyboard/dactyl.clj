@@ -372,7 +372,8 @@
 
 (def thumb
   (union
-   (thumb-1x-layout single-plate)
+   ; This is the layout of all 4 switches we want to remove
+   (comment thumb-1x-layout single-plate)
    (thumb-15x-layout single-plate)
    (thumb-15x-layout larger-plate)
    ))
@@ -389,17 +390,17 @@
              (thumb-tl-place thumb-post-br)
              (thumb-tr-place thumb-post-tl)
              (thumb-tr-place thumb-post-bl))
-      (triangle-hulls    ; bottom two on the right
+      (comment triangle-hulls    ; bottom two on the right
              (thumb-br-place web-post-tr)
              (thumb-br-place web-post-br)
              (thumb-mr-place web-post-tl)
              (thumb-mr-place web-post-bl))
-      (triangle-hulls    ; bottom two on the left
+      (comment triangle-hulls    ; bottom two on the left
              (thumb-bl-place web-post-tr)
              (thumb-bl-place web-post-br)
              (thumb-ml-place web-post-tl)
              (thumb-ml-place web-post-bl))
-      (triangle-hulls    ; centers of the bottom four
+      (comment triangle-hulls    ; centers of the bottom four
              (thumb-br-place web-post-tl)
              (thumb-bl-place web-post-bl)
              (thumb-br-place web-post-tr)
@@ -418,7 +419,7 @@
              (thumb-tr-place thumb-post-bl)
              (thumb-mr-place web-post-br)
              (thumb-tr-place thumb-post-br))
-      ; These join the two extra holes, may need uncommenting and fixing.
+      ; These join the two extra holes, have been fixed.
       (triangle-hulls    ; top two to the main keyboard, starting on the left
              (thumb-tl-place thumb-post-tl)
              (key-place 0 cornerrow web-post-bl)
@@ -517,21 +518,20 @@
    (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
    ; thumb walls
-   (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
-   (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
-   (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
-   (wall-brace thumb-ml-place -0.3  1 web-post-tr thumb-ml-place  0  1 web-post-tl)
-   (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl)
-   (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl)
-   (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl)
+   (color [0, 0, 0] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br))
+   (color [0, 0, 0] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl))
+   (color [0, 0, 0] (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl))
+   (color [0, 0, 0] (wall-brace thumb-ml-place -0.3  1 web-post-tr thumb-ml-place  0  1 web-post-tl))
+   (color [0, 0, 0] (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl))
+   (color [0, 0, 0] (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl))
+   (color [0, 0, 0] (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl))
    ; thumb corners
-   (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
-   (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
+   (color [0.58, 0, 0.83] (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl))
+   (color [0.29, 0, 0.51] (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl))
    ; thumb tweeners
-   (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
-   (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
-   (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
    (color [0, 0, 1] (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br))
+   (color [0, 1, 0] (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr))
+   (color [0, 1, 1] (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl))
    ; NOTE this line specifically is correct; the other thumb walls, corners and tweeners will need correcting
    ; for the removed thumb keys.
    (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 cornerrow)  0 -1 web-post-bl)
@@ -666,9 +666,10 @@
 
 (def wire-posts
   (union
-     (thumb-ml-place (translate [-5 0 -2] (wire-post  1 0)))
-     (thumb-ml-place (translate [ 0 0 -2.5] (wire-post -1 6)))
-     (thumb-ml-place (translate [ 5 0 -2] (wire-post  1 0)))
+     ; these are in the thumb part
+     (comment thumb-ml-place (translate [-5 0 -2] (wire-post  1 0)))
+     (comment thumb-ml-place (translate [ 0 0 -2.5] (wire-post -1 6)))
+     (comment thumb-ml-place (translate [ 5 0 -2] (wire-post  1 0)))
      (for [column (range 0 lastcol)
            row (range 0 cornerrow)]
        (union
