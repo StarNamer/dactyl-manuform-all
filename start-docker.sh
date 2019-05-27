@@ -19,3 +19,6 @@ docker run -v $(pwd)/src:/dactyl/src -v $(pwd)/things:/dactyl/things -it --name 
 # exit container? don't worry, type following line to return into the container
 # docker attach dactyl-builder
 
+# build other layout (such as 4x6,  5x6...)? ok, apply patch before build
+# patch -p1 < 5x6.patch
+
