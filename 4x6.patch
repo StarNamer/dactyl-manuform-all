@@ -1,14 +1,12 @@
 diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
-index d8861fb..e58302f 100644
+index 426c362..f972ca5 100644
 --- a/src/dactyl_keyboard/dactyl.clj
 +++ b/src/dactyl_keyboard/dactyl.clj
-@@ -13,13 +13,13 @@
- ;; Shape parameters ;;
- ;;;;;;;;;;;;;;;;;;;;;;
+@@ -16,12 +16,12 @@
+ (def smooth 50)
  
--(def nrows 4)
+ (def nrows 4)
 -(def ncols 5)
-+(def nrows 4)
 +(def ncols 6)
  
  (def α (/ π 12))                        ; curvature of the columns
@@ -19,7 +17,7 @@ index d8861fb..e58302f 100644
  (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
  (def column-style 
    (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
-@@ -32,7 +32,7 @@
+@@ -34,7 +34,7 @@
  
  (def thumb-offsets [6 -3 7])
  
@@ -28,3 +26,16 @@ index d8861fb..e58302f 100644
  
  (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
  (def extra-height 1.0)                  ; original= 0.5
+@@ -665,10 +665,10 @@
+     )))
+ 
+ (defn screw-insert-all-shapes [bottom-radius top-radius height]
+-  (let [ofs-thumb-far  [ -4   -4.2 0]
++  (let [ofs-thumb-far  [ -2.3   -5.6 0]
+         ofs-thumb-near [ 10   -5   0]
+         ofs-pinky-far  [ -3.0  6.3 0]
+-        ofs-pinky-near [ -4.2 19.3 0]
++        ofs-pinky-near [ -2.5 19.3 0]
+         ofs-index-far  [  5    6   0]]
+   (union (screw-insert       0       0 bottom-radius top-radius height ofs-index-far)
+          (screw-insert       0 lastrow bottom-radius top-radius height ofs-thumb-far)
