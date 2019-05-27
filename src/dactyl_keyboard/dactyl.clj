@@ -417,8 +417,9 @@
              (thumb-mr-place web-post-tr)
              (thumb-tr-place thumb-post-bl)
              (thumb-mr-place web-post-br)
-             (thumb-tr-place thumb-post-br)) 
-      (triangle-hulls    ; top two to the main keyboard, starting on the left
+             (thumb-tr-place thumb-post-br))
+      ; These join the two extra holes, may need uncommenting and fixing.
+      (comment triangle-hulls    ; top two to the main keyboard, starting on the left
              (thumb-tl-place thumb-post-tl)
              (key-place 0 cornerrow web-post-bl)
              (thumb-tl-place thumb-post-tr)
@@ -440,7 +441,7 @@
              (key-place 3 lastrow web-post-tr)
              (key-place 3 cornerrow web-post-br)
              (key-place 4 cornerrow web-post-bl))
-      (triangle-hulls 
+      (comment triangle-hulls 
              (key-place 1 cornerrow web-post-br)
              (key-place 2 lastrow web-post-tl)
              (key-place 2 cornerrow web-post-bl)
@@ -448,7 +449,7 @@
              (key-place 2 cornerrow web-post-br)
              (key-place 3 cornerrow web-post-bl)
              )
-      (triangle-hulls 
+      (comment triangle-hulls 
              (key-place 3 lastrow web-post-tr)
              (key-place 3 lastrow web-post-br)
              (key-place 3 lastrow web-post-tr)
