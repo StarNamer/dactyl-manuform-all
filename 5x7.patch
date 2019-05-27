@@ -1,0 +1,46 @@
+diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
+index 426c362..5d40bc6 100644
+--- a/src/dactyl_keyboard/dactyl.clj
++++ b/src/dactyl_keyboard/dactyl.clj
+@@ -15,13 +15,13 @@
+ 
+ (def smooth 50)
+ 
+-(def nrows 4)
+-(def ncols 5)
++(def nrows 5)
++(def ncols 7)
+ 
+ (def α (/ π 12))                        ; curvature of the columns
+ (def β (/ π 36))                        ; curvature of the rows
+ (def centerrow (- nrows 3))             ; controls front-back tilt
+-(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
++(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
+ (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
+ (def column-style 
+   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
+@@ -34,7 +34,7 @@
+ 
+ (def thumb-offsets [6 -3 7])
+ 
+-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
++(def keyboard-z-offset 16)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+ 
+ (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
+ (def extra-height 1.0)                  ; original= 0.5
+@@ -665,11 +665,11 @@
+     )))
+ 
+ (defn screw-insert-all-shapes [bottom-radius top-radius height]
+-  (let [ofs-thumb-far  [ -4   -4.2 0]
++  (let [ofs-thumb-far  [ -2.5   -4.8 0]
+         ofs-thumb-near [ 10   -5   0]
+-        ofs-pinky-far  [ -3.0  6.3 0]
+-        ofs-pinky-near [ -4.2 19.3 0]
+-        ofs-index-far  [  5    6   0]]
++        ofs-pinky-far  [ -3.0  3.3 0]
++        ofs-pinky-near [ -2.5 19.3 0]
++        ofs-index-far  [ 19   16.8 0]]
+   (union (screw-insert       0       0 bottom-radius top-radius height ofs-index-far)
+          (screw-insert       0 lastrow bottom-radius top-radius height ofs-thumb-far)
+          (screw-insert lastcol lastrow bottom-radius top-radius height ofs-pinky-near)
