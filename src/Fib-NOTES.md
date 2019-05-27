@@ -36,3 +36,7 @@ I edited the case/shell between column indexes 3 and 4, now need to do the part 
 Okay, did a fix to the thumb wall, now some commented-out lines need fixing
 
 Okay, I've fixed the hull. The thumb part sticks out a bit sharply now though.
+
+Okay, I've made it less sharp while still having clearance for the caps.
+
+Next, the actual thumb cluster. I want to keep the top two and remove the rest... but I need the wall to make sense afterwards.

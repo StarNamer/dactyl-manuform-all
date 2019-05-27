@@ -419,7 +419,7 @@
              (thumb-mr-place web-post-br)
              (thumb-tr-place thumb-post-br))
       ; These join the two extra holes, may need uncommenting and fixing.
-      (color [1,0,0] (triangle-hulls    ; top two to the main keyboard, starting on the left
+      (triangle-hulls    ; top two to the main keyboard, starting on the left
              (thumb-tl-place thumb-post-tl)
              (key-place 0 cornerrow web-post-bl)
              (thumb-tl-place thumb-post-tr)
@@ -428,32 +428,16 @@
              (key-place 1 cornerrow web-post-bl)
              (thumb-tr-place thumb-post-tr)
              (key-place 1 cornerrow web-post-br)
-             ;(key-place 2 lastrow web-post-tl)
-             ;(key-place 2 lastrow web-post-bl)
              (thumb-tr-place thumb-post-tr)
-             (key-place 2 cornerrow web-post-bl)
-             (thumb-tr-place thumb-post-br)
-             (key-place 2 cornerrow web-post-br)
              (key-place 3 cornerrow web-post-bl)
-             ;(key-place 2 lastrow web-post-tr)
-             ;(key-place 3 lastrow web-post-tl)
-             ;(key-place 3 cornerrow web-post-bl)
-             ;(key-place 3 lastrow web-post-tr)
-             ;(key-place 3 cornerrow web-post-br)
-             ;(key-place 4 cornerrow web-post-bl)
-             ))
-      (comment triangle-hulls 
+             (thumb-tr-place thumb-post-br))
+      (triangle-hulls 
              (key-place 1 cornerrow web-post-br)
              (key-place 2 lastrow web-post-tl)
              (key-place 2 cornerrow web-post-bl)
              (key-place 2 lastrow web-post-tr)
              (key-place 2 cornerrow web-post-br)
              (key-place 3 cornerrow web-post-bl))
-      (comment triangle-hulls 
-             (key-place 3 lastrow web-post-tr)
-             (key-place 3 lastrow web-post-br)
-             (key-place 3 lastrow web-post-tr)
-             (key-place 4 cornerrow web-post-bl))
   ))
 
 ;;;;;;;;;;
