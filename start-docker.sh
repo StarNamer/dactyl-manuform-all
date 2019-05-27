@@ -13,3 +13,9 @@ CONTAINER_NAME=dactyl-builder
 docker run -v $(pwd)/src:/dactyl/src -v $(pwd)/things:/dactyl/things -it --name $CONTAINER_NAME $IMAGE_NAME /bin/bash
 
 # next, execute 'src/build.sh' in the container
+
+
+
+# exit container? don't worry, type following line to return into the container
+# docker attach dactyl-builder
+

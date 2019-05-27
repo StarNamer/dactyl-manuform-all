@@ -13,6 +13,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
+(def smooth 50)
+
 (def nrows 4)
 (def ncols 5)
 
@@ -644,10 +646,10 @@
            ))
 
 (defn screw-insert-shape [bottom-radius top-radius height] 
-   (union (cylinder [bottom-radius top-radius] height)
+   (union (binding [*fn* smooth] (cylinder [bottom-radius top-radius] height))
           (translate [0 0 (/ height 2)] (sphere top-radius))))
 
-(defn screw-insert [column row bottom-radius top-radius height] 
+(defn screw-insert [column row bottom-radius top-radius height offset] 
   (let [shift-right   (= column lastcol)
         shift-left    (= column 0)
         shift-up      (and (not (or shift-right shift-left)) (= row 0))
@@ -658,19 +660,19 @@
                                        (key-position column row (map + (wall-locate2  1  0) [(/ mount-width 2) 0 0])))))
         ]
     (->> (screw-insert-shape bottom-radius top-radius height)
-         (translate [(first position) (second position) (/ height 2)])
+         (translate (map + offset [(first position) (second position) (/ height 2)]))
     )))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0 0         bottom-radius top-radius height)
-         (screw-insert 0 lastrow   bottom-radius top-radius height)
-         (screw-insert 2 (+ lastrow 0.3)  bottom-radius top-radius height)
-         (screw-insert 3 0         bottom-radius top-radius height)
-         (screw-insert lastcol 1   bottom-radius top-radius height)
+  (union (screw-insert       0       0 bottom-radius top-radius height [5  6 0])
+         (screw-insert       0 lastrow bottom-radius top-radius height [ -4   -4.2 0])
+         (screw-insert lastcol lastrow bottom-radius top-radius height [ -4.2 19 0])
+         (screw-insert lastcol       0 bottom-radius top-radius height [ -3.2   6.7 0])
+         (screw-insert       1 lastrow bottom-radius top-radius height [ 10 -5 0])
          ))
-(def screw-insert-height 3.8)
-(def screw-insert-bottom-radius (/ 5.31 2))
-(def screw-insert-top-radius (/ 5.1 2))
+(def screw-insert-height 4.8)               ;; SB-3006CD
+(def screw-insert-bottom-radius (/ 5.0 2))  ;; SB-3006CD
+(def screw-insert-top-radius (/ 4.5 2))     ;; SB-3006CD
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
 (def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
