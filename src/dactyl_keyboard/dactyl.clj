@@ -665,12 +665,17 @@
     )))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert       0       0 bottom-radius top-radius height [5  6 0])
-         (screw-insert       0 lastrow bottom-radius top-radius height [ -4   -4.2 0])
-         (screw-insert lastcol lastrow bottom-radius top-radius height [ -4.2 19 0])
-         (screw-insert lastcol       0 bottom-radius top-radius height [ -3.2   6.7 0])
-         (screw-insert       1 lastrow bottom-radius top-radius height [ 10 -5 0])
-         ))
+  (let [ofs-thumb-far  [ -4   -4.2 0]
+        ofs-thumb-near [ 10   -5   0]
+        ofs-pinky-far  [ -3.0  6.3 0]
+        ofs-pinky-near [ -4.2 19.3 0]
+        ofs-index-far  [  5    6   0]]
+  (union (screw-insert       0       0 bottom-radius top-radius height ofs-index-far)
+         (screw-insert       0 lastrow bottom-radius top-radius height ofs-thumb-far)
+         (screw-insert lastcol lastrow bottom-radius top-radius height ofs-pinky-near)
+         (screw-insert lastcol       0 bottom-radius top-radius height ofs-pinky-far)
+         (screw-insert       1 lastrow bottom-radius top-radius height ofs-thumb-near)
+         )))
 (def screw-insert-height 4.8)               ;; SB-3006CD
 (def screw-insert-bottom-radius (/ 5.0 2))  ;; SB-3006CD
 (def screw-insert-top-radius (/ 4.5 2))     ;; SB-3006CD
