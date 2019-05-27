@@ -23,3 +23,12 @@ okay, they're somewhere in the 'thumb-connectors' form but so are many parts of 
 
 Three forms I commented out in this commit are the 'weird' ones in the connectors. May need reintroducing with modifications to join the hull.
 Still need to modify the shell itself.
+
+back, left, right wall sections aren't part of the weird bit.
+front wall *is* part of the weird bit.
+
+can wrap a form with (color [1, 0, 0] ...) to have it show up in red.
+
+I think one of the 'front' sections is actually a 'back' section, I removed it since it was actually a duplicate.
+
+I edited the case/shell between column indexes 3 and 4, now need to do the part between the thumbs and column index 3. One of the screw inserts also lives along this wall and so will need to move.
