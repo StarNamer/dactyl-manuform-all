@@ -409,7 +409,7 @@
              (thumb-ml-place web-post-bl)
              (thumb-mr-place web-post-tr)
              (thumb-ml-place web-post-br))
-      (triangle-hulls    ; top two to the middle two, starting on the left
+      (comment triangle-hulls    ; top two to the middle two, starting on the left
              (thumb-tl-place thumb-post-tl)
              (thumb-ml-place web-post-tr)
              (thumb-tl-place thumb-post-bl)
@@ -518,7 +518,7 @@
    (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
    ; thumb walls
-   (color [0, 0, 0] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br))
+   (color [1, 1, 1] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br))
    (color [0, 0, 0] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl))
    (color [0, 0, 0] (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl))
    (color [0, 0, 0] (wall-brace thumb-ml-place -0.3  1 web-post-tr thumb-ml-place  0  1 web-post-tl))
@@ -560,8 +560,9 @@
      (key-place 0 cornerrow (translate (wall-locate1 -1 0) web-post-bl))
      (thumb-tl-place thumb-post-tl))
    (hull
-     (thumb-ml-place web-post-tr)
-     (thumb-ml-place (translate (wall-locate1 -0.3 1) web-post-tr))
+     (thumb-tl-place thumb-post-bl)
+     ; NOTE: don't understand why we're referencing thumb-ml-place here, but it works
+     ; shapewise
      (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
      (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr))
      (thumb-tl-place thumb-post-tl))
@@ -642,7 +643,10 @@
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
   (union (screw-insert 0 0         bottom-radius top-radius height)
-         (screw-insert 0 lastrow   bottom-radius top-radius height)
+         ; NOTE this is the screw insert that has to move when the wall does
+         ; I moved it to an 'okay' position, screw-insert does heinous things to the
+         ; values passed in.
+         (screw-insert 0 (- lastrow 0.5)  bottom-radius top-radius height)
          (screw-insert 2 (+ lastrow 0.3)  bottom-radius top-radius height)
          (screw-insert 3 0         bottom-radius top-radius height)
          (screw-insert lastcol 1   bottom-radius top-radius height)
