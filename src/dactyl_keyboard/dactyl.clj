@@ -726,44 +726,43 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
 
-(spit "things/right-test.scad"
-      (write-scad
-                   (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    case-walls
-                    thumbcaps
-                    caps
-                    teensy-holder
-                    rj9-holder
-                    usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout
-                    ;             rj9-space
-                                ; wire-posts
-                  )))
+; (spit "things/right-test.scad"
+;       (write-scad
+;                    (union
+;                     key-holes
+;                     connectors
+;                     thumb
+;                     thumb-connectors
+;                     case-walls
+;                     thumbcaps
+;                     caps
+;                     teensy-holder
+;                     rj9-holder
+;                     usb-holder-hole
+;                     ; usb-holder-hole
+;                     ; ; teensy-holder-hole
+;                     ;             screw-insert-outers
+;                     ;             teensy-screw-insert-holes
+;                     ;             teensy-screw-insert-outers
+;                     ;             usb-cutout
+;                     ;             rj9-space
+;                                 ; wire-posts
+;                   )))
 
-(spit "things/right-plate.scad"
-      (write-scad
-                   (cut
-                     (translate [0 0 -0.1]
-                       (difference (union case-walls
-                                          teensy-holder
-                                          ; rj9-holder
-                                          screw-insert-outers)
-                                   (translate [0 0 -10] screw-insert-screw-holes))
-                  ))))
+; (spit "things/right-plate.scad"
+;       (write-scad
+;                    (cut
+;                      (translate [0 0 -0.1]
+;                        (difference (union case-walls
+;                                           teensy-holder
+;                                           ; rj9-holder
+;                                           screw-insert-outers)
+;                                    (translate [0 0 -10] screw-insert-screw-holes))
+;                   ))))
 
-(spit "things/test.scad"
-      (write-scad
-         (difference usb-holder usb-holder-hole)))
-
+; (spit "things/test.scad"
+;       (write-scad
+;          (difference usb-holder usb-holder-hole)))
 
 
 (defn -main [] 1)  ; dummy to make it easier to batch
