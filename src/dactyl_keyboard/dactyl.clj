@@ -518,30 +518,23 @@
    (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
    ; thumb walls
-   (color [1, 1, 1] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br))
-   (color [0, 0, 0] (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl))
-   (color [0, 0, 0] (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl))
-   (color [0, 0, 0] (wall-brace thumb-ml-place -0.3  1 web-post-tr thumb-ml-place  0  1 web-post-tl))
-   (color [0, 0, 0] (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl))
-   (color [0, 0, 0] (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl))
-   (color [0, 0, 0] (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl))
-   ; thumb corners
-   (color [0.58, 0, 0.83] (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl))
-   (color [0.29, 0, 0.51] (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl))
+   (wall-brace thumb-tr-place  0 -1 thumb-post-br thumb-tr-place  0 -1 thumb-post-bl)
+   (wall-brace thumb-tr-place  0 -1 thumb-post-bl thumb-tl-place  0 -1 thumb-post-br)
+   (wall-brace thumb-tl-place  0 -1 thumb-post-br thumb-tl-place  0 -1 thumb-post-bl)
+   (wall-brace thumb-tl-place -1  0 thumb-post-bl thumb-tl-place -1  0 thumb-post-tl)
    ; thumb tweeners
-   (color [0, 0, 1] (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br))
-   (color [0, 1, 0] (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr))
-   (color [0, 1, 1] (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl))
+   (wall-brace thumb-tl-place 0 -1 thumb-post-bl thumb-tl-place  -1 0 thumb-post-bl)
    ; NOTE this line specifically is correct; the other thumb walls, corners and tweeners will need correcting
    ; for the removed thumb keys.
    (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 cornerrow)  0 -1 web-post-bl)
    ; clunky bit on the top left thumb connection  (normal connectors don't work well)
-   (bottom-hull
+   (comment bottom-hull
      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
      (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
      (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
      (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr)))
-   (hull
+   ; NOTE this is the one my wall-brace needs to attach to
+   (comment hull
      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
      (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
      (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
@@ -559,7 +552,8 @@
      (key-place 0 cornerrow web-post-bl)
      (key-place 0 cornerrow (translate (wall-locate1 -1 0) web-post-bl))
      (thumb-tl-place thumb-post-tl))
-   (hull
+   ; NOTE going to try to replace this with a wall-brace
+   (comment hull
      (thumb-tl-place thumb-post-bl)
      ; NOTE: don't understand why we're referencing thumb-ml-place here, but it works
      ; shapewise
