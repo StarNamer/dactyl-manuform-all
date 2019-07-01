@@ -420,7 +420,7 @@
              (thumb-mr-place web-post-br)
              (thumb-tr-place thumb-post-br))
       ; These join the two extra holes, have been fixed.
-      (triangle-hulls    ; top two to the main keyboard, starting on the left
+      (comment triangle-hulls    ; top two to the main keyboard, starting on the left
              (thumb-tl-place thumb-post-tl)
              (key-place 0 cornerrow web-post-bl)
              (thumb-tl-place thumb-post-tr)
@@ -432,7 +432,7 @@
              (thumb-tr-place thumb-post-tr)
              (key-place 3 cornerrow web-post-bl)
              (thumb-tr-place thumb-post-br))
-      (triangle-hulls 
+      (comment triangle-hulls 
              (key-place 1 cornerrow web-post-br)
              (key-place 2 lastrow web-post-tl)
              (key-place 2 cornerrow web-post-bl)
@@ -676,26 +676,26 @@
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
 
-(def model-right (difference 
+(def model-right ;(difference 
                    (union
                     key-holes
                     connectors
                     thumb
                     thumb-connectors
-                    (difference (union case-walls 
-                                       screw-insert-outers 
-                                       teensy-holder
-                                       usb-holder)
-                                rj9-space 
-                                usb-holder-hole
-                                screw-insert-holes)
-                    rj9-holder
-                    wire-posts
+                    ;(difference (union case-walls 
+                    ;                   screw-insert-outers 
+                    ;                   teensy-holder
+                    ;                   usb-holder)
+                    ;            rj9-space 
+                    ;            usb-holder-hole
+                    ;            screw-insert-holes)
+                    ;rj9-holder
+                    ;wire-posts
                     ; thumbcaps
                     ; caps
                     )
-                   (translate [0 0 -20] (cube 350 350 40)) 
-                  ))
+                   ;(translate [0 0 -20] (cube 350 350 40)) 
+                  );)
 
 (spit "things/right.scad"
       (write-scad model-right))
