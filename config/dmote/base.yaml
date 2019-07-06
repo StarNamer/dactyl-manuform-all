@@ -45,6 +45,7 @@ key-clusters:
       m11: [3, 0]
       m12: [4, last]
       near-right: [last, first]
+      near-right2: [4, first]
   thumb0:
     position:
       anchor: m01
@@ -381,7 +382,10 @@ case:
           offset: [-2.5, -11]
         - anchor: near-right
           corner: ESE
-          offset: [-5, 3]
+          offset: [-4, 3]
+        - anchor: near-right2
+          corner: ESE
+          offset: [-4, 3]
         - anchor: t4
           corner: SSW
           offset: [-1, 4]
