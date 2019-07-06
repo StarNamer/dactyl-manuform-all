@@ -52,7 +52,7 @@ key-clusters:
       offset: [-6, -14, 27]
     matrix-columns:
     - rows-above-home: 1
-      rows-below-home: 1
+      rows-below-home: 0
     - rows-above-home: 1
     aliases:
       tc: [first, 0]
@@ -62,13 +62,15 @@ key-clusters:
       t4: [first, first]
   thumb1:
     position:
-      anchor: t4
-      offset: [-12, 5, -17.5]
+      anchor: tc
+      offset: [-31.5, -27.5, -17.5]
+      # offset: [-16, -14, -15.5]
     matrix-columns:
-    - rows-above-home: 1
+    - rows-above-home: 0
+    - rows-above-home: 0
     aliases:
-      t0: [first, last]
-      t5: [first, first]
+      t0: [first, first]
+      t5: [last, last]
 by-key:
   parameters:
     key-style: minimal
@@ -229,19 +231,6 @@ by-key:
                 extent: 4
                 perpendicular: -6
           rows:
-            first:
-              parameters:
-                layout:
-                  translation:
-                    early: [0, -1.5, -1]
-                  pitch:
-                    intrinsic: -0.3
-                wall:
-                  east:
-                    extent: 0
-                  south:
-                    extent: 1
-                    parallel: -2
             last:
               parameters:
                 layout:
@@ -278,12 +267,12 @@ by-key:
       parameters:
         layout:
           roll:
-            base: -1.2
+            base: -0.1
           pitch:
-            base: -0.4
+            base: -0.02
             progressive: 0.8
           yaw:
-            base: 0.8
+            base: 0.7
         wall:
           north:
             extent: 0
@@ -300,15 +289,10 @@ by-key:
               parameters:
                 layout:
                   translation:
-                    early: [-0.3, 1, -2]
+                    early: [-3, -2,3]
                   roll:
-                    intrinsic: 0
+                    intrinsic: 0.45
                   yaw:
-                    intrinsic: 0 #.1
-            last:
-              parameters:
-                layout:
-                  roll:
                     intrinsic: 0
 secondaries:
   # Main-to-thumb0 cluster bridge points:
