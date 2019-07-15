@@ -28,7 +28,7 @@ key-clusters:
   main:
     position:
       anchor: origin
-      offset: [0, 0, 32]
+      offset: [0, 0, 25]
     matrix-columns:
     - rows-above-home: 2
       rows-below-home: 1
@@ -109,7 +109,7 @@ by-key:
             progressive: 0.3
             intrinsic: -0.1
           roll:
-            base: 0.2
+            base: 0.4
             progressive: 0.06
           yaw:
             base: 0.03
@@ -198,7 +198,7 @@ by-key:
           pitch:
             base: 0.1745
           roll:
-            base: -0.4014
+            base: -0.2014
           yaw:
             base: 0.1745
         wall:
