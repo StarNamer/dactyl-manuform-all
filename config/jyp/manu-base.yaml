@@ -295,16 +295,16 @@ case:
         positions:
         - anchor: m00
           corner: WSW
-          offset: [-3, -7]
+          offset: [-3, -8]
         - anchor: back0
           corner: WSW
-          offset: [0, 6]
+          offset: [0, 3]
         - anchor: back2
           corner: NNE
           offset: [13.5, -3]
         - anchor: m02
           corner: SSE
-          offset: [-6, -2]
+          offset: [-6, -4]
         - anchor: right0
           corner: ESE
           offset: [-1, 10]
