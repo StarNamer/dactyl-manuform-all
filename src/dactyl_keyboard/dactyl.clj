@@ -32,7 +32,7 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 14)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -74,7 +74,7 @@
 
 (def sa-profile-key-height 12.7)
 
-(def plate-thickness 4)
+(def plate-thickness 3)
 (def side-nub-thickness 4)
 (def retention-tab-thickness 1.5)
 (def retention-tab-hole-thickness (- plate-thickness retention-tab-thickness))
@@ -595,14 +595,14 @@
     (thumb-bl-place (translate (wall-locate3 -0.3 1) web-post-tr))
     (thumb-tl-place web-post-tl))))
 
-(def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
+(def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0.5  -1) [0 (/ mount-height 2) 0])))
 
-(def usb-holder-position (map + [17 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
-(def usb-holder-cube   (cube 15 12 2))
+(def usb-holder-position (map + [17 18.1 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
+(def usb-holder-cube   (cube 20 12 2))
 (def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
-(def usb-holder-holder (translate usb-holder-position (cube 19 12 4)))
+(def usb-holder-holder (translate usb-holder-position (cube 24 12 4)))
 
-(def usb-jack (translate (map + usb-holder-position [0 10 3]) (cube 8.1 20 3.1)))
+(def usb-jack (translate (map + usb-holder-position [0 10 3]) (cube 9.1 20 3.1)))
 
 (def pro-micro-position (map + (key-position 0 1 (wall-locate3 -1 0)) [-6 2 -15]))
 (def pro-micro-space-size [4 10 12]) ; z has no wall;
@@ -619,7 +619,7 @@
 
 (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
 (def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
-(def trrs-holder-position  (map + usb-holder-position [-13.6 0 0]))
+(def trrs-holder-position  (map + usb-holder-position [-15.6 0 0]))
 (def trrs-holder-thickness 2)
 (def trrs-holder-thickness-2x (* 2 trrs-holder-thickness))
 (def trrs-holder
