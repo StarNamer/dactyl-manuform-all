@@ -87,13 +87,13 @@ by-key:
         perpendicular: -15
       east:
         parallel: 5
-        perpendicular: -15
+        perpendicular: -8
       south:
         parallel: 5
-        perpendicular: -15
+        perpendicular: -8
       west:
         parallel: 5
-        perpendicular: -15
+        perpendicular: -8
   clusters:
     main:
       parameters:
