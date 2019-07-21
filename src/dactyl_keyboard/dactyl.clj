@@ -60,6 +60,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 (def lastrow (dec nrows))
+(def innerrow (dec lastrow))
 (def pinkyrow nrows)
 (def cornerrow  lastrow)
 (def thumbrow (dec lastrow))
@@ -350,14 +351,14 @@
        (rotate (deg2rad -23) [0 1 0])
        (rotate (deg2rad  25) [0 0 1])
        (translate thumborigin)
-       (translate [-32 -24 -3.5])))
+       (translate [-35 -20 -2])))
 (defn thumb-br-place [shape]
   (->> shape
        (rotate (deg2rad   6) [1 0 0])
-       (rotate (deg2rad -34) [0 1 0])
+       (rotate (deg2rad -32) [0 1 0])
        (rotate (deg2rad  35) [0 0 1])
        (translate thumborigin)
-       (translate [-47 -33 -14])))
+       (translate [-51 -30 -11.5])))
 ; (defn thumb-bl-place [shape]
 ;   (->> shape
 ;        (rotate (deg2rad   6) [1 0 0])
@@ -402,8 +403,8 @@
 
 (def thumb
   (union
-   ; (thumb-1x-layout single-plate)
-  (thumb-15x-layout single-plate)
+   (thumb-15x-layout single-plate)
+  ; (thumb-15x-layout larger-plate)
    (thumb-10x-layout single-plate)
 ))
 
@@ -415,10 +416,15 @@
 (def thumb-connectors
   (union
    (triangle-hulls    ; top two
-    (thumb-mr-place web-post-tr)
-    (thumb-mr-place web-post-br)
-    (thumb-tr-place thumb-post-tl)
-    (thumb-tr-place thumb-post-bl))
+                (thumb-tl-place thumb-post-tr)
+             (thumb-tl-place thumb-post-br)
+             (thumb-tr-place thumb-post-tl)
+             (thumb-tr-place thumb-post-bl))
+
+    ; (thumb-mr-place thum_post_tl_i) ;topleft
+    ; (thumb-mr-place thum_post_bl_i) ;backleft
+    ; (thumb-tr-place thum_post_tr_i)) ;topright
+    ; (thumb-tr-place thum_post_br_i)) ;backright
    (triangle-hulls    ; bottom two
     (thumb-br-place web-post-tr)
     (thumb-br-place web-post-br)
@@ -569,15 +575,15 @@
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
    (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
-   (wall-brace thumb-mr-place  0  1 web-post-tr thumb-br-place  0  1 web-post-tl)
+   (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl)
    (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl)
-   ; (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-tl)
+   (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl)
    ; thumb corners
    (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
-   (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place  0  1 web-post-tl)
+   (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
    ; thumb tweeners
    (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
-   ; (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
+   (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl)
    (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
    ; clunky bit on the top left thumb connection  (normal connectors don't work well)
    (bottom-hull
@@ -601,6 +607,7 @@
     (left-key-place thumbrow -1 web-post)
     (left-key-place thumbrow -1 (translate (wall-locate1 -1 0) web-post))
     (key-place 0 thumbrow web-post-bl)
+    ; (key-place 0 cornerrow web-post-bl)
     (thumb-tl-place web-post-tl))
    (hull
     (thumb-bl-place web-post-tr)
@@ -672,12 +679,12 @@
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
   (union (screw-insert 0 0         bottom-radius top-radius height [11 10 0])
-         (screw-insert 0 lastrow   bottom-radius top-radius height [0 0 0])
+         (screw-insert 0 lastrow   bottom-radius top-radius height [1 -2 0])
         ;  (screw-insert lastcol lastrow  bottom-radius top-radius height [-5 13 0])
         ;  (screw-insert lastcol 0         bottom-radius top-radius height [-3 6 0])
          (screw-insert lastcol pinkyrow  bottom-radius top-radius height [0 12 0])
          (screw-insert lastcol 0         bottom-radius top-radius height [0 7 0])
-         (screw-insert 1 lastrow         bottom-radius top-radius height [0 -16 0])))
+         (screw-insert 1	lastrow         bottom-radius top-radius height [0 3 0])))
 
 ; Hole Depth Y: 4.4
 (def screw-insert-height 4)
