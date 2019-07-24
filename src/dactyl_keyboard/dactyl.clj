@@ -10,7 +10,7 @@
 (def lastrow (dec nrows))
 (def cornerrow (dec lastrow))
 (def α (/ π 12))                        ; curvature of the columns
-(def β (/ π (if (= nrows 4) 26 36)))    ; curvature of the rows
+(def β (/ π 28))    ; curvature of the rows
 (def centerrow (- cornerrow 1))         ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting
 (def orthographic-x (> nrows 5))        ; for larger number of rows don't curve them in as much
@@ -143,8 +143,9 @@
                               (translate [0 0 row-radius]))
         column-offset (cond
                         (= column 2) [0 2.82 1.5]
-                        (= column 3) [0 0 -0.5]
-                        (>= column 4) [0 -5.8 -0.5]
+                        (= column 3) [0 2.82 -0.5]
+                        (= column 4) [0 -5.8 -1.5]
+                        (= column 5) [0 -5.8 -1.5]
                         ; (= column 22) [0 2.82 -4.5]
                         ; (>= column 24) [0 -5.8 5.64]
                         :else [0 0 4])
@@ -207,7 +208,9 @@
          (concat
           ;; Row connections
           (for [column (range 0 (dec ncols))
-                row (range 0 lastrow)]
+                row rows
+                :when (or (.contains [2 3] column)
+                         (not= row lastrow))]
             (triangle-hulls
              (key-place (inc column) row web-post-tl)
              (key-place column row web-post-tr)
@@ -216,7 +219,9 @@
 
           ;; Column connections
           (for [column columns
-                row (range 0 cornerrow)]
+                row rows
+                :when (or (.contains [2 3] column)
+                         (not= row lastrow))]
             (triangle-hulls
              (key-place column row web-post-bl)
              (key-place column row web-post-br)
@@ -225,7 +230,7 @@
 
           ;; Diagonal connections
           (for [column (range 0 (dec ncols))
-                row (range 0 cornerrow)]
+                row (range 0 lastrow)]
             (triangle-hulls
              (key-place column row web-post-br)
              (key-place column (inc row) web-post-tr)
@@ -235,7 +240,7 @@
 ;;;;;;;;;;;;
 ;; Thumbs ;;
 ;;;;;;;;;;;;
-(def thumborigin [-23 -34 47])
+(def thumborigin [-23 -34 53])
 
 (defn deg2rad [degrees]
   (* (/ degrees 180) pi))
@@ -299,7 +304,7 @@
    (thumb-tr-place shape)
    (thumb-tl-place shape)))
 
-(def larger-plate
+(def mx-larger-plate
   (let [plate-height (/ (- sa-double-length mount-height) 3)
         top-plate (->> (cube mount-width plate-height web-thickness)
                        (translate [0 (/ (+ plate-height mount-height) 2)
@@ -317,7 +322,7 @@
   (union
    (thumb-1x-layout mx-single-plate)
    (thumb-15x-layout mx-single-plate)
-   (thumb-15x-layout larger-plate)
+   (thumb-15x-layout mx-larger-plate)
    ))
 
 (def thumb-post-tr (translate [(- (/ mount-width 2) post-adj)  (- (/ mount-height  1.15) post-adj) 0] web-post))
@@ -377,25 +382,26 @@
              (thumb-tr-place thumb-post-br)
              (key-place 2 lastrow web-post-br)
              (key-place 3 lastrow web-post-bl)
-             (key-place 2 lastrow web-post-tr)
-             (key-place 3 lastrow web-post-tl)
-             (key-place 3 cornerrow web-post-bl)
-             (key-place 3 lastrow web-post-tr)
-             (key-place 3 cornerrow web-post-br)
-             (key-place 4 cornerrow web-post-bl))
-      (triangle-hulls 
-             (key-place 1 cornerrow web-post-br)
-             (key-place 2 lastrow web-post-tl)
-             (key-place 2 cornerrow web-post-bl)
-             (key-place 2 lastrow web-post-tr)
-             (key-place 2 cornerrow web-post-br)
-             (key-place 3 cornerrow web-post-bl)
-             )
-      (triangle-hulls 
-             (key-place 3 lastrow web-post-tr)
-             (key-place 3 lastrow web-post-br)
-             (key-place 3 lastrow web-post-tr)
-             (key-place 4 cornerrow web-post-bl))
+             ;(key-place 2 lastrow web-post-tr)
+                      )
+            ; (key-place 3 lastrow web-post-tl)
+            ; (key-place 3 cornerrow web-post-bl)
+            ; (key-place 3 lastrow web-post-tr)
+            ; (key-place 3 cornerrow web-post-br)
+            ; (key-place 4 cornerrow web-post-bl))
+     ; (triangle-hulls 
+     ;        (key-place 1 cornerrow web-post-br)
+     ;        (key-place 2 lastrow web-post-tl)
+     ;        (key-place 2 cornerrow web-post-bl)
+     ;        (key-place 2 lastrow web-post-tr)
+     ;        (key-place 2 cornerrow web-post-br)
+     ;        (key-place 3 cornerrow web-post-bl)
+     ;        )
+     ; (triangle-hulls 
+     ;        (key-place 3 lastrow web-post-tr)
+     ;        (key-place 3 lastrow web-post-br)
+     ;        (key-place 3 lastrow web-post-tr)
+     ;        (key-place 4 cornerrow web-post-bl))
   ))
 
 ;;;;;;;;;;
@@ -535,13 +541,37 @@
 ; height - 1.45
 ; 
 
+(spit "things/right-keys.scad"
+      (write-scad (union
+                   key-holes
+                   connectors
+                   )))
+
+(spit "things/right-wall.scad"
+      (write-scad (difference
+                     case-walls
+                     key-holes
+                     connectors
+                     thumb
+                     thumb-connectors
+                    )
+                  
+                  ))
+
+(spit "things/right-thumbs.scad"
+      (write-scad  
+                    (union
+                     thumb
+                     thumb-connectors
+                  )))
+
 (spit "things/right.scad"
       (write-scad (union
                    key-holes
                    connectors
                    thumb
                    thumb-connectors
-                   (difference case-walls usb-cutout)
+                   case-walls
                    ; rj9-holder
                    ; (if (= nrows 4) teensy-holder)
                    teensy-holder
