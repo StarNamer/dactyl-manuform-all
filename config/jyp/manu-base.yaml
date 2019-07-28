@@ -54,7 +54,7 @@ key-clusters:
   thumb0:
     position:
       anchor: m00
-      offset: [1, -27, -6.5]
+      offset: [10, -27, -16.5]
     matrix-columns:
     - rows-above-home: 0
     - rows-above-home: 0
@@ -64,7 +64,7 @@ key-clusters:
   thumb1:
     position:
       anchor: thumb-tl
-      offset: [3.5, -25, -14]
+      offset: [1.5, -25, -10]
     matrix-columns:
     - rows-above-home: 1
     - rows-above-home: 1
@@ -193,36 +193,25 @@ by-key:
                 intrinsic: -0.3
     thumb0:
       parameters:
-        key-style: big
+        key-style: default
         layout:
           pitch:
             base: 0.1745
+            progressive: 0.55
           roll:
-            base: -0.2014
+            base: -0.1014
+            progressive: 1.05
           yaw:
-            base: 0.1745
+            base: -0.1745
         wall:
           north:
             extent: 0
           east:
-            extent: 0
+            extent: 2
           south:
             extent: 0
           west:
             extent: 0
-      columns:
-        first:
-          parameters:
-            layout:
-              roll:
-                intrinsic: 0
-              yaw:
-                intrinsic: 0
-        last:
-          parameters:
-            layout:
-              translation:
-                late: [3, -4, -2.2]
     thumb1:
       parameters:
         layout:
@@ -234,7 +223,7 @@ by-key:
           pitch:
             base: -0.02
           roll:
-            base: -0.59
+            base: -0.24
           yaw:
             base: 0.94
         wall:
@@ -337,11 +326,25 @@ case:
         - hull-around:
           - [m02, WNW]
           - [m02, WSW]
-        - [thumb-tr, ESE]
-        - [m02, SSW]
+        - [thumb-tr, ENE, 2]
+      - chunk-size: 3
+        hull-around:
+        - [thumb-tr, ESE, 2]
+        - [thumb-tr, ENE, 2]
+        - [m03, WSW]
         - hull-around:
+          - [m02, SSW]
           - [m02, SSE]
           - [m03, WSW]
+      - chunk-size: 3
+        hull-around:
+        - [thumb-tr, SSE, 3]
+        - [m03, SSW, 3]
+        - [thumb-tr, ESE, 2]
+        - [m03, WSW]
+      - hull-around:
+        - [thumb-tr, ESE, 0, 2]
+        - [thumb-tr, SSE, 3]
     to-floor:
       - at-ground: true
         hull-around:
@@ -362,7 +365,7 @@ case:
         hull-around:
         - [thumb-mr, SSE, 0, 4]
         - [thumb-tr, SSE, 0, 4]
-        - [m03, SSW, 0, 4]
+        - [thumb-tr, SSE, 3, 4]
 mcu:
   include: true
   type: promicro
