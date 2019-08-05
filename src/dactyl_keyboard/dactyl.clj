@@ -100,6 +100,9 @@
 
 (def sa-length 18.25)
 (def sa-double-length 37.5)
+(def height-of-top-thumb-caps-in-units 1) ; or 2
+(def height-of-top-thumb-caps (* height-of-top-thumb-caps-in-units sa-length))
+
 (def sa-cap {1 (let [bl2 (/ 18.5 2)
                      m (/ 17 2)
                      key-cap (hull (->> (polygon [[bl2 bl2] [bl2 (- bl2)] [(- bl2) (- bl2)] [(- bl2) bl2]])
@@ -114,7 +117,7 @@
                  (->> key-cap
                       (translate [0 0 (+ 5 plate-thickness)])
                       (color [220/255 163/255 163/255 1])))
-             2 (let [bl2 (/ sa-double-length 2)
+             2 (let [bl2 (/ height-of-top-thumb-caps 2)
                      bw2 (/ 18.25 2)
                      key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
                                         (extrude-linear {:height 0.1 :twist 0 :convexity 0})
@@ -359,7 +362,7 @@
    (thumb-tl-place shape)))
 
 (def larger-plate
-  (let [plate-height (/ (- sa-double-length mount-height) 3)
+  (let [plate-height (/ (- height-of-top-thumb-caps mount-height) 3)
         top-plate (->> (cube mount-width plate-height web-thickness)
                        (translate [0 (/ (+ plate-height mount-height) 2)
                                    (- plate-thickness (/ web-thickness 2))]))
@@ -379,10 +382,14 @@
    (thumb-15x-layout larger-plate)
    ))
 
-(def thumb-post-tr (translate [(- (/ mount-width 2) post-adj)  (- (/ mount-height  1.15) post-adj) 0] web-post))
-(def thumb-post-tl (translate [(+ (/ mount-width -2) post-adj) (- (/ mount-height  1.15) post-adj) 0] web-post))
-(def thumb-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -1.15) post-adj) 0] web-post))
-(def thumb-post-br (translate [(- (/ mount-width 2) post-adj)  (+ (/ mount-height -1.15) post-adj) 0] web-post))
+(defn thumb-post-dist-factor [width-in-units] (max 0.5 (- (/ width-in-units 2) 0.13)))
+(def thumb-post-top-dist-x (- post-adj (* mount-width (thumb-post-dist-factor 1))))
+(def thumb-post-top-dist-y (- post-adj (* mount-height (thumb-post-dist-factor height-of-top-thumb-caps-in-units))))
+
+(def thumb-post-tr (translate [(- thumb-post-top-dist-x) (- thumb-post-top-dist-y) 0] web-post))
+(def thumb-post-tl (translate [(+ thumb-post-top-dist-x) (- thumb-post-top-dist-y) 0] web-post))
+(def thumb-post-bl (translate [(+ thumb-post-top-dist-x) (+ thumb-post-top-dist-y) 0] web-post))
+(def thumb-post-br (translate [(- thumb-post-top-dist-x) (+ thumb-post-top-dist-y) 0] web-post))
 
 (def connectors-thumb-to-main
     (triangle-hulls
