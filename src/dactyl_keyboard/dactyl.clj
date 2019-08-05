@@ -384,6 +384,49 @@
 (def thumb-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -1.15) post-adj) 0] web-post))
 (def thumb-post-br (translate [(- (/ mount-width 2) post-adj)  (+ (/ mount-height -1.15) post-adj) 0] web-post))
 
+(def connectors-thumb-to-main
+    (triangle-hulls
+           (thumb-tl-place thumb-post-tl)
+           (key-place 0 cornerrow web-post-bl)
+           (thumb-tl-place thumb-post-tr)
+           (key-place 0 cornerrow web-post-br)
+           (thumb-tr-place thumb-post-tl)
+           (key-place 1 cornerrow web-post-bl)
+           (thumb-tr-place thumb-post-tr)
+           (key-place 1 cornerrow web-post-br)
+           (key-place 2 lastrow web-post-tl)
+           (key-place 2 lastrow web-post-bl)
+           (thumb-tr-place thumb-post-tr)
+           (key-place 2 lastrow web-post-bl)
+           (thumb-tr-place thumb-post-br))
+  )
+
+(def connectors-main-lower-corner
+  (union
+      (triangle-hulls
+             (key-place 2 lastrow web-post-br)
+             (key-place 3 lastrow web-post-bl)
+             (key-place 2 lastrow web-post-tr)
+             (key-place 3 lastrow web-post-tl)
+             (key-place 3 cornerrow web-post-bl)
+             (key-place 3 lastrow web-post-tr)
+             (key-place 3 cornerrow web-post-br)
+             (key-place 4 cornerrow web-post-bl))
+      (triangle-hulls 
+             (key-place 1 cornerrow web-post-br)
+             (key-place 2 lastrow web-post-tl)
+             (key-place 2 cornerrow web-post-bl)
+             (key-place 2 lastrow web-post-tr)
+             (key-place 2 cornerrow web-post-br)
+             (key-place 3 cornerrow web-post-bl)
+             )
+      (triangle-hulls 
+             (key-place 3 lastrow web-post-tr)
+             (key-place 3 lastrow web-post-br)
+             (key-place 3 lastrow web-post-tr)
+             (key-place 4 cornerrow web-post-bl))
+  ))
+
 (def thumb-connectors
   (union
       (triangle-hulls    ; top two
@@ -420,41 +463,6 @@
              (thumb-tr-place thumb-post-bl)
              (thumb-mr-place web-post-br)
              (thumb-tr-place thumb-post-br)) 
-      (triangle-hulls    ; top two to the main keyboard, starting on the left
-             (thumb-tl-place thumb-post-tl)
-             (key-place 0 cornerrow web-post-bl)
-             (thumb-tl-place thumb-post-tr)
-             (key-place 0 cornerrow web-post-br)
-             (thumb-tr-place thumb-post-tl)
-             (key-place 1 cornerrow web-post-bl)
-             (thumb-tr-place thumb-post-tr)
-             (key-place 1 cornerrow web-post-br)
-             (key-place 2 lastrow web-post-tl)
-             (key-place 2 lastrow web-post-bl)
-             (thumb-tr-place thumb-post-tr)
-             (key-place 2 lastrow web-post-bl)
-             (thumb-tr-place thumb-post-br)
-             (key-place 2 lastrow web-post-br)
-             (key-place 3 lastrow web-post-bl)
-             (key-place 2 lastrow web-post-tr)
-             (key-place 3 lastrow web-post-tl)
-             (key-place 3 cornerrow web-post-bl)
-             (key-place 3 lastrow web-post-tr)
-             (key-place 3 cornerrow web-post-br)
-             (key-place 4 cornerrow web-post-bl))
-      (triangle-hulls 
-             (key-place 1 cornerrow web-post-br)
-             (key-place 2 lastrow web-post-tl)
-             (key-place 2 cornerrow web-post-bl)
-             (key-place 2 lastrow web-post-tr)
-             (key-place 2 cornerrow web-post-br)
-             (key-place 3 cornerrow web-post-bl)
-             )
-      (triangle-hulls 
-             (key-place 3 lastrow web-post-tr)
-             (key-place 3 lastrow web-post-br)
-             (key-place 3 lastrow web-post-tr)
-             (key-place 4 cornerrow web-post-bl))
   ))
 
 ;;;;;;;;;;
@@ -696,17 +704,19 @@
                    (union
                     key-holes
                     connectors
+                    connectors-main-lower-corner
                     thumb
+                    ;connectors-thumb-to-main
                     thumb-connectors
-                    (difference (union case-walls 
-                                       screw-insert-outers 
-                                       teensy-holder
-                                       usb-holder)
-                                rj9-space 
-                                usb-holder-hole
-                                screw-insert-holes)
-                    rj9-holder
-                    wire-posts
+                    ;(difference (union case-walls 
+                    ;                   screw-insert-outers 
+                    ;                   teensy-holder
+                    ;                   usb-holder)
+                    ;            rj9-space 
+                    ;            usb-holder-hole
+                    ;            screw-insert-holes)
+                    ;rj9-holder
+                    ;wire-posts
                     ; thumbcaps
                     ; caps
                     )
