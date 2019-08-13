@@ -3,23 +3,27 @@
 # Read the project documentation.
 
 keycaps:
+  preview: false
   body-height: 7.3  # DSA-profile caps.
   resting-clearance: 6.5  # DSA on Matias switches.
 switches:
   travel: 3.5
+  style: mx
 key-clusters:
   finger:
     matrix-columns:
-    - rows-above-home: 1
+    - rows-above-home: 2
       rows-below-home: 1
-    - rows-above-home: 1
+    - rows-above-home: 2
       rows-below-home: 2
-    - rows-above-home: 1
+    - rows-above-home: 2
       rows-below-home: 3
+    - rows-above-home: 2
+      rows-below-home: 2
     - rows-above-home: 1
       rows-below-home: 2
-    - rows-below-home: 2
-    - rows-below-home: 2
+    - rows-above-home: 1
+      rows-below-home: 2
     aliases:
       f0: [0, first]
       f1: [1, first]
@@ -538,7 +542,7 @@ case:
     - [f3, WSW, 3, 4]
     - [f3, SSW, 3, 4]
   foot-plates:
-    include: true
+    include: false
     height: 3
     polygons:
     - points:
