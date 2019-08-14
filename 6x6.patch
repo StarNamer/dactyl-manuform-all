@@ -1,5 +1,5 @@
 diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
-index d8861fb..e58302f 100644
+index 73611b8..5ce8b80 100644
 --- a/src/dactyl_keyboard/dactyl.clj
 +++ b/src/dactyl_keyboard/dactyl.clj
 @@ -13,13 +13,13 @@
@@ -21,10 +21,10 @@ index d8861fb..e58302f 100644
    (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 @@ -32,7 +32,7 @@
  
- (def thumb-offsets [6 -3 13])
+ (def thumb-offsets [0 -3 5])
  
--(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
-+(def keyboard-z-offset 16)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+-(def keyboard-z-offset 34)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
++(def keyboard-z-offset 58)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
  
  (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
  (def extra-height 1.0)                  ; original= 0.5
