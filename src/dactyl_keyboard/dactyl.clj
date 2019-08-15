@@ -63,7 +63,7 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.4) ;; Was 14.1, then 14.25
+(def keyswitch-height 14) ;; Was 14.1, then 14.25
 (def keyswitch-width 14.4)
 
 (def sa-profile-key-height 12.7)
@@ -83,12 +83,8 @@
                                    (/ plate-thickness 2)]))
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
-                      (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 plate-thickness)
-                                 (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
-                                             0
-                                             (/ plate-thickness 2)]))))
-        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
+                      (translate [(+ (/ keyswitch-width 2)) 4 2.5]))
+        plate-half (union top-wall left-wall (with-fn 100 side-nub) (mirror [0 1 0] (with-fn 100 side-nub)))]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -714,8 +710,18 @@
                   ))
 
 (spit "things/right.scad"
-      (write-scad model-right))
- 
+  (write-scad model-right))
+
+(spit "things/socket.scad"
+  (write-scad
+    (intersection
+      (rotate (/ π -12) [0 1 0]
+        (intersection
+          model-right
+          (translate [0 0 0]
+            (cube 19 22 40))))
+    (translate [0 0 11] (cube 22 20 5)))))
+
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
                   
@@ -743,15 +749,15 @@
                   )))
 
 (spit "things/right-plate.scad"
-      (write-scad 
-                   (cut
-                     (translate [0 0 -0.1]
-                       (difference (union case-walls
-                                          teensy-holder
-                                          ; rj9-holder
-                                          screw-insert-outers)
-                                   (translate [0 0 -10] screw-insert-screw-holes))
-                  ))))
+  (write-scad 
+    (cut
+      (translate [0 0 -0.1]
+        (difference
+          (union case-walls
+            teensy-holder
+            ; rj9-holder
+            screw-insert-outers)
+          (translate [0 0 -10] screw-insert-screw-holes))))))
 
 (spit "things/test.scad"
       (write-scad 

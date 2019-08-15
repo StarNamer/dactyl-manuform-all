@@ -20,6 +20,20 @@ I built a 4x5 version (40% size) for myself. The default has a bit more tenting 
 * [60% size, (5x6)](https://github.com/tshort/dactyl-keyboard/blob/master/things/right-5x6.stl)
 
 
+## Improvements
+* Kailh low profile switches support
+    * New key caps
+    * Switch holes adaptation
+    * Case dimensions/curvatures adaptation
+* Trackpoint
+    * Holder
+    * Hole for the stick
+    * Custom stick model
+* Wireless connection
+    * Board holder
+    * Batteries holder and door
+    * On/off switch hole & holder
+
 ## Assembly
 
 ### Generating a Design
