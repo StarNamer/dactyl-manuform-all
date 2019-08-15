@@ -64,7 +64,7 @@
 ;;;;;;;;;;;;;;;;;
 
 (def keyswitch-height 13.9) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.4)
+(def keyswitch-width 14.9) ;; Side with bumper
 
 (def sa-profile-key-height 12.7)
 
@@ -81,7 +81,7 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        side-nub (->> (binding [*fn* 30] (cylinder 0.4 keyswitch-width))
+        side-nub (->> (binding [*fn* 30] (cylinder 0.5 keyswitch-width))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 2.9]))
         plate-half (union top-wall left-wall (with-fn 100 side-nub))]
