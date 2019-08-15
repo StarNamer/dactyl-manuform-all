@@ -63,7 +63,7 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14) ;; Was 14.1, then 14.25
+(def keyswitch-height 13.9) ;; Was 14.1, then 14.25
 (def keyswitch-width 14.4)
 
 (def sa-profile-key-height 12.7)
@@ -81,9 +81,9 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
+        side-nub (->> (binding [*fn* 30] (cylinder 0.8 2.75))
                       (rotate (/ π 2) [1 0 0])
-                      (translate [(+ (/ keyswitch-width 2)) 4 2.5]))
+                      (translate [(+ (/ keyswitch-width 2)) 3.8 3]))
         plate-half (union top-wall left-wall (with-fn 100 side-nub) (mirror [0 1 0] (with-fn 100 side-nub)))]
     (union plate-half
            (->> plate-half
