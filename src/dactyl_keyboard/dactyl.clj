@@ -81,9 +81,9 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        side-nub (->> (binding [*fn* 30] (cylinder 0.8 2.75))
+        side-nub (->> (binding [*fn* 30] (cylinder 0.6 2.75))
                       (rotate (/ π 2) [1 0 0])
-                      (translate [(+ (/ keyswitch-width 2)) 3.8 3]))
+                      (translate [(+ (/ keyswitch-width 2)) 3.6 3]))
         plate-half (union top-wall left-wall (with-fn 100 side-nub) (mirror [0 1 0] (with-fn 100 side-nub)))]
     (union plate-half
            (->> plate-half
