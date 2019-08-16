@@ -17,7 +17,7 @@
 (def ncols 5)
 (def switch-type :kailh-low)  ; possible values :kailh-low, :alps (original)
 
-(def α (/ π 12))                        ; curvature of the columns
+(def α (/ π 9))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
@@ -35,8 +35,8 @@
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 1.0)                  ; original= 0.5
+(def extra-width 0)                   ; extra space between the base of keys; original= 2
+(def extra-height 0)                  ; original= 0.5
 
 (def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
@@ -780,6 +780,13 @@
           (translate [0 0 0]
             (cube 19 22 40))))
     (translate [0 0 11] (cube 22 20 5)))))
+
+(spit "things/test-part.scad"
+  (write-scad
+    (intersection
+      (rotate (/ π -6) [0 1 0] model-right)
+      (->> (cube 40 40 20)
+           (translate [-53 10 10])))))
 
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
