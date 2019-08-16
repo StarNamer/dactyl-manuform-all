@@ -13,6 +13,9 @@ The main change is that the thumb cluster was adapted from the [ManuForm keyboar
 * Column tilt
 * Column offsets
 * Height
+* Switch type - ALPS/Cherry MX or Kailh Low Profile
+
+NOTE: I heard somewhere that the original model uses Cherry MX, but I don't know for sure, so test it youself! I added Kailh low support and went with it.
 
 I built a 4x5 version (40% size) for myself. The default has a bit more tenting than the Dactyl. See the following model files for configurations that may be most common:
 
