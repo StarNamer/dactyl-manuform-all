@@ -1,0 +1,12 @@
+diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
+--- a/src/dactyl_keyboard/dactyl.clj
++++ b/src/dactyl_keyboard/dactyl.clj
+@@ -23,7 +23,7 @@
+ ;;;;;;;;;;;;;;;;;;;;;;
+
+ (def nrows 4)                           ; number of columns, 4-6, wide-col buggy > 5
+-(def ncols 5)                           ; number of rows, 4-7
++(def ncols 5)                           ; number of rows, 4-7
+ (def wide-col false)                    ; make right-most column 1.5u key cap
+
+ (def α (/ π 12))                        ; curvature of the columns

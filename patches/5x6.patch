@@ -1,0 +1,24 @@
+diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
+index 8eee971..67ab8d5 100644
+--- a/src/dactyl_keyboard/dactyl.clj
++++ b/src/dactyl_keyboard/dactyl.clj
+@@ -22,8 +22,8 @@
+ ;; Shape parameters ;;
+ ;;;;;;;;;;;;;;;;;;;;;;
+
+-(def nrows 4)                           ; number of columns, 4-6, wide-col buggy > 5
+-(def ncols 5)                           ; number of rows, 4-7
++(def nrows 5)                           ; number of columns, 4-6, wide-col buggy > 5
++(def ncols 6)                           ; number of rows, 4-7
+ (def wide-col false)                    ; make right-most column 1.5u key cap
+
+ (def α (/ π 12))                        ; curvature of the columns
+@@ -42,7 +42,7 @@
+
+ (def thumb-offsets [6 -3 7])
+
+-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
++(def keyboard-z-offset 16)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+
+ (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
+ (def extra-height 1.0)                  ; original= 0.5
