@@ -494,13 +494,16 @@
       (place2 post2)
       (place2 (translate (wall-locate1 dx2 dy2) post2))
       (place2 (translate (wall-locate2 dx2 dy2) post2))
-      (place2 (translate (wall-locate3 dx2 dy2) post2)))
+      (place2 (translate (wall-locate3 dx2 dy2) post2))
+    )
     (bottom-hull
       (place1 (translate (wall-locate2 dx1 dy1) post1))
       (place1 (translate (wall-locate3 dx1 dy1) post1))
       (place2 (translate (wall-locate2 dx2 dy2) post2))
-      (place2 (translate (wall-locate3 dx2 dy2) post2)))
-      ))
+      (place2 (translate (wall-locate3 dx2 dy2) post2))
+    )
+  )
+)
 
 (defn wall-brace2 [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
   (union
@@ -595,9 +598,9 @@
    (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl)
    ; thumb corners
    (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
-        ;   screw-insert #4
+        ;   screw-insert #7
    (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
-        ;   screw-insert #5
+        ;   screw-insert #8
    ; thumb tweeners
    (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
    (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
@@ -657,37 +660,39 @@
 
 (def teensy-width 20)  
 (def teensy-height 12)
-(def teensy-length 33)
-(def teensy2-length 53)
+(def teensy-length 40)
 (def teensy-pcb-thickness 3) 
 (def teensy-holder-width  (+ 7 teensy-pcb-thickness))
 (def teensy-holder-height (+ 6 teensy-width))
 (def teensy-offset-height 5)
 (def teensy-holder-top-length 18)
-(def teensy-top-xy (key-position 0 (- centerrow 1) (wall-locate3 -1 0)))
-(def teensy-bot-xy (key-position 0 (+ centerrow 1) (wall-locate3 -1 0)))
-(def teensy-holder-length (- (second teensy-top-xy) (second teensy-bot-xy)))
+(def teensy-top-xy (key-position 0       lastrow (map + (wall-locate1  -80.5 -9.5) [(/ mount-width 2) 0 0])))
+(def teensy-bot-xy (key-position lastcol lastrow (map + (wall-locate2  -14.5 -11.6) [(/ mount-width 2) 0 0])))
+;(def teensy-holder-length (- (second teensy-top-xy) (second teensy-bot-xy)))
+(def teensy-holder-length teensy-length)
 (def teensy-holder-offset (/ teensy-holder-length -2))
-(def teensy-holder-top-offset (- (/ teensy-holder-top-length 2) teensy-holder-length))
+(def teensy-holder-top-offset (- (/ teensy-holder-top-length 2) teensy-length))
  
 (def teensy-holder 
     (->> 
         (union 
-          (->> (cube 9 (+ teensy-holder-length 5.5) (+ 6 teensy-width))     ; base
-               (translate [3.5 teensy-holder-offset 0]))
+          (->> (cube 9 teensy-holder-length (+ 6 teensy-width))     ; base
+               (translate [3.5 teensy-holder-offset 0])
+               )
           ;(->> (cube teensy-pcb-thickness teensy-holder-length 3)  ;   mid section
           ;     (translate [(+ (/ teensy-pcb-thickness 2) 3.5) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
           ;(->> (cube 4 teensy-holder-length 4) ; holder-bottom
-          ;     (translate [(+ teensy-pcb-thickness 5) teensy-holder-offset (-  -1 (/ teensy-width 2))])) 
+          ;     (translate [(+ teensy-pcb-thickness 7) teensy-holder-offset (-  -1 (/ teensy-width 2))])) 
           ;(->> (cube teensy-pcb-thickness teensy-holder-top-length 3)  ;   mid section
           ;     (translate [(+ (/ teensy-pcb-thickness 2) 3.5) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
           ;(->> (cube 4 teensy-holder-top-length 4) ; holder-top
-          ;     (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))]))
+          ;     (translate [(+ teensy-pcb-thickness 7) teensy-holder-top-offset (+ 1 (/ teensy-width 2))]))
           )
-        (translate [(- teensy-holder-width) 0 0])
-        (translate [7.5 0 0])   ; teensy-holder 7.5mm from the back-wall 
-        (translate [(first teensy-top-xy) 
-                    (- (second teensy-top-xy) 1) 
+        ;(translate [(- teensy-holder-width) 0 0])
+        ;(translate [7.5 0 0])   ; teensy-holder 7.5mm from the back-wall 
+        (rotate (deg2rad  52) [0 0 1])
+        (translate [(+ (first teensy-top-xy) (- teensy-width 6))
+                    (- (second teensy-top-xy) 13)
                     (/ (+ 6 teensy-width) 2)])
            ))
 
@@ -696,36 +701,67 @@
           (translate [0 0 (/ height 2)] (sphere top-radius))))
 
 (defn screw-insert [column row bottom-radius top-radius height] 
-  (let [shift-right (= column lastcol)
-            ; test if column equals last col
-        shift-left  (= column 0)
-            ; test if column equals 0
-        shift-up    (and (not (or shift-right shift-left)) (= row 0))
-        shift-down  (and (not (or shift-right shift-left)) (>= row lastrow))
-        position    (if shift-up
-                            (key-position column row (map + (wall-locate2  0  1) [0 (/ mount-height 2) 0]))
-                      (if shift-down
-                            (key-position column row (map - (wall-locate2  0 -1) [0 (/ mount-height 2) 0]))
-                        (if shift-left
-                            (map + (left-key-position row 0) (wall-locate3 -1 0)) 
-                          (key-position column row (map + (wall-locate2  1  0) [(/ mount-width 2) 0 0]))
-                                       ;)
+  (let [is-first-column       (= column 0)
+        is-last-column        (= column lastcol)
+        is-center-column      (= column centercol)
+        is-first-row          (= row 0)
+        is-thumb-row          (= row lastrow)
+        is-corner-row         (= row cornerrow)
+        is-left-down          (and is-last-column   is-corner-row)  ; #01
+        is-left-up            (and is-last-column   is-first-row)   ; #02
+        is-right-up           (and is-first-column  is-first-row)   ; #05
+        is-right-down         (and is-first-column  is-corner-row)  ; #06
+        is-middle-down        (and is-center-column is-thumb-row)   ; #03
+        is-middle-up          (and is-center-column is-first-row)   ; #04
+        is-thumb-down         (and is-first-column  is-thumb-row)   ; #07
+        is-thumb-up           (and is-last-column   is-thumb-row)   ; #08
+        position    (if is-left-up
+                       (key-position column row (map + (wall-locate2  2  0.8) [0 (/ mount-height 2) 0]))
+                       (if is-left-down
+                          (key-position column row (map - (wall-locate2  2 -0.8) [0 (/ mount-height 2) 0]))
+                          (if is-right-down
+                             (key-position column row (map + (wall-locate3 -2.2 -1.8) [0 (/ mount-height 2) 0]))
+                             (if is-right-up
+                                (key-position column row (map - (wall-locate3  -1.6  2.3) [0 (/ mount-height 2) 0]))
+                                (if is-middle-down
+                                   (key-position column row (map + (wall-locate2 -6.3 -5.7) [0 (/ mount-height 2) 0]))
+                                   (if is-middle-up
+                                      (key-position column row (map - (wall-locate2  0  4.5) [0 (/ mount-height 2) 0]))
+                                      (if is-thumb-up
+                                          (key-position column row (map + (wall-locate1  -80.5 -9.5) [(/ mount-width 2) 0 0]))
+                                          (key-position column row (map + (wall-locate2  -14.5 -11.6) [(/ mount-width 2) 0 0]))
+                                            ; is-thumb-down
+                                      )
+                                   )
+                                )
+                             )
+                          )
                         )
                       )
-                    )
         ]
     (->> (screw-insert-shape bottom-radius top-radius height)
          (translate [(first position) (second position) (/ height 2)])
     )))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union ;(screw-insert 0 0                 bottom-radius top-radius height) ; column 0 row 0 
-         (screw-insert 0 (- lastrow 0.6)   bottom-radius top-radius height) ; column 0 (#7)
-         (screw-insert 2 (+ lastrow 0.25)  bottom-radius top-radius height) ; column 2 (#2)
-         (screw-insert 3 0                 bottom-radius top-radius height) ; column 3 (#9)
-         ;(screw-insert (+ lastcol 0.13) 1   bottom-radius top-radius height) ; last column
-         ;(screw-insert 0 (+ lastrow 2)  bottom-radius top-radius height); thumb
-         ))
+  (union 
+     (screw-insert lastcol cornerrow  bottom-radius top-radius height) ; (#01)
+        ;   left up
+     (screw-insert lastcol 0          bottom-radius top-radius height) ; (#02)
+        ;   left down
+     (screw-insert centercol 0        bottom-radius top-radius height) ; (#03)
+        ;   middle up
+     (screw-insert centercol lastrow  bottom-radius top-radius height) ; (#04)
+        ;   middle down
+     (screw-insert 0 0                bottom-radius top-radius height) ; (#05)
+        ;   right up
+     (screw-insert 0       cornerrow  bottom-radius top-radius height) ; (#06)
+        ;   right down
+     (screw-insert 0        lastrow   bottom-radius top-radius height) ; (#07)
+        ;   thumb down
+     (screw-insert lastcol  lastrow   bottom-radius top-radius height) ; (#08)
+        ;   thumb up
+     ))
 (def screw-insert-height 3.8)
 (def screw-insert-bottom-radius (/ 5.31 2))
 (def screw-insert-top-radius (/ 5.1 2))
@@ -769,7 +805,8 @@
                                        )
                                 ; rj9-space ; avk don't need it
                                 ;usb-holder-hole
-                                screw-insert-holes)
+                                screw-insert-holes
+                                )
                     ;rj9-holder
                     ;wire-posts
                     ; thumbcaps
