@@ -1,11 +1,10 @@
-# The Dactyl Keyboard
-The Dactyl is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
+# The Ex-Dactyl Keyboard
+The Ex-Dactyl is an extended version of Dactyl keyboard, which is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
-<img src="https://raw.githubusercontent.com/adereth/dactyl-cave/master/resources/glamourshot.png"/>
+![](https://thingiverse-production-new.s3.amazonaws.com/assets/59/64/c4/50/0d/IMG_5335.JPG)
+![](https://thingiverse-production-new.s3.amazonaws.com/assets/6c/6e/a8/60/f7/IMG_6127.JPG)
 
-There's a talk about the motivation and design of the Dactyl that helps provide context for this repo:
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/uk3A41U0iO4/0.jpg)](https://www.youtube.com/watch?v=uk3A41U0iO4)
+You can download it from [Thingiverse](https://www.thingiverse.com/thing:3815317)
 
 ## Assembly
 
@@ -30,7 +29,7 @@ There's a talk about the motivation and design of the Dactyl that helps provide 
 
 
 ### Printing
-Pregenerated STL files are available in the [things/](things/) directory.
+Pregenerated STL files are available in the [things/](things/) directory after generation.
 
 ### Wiring
 Masks for the flexible PCBs I used are available for the [left](resources/pcb-left.svg) and [right](resources/pcb-right.svg) side.
