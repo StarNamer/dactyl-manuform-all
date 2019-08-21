@@ -245,7 +245,9 @@
 
 (def post-adj (/ post-size 2))
 (def web-post-tr (translate [(- (/ mount-width 2) post-adj) (- (/ mount-height 2) post-adj) 0] web-post))
+;TODO it can be shared with screw insertion
 (def web-post-tl (translate [(+ (/ mount-width -2) post-adj) (- (/ mount-height 2) post-adj) 0] web-post))
+;TODO it can be shared with screw insertion
 (def web-post-bl (translate [(+ (/ mount-width -2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 (def web-post-br (translate [(- (/ mount-width 2) post-adj) (+ (/ mount-height -2) post-adj) 0] web-post))
 
@@ -543,6 +545,26 @@
       (place2 (translate (wall-locate3 dx2 dy2) post2)))
   ))
 
+(defn wall-brace4 [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
+  (union
+    ;(hull
+    ;  (place1 post1)
+    ;  (place1 (translate (wall-locate1 dx1 dy1) post1))
+    ;  (place1 (translate (wall-locate2 dx1 dy1) post1))
+    ;  (place1 (translate (wall-locate3 dx1 dy1) post1))
+    ;  (place2 post2)
+    ;  (place2 (translate (wall-locate1 dx2 dy2) post2))
+    ;  (place2 (translate (wall-locate2 dx2 dy2) post2))
+    ;  (place2 (translate (wall-locate3 dx2 dy2) post2))
+    ;)
+    ;(bottom-hull
+      (place1 (translate (wall-locate2 dx1 dy1) post1))
+      (place1 (translate (wall-locate3 dx1 dy1) post1))
+      (place2 (translate (wall-locate2 dx2 dy2) post2))
+      (place2 (translate (wall-locate3 dx2 dy2) post2))
+    ;)
+  ))
+
 (defn key-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2] 
   (wall-brace (partial key-place x1 y1) dx1 dy1 post1 
               (partial key-place x2 y2) dx2 dy2 post2))
@@ -672,33 +694,38 @@
 (def teensy-holder-length teensy-length)
 (def teensy-holder-offset (/ teensy-holder-length -2))
 (def teensy-holder-top-offset (- (/ teensy-holder-top-length 2) teensy-length))
+
+(def screw-insert-height 3.8)
+(def screw-insert-bottom-radius (/ 5.31 2))
+(def screw-insert-top-radius (/ 5.1 2))
+(def teensy-screw-hole-distance -28)
+
+(defn screw-insert-shape [bottom-radius top-radius height] 
+   (union (cylinder [bottom-radius top-radius] height)
+          (translate [0 0 (/ height 2)] (sphere top-radius))))
  
 (def teensy-holder 
     (->> 
         (union 
-          (->> (cube 9 teensy-holder-length (+ 6 teensy-width))     ; base
-               (translate [3.5 teensy-holder-offset 0])
+            (difference
+               (->> (cube (+ screw-insert-height screw-insert-top-radius) teensy-holder-length (+ 6 teensy-width))     ; base
+                    (translate [3.5 teensy-holder-offset 0])
                )
-          ;(->> (cube teensy-pcb-thickness teensy-holder-length 3)  ;   mid section
-          ;     (translate [(+ (/ teensy-pcb-thickness 2) 3.5) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
-          ;(->> (cube 4 teensy-holder-length 4) ; holder-bottom
-          ;     (translate [(+ teensy-pcb-thickness 7) teensy-holder-offset (-  -1 (/ teensy-width 2))])) 
-          ;(->> (cube teensy-pcb-thickness teensy-holder-top-length 3)  ;   mid section
-          ;     (translate [(+ (/ teensy-pcb-thickness 2) 3.5) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
-          ;(->> (cube 4 teensy-holder-top-length 4) ; holder-top
-          ;     (translate [(+ teensy-pcb-thickness 7) teensy-holder-top-offset (+ 1 (/ teensy-width 2))]))
-          )
-        ;(translate [(- teensy-holder-width) 0 0])
-        ;(translate [7.5 0 0])   ; teensy-holder 7.5mm from the back-wall 
+               (->> (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius (+ 1 screw-insert-height))
+                    (rotate (deg2rad  -90) [0 1 0])
+                    (translate [(+ 3.5 screw-insert-top-radius) teensy-screw-hole-distance 0])
+               )
+            )
+            (->> (cube teensy-pcb-thickness teensy-holder-length 3)  ;   mid section
+                 (translate [(+ screw-insert-height screw-insert-top-radius 1.75) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
+            (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)  ;   mid section
+                 (translate [(+ screw-insert-height screw-insert-top-radius 1.75) teensy-holder-offset (+ 1.5 (/ teensy-width 2))]))
+        )
         (rotate (deg2rad  52) [0 0 1])
         (translate [(+ (first teensy-top-xy) (- teensy-width 6))
                     (- (second teensy-top-xy) 13)
                     (/ (+ 6 teensy-width) 2)])
            ))
-
-(defn screw-insert-shape [bottom-radius top-radius height] 
-   (union (cylinder [bottom-radius top-radius] height)
-          (translate [0 0 (/ height 2)] (sphere top-radius))))
 
 (defn screw-insert [column row bottom-radius top-radius height] 
   (let [is-first-column       (= column 0)
@@ -762,9 +789,6 @@
      (screw-insert lastcol  lastrow   bottom-radius top-radius height) ; (#08)
         ;   thumb up
      ))
-(def screw-insert-height 3.8)
-(def screw-insert-bottom-radius (/ 5.31 2))
-(def screw-insert-top-radius (/ 5.1 2))
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
 (def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
@@ -802,11 +826,11 @@
                                        screw-insert-outers 
                                        teensy-holder
                                        ;usb-holder
-                                       )
+                                )
                                 ; rj9-space ; avk don't need it
                                 ;usb-holder-hole
                                 screw-insert-holes
-                                )
+                    )
                     ;rj9-holder
                     ;wire-posts
                     ; thumbcaps
@@ -822,16 +846,21 @@
       (write-scad (mirror [-1 0 0] model-right)))
                   
 (spit "things/right-test.scad"
-      (write-scad 
-                   (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    case-walls 
-                    thumbcaps
-                    caps
-                    teensy-holder
+      (write-scad (difference
+                    (union
+                        key-holes
+                        connectors
+                        thumb
+                        thumb-connectors
+                        (difference (union case-walls 
+                                           screw-insert-outers 
+                                           teensy-holder
+                                    )
+                                    screw-insert-holes
+                        )
+                        thumbcaps
+                        caps
+                        ;(thumb-bl-place (translate (wall-locate3 -1 0) (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius screw-insert-height)))
                     ; rj9-holder ; avk don't need it
                     ;usb-holder-hole
                     ; usb-holder-hole
@@ -842,22 +871,38 @@
                     ;             usb-cutout 
                     ;             rj9-space 
                                 ; wire-posts
-                  )))
+                     )
+                     (translate [0 0 -20] (cube 350 350 40)) 
+                    )
+      )
+)
 
 (spit "things/right-plate.scad"
       (write-scad 
                    (cut
                      (translate [0 0 -0.1]
                        (difference (union case-walls
-                                          teensy-holder
+                                          ;teensy-holder
                                           ; rj9-holder
                                           screw-insert-outers)
                                    (translate [0 0 -10] screw-insert-screw-holes))
                   ))))
 
 (spit "things/test.scad"
-      (write-scad 
-         (difference usb-holder usb-holder-hole)))
+    (write-scad 
+        (difference
+            (union (difference usb-holder usb-holder-hole)
+                web-post-tl
+                (wall-brace4 thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
+                (wall-brace4 thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
+                ;screw-insert-outers 
+                (thumb-bl-place (translate (wall-locate3 -1 0) (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius screw-insert-height)))
+                                           teensy-holder
+            )
+            ;(translate [0 0 -20] (cube 350 350 40)) 
+        )
+    )
+)
 
 
 

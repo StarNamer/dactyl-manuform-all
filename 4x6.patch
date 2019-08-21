@@ -1,5 +1,5 @@
 diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
-index 93a2d0c..6656901 100644
+index 930bf09..1fb85e5 100644
 --- a/src/dactyl_keyboard/dactyl.clj
 +++ b/src/dactyl_keyboard/dactyl.clj
 @@ -14,12 +14,12 @@
@@ -26,7 +26,7 @@ index 93a2d0c..6656901 100644
  
  (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
  (def extra-height 1.0)                  ; original= 0.5
-@@ -666,8 +666,8 @@
+@@ -688,8 +688,8 @@
  (def teensy-holder-height (+ 6 teensy-width))
  (def teensy-offset-height 5)
  (def teensy-holder-top-length 18)
@@ -37,16 +37,16 @@ index 93a2d0c..6656901 100644
  ;(def teensy-holder-length (- (second teensy-top-xy) (second teensy-bot-xy)))
  (def teensy-holder-length teensy-length)
  (def teensy-holder-offset (/ teensy-holder-length -2))
-@@ -691,7 +691,7 @@
-         ;(translate [(- teensy-holder-width) 0 0])
-         ;(translate [7.5 0 0])   ; teensy-holder 7.5mm from the back-wall 
+@@ -722,7 +722,7 @@
+                  (translate [(+ screw-insert-height screw-insert-top-radius 1.75) teensy-holder-offset (+ 1.5 (/ teensy-width 2))]))
+         )
          (rotate (deg2rad  52) [0 0 1])
 -        (translate [(+ (first teensy-top-xy) (- teensy-width 6))
 +        (translate [(+ (first teensy-top-xy) (+ teensy-width 10))
                      (- (second teensy-top-xy) 13)
                      (/ (+ 6 teensy-width) 2)])
             ))
-@@ -724,12 +724,12 @@
+@@ -751,12 +751,12 @@
                               (if is-right-up
                                  (key-position column row (map - (wall-locate3  -1.6  2.3) [0 (/ mount-height 2) 0]))
                                  (if is-middle-down
