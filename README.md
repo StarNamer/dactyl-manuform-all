@@ -6,7 +6,7 @@ I change the micro-controller from Teensy 2.0 to Arduino, which is easier to obt
 
 ## Assembly
 
-TODO
+Please refer to [Assembly Guide](guide/README.md).
 
 ## Software
 
