@@ -8,6 +8,8 @@ I modified original design so that both left-side and right-side can contain a m
 
 Copyright © 2019 Yongda Fan
 
+Copyright © 2017 kennykaye
+
 Copyright © 2015 Matthew Adereth
 
 Everything in this folder is under license [Creative Commons Attribution-NonCommercial-ShareAlike License Version 3.0](LICENSE).
