@@ -1,4 +1,4 @@
-mirror ([-1, 0, 0]) {
+mirror (v=[-1, 0, 0]) {
   difference () {
     union () {
       difference () {
