@@ -10,7 +10,7 @@ Please refer to [Assembly Guide](guide/README.md).
 
 ## Software
 
-TODO
+<font color=red>TODO</font>
 
 ## License
 
