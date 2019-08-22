@@ -14,4 +14,4 @@ TODO
 
 ## License
 
-Everything in [things](things) folder is under [Creative Commons Attribution-NonCommercial-ShareAlike License Version 3.0](things/LICENSE); anything else is under [???]().
+Everything in [things](things) folder is under [Creative Commons Attribution-NonCommercial-ShareAlike License Version 3.0](things/LICENSE); anything else is under [BSD 3-Clause "New" or "Revised" License](LICENSE).
