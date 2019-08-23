@@ -17,10 +17,20 @@ Here is the tools you need,
 - Electric Iron.
 - Screwdriver.
 
-### 3D Print
+### Step 1: 3D print files
 
 Download all the `.stl` files in the [things](../things) folder, and use 3d printer to print them.
 
 <font color=red>IMAGE NEEDED</font>
+
+### Step 2: Connect each parts using screw
+
+### Step 3: Soldering diodes and keyboard switches
+
+### Step 4: Installing keyboard switches into keyboard
+
+### Step 5: Soldering keyboard switches and Arduino
+
+### Step 6: Flash keyboard firmware
 
 <font color=red>TODO</font>
