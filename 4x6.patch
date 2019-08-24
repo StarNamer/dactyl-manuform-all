@@ -1,12 +1,14 @@
 diff --git a/src/dactyl_keyboard/dactyl.clj b/src/dactyl_keyboard/dactyl.clj
-index 930bf09..1fb85e5 100644
+index febc14c..ae2927d 100644
 --- a/src/dactyl_keyboard/dactyl.clj
 +++ b/src/dactyl_keyboard/dactyl.clj
-@@ -14,12 +14,12 @@
+@@ -13,13 +13,13 @@
+ ;; Shape parameters ;;
  ;;;;;;;;;;;;;;;;;;;;;;
  
- (def nrows 4)
+-(def nrows 4)
 -(def ncols 5)
++(def nrows 5)
 +(def ncols 6)
  
  (def α (/ π 12))                        ; curvature of the columns
@@ -22,11 +24,11 @@ index 930bf09..1fb85e5 100644
  (def thumb-offsets [0 -3 5])
  
 -(def keyboard-z-offset 34)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
-+(def keyboard-z-offset 53)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
++(def keyboard-z-offset 58)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
  
  (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
  (def extra-height 1.0)                  ; original= 0.5
-@@ -688,8 +688,8 @@
+@@ -657,8 +657,8 @@
  (def teensy-holder-height (+ 6 teensy-width))
  (def teensy-offset-height 5)
  (def teensy-holder-top-length 18)
@@ -37,24 +39,27 @@ index 930bf09..1fb85e5 100644
  ;(def teensy-holder-length (- (second teensy-top-xy) (second teensy-bot-xy)))
  (def teensy-holder-length teensy-length)
  (def teensy-holder-offset (/ teensy-holder-length -2))
-@@ -722,7 +722,7 @@
-                  (translate [(+ screw-insert-height screw-insert-top-radius 1.75) teensy-holder-offset (+ 1.5 (/ teensy-width 2))]))
-         )
-         (rotate (deg2rad  52) [0 0 1])
--        (translate [(+ (first teensy-top-xy) (- teensy-width 6))
-+        (translate [(+ (first teensy-top-xy) (+ teensy-width 10))
-                     (- (second teensy-top-xy) 13)
-                     (/ (+ 6 teensy-width) 2)])
-            ))
-@@ -751,12 +751,12 @@
+@@ -701,7 +701,7 @@
+ (defn usb-holder-hole-position [holder]
+     (->> holder
+          (rotate (deg2rad  52) [0 0 1])
+-         (translate [(+ (first teensy-top-xy) (- teensy-width 6))
++         (translate [(+ (first teensy-top-xy) (+ teensy-width 10))
+                      (- (second teensy-top-xy) 13)
+                      (/ (+ 6 teensy-width) 2)])
+     )
+@@ -808,14 +808,14 @@
+                           (if is-right-down
+                              (key-position column row (map + (wall-locate3 -2.2 -1.8) [0 (/ mount-height 2) 0]))
                               (if is-right-up
-                                 (key-position column row (map - (wall-locate3  -1.6  2.3) [0 (/ mount-height 2) 0]))
+-                                (key-position column row (map - (wall-locate3  -1.6  2.3) [0 (/ mount-height 2) 0]))
++                                (key-position column row (map - (wall-locate3  -1.3  2.1) [0 (/ mount-height 2) 0]))
                                  (if is-middle-down
 -                                   (key-position column row (map + (wall-locate2 -6.3 -5.7) [0 (/ mount-height 2) 0]))
 +                                   (key-position column row (map + (wall-locate2 0 -5.7) [0 (/ mount-height 2) 0]))
                                     (if is-middle-up
 -                                      (key-position column row (map - (wall-locate2  0  4.5) [0 (/ mount-height 2) 0]))
-+                                      (key-position column row (map - (wall-locate2  4.2  4) [0 (/ mount-height 2) 0]))
++                                      (key-position column row (map - (wall-locate2  4.2  3.8) [0 (/ mount-height 2) 0]))
                                        (if is-thumb-up
 -                                          (key-position column row (map + (wall-locate1  -80.5 -9.5) [(/ mount-width 2) 0 0]))
 -                                          (key-position column row (map + (wall-locate2  -14.5 -11.6) [(/ mount-width 2) 0 0]))

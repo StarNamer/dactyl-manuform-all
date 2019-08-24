@@ -545,26 +545,6 @@
       (place2 (translate (wall-locate3 dx2 dy2) post2)))
   ))
 
-(defn wall-brace4 [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
-  (union
-    ;(hull
-    ;  (place1 post1)
-    ;  (place1 (translate (wall-locate1 dx1 dy1) post1))
-    ;  (place1 (translate (wall-locate2 dx1 dy1) post1))
-    ;  (place1 (translate (wall-locate3 dx1 dy1) post1))
-    ;  (place2 post2)
-    ;  (place2 (translate (wall-locate1 dx2 dy2) post2))
-    ;  (place2 (translate (wall-locate2 dx2 dy2) post2))
-    ;  (place2 (translate (wall-locate3 dx2 dy2) post2))
-    ;)
-    ;(bottom-hull
-      (place1 (translate (wall-locate2 dx1 dy1) post1))
-      (place1 (translate (wall-locate3 dx1 dy1) post1))
-      (place2 (translate (wall-locate2 dx2 dy2) post2))
-      (place2 (translate (wall-locate3 dx2 dy2) post2))
-    ;)
-  ))
-
 (defn key-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2] 
   (wall-brace (partial key-place x1 y1) dx1 dy1 post1 
               (partial key-place x2 y2) dx2 dy2 post2))
@@ -669,17 +649,6 @@
                   (difference rj9-cube
                               (union (translate [0 2 0] (cube 10.78  9 18.38))
                                      (translate [0 0 5] (cube 10.78 13  5))))))
-
-(def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
-(def usb-holder-size [6.5 10.0 13.6])
-(def usb-holder-thickness 4)
-(def usb-holder
-    (->> (cube (+ (first usb-holder-size) usb-holder-thickness) (second usb-holder-size) (+ (last usb-holder-size) usb-holder-thickness))
-         (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
-(def usb-holder-hole
-    (->> (apply cube usb-holder-size)
-         (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
-
 (def teensy-width 20)  
 (def teensy-height 12)
 (def teensy-length 40)
@@ -698,11 +667,102 @@
 (def screw-insert-height 3.8)
 (def screw-insert-bottom-radius (/ 5.31 2))
 (def screw-insert-top-radius (/ 5.1 2))
-(def teensy-screw-hole-distance -28)
+(def teensy-screw-hole-distance -28.8)
 
 (defn screw-insert-shape [bottom-radius top-radius height] 
    (union (cylinder [bottom-radius top-radius] height)
           (translate [0 0 (/ height 2)] (sphere top-radius))))
+
+(def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
+(def usb-holder-size [14.2 10 20.0])
+(def usb-holder-thickness 4)
+(defn usb-holder-location [holder]
+    (translate [(+ (first teensy-top-xy) (- teensy-width 4))
+                (+ (second teensy-top-xy) 3)
+                (/ (+ (last usb-holder-size) usb-holder-thickness 2) 2)] holder)
+)
+(defn usb-holder-position [holder]
+    (translate [(+ (/ (+ (first usb-holder-size) screw-insert-height screw-insert-top-radius) 2) 3.5)
+                (+ (/ (second usb-holder-size) 2) 3)
+                0]
+                holder
+    )
+)
+
+(def usb-holder-outer
+    (->> (cube (+ (first usb-holder-size) usb-holder-thickness)
+               (second usb-holder-size)
+               (+ (last usb-holder-size) usb-holder-thickness)
+         )
+         (usb-holder-position)
+    )
+)
+
+(defn usb-holder-hole-position [holder]
+    (->> holder
+         (rotate (deg2rad  52) [0 0 1])
+         (translate [(+ (first teensy-top-xy) (- teensy-width 6))
+                     (- (second teensy-top-xy) 13)
+                     (/ (+ 6 teensy-width) 2)])
+    )
+)
+
+(def micro-usb-hole-size [10.5 2.7 7.75]) ; [from the bottom   height   width  ]
+(def trrs-hole-size  [5.1  3.00 -3.0])    ; [from the bottom   radius   to left]
+(def reset-hole-size [5.6  1.75 +3.1])    ; [from the bottom   radius   to left]
+(def usb-holder-wall-thickness 2)
+
+(defn usb-holder-hole [mirror]
+    (->> (union 
+            (translate [0 usb-holder-wall-thickness 0]
+               (apply cube [(first usb-holder-size) (+ (second usb-holder-size) 2) (last usb-holder-size)])
+            )
+            (translate [-5 (+ usb-holder-wall-thickness 2) 0]
+               (apply cube [(first usb-holder-size)
+                            (+ (second usb-holder-size) 2)
+                            (+ (last usb-holder-size) 3 usb-holder-wall-thickness)
+                           ]
+               )
+            )
+            (translate [0.5 (+ usb-holder-wall-thickness 5.2) 0]
+               (rotate (deg2rad 60) [0 0 1]
+                  (apply cube [(first usb-holder-size)
+                               (+ (second usb-holder-size) 2)
+                               (+ (last usb-holder-size) 3 usb-holder-wall-thickness)
+                              ]
+                  )
+               )
+            )
+            ; micro USB
+            (translate [(- (first micro-usb-hole-size) (/ (first usb-holder-size) 2)) 0 0]
+              (apply cube [ (second micro-usb-hole-size) (last usb-holder-size) (last micro-usb-hole-size)])
+            )
+            ; TRRS
+            (->> (cylinder [(second trrs-hole-size) (second trrs-hole-size)] (last usb-holder-size))
+                 (rotate (deg2rad 90) [1 0 0])
+                 (translate [(- (first  trrs-hole-size) (/ (first usb-holder-size) 2))
+                             0
+                             (* (last trrs-hole-size) mirror)
+                            ])
+            )
+            ; Reset switch
+            (->> (cylinder [(second reset-hole-size) (second reset-hole-size)] (last usb-holder-size))
+                 (rotate (deg2rad 90) [1 0 0])
+                 (translate [(- (first  reset-hole-size) (/ (first usb-holder-size) 2))
+                             0
+                             (* (last reset-hole-size) mirror)
+                            ])
+            )
+         )
+         (usb-holder-position)
+    )
+)
+
+(def usb-holder
+    (->> (difference usb-holder-outer (usb-holder-hole 1))
+    )
+)
+
  
 (def teensy-holder 
     (->> 
@@ -716,16 +776,15 @@
                     (translate [(+ 3.5 screw-insert-top-radius) teensy-screw-hole-distance 0])
                )
             )
+            usb-holder-outer
             (->> (cube teensy-pcb-thickness teensy-holder-length 3)  ;   mid section
                  (translate [(+ screw-insert-height screw-insert-top-radius 1.75) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
             (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)  ;   mid section
                  (translate [(+ screw-insert-height screw-insert-top-radius 1.75) teensy-holder-offset (+ 1.5 (/ teensy-width 2))]))
         )
-        (rotate (deg2rad  52) [0 0 1])
-        (translate [(+ (first teensy-top-xy) (- teensy-width 6))
-                    (- (second teensy-top-xy) 13)
-                    (/ (+ 6 teensy-width) 2)])
-           ))
+        (usb-holder-hole-position)
+    )
+)
 
 (defn screw-insert [column row bottom-radius top-radius height] 
   (let [is-first-column       (= column 0)
@@ -816,7 +875,7 @@
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
 
-(def model-right (difference 
+(defn model-right [mirror] (difference 
                    (union
                     key-holes
                     connectors
@@ -825,25 +884,19 @@
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
-                                       ;usb-holder
                                 )
-                                ; rj9-space ; avk don't need it
-                                ;usb-holder-hole
+                                (usb-holder-hole-position (usb-holder-hole mirror))
                                 screw-insert-holes
                     )
-                    ;rj9-holder
-                    ;wire-posts
-                    ; thumbcaps
-                    ; caps
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
 
 (spit "things/right.scad"
-      (write-scad model-right))
+      (write-scad (model-right 1)))
  
 (spit "things/left.scad"
-      (write-scad (mirror [-1 0 0] model-right)))
+      (write-scad (mirror [-1 0 0] (model-right -1))))
                   
 (spit "things/right-test.scad"
       (write-scad (difference
@@ -855,22 +908,13 @@
                         (difference (union case-walls 
                                            screw-insert-outers 
                                            teensy-holder
+                                           ;usb-holder
                                     )
+                                    (usb-holder-hole-position (usb-holder-hole 1))
                                     screw-insert-holes
                         )
                         thumbcaps
                         caps
-                        ;(thumb-bl-place (translate (wall-locate3 -1 0) (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius screw-insert-height)))
-                    ; rj9-holder ; avk don't need it
-                    ;usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers 
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout 
-                    ;             rj9-space 
-                                ; wire-posts
                      )
                      (translate [0 0 -20] (cube 350 350 40)) 
                     )
@@ -891,14 +935,16 @@
 (spit "things/test.scad"
     (write-scad 
         (difference
-            (union (difference usb-holder usb-holder-hole)
-                web-post-tl
-                (wall-brace4 thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
-                (wall-brace4 thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
+            (union
+               ;(difference usb-holder-outer usb-holder-hole)
+                ;web-post-tl
                 ;screw-insert-outers 
-                (thumb-bl-place (translate (wall-locate3 -1 0) (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius screw-insert-height)))
-                                           teensy-holder
+                ;(thumb-bl-place (translate (wall-locate3 -1 0) (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius screw-insert-height)))
+               ;(difference teensy-holder (usb-holder-hole-position usb-holder-hole))
             )
+            teensy-holder
+            (usb-holder-hole 1)
+            (usb-holder-hole-position (usb-holder-hole 1))
             ;(translate [0 0 -20] (cube 350 350 40)) 
         )
     )
