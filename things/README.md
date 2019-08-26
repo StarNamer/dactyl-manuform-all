@@ -4,6 +4,38 @@ This folder contains the 3d print file for Dactyl keyboard. `.scad` file is the 
 
 I modified original design so that both left-side and right-side can contain a micro-controller. (I basically mirror all of the right-side design to left side).
 
+## Combined
+
+Combined contains 4 parts, 
+- `dactyl-bottom-left`; 
+- `dactyl-bottom-right`;
+- `dactyl-top-left`;
+- `dactyl-top-right`.
+
+To print these files, the 3d printer must at least be able to print `200 * 200 * 100 mm`.
+
+`.stl` file is under [combined/bin](combined/bin) folder and `.scad` file is under [combined/src](combined/src) folder.
+
+To connect `bottom` and `top`, 3 ??? screw is needed for each side.
+
+## Separate
+
+Separate contains 8 parts,
+- `dactyl-bottom-left`; 
+- `dactyl-bottom-right`;
+- `dactyl-rest-left`;
+- `dactyl-rest-right`;
+- `dactyl-stand-left`;
+- `dactyl-stand-right`;
+- `dactyl-top-left`;
+- `dactyl-top-right`.
+
+To print these files, the 3d printer must at least be able to print `200 * 150 * 800 mm`. Then we can use 6 ??? screw to connect `bottom`, `rest` and `stand` together on each side; and then 3 ??? screw to connect with `top`.
+
+## OpenSCAD
+
+To modified model, you need [OpenSCAD](https://www.openscad.org/) to open `.scad` file, and then change the code and re-compile.
+
 ## License
 
 Copyright © 2019 Yongda Fan
