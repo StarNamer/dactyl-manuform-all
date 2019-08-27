@@ -20,11 +20,12 @@
 1. 3d print every file in [things/separate/bin](../things/separate/bin).
 2. Use \#8 screws connect `bottom`, `stand` and `rest` part together (for both left and right), as picture shown below.
 
-![TODO](image/step1opt2.png)
+![TODO](image/step1opt2p1.png)
 
 For details about this step, please check [things/README.md](../things/README.md). 
 
-### Step 2: Connect each parts using screw
+### Step 2: Prepare PCB board
+
 
 ### Step 3: Soldering diodes and keyboard switches
 
