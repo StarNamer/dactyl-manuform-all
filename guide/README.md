@@ -1,27 +1,25 @@
 ## Assembly Guide
 
-### Needed
+### Step 1: Prepare case for keyboard.
 
-Here is the materials that you need,
+#### Option 1
 
-- 70 Keyboard Switches.
-- 70 Diodes.
-- 2 Arduino Nano.
-- Some Wires and Solder.
-- Some Screw (<font color=red>MODEL NEEDED</font>).
-- 2 USB to Serial Converter.
+*Requirements:* 
+- 3d printer.
 
-Here is the tools you need,
+*Instructions:*
+1. 3d print every file in [things/combined/bin](../combined/bin).
 
-- 3D Printer (or 3D Printing Service).
-- Electric Iron.
-- Screwdriver.
+#### Option 2
 
-### Step 1: 3D print files
+*Requirements:*
+- 3d printer;
+- \#8 screws (or M4 screws) × 12
 
-Download all the `.stl` files in the [things](../things) folder, and use 3d printer to print them.
+*Instructions:*
+1. 3d print every file in [things/separate/bin](../separate/bin).
 
-<font color=red>IMAGE NEEDED</font>
+For details about this step, please check [things/README.md](../things/README.md). 
 
 ### Step 2: Connect each parts using screw
 
