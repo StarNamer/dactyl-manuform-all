@@ -30,6 +30,7 @@ key-clusters:
       f2: [2, first]
       f3: [3, first]
       back: [1, last]
+      mount-point: [0, last]
       far-right: [last, last]
       near-right: [last, first]
   thumb:
@@ -461,7 +462,7 @@ case:
       - key-alias: near-right
         key-corner: ESE
 mcu:
-  type: promicro
+  type: bluepill
   margin: 0.25
   position:
     prefer-rear-housing: true
@@ -469,7 +470,7 @@ mcu:
     corner: ENE
     offset: [-1, 0, 2]
   support:
-    style: lock
+    style: stop
     height-factor: 0.5
     lateral-spacing: 2.5
     lock:
@@ -484,7 +485,7 @@ mcu:
         mount-length: 10
         mount-thickness: 6
     stop:
-      key-alias: back
+      key-alias: mount-point
       direction: east
       gripper:
         notch-depth: 0.4

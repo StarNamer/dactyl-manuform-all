@@ -118,7 +118,7 @@
 (spec/def ::supported-switch-style #{:alps :mx})
 (spec/def ::supported-cluster-style #{:standard :orthographic})
 (spec/def ::supported-cap-style #{:flat :socket :button})
-(spec/def ::supported-mcu-type #{:promicro})
+(spec/def ::supported-mcu-type #{:promicro :bluepill})
 (spec/def ::supported-mcu-support-style #{:lock :stop})
 (spec/def ::supported-wrist-rest-style #{:threaded :solid})
 (spec/def ::flexcoord (spec/or :absolute int? :extreme #{:first :last}))

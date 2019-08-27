@@ -60,7 +60,8 @@
         pcb (case mcu-type
               :promicro (merge pcb-base {:width 18 :length 33})
               :teensy (merge pcb-base {:width 17.78 :length 35.56})
-              :teensy++ (merge pcb-base {:width 17.78 :length 53}))]
+              :teensy++ (merge pcb-base {:width 17.78 :length 53})
+              :bluepill (merge pcb-base {:width 22.5 :length 53}))]
    {:pcb pcb
     :connector (:micro usb-a-female-dimensions)
     :support-height (* (getopt :mcu :support :height-factor) (:width pcb))}))
@@ -143,26 +144,7 @@
 
 (defn mcu-stop [getopt]
   "The stop style of MCU support, in place."
-  (let [prop (partial getopt :mcu :derived)
-        {pcb-x :thickness pcb-y :length pcb-z :width} (prop :pcb)
-        alias (getopt :mcu :support :stop :key-alias)
-        keyinfo (getopt :key-clusters :derived :aliases alias)
-        {cluster :cluster coordinates0 :coordinates} keyinfo
-        direction (getopt :mcu :support :stop :direction)
-        opposite (turning-left (turning-left direction))
-        coordinates1 (walk-matrix coordinates0 direction)
-        post (fn [coord corner]
-               (cluster-place getopt cluster coord
-                 (mount-corner-post getopt corner)))]
-    (union
-      (mcu-position getopt (mcu-gripper getopt 1))
-      (hull
-        ;; Connect the back half of the gripper to two key mounts.
-        (mcu-position getopt (mcu-gripper getopt 0.5))
-        (post coordinates0 [direction (turning-left direction)])
-        (post coordinates0 [direction (turning-right direction)])
-        (post coordinates1 [opposite (turning-left direction)])
-        (post coordinates1 [opposite (turning-right direction)])))))
+  (mcu-position getopt (mcu-gripper getopt 1)))
 
 (defn mcu-lock-fixture-positive [getopt]
   "Parts of the lock-style MCU support that integrate with the case.
