@@ -16,7 +16,7 @@ To print these files, the 3d printer must at least be able to print `200 * 200 *
 
 `.stl` file is under [combined/bin](combined/bin) folder and `.scad` file is under [combined/src](combined/src) folder.
 
-To connect `bottom` and `top`, 3 ??? screw is needed for each side.
+![screw: #4 or m3](image/combined.png)
 
 ## Separate
 
@@ -34,7 +34,7 @@ To print these files, the 3d printer must at least be able to print `200 * 150 *
 
 `.stl` file is under [separate/bin](separate/bin) folder and `.scad` file is under [separate/src](separate/src) folder.
 
-We can use 6 ??? screw to connect `bottom`, `rest` and `stand` together on each side; and then 3 ??? screw to connect with `top`.
+![screw: #4 or m3](image/separate.png)
 
 ## OpenSCAD
 
