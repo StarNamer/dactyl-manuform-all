@@ -18,6 +18,9 @@
 
 *Instructions:*
 1. 3d print every file in [things/separate/bin](../things/separate/bin).
+2. Use \#8 screws connect `bottom`, `stand` and `rest` part together (for both left and right), as picture shown below.
+
+![TODO](image/step1opt2.png)
 
 For details about this step, please check [things/README.md](../things/README.md). 
 
