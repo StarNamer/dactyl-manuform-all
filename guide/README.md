@@ -8,7 +8,7 @@
 - 3d printer.
 
 *Instructions:*
-1. 3d print every file in [things/combined/bin](../combined/bin).
+1. 3d print every file in [things/combined/bin](../things/combined/bin).
 
 #### Option 2
 
@@ -17,7 +17,7 @@
 - \#8 screws (or M4 screws) × 12
 
 *Instructions:*
-1. 3d print every file in [things/separate/bin](../separate/bin).
+1. 3d print every file in [things/separate/bin](../things/separate/bin).
 
 For details about this step, please check [things/README.md](../things/README.md). 
 
