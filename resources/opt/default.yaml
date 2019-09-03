@@ -468,7 +468,7 @@ mcu:
     prefer-rear-housing: true
     key-alias: back
     corner: ENE
-    offset: [-1, 0, 2]
+    offset: [0, 0, 0.5]
   support:
     style: stop
     height-factor: 0.5
@@ -486,6 +486,7 @@ mcu:
         mount-thickness: 6
     stop:
       key-alias: mount-point
+      bed-length: 5
       direction: east
       gripper:
         notch-depth: 0.4

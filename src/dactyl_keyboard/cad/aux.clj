@@ -134,17 +134,47 @@
         notch-base (prop :notch-depth)
         notch-y (- notch-base margin)
         grip-x (prop :grip-width)
-        x (+ (* 2 grip-x) pcb-x margin)
+        x (* 2 (+ (* 2 grip-x) pcb-x margin))
         y-base (prop :total-depth)
         y (* depth-factor y-base)
         gripper-y-center (/ (- (* 2 y-base) y) 2)
         z (getopt :mcu :derived :support-height)]
-   (translate [0 (- notch-y pcb-y gripper-y-center) 0]
+   (translate [(* -0.25 x) (- notch-y pcb-y gripper-y-center) 0]
      (cube x y z))))
 
 (defn mcu-stop [getopt]
   "The stop style of MCU support, in place."
   (mcu-position getopt (mcu-gripper getopt 1)))
+
+(defn mcu-stop-fixture-positive [getopt]
+  "Parts of the lock-style MCU support that integrate with the case.
+  These comprise a bed for the bare side of the PCB to lay against and a socket
+  that encloses the USB connector on the MCU to stabilize it, since integrated
+  USB connectors are usually surface-mounted and therefore fragile."
+  (let [prop (partial getopt :mcu :derived)
+        {pcb-x :thickness pcb-y :length} (prop :pcb)
+        {usb-x :height usb-y :length usb-z :width} (prop :connector)
+        bed-x (getopt :mcu :support :lateral-spacing)
+        bed-y (getopt :mcu :support :stop :bed-length)
+        thickness (getopt :mcu :support :lock :socket :thickness)
+        socket-x-thickness (+ (/ usb-x 2) thickness)
+        socket-x-offset (+ (/ pcb-x 2) (* 3/4 usb-x) (/ thickness 2))
+        socket-z (+ usb-z (* 2 thickness))]
+   (mcu-position getopt
+     (union
+       (translate [(+ (/ bed-x -2) (/ pcb-x -2)) (/ bed-y -2) 0]
+         (cube bed-x bed-y (getopt :mcu :derived :support-height)))
+       (hull
+         ;; Purposely ignore connector overshoot in placing the socket.
+         ;; This has the advantages that the lock itself can also be stabilized
+         ;; by the socket, while the socket does not protrude outside the case.
+         (translate [socket-x-offset (/ usb-y -2) 0]
+           (cube socket-x-thickness usb-y socket-z))
+         ;; Stabilizers for the socket:
+         (translate [10 0 0]
+           (cube 1 1 socket-z))
+         (translate [socket-x-offset 0 0]
+           (cube 1 1 (+ socket-z 6))))))))
 
 (defn mcu-lock-fixture-positive [getopt]
   "Parts of the lock-style MCU support that integrate with the case.

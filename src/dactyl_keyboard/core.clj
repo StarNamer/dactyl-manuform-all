@@ -26,6 +26,23 @@
   "Apply passed function to all key clusters."
   (apply union (map (partial function getopt) key/clusters)))
 
+(defn build-mcu-box [getopt]
+  (difference 
+    (union
+      (if (= (getopt :mcu :support :style) :stop)
+        (aux/mcu-stop getopt))
+      (aux/connection-positive getopt)
+      (if (getopt :case :back-plate :include) (aux/backplate-block getopt))
+      (if (getopt :case :rear-housing :include) (body/rear-housing getopt)) 
+      (aux/mcu-stop-fixture-positive getopt)
+      (sandbox/positive getopt))
+    (aux/connection-negative getopt)
+    (aux/mcu-negative getopt)
+    (if (getopt :case :back-plate :include)
+      (aux/backplate-fastener-holes getopt))
+    (sandbox/negative getopt)
+    ))
+
 (defn build-keyboard-right [getopt]
   "Right-hand-side keyboard model."
   (union
@@ -41,17 +58,19 @@
               :threaded (wrist/case-plate getopt)))
           (if (= (getopt :mcu :support :style) :stop)
             (aux/mcu-stop getopt))
+          (if (= (getopt :mcu :support :style) :stop)
+            (aux/mcu-stop-fixture-positive getopt))
           (aux/connection-positive getopt)
           (aux/foot-plates getopt)
           (if (getopt :case :back-plate :include) (aux/backplate-block getopt))
           (if (getopt :case :rear-housing :include) (body/rear-housing getopt))
           (body/wall-tweaks getopt)
+          (aux/mcu-lock-fixture-positive getopt)
           (sandbox/positive getopt))
         (metacluster key/cluster-cutouts getopt)
         (metacluster key/cluster-channels getopt)
         (aux/connection-negative getopt)
         (aux/mcu-negative getopt)
-        (aux/mcu-alcove getopt)
         (if (= (getopt :mcu :support :style) :lock)
           (aux/mcu-lock-sink getopt))
         (if (getopt :case :leds :include) (aux/led-holes getopt))
@@ -124,6 +143,7 @@
                (scad-file (str "left-hand-" basename) (mirror [-1 0 0] model)))]
    (scad-file "preview-keycap" (key/all-keycaps getopt))
    (pair "case" (build-keyboard-right getopt))
+   (pair "mcu-box" (build-mcu-box getopt))
    (if (= (getopt :mcu :support :style) :lock)
      (scad-file "mcu-lock-bolt" (aux/mcu-lock-bolt getopt)))
    (if (getopt :wrist-rest :include)

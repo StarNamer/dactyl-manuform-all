@@ -910,6 +910,13 @@
     "to a hull of four neighbouring key mount corners in this direction."]
    [:section [:mcu :support :stop :gripper]
     "The shape of the part that grips the PCB."]
+   [:parameter [:mcu :support :stop :bed-length]
+    {:default 1 :parse-fn num}
+    "The horizontal depth of the bed length in the gripper that holds the PCB. "
+    "The larger this number, the more flexible the case has to be to allow "
+    "assembly.\n\n"
+    "Note that while this is similar in effect to `lock`-style `overshoot`, "
+    "it is a separate parameter because of the flexion limit."]
    [:parameter [:mcu :support :stop :gripper :notch-depth]
     {:default 1 :parse-fn num}
     "The horizontal depth of the notch in the gripper that holds the PCB. "
