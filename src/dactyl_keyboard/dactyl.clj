@@ -605,6 +605,31 @@
 (def usb-holder-hole
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+(def trrs-diameter 9)
+(def trrs-radius (/ trrs-diameter 2))
+(def trrs-hole-depth 10)
+
+(def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
+                           (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
+                                (translate [0 (/ (+ trrs-radius 5) 2) 0])))
+                    (rotate (/ π 2) [1 0 0])
+                    (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+                    (with-fn 50)))
+(def trrs-hole-just-circle
+  (->> (cylinder trrs-radius trrs-hole-depth)
+       (rotate (/ π 2) [1 0 0])
+       (translate rj9-position)
+       (with-fn 50)))
+
+(def trrs-box-hole (->> (cube 14 14 7 )
+                        (translate [0 1 -3.5])))
+
+
+(def trrs-cutout
+  (->> (union trrs-hole
+              trrs-box-hole)
+      (translate rj9-position)))
+
 
 (def teensy-width 20)  
 (def teensy-height 12)
@@ -698,19 +723,23 @@
 
 (def model-right (difference 
                    (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
+                    ; key-holes
+                    ; connectors
+                    ; thumb
+                    ; thumb-connectors
                     (difference (union case-walls 
-                                       screw-insert-outers 
-                                       teensy-holder
+                                      ;  screw-insert-outers 
+                                      ;  teensy-holder
                                        usb-holder)
-                                rj9-space 
+                                ; rj9-space
+                                trrs-hole-just-circle
                                 usb-holder-hole
                                 screw-insert-holes)
-                    rj9-holder
-                    wire-posts
+                    ; rj9-holder
+                    ; trrs-cutout
+
+                    
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
