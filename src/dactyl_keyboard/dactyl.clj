@@ -585,9 +585,9 @@
 
 (def trs-start  (map + [0 -3  0] (key-position 0 0 (map + (wall-locate3 0 1) [0 (/ mount-height  2) 0]))))
 (def trs-position  [(first trs-start) (second trs-start) 11])
-(def trs-cylinder (cylinder 4, 20))
+(def trs-cylinder (cylinder (/ 5.85 2), 20))
 (def trs-cut
-  (translate [5, 0, 0] (rotate (/ π -2) [1 0 0] trs-cylinder)))
+  (translate [3, 0, 0] (rotate (/ π -2) [1 0 0] trs-cylinder)))
 
 (def trs-space (translate trs-position trs-cut))
 
