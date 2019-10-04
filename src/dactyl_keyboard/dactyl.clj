@@ -650,7 +650,7 @@
                    thumb-connectors
                    (difference (union case-walls
                                       screw-insert-outers
-                                      teensy-holder
+                                      ; teensy-holder
                                       usb-holder)
                                trs-space
                                usb-holder-hole
