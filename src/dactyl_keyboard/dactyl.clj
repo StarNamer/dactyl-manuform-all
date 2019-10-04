@@ -628,11 +628,12 @@
          (translate [(first position) (second position) (/ height 2)]))))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0 0         bottom-radius top-radius height)
-         (screw-insert 0 lastrow   bottom-radius top-radius height)
-         (screw-insert 2 (+ lastrow 0.3)  bottom-radius top-radius height)
-         (screw-insert 3 0         bottom-radius top-radius height)
-         (screw-insert lastcol 1   bottom-radius top-radius height)))
+  (union
+   (screw-insert 0 0                 bottom-radius top-radius height)
+   (screw-insert 0 (- lastrow 0.175) bottom-radius top-radius height)
+   (screw-insert 2 (+ lastrow 0.3)   bottom-radius top-radius height)
+   (screw-insert 3 0                 bottom-radius top-radius height)
+   (screw-insert lastcol 1           bottom-radius top-radius height)))
 (def screw-insert-height 3.8)
 (def screw-insert-bottom-radius (/ 3.6 2))
 (def screw-insert-top-radius (/ 3.6 2))
