@@ -676,4 +676,7 @@
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
 
+(spit "things/teensy-holder.scad"
+      (write-scad teensy-holder))
+
 (defn -main [dum] 1)  ; dummy to make it easier to batch
