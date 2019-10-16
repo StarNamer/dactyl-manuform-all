@@ -6,14 +6,16 @@
             [unicode-math.core :refer :all]))
 
 
-(defn deg2rad [degrees]
-  (* (/ degrees 180) pi))
+(defn deg2rad
+  "Convert degrees to radians."
+  [degrees]
+  (* (/ degrees 180) π))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
+(def nrows 4)  ; for 2 & 3 columns only, the rest is less by 1
 (def ncols 5)
 (def switch-type :kailh-low)  ; possible values :kailh-low, :alps (original)
 
@@ -56,9 +58,9 @@
 ;; General variables ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(def lastrow (dec nrows))
-(def cornerrow (dec lastrow))
-(def lastcol (dec ncols))
+(def lastrow (dec nrows))  ; index of the last row
+(def cornerrow (dec lastrow))  ; might be an index of the last row in the shortest column
+(def lastcol (dec ncols))  ; index of the last column
 
 ;;;;;;;;;;;;;;;;;
 ;; Switch Hole ;;
@@ -156,7 +158,9 @@
 (def columns (range 0 ncols))
 (def rows (range 0 nrows))
 
+; curvature depends on this parameter
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
+; TODO figure out radius magic
 (def row-radius (+ (/ (/ (+ mount-height extra-height) 2)
                       (Math/sin (/ α 2)))
                    cap-top-height))
@@ -166,11 +170,13 @@
 (def column-x-delta (+ -1 (- (* column-radius (Math/sin β)))))
 (def column-base-angle (* β (- centercol 2)))
 
-(defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]
-  (let [column-angle (* β (- centercol column))   
+(defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape shape-type]
+  (let [type-coefficient (if (= shape-type :key) 0 0.5)
+        column-angle (* β (- centercol column type-coefficient))
+        row-angle (* α (- centerrow row type-coefficient))
         placed-shape (->> shape
                           (translate-fn [0 0 (- row-radius)])
-                          (rotate-x-fn  (* α (- centerrow row)))      
+                          (rotate-x-fn  row-angle)      
                           (translate-fn [0 0 row-radius])
                           (translate-fn [0 0 (- column-radius)])
                           (rotate-y-fn  column-angle)
@@ -179,7 +185,7 @@
         column-z-delta (* column-radius (- 1 (Math/cos column-angle)))
         placed-shape-ortho (->> shape
                                 (translate-fn [0 0 (- row-radius)])
-                                (rotate-x-fn  (* α (- centerrow row)))      
+                                (rotate-x-fn  row-angle)      
                                 (translate-fn [0 0 row-radius])
                                 (rotate-y-fn  column-angle)
                                 (translate-fn [(- (* (- column centercol) column-x-delta)) 0 column-z-delta])
@@ -188,7 +194,7 @@
                                 (rotate-y-fn  (nth fixed-angles column))
                                 (translate-fn [(nth fixed-x column) 0 (nth fixed-z column)])
                                 (translate-fn [0 0 (- (+ row-radius (nth fixed-z column)))])
-                                (rotate-x-fn  (* α (- centerrow row)))      
+                                (rotate-x-fn  row-angle)      
                                 (translate-fn [0 0 (+ row-radius (nth fixed-z column))])
                                 (rotate-y-fn  fixed-tenting)
                                 (translate-fn [0 (second (column-offset column)) 0])
@@ -204,7 +210,13 @@
   (apply-key-geometry translate 
     (fn [angle obj] (rotate angle [1 0 0] obj)) 
     (fn [angle obj] (rotate angle [0 1 0] obj)) 
-    column row shape))
+    column row shape :key))
+
+(defn trackpoint-place [column row shape]
+  (apply-key-geometry translate
+    (fn [angle obj] (rotate angle [1 0 0] obj)) 
+    (fn [angle obj] (rotate angle [0 1 0] obj)) 
+    column row shape :trackpoint))
 
 (defn rotate-around-x [angle position] 
   (mmul 
@@ -221,7 +233,7 @@
    position))
 
 (defn key-position [column row position]
-  (apply-key-geometry (partial map +) rotate-around-x rotate-around-y column row position))
+  (apply-key-geometry (partial map +) rotate-around-x rotate-around-y column row position :key))
 
 
 (def key-holes
@@ -703,6 +715,20 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
+(def trackpoint-width 26)
+; TODO always use the same position no matter how many rows
+(def trackpoint-mount
+  (let [plate (trackpoint-place 0 1 (cube (- trackpoint-width 2) 15 3))
+        key-hole (cube keyswitch-width keyswitch-height 20)]
+    (difference
+      plate
+      (key-place 0 1 key-hole)
+      (key-place 0 2 key-hole)
+      (key-place 1 1 key-hole)
+      (key-place 1 2 key-hole))))
+
+(def trackpoint-hole
+  (trackpoint-place 0 1 (binding [*fn* 30] (cylinder 3 15))))
 
 (def model-right (difference 
                    (union
@@ -718,12 +744,14 @@
                                 usb-holder-hole
                                 screw-insert-holes)
                     rj9-holder
-                    wire-posts
+                    trackpoint-mount
+                    ; TODO uncomment & adapt wire-posts after trackpoint's done
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
-                  ))
+                   trackpoint-hole))
 
 (spit "things/right.scad"
       (write-scad model-right))
