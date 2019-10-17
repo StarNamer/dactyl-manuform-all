@@ -606,7 +606,7 @@
     (->> (cube 4 teensy-holder-top-length 4)
          (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
    (translate [(- teensy-holder-width) 0 0])
-   (translate [-1.4 0 0])
+   (translate [-1.5 0 0])
    (translate [(first teensy-top-xy)
                (- (second teensy-top-xy) 1)
                (/ (+ 6 teensy-width) 2)])))
@@ -651,7 +651,7 @@
                    thumb-connectors
                    (difference (union case-walls
                                       screw-insert-outers
-                                      ; teensy-holder
+                                      teensy-holder
                                       usb-holder)
                                trs-space
                                usb-holder-hole
