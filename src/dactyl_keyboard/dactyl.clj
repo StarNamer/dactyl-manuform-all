@@ -661,13 +661,13 @@
 )
                   (translate [0 0 -20] (cube 350 350 40))))
 
-(spit "things/right.scad"
+(spit "things/right-case.scad"
       (write-scad [:fn 20] model-right))
 
-(spit "things/left.scad"
+(spit "things/left-case.scad"
       (write-scad [:fn 20] (mirror [-1 0 0] model-right)))
 
-(spit "things/right-plate.scad"
+(spit "things/right-plate-outline.scad"
       (write-scad [:fn 20]
                   (cut
                    (translate [0 0 -0.1]
