@@ -11,6 +11,9 @@ openscad -o things/switch-hole.stl things/switch-hole.scad
 echo "generating teensy-holder.stl"
 openscad -o things/teensy-holder.stl things/teensy-holder.scad
 
+echo "generating insert-holder.stl"
+openscad -o things/insert-holder.stl things/insert-holder.scad
+
 echo "generating right-plate-outline.dxf"
 openscad -o things/right-plate-outline.dxf things/right-plate-outline.scad
 
