@@ -634,10 +634,10 @@
    (screw-insert 2 (+ lastrow 0.3)   bottom-radius top-radius height)
    (screw-insert 3 0                 bottom-radius top-radius height)
    (screw-insert lastcol 1           bottom-radius top-radius height)))
-(def screw-insert-height 3.8)
+(def screw-insert-height 4)
 (def screw-insert-bottom-radius (/ 3.6 2))
 (def screw-insert-top-radius (/ 3.6 2))
-(def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
+(def screw-insert-holes  (translate [0, 0, -0.1] (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height)))
 (def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
 (def screw-insert-single (difference
