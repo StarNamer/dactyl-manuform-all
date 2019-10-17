@@ -662,19 +662,19 @@
                   (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/right.scad"
-      (write-scad model-right))
+      (write-scad [:fn 20] model-right))
 
 (spit "things/left.scad"
-      (write-scad (mirror [-1 0 0] model-right)))
+      (write-scad [:fn 20] (mirror [-1 0 0] model-right)))
 
 (spit "things/right-plate.scad"
-      (write-scad
-       (cut
-        (translate [0 0 -0.1]
-                   (difference (union case-walls
+      (write-scad [:fn 20]
+                  (cut
+                   (translate [0 0 -0.1]
+                              (difference (union case-walls
                                       ; teensy-holder
-                                      screw-insert-outers)
-                               (translate [0 0 -10] screw-insert-screw-holes))))))
+                                                 screw-insert-outers)
+                                          (translate [0 0 -10] screw-insert-screw-holes))))))
 
 (spit "things/switch-hole.scad"
       (write-scad single-plate))
@@ -683,6 +683,6 @@
       (write-scad teensy-holder))
 
 (spit "things/insert-holder.scad"
-      (write-scad screw-insert-single))
+      (write-scad [:fn 20] screw-insert-single))
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
