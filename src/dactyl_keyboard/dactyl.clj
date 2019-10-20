@@ -11,27 +11,28 @@
 
 (def keyswitch-height 14.4) ;; Was 14.1, then 14.25
 (def keyswitch-width 14.4)
+(def keyborder (- 17.4 keyswitch-width)) ; 17.4 is a safe value even us SA keycaps
 
 (def sa-profile-key-height 12.7)
 
 (def plate-thickness 4)
-(def mount-width (+ keyswitch-width 3))
-(def mount-height (+ keyswitch-height 3))
+(def mount-width (+ keyswitch-width keyborder))
+(def mount-height (+ keyswitch-height keyborder))
 
 (def old-single-plate
-  (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+  (let [top-wall (->> (cube (+ keyswitch-width keyborder) (/ keyborder 2) plate-thickness)
                       (translate [0
-                                  (+ (/ 1.5 2) (/ keyswitch-height 2))
+                                  (+ (/ (/ keyborder 2) 2) (/ keyswitch-height 2))
                                   (/ plate-thickness 2)]))
-        left-wall (->> (cube 1.7 (+ keyswitch-height 3) plate-thickness)
-                       (translate [(+ (/ 1.3 2) (/ keyswitch-width 2))
+        left-wall (->> (cube (/ keyborder 2) (+ keyswitch-height keyborder) plate-thickness)
+                       (translate [(+ (/ (/ keyborder 2) 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 plate-thickness)
-                                 (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
+                      (hull (->> (cube (/ keyborder 2) 2.75 plate-thickness)
+                                 (translate [(+ (/ (/ keyborder 2) 2) (/ keyswitch-width 2))
                                              0
                                              (/ plate-thickness 2)]))))
         plate-half (union top-wall left-wall (with-fn 100 side-nub))]
