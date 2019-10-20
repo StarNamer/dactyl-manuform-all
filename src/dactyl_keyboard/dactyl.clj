@@ -530,9 +530,16 @@
            (key-place -1 0 web-post-tl)
            (key-place -1 0 web-post-tr))
 
+     (hull (place (- 5 1/2) 0 (translate [0 -1 0.5] wall-sphere-bottom-back-top))
+           (place right-wall-column 0.02 (translate [-1.5 -1 3] (wall-sphere-bottom 1 1)))
+           (key-place 5 0 web-post-tl)
+           (key-place 5 0 web-post-tr))
+     (hull (place (- 5 1/2) 0 (translate [0 -1 0.5] wall-sphere-bottom-back-top))
+           (key-place 5 0 web-post-tl)
+           (key-place (- 5 1) 0 web-post-tr))
 
      (apply union
-            (for [x (range 0 6)]
+            (for [x (range 0 5)]
               (union
                (hull (place (- x 1/2) 0 (translate [0 -1 0.5] wall-sphere-bottom-back-top))
                      (place (+ x 1/2) 0 (translate [0 -1 0.5] wall-sphere-bottom-back-top))
@@ -564,8 +571,9 @@
                      (place right-wall-column 0.02 (translate [-1.5 -1 3] (wall-sphere-bottom 1 1)))
                      (key-place 5 0 web-post-tr))
                (hull (place right-wall-column 4 (translate [-1.5 0 3] (wall-sphere-bottom 1/2 top-sphere-size)))
-                     (place right-wall-column 4 (translate [-1.5 2 3] (wall-sphere-bottom 0 1)))
-                     (key-place 5 4 web-post-br)))])))))
+                     (place right-wall-column 4 (translate [-1.5 1.5 0.5] wall-sphere-bottom-front-top))
+                     (key-place 5 4 web-post-br))
+               )])))))
 
 (def left-wall
   (let [place case-place]
@@ -671,7 +679,7 @@
         thumb-br (->> web-post-br
                       (translate [-0 (- plate-height) 0]))]
     (union
-     (hull (place thumb-right-wall thumb-front-row wall-sphere-bottom-front-top)
+     (hull (place thumb-right-wall thumb-front-row (translate [0 1 0.8] wall-sphere-bottom-front-top))
            (key-place 1 4 web-post-bl)
            (place 0 -1/2 thumb-br)
            (place 0 -1/2 web-post-br)
@@ -682,7 +690,7 @@
            (place 2 -1 web-post-bl)
            (place 2 -1 web-post-br))
 
-     (hull (place thumb-right-wall thumb-front-row (translate [0 1 1] wall-sphere-bottom-front-top))
+     (hull (place thumb-right-wall thumb-front-row (translate [0 1 0.8] wall-sphere-bottom-front-top))
            (place (+ 1/2 0.05) thumb-front-row (translate [0 1 1] wall-sphere-bottom-front-top))
            (place 0 -1/2 thumb-bl)
            (place 0 -1/2 thumb-br))
