@@ -930,7 +930,9 @@
                          (hull
                           (case-place left-wall-column 3  (translate [0.9 3 1] wall-sphere-bottom-back))
                           (thumb-place 3/2 thumb-back-y (translate [0 -1 1] wall-sphere-bottom-back))
-           (key-place -1 2 web-post-bl)
+                          (key-place -1 2 web-post-bl)
+                          (thumb-place 1 1 web-post-bl)
+                          (key-place -1 3 web-post-tl)
                           (thumb-place 1 1 web-post-tl))
                           ]
          thumb-left-wall [(hull
@@ -971,9 +973,9 @@
                                  (thumb-place 0 -1 web-post-bl)
                                  (thumb-place 0 -1 web-post-br))]
          thumb-inside [(triangle-hulls
-                        (key-place -1 3 web-post-tl)
+                        (thumb-place 1 1 web-post-br)
                         (key-place -1 3 web-post-tr)
-                        (thumb-place 1 1 web-post-bl)
+                        (key-place -1 3 web-post-tl)
                         (thumb-place 1 1 web-post-br)
                         (key-place -1 3 web-post-tr)
                         (key-place 0 3 web-post-tl)
@@ -989,6 +991,11 @@
                         (key-place 1 4 web-post-tl)
                         (key-place 1 4 half-post-bl)
                         )
+                       (hull
+                        (key-place -1 3 web-post-tl)
+                        (thumb-place 1 1 web-post-br)
+                        (thumb-place 1 1 web-post-bl)
+                       )
 
                        (hull
                          (thumb-place 1 1 web-post-tl)
@@ -1012,7 +1019,8 @@
                         (thumb-place 0 -1/2 web-post-br)
                         (thumb-place thumb-right-wall thumb-front-row (translate [-1 1 1] wall-sphere-bottom-front))
                         (case-place 0.7 4 (translate [0 1 0] wall-sphere-bottom-front))
-                        (key-place 1 4 half-post-bl))]
+                        (key-place 1 4 half-post-bl))
+                       ]
          stands (let [bumper-diameter 8.4
                       bumper-radius (/ bumper-diameter 2)
                       stand-diameter (+ bumper-diameter 2)
