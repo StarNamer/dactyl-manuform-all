@@ -1211,34 +1211,80 @@
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (translate [0 0 0.8] (circuit-cover teensy-width teensy-length teensy-height)))
 
-(def trrs-diameter 6.6)
+(def trrs-diameter 8)
+(def trrs-outer-diameter 10.2)
 (def trrs-radius (/ trrs-diameter 2))
-(def trrs-hole-depth 10)
+(def trrs-outer-radius (/ trrs-outer-diameter 2))
+(def trrs-hole-depth 21)
+(def trrs-offset -5.1)
 
-(def trrs-hole (->> (
-  union
-    (cube 6.5 5.5 12.5)
+(def trrs-cut
+  (->> 
+    (hull
+      (->>
+        (cube trrs-diameter trrs-diameter trrs-hole-depth)
+        (translate [ 0 10 0 ])
+      )
       (->>
         (cylinder trrs-radius trrs-hole-depth)
-        (translate [ 0 0 -5])))
-          (rotate (/ π 2) [1 0 0])
-          (translate [0 4 (- (+ trrs-radius 0.1))])
-          (with-fn 50)))
+        (translate [ 0 trrs-offset 0 ])
+      )
+    )
+      (rotate (/ π 2) [1 0 0])
+      (translate [ 0 4 0 ])
+      (with-fn 50)
+  )
+)
 
-(def trrs-hole-just-circle
-  (->> (cylinder trrs-radius trrs-hole-depth)
-       (rotate (/ π 2) [1 0 0])
-       (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
-       (with-fn 50)
-       (key-place 1/2 0)))
+(def trrs-shell-ring
+  (->>
+    (difference
+      (hull
+        (cylinder (+ trrs-outer-radius 0.6) trrs-hole-depth)
+        (translate [0 (- (+ trrs-outer-radius 0.6) -0.5) 1.5] (cube (* (+ trrs-outer-radius 0.6) 2) 1 (+ trrs-hole-depth 3)))
+      )
+      (translate [0 3 -4.5] (rotate (/ π 8) [ -1 0 0 ] (cube 15 10 6)))
+      (translate [0 -6.3 13] (rotate (/ π 2.8) [ 1 0 0 ] (cube 15 10 6)))
+      (translate [0 3 3.5] (cube 15 9 trrs-hole-depth))
+    )
+      (translate [ 0 trrs-offset 0 ])
+      (rotate (/ π 2) [1 0 0])
+      (translate [ 0 2.3 0 ])
+      (with-fn 50)
+  )
+)
 
-(def trrs-box-hole (->> (cube 14 14 7 )
-                        (translate [0 1 -3.5])))
+(def trrs-ring
+  (->>
+    (hull
+      (->>
+        (cube trrs-outer-diameter trrs-outer-diameter 1.6)
+        (translate [ 0 10 0 ])
+      )
+      (cylinder trrs-outer-radius 1.6)
+    )
+      (translate [ 0 trrs-offset 0 ])
+      (rotate (/ π 2) [1 0 0])
+      (translate [ 0 9.5 0 ])
+      (with-fn 50)
+  )
+)
 
+(defn trrs-pos [obj]
+  (->> obj (key-place 1/2 0))
+)
 
 (def trrs-cutout
-  (->> (union trrs-hole)
-       (key-place 1/2 0)))
+  (->> (trrs-pos trrs-cut))
+)
+
+(def trrs-shell
+  (->> (trrs-pos trrs-shell-ring))
+)
+
+(def trrs-ring-cutout
+  (->> (trrs-pos trrs-ring))
+)
 
 (def teensy-pcb-thickness 1.6)
 (def teensy-offset-height 3.5)
@@ -1300,13 +1346,15 @@
     (difference
       (union
      bottom-plate
+     trrs-shell
     screw-hole-holders
         )
      (hull teensy-cover)
      new-case
      teensy-cover
-     trrs-cutout
      screw-nut-holes
+     trrs-cutout
+     trrs-ring-cutout
      screw-holes))
      (->> (cube 1000 1000 10) (translate [0 0 -5.8]))
    )
@@ -1330,7 +1378,6 @@
           thumb
           teensy-clamp
           new-case)
-   trrs-hole-just-circle
    screw-holes
    ))
 
@@ -1344,7 +1391,6 @@
                   connectors
                   thumb
                   new-case)
-           trrs-hole-just-circle
            screw-holes)))
 
 (def teensy-parts
