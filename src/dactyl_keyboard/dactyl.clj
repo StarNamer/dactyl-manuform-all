@@ -9,13 +9,13 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.4) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.4)
+(def keyswitch-height 14) ;; Was 14.1, then 14.25
+(def keyswitch-width 14)
 (def keyborder (- 17.4 keyswitch-width)) ; 17.4 is a safe value even us SA keycaps
 
 (def sa-profile-key-height 12.7)
 
-(def plate-thickness 4)
+(def plate-thickness 5)
 (def mount-width (+ keyswitch-width keyborder))
 (def mount-height (+ keyswitch-height keyborder))
 
@@ -737,7 +737,7 @@
                 ]
             (->> bottom-front-key-guard
                  (key-place column row))))
-   (let [shift #(translate [0 0 (+ (- web-thickness) -5)] %)
+   (let [shift #(translate [0 0 (+ (- web-thickness) -6)] %)
          web-post-tl (shift web-post-tl)
          web-post-tr (shift web-post-tr)
          web-post-br (shift web-post-br)
