@@ -1,3 +1,26 @@
+# Anorak Dactyl ManuForm Keyboard
+
+This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard). The Dactyl-Manuform is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard) with the thumb cluster from [ManuForm](https://github.com/jeffgran/ManuForm).
+
+Some of the features of l4u's [Dactyl ManuForm Mini Keyboard](https://github.com/l4u/dactyl-manuform-mini-keyboard) changes are merget into the anorak variant of the keyboard.
+
+## Features
+
+- Sidenubs for switches 
+  - The use of sidenubs can be disabled. Sidenub should be disabled if you use Kailh, and Outemu. If you use Cherry MX, Gateron or Zealios switches, you can enable the sidenubs.
+- Spaces for rentention tabs are added.
+- Wire posts are removed. 
+- A micro USB mount is used. A breakout board, or an extension cable can be used.
+- Screw posts are moved inside. The holes are designed for TRISERT® thread inserts 145m3.
+- More screw posts (I like to have lots of screws...)
+- The hoder for the µCPU has been removed
+
+## Variables to modify
+
+
+
+# The Original Stuff
+
 # The Dactyl-ManuForm Keyboard
 This is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard), a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
