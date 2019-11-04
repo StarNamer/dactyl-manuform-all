@@ -17,6 +17,13 @@ Some of the features of l4u's [Dactyl ManuForm Mini Keyboard](https://github.com
 
 ## Variables to modify
 
+- ncols/nrows: number of columns and rows, e.g. 6x6, 5x6, ...
+- pinky-15u: enable 1.5u wide pinky row (leftmost/rightmost column)
+- create-side-nubs: enable side nubs for Cherry MX, Gateron or Zealios switches
+- plate-thickness: thickness of plate holding switch (good are 2-4)
+- web-thickness: the web holds the plate (2-4)
+- keyboard-z-offset: controls overall height; original=9 with centercol=3; use 16 for centercol=2
+
 
 
 # The Original Stuff
