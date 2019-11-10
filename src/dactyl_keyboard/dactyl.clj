@@ -1055,11 +1055,11 @@
                   [
                    (difference
                      (hull
-                       (stand-at #(key-place -2 -0.1 %))
+                       (stand-at #(key-place -2 -0.6 %))
                        (stand-top #(key-place -1 1 %))
                      )
                      (stand-cut #(key-place -1 1 %))
-                     (stand-bump-cut #(key-place -2 -0.1 %))
+                     (stand-bump-cut #(key-place -2 -0.6 %))
                    )
                    (difference
                      (hull
@@ -1071,11 +1071,11 @@
                    )
                    (difference
                      (hull
-                       (stand-at #(key-place 5.1 0 %))
+                       (stand-at #(key-place 5.1 -0.3 %))
                        (stand-top #(key-place 4.9 0.5 %))
                      )
                      (stand-cut #(key-place 4.9 0.5 %))
-                     (stand-bump-cut #(key-place 5.1 0 %))
+                     (stand-bump-cut #(key-place 5.1 -0.3 %))
                    )
                    (difference
                      (hull
