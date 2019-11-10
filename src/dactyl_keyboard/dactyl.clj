@@ -1101,9 +1101,17 @@
              stands
              )))))
 
-(def screw-hole (->> (cylinder 1.5 60)
-                     (translate [0 0 19])
-                     (with-fn wall-sphere-n)))
+(def screw-hole (->> (union
+                      (->>
+                        (cylinder 2 2.5) (with-fn wall-sphere-n)
+                        (translate [0 0 2.85])
+                      )
+                      (->>
+                        (cylinder 1.5 60)
+                        (translate [0 0 19])
+                        (with-fn wall-sphere-n)
+                      )
+                     )))
 
 (def screw-hole-holder (->> (hull (cylinder 2.5 4.5)
                                   (translate [0 0 -3] (cylinder 8 0.001))
@@ -1323,7 +1331,8 @@
           teensy-clamp
           new-case)
    trrs-hole-just-circle
-   screw-holes))
+   screw-holes
+   ))
 
 (def dactyl-top-right-case
   new-case)
