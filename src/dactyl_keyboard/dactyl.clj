@@ -1111,7 +1111,7 @@
                      (translate [0 0 -3])
                      (with-fn wall-sphere-n)))
 
-(def nut-cube (->> (cube 4.2 2.5 7)))
+(def nut-cube (->> (cube 4.1 2.368 7)))
 
 (def screw-nut-hole (->> (union
                            (rotate (* 2 (/ π 3)) [0 0 1] nut-cube)
