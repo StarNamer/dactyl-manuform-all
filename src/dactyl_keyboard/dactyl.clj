@@ -13,8 +13,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 5)
+(def nrows 5)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -700,13 +700,14 @@
                     thumb-connectors
                     (difference (union case-walls 
                                        screw-insert-outers 
-                                       teensy-holder
-                                       usb-holder)
-                                rj9-space 
-                                usb-holder-hole
+                                       ;;;teensy-holder
+                                       ;usb-holder)
+                                       )
+                                ;rj9-space 
+                                ;usb-holder-hole
                                 screw-insert-holes)
-                    rj9-holder
-                    wire-posts
+                    ;rj9-holder
+                    ;wire-posts
                     ; thumbcaps
                     ; caps
                     )
