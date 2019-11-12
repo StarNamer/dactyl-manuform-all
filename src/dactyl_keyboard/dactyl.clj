@@ -598,6 +598,16 @@
 (def usb-holder
     (->> (cube (+ (first usb-holder-size) usb-holder-thickness) (second usb-holder-size) (+ (last usb-holder-size) usb-holder-thickness))
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+
+(def promic-holder
+  (union
+    (->> (cube 12 40 24)
+         (translate [-76 35 13]))
+    (->> (cube 8 5 22)
+         (translate [-62.5 61 13]))
+  )
+)
+
 (def usb-holder-hole
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
@@ -699,7 +709,16 @@
                     thumb
                     thumb-connectors
                     (difference (union case-walls 
-                                       screw-insert-outers 
+                                       screw-insert-outers
+                                       (difference
+                                         promic-holder
+                                         (translate [-2 0 0] case-walls)
+                                         (translate [-4 0 0] case-walls)
+                                         (translate [-6 0 0] case-walls)
+                                         (translate [-8 0 0] case-walls)
+                                         (translate [-10 0 0] case-walls)
+                                         (translate [-12 0 0] case-walls)
+                                        )
                                        ;;;teensy-holder
                                        ;usb-holder)
                                        )
