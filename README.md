@@ -24,7 +24,7 @@ files that are safe and easy to edit. Use them to change:
 ---
 ## The DMOTE Family
 
-* Custom wrist rests:[https://github.com/veikman/dmote-topography](https://github.com/veikman/dmote-topography)
+* Custom wrist rests: [veikman/dmote-topography](https://github.com/veikman/dmote-topography)
 
    Generates custom wrist rests with smooth organic topography. The topography is based on a bivariate normal distribution function multiplied by a logarithmic mound shape.
 
