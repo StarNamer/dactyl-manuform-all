@@ -19,10 +19,14 @@ files that are safe and easy to edit. Use them to change:
 - Minor features like LED strips and wrist rests.
 
 
-### Introduction: [doc/intro.md](doc/intro.md)
+### Introduction & Getting Started: [doc/intro.md](doc/intro.md)
 ### Documentation: [doc/](doc/)
 ---
 ## The DMOTE Family
+
+* Custom wrist rests:[https://github.com/veikman/dmote-topography](https://github.com/veikman/dmote-topography)
+
+   Generates custom wrist rests with smooth organic topography. The topography is based on a bivariate normal distribution function multiplied by a logarithmic mound shape.
 
 * A stabilizing accesory for the DMOTE: [veikman/dmote-beam](https://github.com/veikman/dmote-beam)
 
