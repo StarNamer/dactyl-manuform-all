@@ -601,10 +601,10 @@
 
 (def promic-holder
   (union
-    (->> (cube 12 40 24)
-         (translate [-76 35 13]))
-    (->> (cube 8 5 22)
-         (translate [-62.5 61 13]))
+    (->> (cube 12 41 24)
+         (translate [-76 34.5 13]))
+    (->> (cube 12 9 22)
+         (translate [-64 58.5 13]))
   )
 )
 
