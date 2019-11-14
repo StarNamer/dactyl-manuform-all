@@ -13,13 +13,13 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
+(def nrows 5)
 (def ncols 5)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
-(def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centerrow (- nrows 2.5))             ; controls front-back tilt
+(def centercol 3.5)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style 
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
@@ -34,8 +34,8 @@
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 1.0)                  ; original= 0.5
+(def extra-width 3.5)                   ; extra space between the base of keys; original= 2
+(def extra-height 0)                    ; original= 0.5
 
 (def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
@@ -313,37 +313,37 @@
        (rotate (deg2rad -23) [0 1 0])
        (rotate (deg2rad  10) [0 0 1])
        (translate thumborigin)
-       (translate [-32 -15 -2])))
+       (translate [-30.5 -14.5 -5.5])))
 (defn thumb-mr-place [shape]
   (->> shape
        (rotate (deg2rad  -6) [1 0 0])
        (rotate (deg2rad -34) [0 1 0])
-       (rotate (deg2rad  48) [0 0 1])
+       (rotate (deg2rad  25) [0 0 1])
        (translate thumborigin)
-       (translate [-29 -40 -13])
+       (translate [-29 -42 -18])
        ))
 (defn thumb-ml-place [shape]
   (->> shape
-       (rotate (deg2rad   6) [1 0 0])
+       (rotate (deg2rad   15) [1 0 0])
        (rotate (deg2rad -34) [0 1 0])
-       (rotate (deg2rad  40) [0 0 1])
+       (rotate (deg2rad  20) [0 0 1])
        (translate thumborigin)
-       (translate [-51 -25 -12])))
+       (translate [-45 -25 -17])))
 (defn thumb-br-place [shape]
   (->> shape
        (rotate (deg2rad -16) [1 0 0])
        (rotate (deg2rad -33) [0 1 0])
        (rotate (deg2rad  54) [0 0 1])
        (translate thumborigin)
-       (translate [-37.8 -55.3 -25.3])
+       (translate [-37.8 -55.3 -28.3])
        ))
 (defn thumb-bl-place [shape]
   (->> shape
-       (rotate (deg2rad  -4) [1 0 0])
+       (rotate (deg2rad  10) [1 0 0])
        (rotate (deg2rad -35) [0 1 0])
        (rotate (deg2rad  52) [0 0 1])
        (translate thumborigin)
-       (translate [-56.3 -43.3 -23.5])
+       (translate [-56.3 -43.3 -26.5])
        ))
 
 (defn thumb-1x-layout [shape]
@@ -419,7 +419,9 @@
              (thumb-mr-place web-post-tr)
              (thumb-tr-place thumb-post-bl)
              (thumb-mr-place web-post-br)
-             (thumb-tr-place thumb-post-br)) 
+             (thumb-tr-place thumb-post-br)
+             ; (key-place 2 lastrow thumb-post-tl)
+             )
       (triangle-hulls    ; top two to the main keyboard, starting on the left
              (thumb-tl-place thumb-post-tl)
              (key-place 0 cornerrow web-post-bl)
@@ -658,7 +660,8 @@
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
   (union (screw-insert 0 0         bottom-radius top-radius height)
          (screw-insert 0 lastrow   bottom-radius top-radius height)
-         (screw-insert 2 (+ lastrow 0.3)  bottom-radius top-radius height)
+         ; (screw-insert 2 (+ lastrow 0.3)  bottom-radius top-radius height)
+         (screw-insert 2 4.3  bottom-radius top-radius height)
          (screw-insert 3 0         bottom-radius top-radius height)
          (screw-insert lastcol 1   bottom-radius top-radius height)
          ))
@@ -681,15 +684,17 @@
 
 (def wire-posts
   (union
-     (thumb-ml-place (translate [-5 0 -2] (wire-post  1 0)))
-     (thumb-ml-place (translate [ 0 0 -2.5] (wire-post -1 6)))
-     (thumb-ml-place (translate [ 5 0 -2] (wire-post  1 0)))
-     (for [column (range 0 lastcol)
-           row (range 0 cornerrow)]
-       (union
-        (key-place column row (translate [-5 0 0] (wire-post 1 0)))
-        (key-place column row (translate [0 0 0] (wire-post -1 6)))
-        (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
+     ; (thumb-ml-place (translate [-5 0 -2] (wire-post  1 0)))
+     ; (thumb-ml-place (translate [ 0 0 -2.5] (wire-post -1 6)))
+     ; (thumb-ml-place (translate [ 5 0 -2] (wire-post  1 0)))
+     ; (for [column (range 0 lastcol)
+     ;       row (range 0 cornerrow)]
+     ;   (union
+     ;    (key-place column row (translate [-5 0 0] (wire-post 1 0)))
+     ;    (key-place column row (translate [0 0 0] (wire-post -1 6)))
+     ;    (key-place column row (translate [5 0 0] (wire-post  1 0)))))
+   )
+)
 
 
 (def model-right (difference 
