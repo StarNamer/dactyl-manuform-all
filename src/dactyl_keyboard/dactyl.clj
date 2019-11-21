@@ -185,7 +185,7 @@
 ;; Web Connectors ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(def web-thickness 3.5)
+(def web-thickness plate-thickness)
 (def post-size 0.1)
 (def web-post (->> (cube post-size post-size web-thickness)
                    (translate [0 0 (+ (/ web-thickness -2)
@@ -737,7 +737,7 @@
                 ]
             (->> bottom-front-key-guard
                  (key-place column row))))
-   (let [shift #(translate [0 0 (+ (- web-thickness) -6)] %)
+   (let [shift #(translate [0 0 (+ (- web-thickness) -4.5)] %)
          web-post-tl (shift web-post-tl)
          web-post-tr (shift web-post-tr)
          web-post-br (shift web-post-br)
@@ -1096,8 +1096,8 @@
 
 (def screw-hole (->> (union
                       (->>
-                        (cylinder 2 2.5) (with-fn wall-sphere-n)
-                        (translate [0 0 2.85])
+                        (cylinder 2.5 3.5) (with-fn wall-sphere-n)
+                        (translate [0 0 4])
                       )
                       (->>
                         (cylinder 1.5 60)
@@ -1118,7 +1118,7 @@
                            (rotate (* 2 (/ π 3)) [0 0 1] nut-cube)
                            (rotate (/ π 3) [0 0 1] nut-cube)
                            nut-cube)
-                     (translate [0 0 -6])))
+                     (translate [0 0 -8])))
 
 (def screw-holes
   (union
@@ -1145,7 +1145,7 @@
   (let [cover-sphere-radius 1
         cover-sphere (->> (sphere cover-sphere-radius)
                           (with-fn 20))
-        cover-sphere-z (+ (- height) (- cover-sphere-radius))
+        cover-sphere-z (+ (+ (- height) (- cover-sphere-radius)) -1.5)
         cover-sphere-x (- (+ (/ width 2) cover-sphere-radius) 0.35)
         cover-sphere-y (- (+ (/ length 2) (+ cover-sphere-radius)) 0.36)
         cover-sphere-tl (->> cover-sphere
@@ -1168,10 +1168,10 @@
         tr (->> (translate [0 5.5 0.4] cover-sphere) lower-to-bottom (key-place 1 5/2))
 
         mlb (->> cover-sphere
-                 (translate [(- cover-sphere-x) 0 (+ (- height) -1)])
+                 (translate [(- cover-sphere-x) 0 (+ (- height) -2.5)])
                  (key-place 1/2 3/2))
         mrb (->> cover-sphere
-                 (translate [cover-sphere-x 0 (+ (- height) -1)])
+                 (translate [cover-sphere-x 0 (+ (- height) -2.5)])
                  (key-place 1/2 3/2))
 
         mlt (->> cover-sphere
@@ -1280,7 +1280,7 @@
 )
 
 (def teensy-pcb-thickness 1.6)
-(def teensy-offset-height 3.5)
+(def teensy-offset-height 3.8)
 
 (def teensy-pcb (->> (cube 18 30.5 teensy-pcb-thickness)
                      (translate [0 0 (+ (/ teensy-pcb-thickness -2) (- teensy-offset-height))])
@@ -1290,9 +1290,9 @@
 (def teensy-support
   (->>
     (union
-      (teensy-pos (translate [0 -15.5 -5.15] (cube 7.2 2.3 2.5)))
-      (teensy-pos (translate [7.5 16 -5.15] (cube 6.5 2.3 2.5)))
-      (teensy-pos (translate [-7.5 16 -5.15] (cube 6.5 2.3 2.5)))
+      (teensy-pos (translate [0 -15.5 -6.6] (cube 7.2 2.3 2.5)))
+      (teensy-pos (translate [7.5 16 -6.6] (cube 6.5 2.3 2.5)))
+      (teensy-pos (translate [-7.5 16 -6.6] (cube 6.5 2.3 2.5)))
     )
   )
 )
@@ -1302,18 +1302,18 @@
     (difference
         (
           key-place 1/2 3/2
-          (translate [0 0 -3] (cylinder 5 6.3))
+          (translate [0 0 -3.1] (cylinder 5 9.8))
         )
         (
           key-place 1/2 3/2
-          (translate [0 0 -5.9] (cylinder 4.2 2.8))
+          (translate [0 0 -8.15] (cylinder 4.2 2.8))
         )
     )
   )
 )
 
 (def usb-cutout
-  (let [hole-height 6.2
+  (let [hole-height 5
         side-radius (/ hole-height 2)
         hole-width 10.75
         side-cylinder (->> (cylinder side-radius teensy-length)
@@ -1323,7 +1323,7 @@
                (mirror [-1 0 0] side-cylinder))
          (rotate (/ π 2) [1 0 0])
          (translate [0 (/ teensy-length 2) (- side-radius)])
-         (translate [0 0 (- 2.5)])
+         (translate [0 0 (- 4.0)])
          (translate [0 0 (- teensy-offset-height)])
          (key-place 1/2 3/2))))
 
