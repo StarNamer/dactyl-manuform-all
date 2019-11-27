@@ -8,8 +8,8 @@
 (def ^:const LEFT 1)
 (def ^:const RIGHT 2)
 (def ^:const FAST_RENDER false)
-(def ^:const RESTS_SEPERATE false)
-(def ^:const STANDS_SEPERATE false)
+(def ^:const RESTS_SEPERATE true)
+(def ^:const STANDS_SEPERATE true)
 
 ;;;;;;;;;;;;;;;;;
 ;; Switch Hole ;;
