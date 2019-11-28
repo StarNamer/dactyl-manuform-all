@@ -743,46 +743,47 @@
 
 (def trackpoint-holes
   (let [cylinder-height 14
-        nut-cap-diameter 2.25
-        nut-diameter 1.25
+        stick-hole-radius 3.8
+        nut-cap-radius 2.25
+        nut-radius 1.25
         under-cap-thickness 1.12  ; IMPORTANT! plate thickness under the nut's cap - 7 layers with 0.16mm layer height
         z-trans (+ (- (/ cylinder-height 2) (/ trackpoint-platform-z 2)) tp-plate-z-trans under-cap-thickness)]
     (union
       ; TODO optimize
       (trackpoint-place 0 1 
-                        (binding [*fn* 30] (cylinder 3.5 cylinder-height)))
+                        (binding [*fn* 30] (cylinder stick-hole-radius cylinder-height)))
       (trackpoint-place 0 1 
-                        (translate [-9.5 0 z-trans] 
+                        (translate [-9.4 0 z-trans] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-cap-diameter cylinder-height))))
+                                     (cylinder nut-cap-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [-9.5 0 0] 
+                        (translate [-9.4 0 0] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-diameter cylinder-height))))
+                                     (cylinder nut-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [9.5 0 z-trans] 
+                        (translate [9.4 0 z-trans] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-cap-diameter cylinder-height))))
+                                     (cylinder nut-cap-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [9.5 0 0] 
+                        (translate [9.4 0 0] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-diameter cylinder-height))))
+                                     (cylinder nut-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [-10.5 -9.5 z-trans] 
+                        (translate [-10.4 -9.75 z-trans] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-cap-diameter cylinder-height))))
+                                     (cylinder nut-cap-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [-10.5 -9.5 0] 
+                        (translate [-10.4 -9.75 0] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-diameter cylinder-height))))
+                                     (cylinder nut-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [10.5 -9.5 z-trans] 
+                        (translate [10.4 -9.75 z-trans] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-cap-diameter cylinder-height))))
+                                     (cylinder nut-cap-radius cylinder-height))))
       (trackpoint-place 0 1 
-                        (translate [10.5 -9.5 0] 
+                        (translate [10.4 -9.75 0] 
                                    (binding [*fn* 30] 
-                                     (cylinder nut-diameter cylinder-height)))))))
+                                     (cylinder nut-radius cylinder-height)))))))
 
 (def model-right (difference 
                    (union
@@ -872,6 +873,14 @@
            (trackpoint-place 0 1)))))
  
 (spit "things/test-trackpoint.scad"
+  (write-scad 
+    (intersection
+      model-right
+      (->> (cube 28 22 5)
+           (translate [0 -6.5 -5])
+           (trackpoint-place 0 1)))))
+ 
+(spit "things/test-trackpoint-with-buttons.scad"
   (write-scad 
     (intersection
       model-right
