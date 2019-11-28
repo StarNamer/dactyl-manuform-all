@@ -715,20 +715,72 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
-(def trackpoint-width 26)
+(def trackpoint-x 30)
+(def trackpoint-y 20)
+(def trackpoint-platform-z 7)
+(def trackpoint-support-z 3)
 ; TODO always use the same position no matter how many rows
 (def trackpoint-mount
-  (let [plate (trackpoint-place 0 1 (cube (- trackpoint-width 2) 15 3))
-        key-hole (cube keyswitch-width keyswitch-height 20)]
+  (let [plate (->>
+                (cube trackpoint-x trackpoint-y trackpoint-platform-z)
+                (translate [0 -3 -1])
+                (trackpoint-place 0 1))
+        key-hole (cube keyswitch-width keyswitch-height 20)
+        extra-support (->>
+                        (cube trackpoint-x trackpoint-y trackpoint-support-z)
+                        (translate [0 -3 (- (/ (- trackpoint-platform-z trackpoint-support-z) -2) 1)])
+                        (trackpoint-place 0 1))]
     (difference
-      plate
+      (union
+        (difference
+          plate
+          (key-place 0 2 key-hole)
+          (key-place 1 2 key-hole))
+        extra-support)
       (key-place 0 1 key-hole)
-      (key-place 0 2 key-hole)
-      (key-place 1 1 key-hole)
-      (key-place 1 2 key-hole))))
+      (key-place 1 1 key-hole))))
 
-(def trackpoint-hole
-  (trackpoint-place 0 1 (binding [*fn* 30] (cylinder 3 15))))
+(def trackpoint-holes
+  (let [cylinder-height 14
+        z-trans (- (/ cylinder-height 2) (/ trackpoint-platform-z 2))
+        nut-cap-diameter 2.25
+        nut-diameter 1.25]
+    (union
+      ; TODO optimize
+      (trackpoint-place 0 1 
+                        (binding [*fn* 30] (cylinder 3.5 cylinder-height)))
+      (trackpoint-place 0 1 
+                        (translate [-9.5 0 z-trans] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-cap-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [-9.5 0 0] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [9.5 0 z-trans] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-cap-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [9.5 0 0] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [-10.5 -9.5 z-trans] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-cap-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [-10.5 -9.5 0] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [10.5 -9.5 z-trans] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-cap-diameter cylinder-height))))
+      (trackpoint-place 0 1 
+                        (translate [10.5 -9.5 0] 
+                                   (binding [*fn* 30] 
+                                     (cylinder nut-diameter cylinder-height)))))))
 
 (def model-right (difference 
                    (union
@@ -751,7 +803,7 @@
                     ; caps
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
-                   trackpoint-hole))
+                   trackpoint-holes))
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -809,6 +861,21 @@
             (cube 19 22 40))))
     (translate [0 0 11] (cube 22 20 5)))))
 
+(spit "things/test-trackpoint-nut-hole.scad"
+  (write-scad 
+    (intersection
+      model-right
+      (->> (cube 8 8 20)
+           (translate [10.5 -9.5 0])
+           (trackpoint-place 0 1)))))
+ 
+(spit "things/test-trackpoint.scad"
+  (write-scad 
+    (intersection
+      model-right
+      (->> (cube 42 40 20)
+           (trackpoint-place 0 1)))))
+ 
 (spit "things/test-part.scad"
   (write-scad
     (intersection
