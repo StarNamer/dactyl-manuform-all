@@ -719,16 +719,17 @@
 (def trackpoint-y 20)
 (def trackpoint-platform-z 7)
 (def trackpoint-support-z 3)
+(def tp-plate-z-trans -1)
 ; TODO always use the same position no matter how many rows
 (def trackpoint-mount
   (let [plate (->>
                 (cube trackpoint-x trackpoint-y trackpoint-platform-z)
-                (translate [0 -3 -1])
+                (translate [0 -3 tp-plate-z-trans])
                 (trackpoint-place 0 1))
         key-hole (cube keyswitch-width keyswitch-height 20)
         extra-support (->>
                         (cube trackpoint-x trackpoint-y trackpoint-support-z)
-                        (translate [0 -3 (- (/ (- trackpoint-platform-z trackpoint-support-z) -2) 1)])
+                        (translate [0 -3 (+ (/ (- trackpoint-platform-z trackpoint-support-z) -2) tp-plate-z-trans)])
                         (trackpoint-place 0 1))]
     (difference
       (union
@@ -742,9 +743,10 @@
 
 (def trackpoint-holes
   (let [cylinder-height 14
-        z-trans (- (/ cylinder-height 2) (/ trackpoint-platform-z 2))
         nut-cap-diameter 2.25
-        nut-diameter 1.25]
+        nut-diameter 1.25
+        under-cap-thickness 1.12  ; IMPORTANT! plate thickness under the nut's cap - 7 layers with 0.16mm layer height
+        z-trans (+ (- (/ cylinder-height 2) (/ trackpoint-platform-z 2)) tp-plate-z-trans under-cap-thickness)]
     (union
       ; TODO optimize
       (trackpoint-place 0 1 
