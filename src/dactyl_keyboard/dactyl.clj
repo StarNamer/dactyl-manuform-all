@@ -1108,7 +1108,7 @@
                       )
                      )))
 
-(def screw-hole-holder (->> (hull (cylinder 2.5 4.5)
+(def screw-hole-holder (->> (hull (->> (cylinder 2.5 4.5) (translate [0 0 -1]))
                                   (translate [0 0 -3] (cylinder 8 0.001))
                                   )
                      (translate [0 0 -3])
