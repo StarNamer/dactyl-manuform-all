@@ -716,9 +716,9 @@
 
 
 (def bottom-key-guard (->> (cube mount-width mount-height web-thickness)
-                           (translate [0 0 (+ (- (/ web-thickness 2)) -4.5)])))
+                           (translate [0 0 (+ (- (/ web-thickness 2)) -3.7)])))
 (def bottom-front-key-guard (->> (cube mount-width (/ mount-height 2) web-thickness)
-                                 (translate [0 (/ mount-height 4) (+ (- (/ web-thickness 2)) -4.5)])))
+                                 (translate [0 (/ mount-height 4) (+ (- (/ web-thickness 2)) -3.7)])))
 
 (def bottom-plate
   (union
@@ -737,7 +737,7 @@
                 ]
             (->> bottom-front-key-guard
                  (key-place column row))))
-   (let [shift #(translate [0 0 (+ (- web-thickness) -6)] %)
+   (let [shift #(translate [0 0 (+ (- web-thickness) -5.2)] %)
          web-post-tl (shift web-post-tl)
          web-post-tr (shift web-post-tr)
          web-post-br (shift web-post-br)
@@ -1164,10 +1164,10 @@
                              (key-place 1/2 3/2))
 
         lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5.5)] %)
-        bl (->> (translate [0 -5.5 0.4] cover-sphere) lower-to-bottom (key-place 0 1/2))
-        br (->> (translate [0 -5.5 0.4] cover-sphere) lower-to-bottom (key-place 1 1/2))
-        tl (->> (translate [0 5.5 0.4] cover-sphere) lower-to-bottom (key-place 0 5/2))
-        tr (->> (translate [0 5.5 0.4] cover-sphere) lower-to-bottom (key-place 1 5/2))
+        bl (->> (translate [0 -5.5 1.2] cover-sphere) lower-to-bottom (key-place 0 1/2))
+        br (->> (translate [0 -5.5 1.2] cover-sphere) lower-to-bottom (key-place 1 1/2))
+        tl (->> (translate [0 5.5 1.2] cover-sphere) lower-to-bottom (key-place 0 5/2))
+        tr (->> (translate [0 5.5 1.2] cover-sphere) lower-to-bottom (key-place 1 5/2))
 
         mlb (->> cover-sphere
                  (translate [(- cover-sphere-x) 0 (+ (- height) -2.5)])
@@ -1177,10 +1177,10 @@
                  (key-place 1/2 3/2))
 
         mlt (->> cover-sphere
-                 (translate [(+ (- cover-sphere-x) -4) 0 -6])
+                 (translate [(+ (- cover-sphere-x) -4) 0 -5.2])
                  (key-place 1/2 3/2))
         mrt (->> cover-sphere
-                 (translate [(+ cover-sphere-x 4) 0 -6])
+                 (translate [(+ cover-sphere-x 4) 0 -5.2])
                  (key-place 1/2 3/2))]
     (union
      (hull cover-sphere-bl cover-sphere-br cover-sphere-tl cover-sphere-tr)
@@ -1234,13 +1234,19 @@
 (def trrs-shell-ring
   (->>
     (difference
-      (hull
-        (cylinder (+ trrs-outer-radius 0.6) trrs-hole-depth)
-        (translate [0 (- (+ trrs-outer-radius 0.6) -0.5) 1.5] (cube (* (+ trrs-outer-radius 0.6) 2) 1 (+ trrs-hole-depth 3)))
+      (intersection
+        (hull
+          (cylinder (+ trrs-outer-radius 0.6) trrs-hole-depth)
+          (translate [0 (- (+ trrs-outer-radius 0.6) -0.5) 1.5] (cube (* (+ trrs-outer-radius 0.6) 2) 1 (+ trrs-hole-depth 3)))
+        )
+        (hull
+          (cylinder (+ trrs-outer-radius 0.6) trrs-hole-depth)
+          (translate [0 (- (+ trrs-outer-radius 0.6) -0.5) 1.5] (cube (* (+ trrs-outer-radius 0.6) 2) 1 (+ trrs-hole-depth 3)))
+        )
       )
-      (translate [0 3 -4.5] (rotate (/ π 8) [ -1 0 0 ] (cube 15 10 6)))
+      (translate [0 4 -4.5] (rotate (/ π 8) [ -1 0 0 ] (cube 15 10 6)))
       (translate [0 -6.3 13] (rotate (/ π 2.8) [ 1 0 0 ] (cube 15 10 6)))
-      (translate [0 3 3.5] (cube 15 9 trrs-hole-depth))
+      (translate [0 3 4] (cube 15 9 trrs-hole-depth))
     )
       (translate [ 0 trrs-offset 0 ])
       (rotate (/ π 2) [1 0 0])
