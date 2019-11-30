@@ -185,7 +185,7 @@
 ;; Web Connectors ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(def web-thickness plate-thickness)
+(def web-thickness 3.5)
 (def post-size 0.1)
 (def web-post (->> (cube post-size post-size web-thickness)
                    (translate [0 0 (+ (/ web-thickness -2)
@@ -737,7 +737,7 @@
                 ]
             (->> bottom-front-key-guard
                  (key-place column row))))
-   (let [shift #(translate [0 0 (+ (- web-thickness) -4.5)] %)
+   (let [shift #(translate [0 0 (+ (- web-thickness) -6)] %)
          web-post-tl (shift web-post-tl)
          web-post-tr (shift web-post-tr)
          web-post-br (shift web-post-br)
@@ -792,7 +792,9 @@
                         (hull (case-place (- x 1/2) 4 (translate [0 1.5 0.5] wall-sphere-bottom-front))
                               (key-place x 4 half-post-bl)
                               (key-place (- x 1) 4 half-post-br))))
-                     [(hull (case-place right-wall-column 4 (translate [-1.5 1.5 0.5] wall-sphere-bottom-front))
+                     [
+                      (hull 
+                        (case-place right-wall-column 4 (translate [-1.5 2 0.6] wall-sphere-bottom-front))
                             (case-place (- right-wall-column 1) 4 (translate [0 1.5 0.5] wall-sphere-bottom-front))
                             (key-place 5 4 half-post-bl)
                             (key-place 5 4 half-post-br))
@@ -816,7 +818,7 @@
                              (key-place 5 0 web-post-tr)
                              )
                        (hull (case-place right-wall-column 4 (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
-                             (case-place right-wall-column 4 (translate [-1.5 2 1] (wall-sphere-bottom 0 1)))
+                             (case-place right-wall-column 4 (translate [-1.5 2 0.6] (wall-sphere-bottom 0 1)))
                              (key-place 5 4 half-post-br)
                              )
                        (hull (case-place right-wall-column 4 (translate [-1.5 0 1] (wall-sphere-bottom 1/2 1)))
@@ -838,7 +840,7 @@
                            (case-place (+ left-wall-column 1) 0  (translate [0 -1 0.5] wall-sphere-bottom-back))
                            (key-place -1 0 web-post-tl)
                            (key-place -1 0 web-post-tr))
-                     (hull (case-place right-wall-column 0 (translate [-1.8 -1.2 0.5] wall-sphere-bottom-back))
+                     (hull (case-place right-wall-column 0 (translate [-1.5 -1 1] wall-sphere-bottom-back))
                            (case-place (- right-wall-column 1) 0  (translate [-1 -1 0.5] wall-sphere-bottom-back))
                            (key-place 5 0 web-post-tl)
                            (key-place 5 0 web-post-tr))
