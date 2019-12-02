@@ -608,6 +608,11 @@
   )
 )
 
+(def jack-holder
+  (->> (cube 10 13 13)
+       (translate [-78 7.5 7.5]))
+)
+
 (def usb-holder-hole
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
@@ -711,7 +716,9 @@
                     (difference (union case-walls 
                                        screw-insert-outers
                                        (difference
+                                         (union
                                          promic-holder
+                                         jack-holder)
                                          (translate [-2 0 0] case-walls)
                                          (translate [-4 0 0] case-walls)
                                          (translate [-6 0 0] case-walls)

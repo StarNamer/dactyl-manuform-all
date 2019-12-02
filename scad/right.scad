@@ -1,6 +1,24 @@
 use <promicro_plate.scad>
 use <promicro.scad>
 
+jack_diameter = 8.8;
+jack_front_diameter = 6.4;
+jack_nut_distance = 2.5;  // distance between the nut and the end of the thinner part with the thread
+jack_nut_diameter = 9;
+
+
+module jack_hole() {
+    translate([-71.2, 7.5, 7.5]) {
+        rotate(-90, [0, 1, 0]) {
+            color("pink") {
+                cylinder(d=jack_diameter, h=10, $fn=30);
+                translate([0, 0, 9.99]) cylinder(d=jack_front_diameter, h=10, $fn=30);
+            }
+            color("red") translate([0, 0, 10 + jack_nut_distance]) cylinder(d=jack_nut_diameter, h=10, $fn=30);
+        }
+    }
+}
+
 module dactyl() {
     difference(){
         union(){
@@ -11,6 +29,7 @@ module dactyl() {
                 rotate(270,[1,0,0])
                     promic_front_cutaway();
         screws();
+        jack_hole();
     }
 }
 
@@ -41,9 +60,9 @@ module promic_bar() {
 
 module screw() {
     rotate(90, [0, 1, 0]) color("red") {
-        translate([0,0,-10]) cylinder(d=1.6, h=9.6, $fn=12);
-        translate([0,0,-0.5]) cylinder(d1=1.6, d2=5.6, h=2.01, $fn=12);
-        translate([0,0,1.5]) cylinder(d=5.6, h=8, $fn=12);
+        translate([0,0,-10]) cylinder(d=1.8, h=9.6, $fn=20);
+        translate([0,0,-0.5]) cylinder(d1=1.8, d2=5.6, h=2.01, $fn=20);
+        translate([0,0,1.5]) cylinder(d=5.6, h=8, $fn=20);
     }
 }
 
@@ -53,7 +72,11 @@ module screws() {
     translate([-67, 18, 20]) screw();
 }
 
+
+intersection() {
+translate([-90, -10, 0]) cube([45, 80, 70]);
 dactyl();
+}
 //promic_mount();
 //promic_bar();
 //
