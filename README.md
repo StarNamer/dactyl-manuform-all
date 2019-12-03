@@ -1,24 +1,12 @@
 # Dactyl ManuForm Mini Keyboard
 
-This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard). The Dactyl-Manuform is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard) with the thumb cluster from [ManuForm](https://github.com/jeffgran/ManuForm).
-
-Build log: https://www.beekeeb.com/dactyl-manuform-mini-mechanical-keyboard-build-log/
-
-## Forks
-
-- https://github.com/lebastaq/dactyl-manuform-mini-keyboard
+This is a fork of the [dactyl-manuform-mini-keyboard](https://github.com/l4u/dactyl-manuform-mini-keyboard) that was forked from [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard) is a for of the Dactyl-Manuform which is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard) with the thumb cluster from [ManuForm](https://github.com/jeffgran/ManuForm).
 
 ## Features
 
-- The use of sidenubs can be disabled. Sidenub should be disabled if you use Kailh, and Outemu. If you use Cherry MX, Gateron or Zealios switches, you can enable the sidenubs.
-- Spaces for rentention tabs are added.
-- One key in the thumb cluster has been removed. Other thumb keys are also adjusted.
-- The total height is reduced and wire posts are removed. This results in a
-  higher printing speed and a lower cost.
-- A TRRS mount instead of a RJ9 mount is used.
-- A micro USB mount is used. A breakout board, or an extension cable can be used.
-- Screw posts are moved inside. The holes are designed for TRISERT® thread inserts 145m3.
-- The pro micro holder has been modified. Dupont cables can be used.
+- Maximum curve
+- Maximum keys
+- Minimum rehoming
 
 ## Generate OpenSCAD and STL models
 
@@ -27,8 +15,6 @@ Build log: https://www.beekeeb.com/dactyl-manuform-mini-mechanical-keyboard-buil
 * Use OpenSCAD to open a `.scad` file.
 * Make changes to design, repeat `load-file`, OpenSCAD will watch for changes and rerender.
 * When done, use OpenSCAD to export STL files
-
-
 
 ## License
 
