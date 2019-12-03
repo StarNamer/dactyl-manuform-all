@@ -12,18 +12,19 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 5)
-(def ncols 6)
+(def nrows 6)
+(def ncols 7)
 
-(def α (/ π 12))                        ; curvature of the columns
-(def β (/ π 36))                        ; curvature of the rows
+(def α (/ π 5))                         ; curvature of the columns
+(def β (/ π 180))                       ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
-(def column-style
-  (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
-; (def column-style :fixed)
-(def pinky-15u true)
+;(def column-style (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
+(def column-style :standard)
+(def column-style :orthographic)
+;(def column-style :fixed)
+(def pinky-15u false)
 
 (defn column-offset [column] (cond
                                (= column 2) [0 2.82 -4.5]
@@ -32,13 +33,13 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 20)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 1.0)                  ; original= 0.5
+(def extra-width 1.5)                   ; extra space between the base of keys; original= 2
+(def extra-height -1.5)                 ; original= 0.5
 
-(def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
-(def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
+(def wall-z-offset -15)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
+(def wall-xy-offset 0)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
 (def wall-thickness 2)                  ; wall thickness parameter; originally 5
 
 ;; Settings for column-style == :fixed
@@ -53,7 +54,7 @@
 
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
-(def create-side-nubs? true)
+(def create-side-nubs? false)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
@@ -116,24 +117,25 @@
 ;; SA Keycaps ;;
 ;;;;;;;;;;;;;;;;
 
-(def sa-length 18.25)
+(def sa-height 8.6)
+(def sa-length 18.00)
+(def sa-midwidth 17)
+(def sa-toplength 16.00)
 (def sa-double-length 37.5)
-(def sa-cap {1 (let [bl2 (/ 18.5 2)
-                     m (/ 17 2)
+(def sa-cap {1 (let [bl2 (/ sa-length 2)
+                     tl2 (/ sa-toplength 2)
+                     m (/ sa-midwidth 2)
                      key-cap (hull (->> (polygon [[bl2 bl2] [bl2 (- bl2)] [(- bl2) (- bl2)] [(- bl2) bl2]])
                                         (extrude-linear {:height 0.1 :twist 0 :convexity 0})
                                         (translate [0 0 0.05]))
-                                   (->> (polygon [[m m] [m (- m)] [(- m) (- m)] [(- m) m]])
+                                   (->> (polygon [[tl2 tl2] [tl2 (- tl2)] [(- tl2) (- tl2)] [(- tl2) tl2]])
                                         (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 6]))
-                                   (->> (polygon [[6 6] [6 -6] [-6 -6] [-6 6]])
-                                        (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 12])))]
+                                        (translate [0 0 sa-height]))   )]
                  (->> key-cap
                       (translate [0 0 (+ 5 plate-thickness)])
-                      (color [220/255 163/255 163/255 1])))
+                      (color [255/255 255/255 255/255 1])))  ;;52/255 152/255 219/255 1
              2 (let [bl2 sa-length
-                     bw2 (/ 18.25 2)
+                     bw2 (/ sa-length 2)
                      key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
                                         (extrude-linear {:height 0.1 :twist 0 :convexity 0})
                                         (translate [0 0 0.05]))
@@ -142,8 +144,8 @@
                                         (translate [0 0 12])))]
                  (->> key-cap
                       (translate [0 0 (+ 5 plate-thickness)])
-                      (color [127/255 159/255 127/255 1])))
-             1.5 (let [bl2 (/ 18.25 2)
+                      (color [52/255 152/255 219/255 1])))
+             1.5 (let [bl2 (/ sa-length 2)
                        bw2 (/ 27.94 2)
                        key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
                                           (extrude-linear {:height 0.1 :twist 0 :convexity 0})
@@ -153,7 +155,7 @@
                                           (translate [0 0 12])))]
                    (->> key-cap
                         (translate [0 0 (+ 5 plate-thickness)])
-                        (color [240/255 223/255 175/255 1])))})
+                        (color [52/255 152/255 219/255 1])))})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Placement Functions ;;
@@ -704,14 +706,16 @@
                    thumb
                    thumb-connectors
                    (difference (union case-walls
-                                      screw-insert-outers
-                                      pro-micro-holder
-                                      usb-holder-holder
-                                      trrs-holder)
-                               usb-holder-space
-                               usb-jack
-                               trrs-holder-hole
-                               screw-insert-holes))
+                                      ;;screw-insert-outers
+                                      ;;pro-micro-holder
+                                      ;;usb-holder-holder
+                                      ;;trrs-holder
+                                      )
+                               ;;usb-holder-space
+                               ;;usb-jack
+                               ;;trrs-holder-hole
+                               ;;screw-insert-holes
+                               ))
                   (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/right.scad"
@@ -732,7 +736,8 @@
          thumb-connectors
          case-walls
          thumbcaps
-         caps)
+         caps
+         )
 
         (translate [0 0 -20] (cube 350 350 40)))))
 
