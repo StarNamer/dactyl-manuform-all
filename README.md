@@ -1,5 +1,7 @@
 # Dactyl Manu Tide
 
+![test print](https://i.redd.it/fhacqnvk64241.jpg)
+
 This is a fork of the [dactyl-manuform-mini-keyboard](https://github.com/l4u/dactyl-manuform-mini-keyboard) that was forked from [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard) is a for of the Dactyl-Manuform which is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard) with the thumb cluster from [ManuForm](https://github.com/jeffgran/ManuForm).
 
 ## Features
