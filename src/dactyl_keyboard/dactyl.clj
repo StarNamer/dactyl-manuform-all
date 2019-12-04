@@ -15,15 +15,15 @@
 (def nrows 6)
 (def ncols 7)
 
-(def α (/ π 5))                         ; curvature of the columns
+(def α (/ π 6))                         ; curvature of the columns
 (def β (/ π 180))                       ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
-;(def column-style (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
-(def column-style :standard)
+; (def column-style (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
+; (def column-style :standard)
 (def column-style :orthographic)
-;(def column-style :fixed)
+; (def column-style :fixed)
 (def pinky-15u false)
 
 (defn column-offset [column] (cond
@@ -33,14 +33,16 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 20)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 20)              ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 1.5)                   ; extra space between the base of keys; original= 2
+(def extra-width 1.0)                   ; extra space between the base of keys; original= 2
 (def extra-height -1.5)                 ; original= 0.5
 
 (def wall-z-offset -15)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 0)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def wall-thickness 2)                  ; wall thickness parameter; originally 5
+(def printer-nozzle-width 0.4)
+(def wall-thickness (* printer-nozzle-width 2)) ; Wall thickness parameter; Double the printer nozzle; originally 5
+(def web-thickness wall-thickness) ; Was 2
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -55,6 +57,9 @@
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
 (def create-side-nubs? false)
+
+(def left-wall-x-offset 7) ; original 10
+(def left-wall-z-offset  7) ; original 3
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
@@ -120,7 +125,7 @@
 (def sa-height 8.6)
 (def sa-length 18.00)
 (def sa-midwidth 17)
-(def sa-toplength 16.00)
+(def sa-toplength 15.70)
 (def sa-double-length 37.5)
 (def sa-cap {1 (let [bl2 (/ sa-length 2)
                      tl2 (/ sa-toplength 2)
@@ -253,7 +258,6 @@
 ;; Web Connectors ;;
 ;;;;;;;;;;;;;;;;;;;;
 
-(def web-thickness 2)
 (def post-size 0.1)
 (def web-post (->> (cube post-size post-size web-thickness)
                    (translate [0 0 (+ (/ web-thickness -2)
@@ -478,9 +482,6 @@
 (defn bottom-hull [& p]
   (hull p (bottom 0.001 p)))
 
-(def left-wall-x-offset 5) ; original 10
-(def left-wall-z-offset  3) ; original 3
-
 (defn left-key-position [row direction]
   (map - (key-position 0 row [(* mount-width -0.5) (* direction mount-height 0.5) 0]) [left-wall-x-offset 0 left-wall-z-offset]))
 
@@ -518,7 +519,8 @@
     (union (key-wall-brace lastcol 0 0 1 tr lastcol 0 1 0 tr)
            (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 tr lastcol y 1 0 br))
            (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 br lastcol y 1 0 tr))
-           (key-wall-brace lastcol cornerrow 0 -1 br lastcol cornerrow 1 0 br))))
+           (key-wall-brace lastcol cornerrow 0 -1 br lastcol cornerrow 1 0 br)
+    )))
 
 (def case-walls
   (union
@@ -706,15 +708,15 @@
                    thumb
                    thumb-connectors
                    (difference (union case-walls
-                                      ;;screw-insert-outers
-                                      ;;pro-micro-holder
-                                      ;;usb-holder-holder
-                                      ;;trrs-holder
+                                      ;screw-insert-outers
+                                      ;pro-micro-holder
+                                      ;usb-holder-holder
+                                      ;trrs-holder
                                       )
-                               ;;usb-holder-space
-                               ;;usb-jack
-                               ;;trrs-holder-hole
-                               ;;screw-insert-holes
+                               ;usb-holder-space
+                               ;usb-jack
+                               ;trrs-holder-hole
+                               ;screw-insert-holes
                                ))
                   (translate [0 0 -20] (cube 350 350 40))))
 
