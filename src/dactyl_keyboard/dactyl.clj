@@ -785,6 +785,34 @@
                                    (binding [*fn* 30] 
                                      (cylinder nut-radius cylinder-height)))))))
 
+(def whole-stem-height 14.5)  ; TODO calculate based on trackpoint position
+(def trackpoint-extension
+  (let [stem-size 4.16
+        extra-socket-space 0.16
+        socket-size (+ stem-size extra-socket-space)
+        notches-size (* socket-size 0.8)
+        notches-height 0.5
+        socket-top-thickness 1.12
+        base-radius 3.44
+        socket-depth 2.56
+        base-height (+ socket-depth socket-top-thickness)
+        stem-height (- whole-stem-height base-height)
+        base (binding [*fn* 30] (cylinder base-radius base-height))
+        socket-hole (cube socket-size socket-size socket-depth)
+        socket-hole-notches (cube notches-size notches-size socket-depth)
+        stem-notches (cube notches-size notches-size notches-height)
+        stem (cube stem-size stem-size stem-height)]
+    (difference
+      (union (translate [0 0 (/ base-height 2)] base)
+             (translate [0 0 (+ (/ stem-height 2) base-height)] stem)
+             (->> stem-notches
+                  (translate [0 0 (+ stem-height base-height (/ notches-height -2))])
+                  (rotate (/ π 4) [0 0 1])))
+      (union (translate [0 0 (/ socket-depth 2)] socket-hole)
+             (->> socket-hole-notches
+                  (translate [0 0 (/ socket-depth 2)])
+                  (rotate (/ π 4) [0 0 1]))))))
+
 (def model-right (difference 
                    (union
                     key-holes
@@ -814,6 +842,9 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
                   
+(spit "things/test-trackpoint-extension.scad"
+  (write-scad trackpoint-extension))
+ 
 (spit "things/right-test.scad"
       (write-scad 
                    (union
