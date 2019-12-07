@@ -787,14 +787,14 @@
 
 (def whole-stem-height 14.5)  ; TODO calculate based on trackpoint position
 (def trackpoint-extension
-  (let [stem-size 4.16
+  (let [stem-size 4.64
         extra-socket-space 0.16
         socket-size (+ stem-size extra-socket-space)
-        notches-size (* socket-size 0.8)
+        notches-size (* socket-size 0.9)
         notches-height 0.5
         socket-top-thickness 1.12
         base-radius 3.44
-        socket-depth 2.56
+        socket-depth 2.72
         base-height (+ socket-depth socket-top-thickness)
         stem-height (- whole-stem-height base-height)
         base (binding [*fn* 30] (cylinder base-radius base-height))
