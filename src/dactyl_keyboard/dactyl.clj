@@ -785,21 +785,24 @@
                                    (binding [*fn* 30] 
                                      (cylinder nut-radius cylinder-height)))))))
 
-(def whole-stem-height 14.5)  ; TODO calculate based on trackpoint position
+(def whole-stem-height 8)  ; TODO calculate based on trackpoint position
+; (def whole-stem-height 14.5)  ; TODO calculate based on trackpoint position
 (def trackpoint-extension
-  (let [stem-size 4.64
+  (let [stem-size 4.48
         extra-socket-space 0.16
         socket-size (+ stem-size extra-socket-space)
-        notches-size (* socket-size 0.9)
+        socket-notches-size (* socket-size 0.9)
+        notches-size (* stem-size 0.9)
         notches-height 0.5
-        socket-top-thickness 1.12
         base-radius 3.44
         socket-depth 2.72
-        base-height (+ socket-depth socket-top-thickness)
+        socket-cone-height 2
+        base-height (- whole-stem-height socket-depth)
         stem-height (- whole-stem-height base-height)
         base (binding [*fn* 30] (cylinder base-radius base-height))
         socket-hole (cube socket-size socket-size socket-depth)
-        socket-hole-notches (cube notches-size notches-size socket-depth)
+        socket-hole-cone (binding [*fn* 30] (cylinder [(/ socket-size 2) 0] socket-cone-height))
+        socket-hole-notches (cube socket-notches-size socket-notches-size socket-depth)
         stem-notches (cube notches-size notches-size notches-height)
         stem (cube stem-size stem-size stem-height)]
     (difference
@@ -809,6 +812,7 @@
                   (translate [0 0 (+ stem-height base-height (/ notches-height -2))])
                   (rotate (/ π 4) [0 0 1])))
       (union (translate [0 0 (/ socket-depth 2)] socket-hole)
+             (translate [0 0 (+ socket-depth (/ socket-cone-height 2))] socket-hole-cone)
              (->> socket-hole-notches
                   (translate [0 0 (/ socket-depth 2)])
                   (rotate (/ π 4) [0 0 1]))))))
