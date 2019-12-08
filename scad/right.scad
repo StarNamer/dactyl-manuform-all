@@ -74,7 +74,7 @@ module screws() {
 
 
 intersection() {
-translate([-90, -10, 0]) cube([45, 80, 70]);
+translate([-90, -10, 0]) cube([49, 80, 70]);
 dactyl();
 }
 //promic_mount();
