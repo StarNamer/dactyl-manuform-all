@@ -1,5 +1,5 @@
-# The Dactyl-ManuForm Keyboard
-This is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard), a parameterized, split-hand, concave, columnar, ergonomic keyboard.
+# The Ducktyl-ManuForm Keyboard
+This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard), which in itself is a combination of the Dactyl, a parameterized, split-hand, concave, columnar, ergonomic keyboard and the thumb cluster of the [ManuForm keyboard](https://github.com/jeffgran/ManuForm) ([geekhack](https://geekhack.org/index.php?topic=46015.0)).
 
 ![Imgur](http://i.imgur.com/LdjEhrR.jpg)
 
