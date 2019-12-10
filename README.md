@@ -3,7 +3,7 @@ This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboar
 
 ![Imgur](http://i.imgur.com/LdjEhrR.jpg)
 
-The main change is that the thumb cluster was adapted from the [ManuForm keyboard](https://github.com/jeffgran/ManuForm) ([geekhack](https://geekhack.org/index.php?topic=46015.0)). The walls were changed to just drop to the floor. The keyboard is paramaterized to allow adjusting the following: 
+The main purpose of this fork is the addition of an OLED-display to the Dactyl-ManuForm's default 5x6 model as well as some minor changes to the keymap and the use of a rotary encoder. As these changes have been (at least for now) only made to one already generated .scad model, it is not possible to generate a Ducktyl-ManuForm using the steps mentioned below, which only remain to make it easier for others to generate a custom model as a starting point. For the process of creating a Ducktyl-ManuForm, you'll have to read my documentation, which is located [here](https://github.com/OutstandingOof/ducktyl-manuform/ducktyl/)
 
 * Rows: 4 - 6 
 * Columns: 5 and up
