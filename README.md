@@ -1,7 +1,7 @@
 # The Ducktyl-ManuForm Keyboard
 This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard), which in itself is a combination of the [Dactyl](https://github.com/adereth/dactyl-keyboard), a parameterized, split-hand, concave, columnar, ergonomic keyboard and the thumb cluster of the [ManuForm keyboard](https://github.com/jeffgran/ManuForm) ([geekhack](https://geekhack.org/index.php?topic=46015.0)).
 
-![Imgur](http://i.imgur.com/LdjEhrR.jpg)
+![Imgur](https://i.imgur.com/VhYYnnR.jpg)
 
 The main purpose of this fork is the addition of an OLED-display to the Dactyl-ManuForm's default 5x6 model as well as some minor changes to the keymap and the use of a rotary encoder. As these changes have been (at least for now) only made to one already generated .scad model, it is not possible to generate a Ducktyl-ManuForm using the steps mentioned below, which only remain to make it easier for others to generate a custom model as a starting point. For the process of creating a Ducktyl-ManuForm, you'll have to read my documentation, which is located in the [ducktyl folder](https://github.com/OutstandingOof/ducktyl-manuform/tree/master/ducktyl).
 
