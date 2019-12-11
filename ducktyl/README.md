@@ -1,7 +1,7 @@
 # Documentation for the Ducktyl-ManuForm
 
-The documentation is split into a simple [build log] of the already generated default 5x6 model, a more [in-depht documentation] of the whole process and some notes on the configuration of the QMK-firmware used to power the keyboard.
-While you should be able to build a fully functional Ducktyl-ManuForm by following the build log and using the default 5x6 model, I'd advise you to read the in-depht documentation if you want to customize anything, so you can better understand my approach and learn from my mistakes. 
+The documentation is split into a simple [build log/guide] of the already generated default 5x6 model, a more [in-depht documentation] of the whole process and some notes on the configuration of the QMK-firmware used to power the keyboard.
+While you should be able to build a fully functional Ducktyl-ManuForm by following the build log/guide and using the default 5x6 model, I'd advise you to read the in-depht documentation if you want to customize anything, so you can better understand my approach and learn from my mistakes. 
 
 # Simple build log 
 
@@ -23,11 +23,16 @@ Optional:
 * Kailh hot swap sockets CPG151101S11
 
 And the obvious part: The 3D printed cases. As nobody sells the cases, you'll have to 3D-print them by yourself, or ask someone to do it for you. I for example was able to print them at my school, using an Ultimaker 2+ with a layerheight of 0.15 mm and 80% infill out of PLA. While the right half is just the [right-5x6.stl](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/things/right-5x6.stl) model, the left half is the [ducktyl-left-5x6.stl](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/things/ducktyl-left-5x6.stl) model, which has the cutout for the OLED-display.
+
 Picture of the printed left side: 
 
 ![Imgur](https://i.imgur.com/dHPAJN4.jpg)
 
-Notice that there is no hole for the OLED ribbon yet, as I added it to the model afterwards. 
+Notice that there is no hole for the OLED ribbon yet, as I added it to the model afterwards. The old model is still available as [old-ducktyl-left-5x6.stl](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/things/old-ducktyl-left-5x6.stl) for people who want to be at the safe side, as the new model is not yet tested. Keep in mind though, that if you go with the old model, you will have to drill the hole by yourself. 
+
+Another thing I have to add is that if you want to mount the microcontrollers like I did, you'll have to take away parts of the back wall of the ports with a dremel to make the microcontroller fit it there. This is not a problem if you use an USB cable to bring the mirocontroller's USB port to the outside. 
+
+
 
 ## Creating the matrix
 
@@ -60,9 +65,9 @@ You can find all information on how to flash the right firmware onto the keyboar
 
 ## Finishing touches
 
-You should now have a working keyboard, but everything inside is still loose. To clean it up a little, its nice to glue in the connectors and put the microcontrollers in place with some hand moldable plastic like I did. Looking back however, with this model it is probably smarter to glue the microcontrollers to the holder to the side and use an USB cable to bring the connectors to the outside, like in the original Dactyl-ManuForm. If you need a bottom plate, also make sure to look up the original tutorial. I didn't add one, as not to add more height, but instead went with glueing anti-slip feet to the screwholes. This is the finished keyboard from the bottom: 
+You should now have a working keyboard, but everything inside is still loose. To clean it up a little, its nice to glue in the connectors and put the microcontrollers in place with some hand moldable plastic like I did. Looking back however, with this model it is probably smarter to glue the microcontrollers to the holder on the side and use an USB cable to bring the connectors to the outside, like in the original Dactyl-ManuForm. If you need a bottom plate, also make sure to look up the original tutorial. I didn't add one, as not to add more height, but instead went with glueing anti-slip feet to the screwholes. This is the finished keyboard from the bottom: 
 
-![Imgur](https://i.imgur.com/VCkwyaX.jpg)
+![Imgur](https://i.imgur.com/VCkwyaX.jpg?1)
 
 This is the finished IO. It's not perfect, but it does the job!
 
