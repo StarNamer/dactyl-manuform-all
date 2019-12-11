@@ -1,6 +1,6 @@
 # Documentation for the Ducktyl-ManuForm
 
-The documentation is split into a simple [build log/guide](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/ducktyl/README.md#simple-build-log) of the already generated default 5x6 model, a more [in-depht documentation] of the whole process and some notes on the configuration of the QMK-firmware used to power the keyboard.
+The documentation is split into a simple [build log/guide](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/ducktyl/README.md#simple-build-log) of the already generated default 5x6 model, a more [in-depht documentation](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/ducktyl/in-depht_documentation.md) of the whole process and some notes on the configuration of the QMK-firmware used to power the keyboard.
 While you should be able to build a fully functional Ducktyl-ManuForm by following the build log/guide and using the default 5x6 model, I'd advise you to read the in-depht documentation if you want to customize anything, so you can better understand my approach and learn from my mistakes. 
 
 # Simple build log/guide
@@ -61,7 +61,7 @@ to pin 2 and SCL to pin 3. The process should look like this:
 
 ## Flashing the firmware
 
-You can find all information on how to flash the right firmware onto the keyboard [here](https://github.com/OutstandingOof/qmk_firmware/tree/ducktyl_manuform/keyboards/handwired/ducktyl_manuform). The firmware should work if you did everything like i did. If you changed things up, I'd advise you to read my in-depht documetation so you can replicate my steps to adapt the firmware to your needs. 
+You can find all information on how to flash the right firmware onto the keyboard [here](https://github.com/OutstandingOof/qmk_firmware/tree/ducktyl_manuform/keyboards/handwired/ducktyl_manuform). The firmware should work if you did everything like i did. If you changed things up, I'd advise you to read my [in-depht documentation](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/ducktyl/in-depht_documentation.md) so you can replicate my steps to adapt the firmware to your needs. 
 
 ## Finishing touches
 
