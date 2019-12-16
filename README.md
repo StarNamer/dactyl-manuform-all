@@ -5,7 +5,7 @@ This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboar
 
 The main purpose of this fork is the addition of an OLED-display to the Dactyl-ManuForm's default 5x6 model as well as some minor changes to the keymap and the use of a rotary encoder. As these changes have been (at least for now) only made to one already generated .scad model, it is not possible to generate a Ducktyl-ManuForm using the steps mentioned below, which only remain to make it easier for others to generate a custom model as a starting point. For the process of creating a Ducktyl-ManuForm, you'll have to read my documentation, which is located in the [ducktyl folder](https://github.com/OutstandingOof/ducktyl-manuform/tree/master/ducktyl).
 
-## Everything from here on expect the updated license is still from the original Dactyl-ManuForm!
+## Everything from here on is still from the original Dactyl-ManuForm!
 
 The main change is that the thumb cluster was adapted from the [ManuForm keyboard](https://github.com/jeffgran/ManuForm) ([geekhack](https://geekhack.org/index.php?topic=46015.0)). The walls were changed to just drop to the floor. The keyboard is paramaterized to allow adjusting the following:
 
@@ -133,6 +133,6 @@ This site also shows connections for the Arduino Pro Micro controllers.
 
 ## License
 
-Copyright © 2015-2019 Matthew Adereth, Tom Short and Johannes Weiss
+Copyright © 2015-2017 Matthew Adereth and Tom Short
 
 The source code for generating the models (everything excluding the [things/](things/) and [resources/](resources/) directories is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).  The generated models and PCB designs are distributed under the [Creative Commons Attribution-NonCommercial-ShareAlike License Version 3.0](LICENSE-models).
