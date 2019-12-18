@@ -6,7 +6,7 @@ jack_front_diameter = 6.4;
 jack_nut_distance = 2.5;  // distance between the nut and the end of the thinner part with the thread
 jack_nut_diameter = 9;
 
-base_pos = [-68, 0, 0];
+base_pos = [-49, 0, 0];
 
 module jack_hole() {
     translate(base_pos) translate([-3.2, 7.5, 7.5]) {

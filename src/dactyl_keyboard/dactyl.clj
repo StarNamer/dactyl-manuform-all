@@ -19,7 +19,7 @@
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style 
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
@@ -32,7 +32,7 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 16)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -602,15 +602,15 @@
 (def promic-holder
   (union
     (->> (cube 12 41 24)
-         (translate [-76 34.5 13]))
-    (->> (cube 12 9 22)
-         (translate [-64 58.5 13]))
+         (translate [-57 34.5 13]))
+    (->> (cube 17 9 22)
+         (translate [-45 58.5 13]))
   )
 )
 
 (def jack-holder
   (->> (cube 10 13 13)
-       (translate [-78 7.5 7.5]))
+       (translate [-59 7.5 7.5]))
 )
 
 (def usb-holder-hole
