@@ -6,9 +6,10 @@ jack_front_diameter = 6.4;
 jack_nut_distance = 2.5;  // distance between the nut and the end of the thinner part with the thread
 jack_nut_diameter = 9;
 
+base_pos = [-68, 0, 0];
 
 module jack_hole() {
-    translate([-71.2, 7.5, 7.5]) {
+    translate(base_pos) translate([-3.2, 7.5, 7.5]) {
         rotate(-90, [0, 1, 0]) {
             color("pink") {
                 cylinder(d=jack_diameter, h=10, $fn=30);
@@ -19,23 +20,9 @@ module jack_hole() {
     }
 }
 
-module dactyl() {
-    difference(){
-        union(){
-            include <../things/right.scad>
-        }
-        translate([-68,54,13])
-            rotate(270,[0,0,1])
-                rotate(270,[1,0,0])
-                    promic_front_cutaway();
-        screws();
-        jack_hole();
-    }
-}
-
 module promic_mount() {
     difference(){
-    translate([-68, 54, 13])
+    translate(base_pos) translate([0, 54, 13])
         rotate(270,[0,0,1])
             rotate(270,[1,0,0])
                 promic_plate();
@@ -45,7 +32,7 @@ module promic_mount() {
 
 module promic_bar() {
     difference(){
-    translate([-68, 54, 13])
+    translate(base_pos) translate([0, 54, 13])
         rotate(270,[0,0,1])
             rotate(270,[1,0,0]) {
                 difference() {
@@ -67,14 +54,30 @@ module screw() {
 }
 
 module screws() {
-    translate([-69, 35, 13]) screw();
-    translate([-67, 18, 7]) screw();
-    translate([-67, 18, 20]) screw();
+    translate(base_pos) {
+        translate([-1, 35, 13]) screw();
+        translate([1, 18, 7]) screw();
+        translate([1, 18, 20]) screw();
+    }
+}
+
+module dactyl() {
+    difference(){
+        union(){
+            include <../things/right.scad>
+        }
+        translate(base_pos) translate([0,54,13])
+            rotate(270,[0,0,1])
+                rotate(270,[1,0,0])
+                    promic_front_cutaway();
+        screws();
+        jack_hole();
+    }
 }
 
 
 intersection() {
-translate([-90, -10, 0]) cube([49, 80, 70]);
+//translate([-90, -10, 0]) cube([49, 80, 70]);
 dactyl();
 }
 //promic_mount();
