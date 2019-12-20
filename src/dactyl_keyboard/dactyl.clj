@@ -70,6 +70,7 @@
   (if (= switch-type :kailh-low) 13.9 14.4))
 (def keyswitch-width
   (if (= switch-type :kailh-low) 15.2 14.4))  ; bumper side
+(def keyswitch-shelf-width-kailh-low 1.3)
 
 (def sa-profile-key-height 12.7)
 
@@ -90,7 +91,7 @@
           (let [side-nub (->> (binding [*fn* 30] (cylinder 0.7 keyswitch-width))
                         (rotate (/ π 2) [1 0 0])
                         (translate [(+ (/ keyswitch-width 2)) 0 (- plate-thickness 2.1)]))
-                switch-shelf (->> (cube keyswitch-width (+ keyswitch-height 1.3) 1)
+                switch-shelf (->> (cube keyswitch-width (+ keyswitch-height keyswitch-shelf-width-kailh-low) 1)
                                   (translate [0 0 (- plate-thickness 0.5)]))]
                 (difference
                         (union top-wall left-wall (with-fn 100 side-nub))
@@ -785,20 +786,21 @@
                                    (binding [*fn* 30] 
                                      (cylinder nut-radius cylinder-height)))))))
 
-(def whole-stem-height 8)  ; TODO calculate based on trackpoint position
-; (def whole-stem-height 14.5)  ; TODO calculate based on trackpoint position
+(def whole-stem-height 14.5)  ; TODO calculate based on trackpoint position
 (def trackpoint-extension
   (let [stem-size 4.48
-        extra-socket-space 0.16
-        socket-size (+ stem-size extra-socket-space)
-        socket-notches-size (* socket-size 0.9)
-        notches-size (* stem-size 0.9)
+        extra-socket-width 0.16
+        height-diff 0.16
         notches-height 0.5
         base-radius 3.44
-        socket-depth 2.72
+        stem-height 2.72
         socket-cone-height 2
-        base-height (- whole-stem-height socket-depth)
-        stem-height (- whole-stem-height base-height)
+        socket-size (+ stem-size extra-socket-width)
+        socket-notches-size (* socket-size 0.9)
+        notches-size (* stem-size 0.9)
+        socket-depth (+ stem-height height-diff)
+        stem-height (- stem-height height-diff)
+        base-height (- whole-stem-height stem-height)
         base (binding [*fn* 30] (cylinder base-radius base-height))
         socket-hole (cube socket-size socket-size socket-depth)
         socket-hole-cone (binding [*fn* 30] (cylinder [(/ socket-size 2) 0] socket-cone-height))
