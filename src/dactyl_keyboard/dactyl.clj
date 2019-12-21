@@ -63,8 +63,8 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.4) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.4)
+(def keyswitch-height 14.3) ;; Was 14.1, then 14.25
+(def keyswitch-width 14.1)
 
 (def sa-profile-key-height 12.7)
 
@@ -83,7 +83,7 @@
                                    0
                                    (/ plate-thickness 2)]))
         clip-hole (->> (cube 6 6 6)
-                       (translate [0 (- (/ keyswitch-width 2) 1.8) 0.2]) ; 0.2 => 0.8 mm clipping height
+                       (translate [0 (- (/ keyswitch-width 2) 1.8) -0.7]) ; 0.2 => 0.8 mm clipping height
                     )
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
