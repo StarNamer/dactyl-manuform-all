@@ -73,7 +73,8 @@
 (def mount-height (+ keyswitch-height 3))
 
 (def single-plate
-  (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+  (let [
+        top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
                                   (/ plate-thickness 2)]))
@@ -81,6 +82,9 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
+        clip-hole (->> (cube 6 6 6)
+                       (translate [0 (- (/ keyswitch-width 2) 1.8) 0.2]) ; 0.2 => 0.8 mm clipping height
+                    )
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
@@ -88,7 +92,24 @@
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
                                              (/ plate-thickness 2)]))))
-        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
+        plate-half
+        (difference
+                    (union
+                    top-wall
+                    left-wall
+                    )
+         clip-hole
+         )
+;        plate-half (
+;                 ;                     difference(
+;                     union(
+;                            top-wall
+;                            left-wall
+;                            ;                        )
+;                            ;                        clip-hole
+;                            ))
+
+        ]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -783,6 +804,14 @@
 (spit "things/test.scad"
       (write-scad 
          (difference usb-holder usb-holder-hole)))
+
+(spit "things/plate.scad"
+      (write-scad
+       (union
+        (difference
+        (translate [0, 0, 0.7] (cube 22 22 1.4))
+         (cube (+ 3 keyswitch-width) (+ 3 keyswitch-width) 20))
+        single-plate)))
 
 
 
