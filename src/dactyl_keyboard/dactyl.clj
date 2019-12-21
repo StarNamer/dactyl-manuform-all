@@ -88,7 +88,7 @@
                                    0
                                    (/ plate-thickness 2)]))
         plate-half (if (= switch-type :kailh-low)
-          (let [side-nub (->> (binding [*fn* 30] (cylinder 0.7 keyswitch-width))
+          (let [side-nub (->> (binding [*fn* 30] (cylinder 0.8 keyswitch-width))
                         (rotate (/ π 2) [1 0 0])
                         (translate [(+ (/ keyswitch-width 2)) 0 (- plate-thickness 2.1)]))
                 switch-shelf (->> (cube keyswitch-width (+ keyswitch-height keyswitch-shelf-width-kailh-low) 1)
