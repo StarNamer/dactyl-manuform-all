@@ -7,3 +7,5 @@
 .lein-*
 *.gcode
 /target
+
+.idea
