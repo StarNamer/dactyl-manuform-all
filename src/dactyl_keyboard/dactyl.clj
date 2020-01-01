@@ -320,26 +320,26 @@
 
 (defn thumb-tr-place [shape]
   (->> shape
-       (rotate (deg2rad  14) [1 0 0])
+       (rotate (deg2rad  15) [1 0 0])
        (rotate (deg2rad -15) [0 1 0])
-       (rotate (deg2rad  10) [0 0 1]) ; original 10
+       (rotate (deg2rad  10) [0 0 1])
        (translate thumborigin)
-       (translate [-15 -10 5]))) ; original 1.5u  (translate [-12 -16 3])
+       (translate [-15 -10 5])))
 (defn thumb-tl-place [shape]
   (->> shape
-       (rotate (deg2rad  10) [1 0 0])
+       (rotate (deg2rad   9) [1 0 0])
        (rotate (deg2rad -23) [0 1 0])
-       (rotate (deg2rad  25) [0 0 1]) ; original 10
+       (rotate (deg2rad  25) [0 0 1])
        (translate thumborigin)
-       (translate [-35 -16 -2]))) ; original 1.5u (translate [-32 -15 -2])))
+       (translate [-33 -16 -2])))
 
 (defn thumb-bl-place [shape]
   (->> shape
        (rotate (deg2rad   6) [1 0 0])
-       (rotate (deg2rad -32) [0 1 0])
+       (rotate (deg2rad -36) [0 1 0])
        (rotate (deg2rad  35) [0 0 1])
        (translate thumborigin)
-       (translate [-51 -25 -11.5]))) ; (translate [-51 -25 -12])))
+       (translate [-48 -24 -11])))
 
 ;(defn thumb-mr-place [shape]
 ;  (->> shape
@@ -656,7 +656,7 @@
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
   (union (screw-insert 0 0               bottom-radius top-radius height [10 10 0])   ; upper left
-         (screw-insert 0 lastrow         bottom-radius top-radius height [-2.5 -2 0]) ; bottom thumb tip
+         (screw-insert 0 lastrow         bottom-radius top-radius height [0 0 0])     ; bottom thumb tip
          (screw-insert lastcol lastrow   bottom-radius top-radius height [-4 13 0])   ; bottom pinky
          (screw-insert lastcol 0         bottom-radius top-radius height [-4 7.5 0])  ; upper right
          (screw-insert 2 lastrow         bottom-radius top-radius height [-9 2 0])    ; bottom thumb
