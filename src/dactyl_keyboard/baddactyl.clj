@@ -1,4 +1,4 @@
-(ns dactyl-keyboard.dactyl
+(ns dactjl-keyboard.dactyl
   (:refer-clojure :exclude [use import])
   (:require [clojure.core.matrix :refer [array matrix mmul]]
             [scad-clj.scad :refer :all]
@@ -14,7 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (def nrows 5)
-(def ncols 6)
+(def ncols 7)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -23,17 +23,17 @@
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style 
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
-(def column-style :standard)
+ (def column-style :standard)
 
 (defn column-offset [column] (cond
-  (< column 2) [0 0 1]
-  (= column 2) [0 2.82 -6.5]
-  (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
+  (< column 3) [0 0 1]
+  (= column 3) [0 2.82 -6.5]		; original [0 2.82 -4.5]
+  (>= column 5) [0 -14 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 22)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 24)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -64,12 +64,12 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.1) ;; Was 14.1, then 14.25
+(def keyswitch-height 14.1) ;; Was 14.1, then 14.25, then 14.2
 (def keyswitch-width 14.1)
 
 (def sa-profile-key-height 12.7)
 
-(def plate-thickness 1.5)
+(def plate-thickness 1.5)		; was 2
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
@@ -152,7 +152,7 @@
 (def column-radius (+ (/ (/ (+ mount-width extra-width) 2)
                          (Math/sin (/ β 2)))
                       cap-top-height))
-(def column-x-delta (+ -1 (- (* column-radius (Math/sin β)))))
+(def column-x-delta (+ -2 (- (* column-radius (Math/sin β)))))
 (def column-base-angle (* β (- centercol 2)))
 
 (defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]
@@ -590,8 +590,8 @@
 (def rj9-space  (translate rj9-position rj9-cube))
 (def rj9-holder (translate rj9-position
                   (difference rj9-cube
-                              (union (translate [0 2 0] (cube 10.78  9 18.38))
-                                     (translate [0 0 5] (cube 10.78 13  5))))))
+                              (union (translate [0 2 0] (cube 11  9 18.38))
+                                     (translate [0 0 5] (cube 11  13  5)))))) ; was 10.78
 
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
@@ -698,12 +698,13 @@
                     key-holes
                     connectors
                     thumb
-                    thumb-connectors
+                    thumb-connectors		    
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
                                        usb-holder)
-                                rj9-space 
+                                usb-holder-hole
+				rj9-space 
                                 usb-holder-hole
                                 screw-insert-holes)
                     rj9-holder

@@ -19,21 +19,20 @@
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style 
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
-(def column-style :standard)
+; (def column-style :fixed)
 
 (defn column-offset [column] (cond
-  (< column 2) [0 0 1]
-  (= column 2) [0 2.82 -6.5]
+  (= column 2) [0 2.82 -4.5]
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 22)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -64,12 +63,12 @@
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
-(def keyswitch-height 14.1) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.1)
+(def keyswitch-height 14.2) ;; Was 14.1, then 14.25
+(def keyswitch-width 14.2)
 
 (def sa-profile-key-height 12.7)
 
-(def plate-thickness 1.5)
+(def plate-thickness 2)
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
