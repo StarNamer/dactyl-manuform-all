@@ -929,7 +929,7 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
 
-#_
+
 (spit "things/right-test.scad"
       (write-scad
        (union
@@ -944,7 +944,7 @@
         rj9-holder
         usb-holder-hole)))
 
-#_
+
 (spit "things/right-plate.scad"
       (write-scad
        (cut
@@ -955,7 +955,16 @@
                                       screw-insert-outers)
                                (translate [0 0 -10] screw-insert-screw-holes))))))
 
-#_
+(spit "things/left-plate.scad"
+      (write-scad (mirror [-1 0 0]
+       (cut
+        (translate [0 0 -0.1]
+                   (difference (union case-walls
+                                      teensy-holder
+                                          ; rj9-holder
+                                      screw-insert-outers)
+                               (translate [0 0 -10] screw-insert-screw-holes)))))))
+
 (spit "things/test.scad"
       (write-scad
        (difference usb-holder usb-holder-hole)))
