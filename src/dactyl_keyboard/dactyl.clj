@@ -959,23 +959,25 @@
 
 (spit "things/right-plate.scad"
       (write-scad
-       (cut
-        (translate [0 0 -0.1]
-                   (difference (union case-walls
-                                      ;teensy-holder
-                                          ; rj9-holder
-                                      screw-insert-outers)
-                               (translate [0 0 -10] screw-insert-screw-holes))))))
-
-(spit "things/left-plate.scad"
-      (write-scad (mirror [-1 0 0]
-       (cut
-        (translate [0 0 -0.1]
+        (translate [0 0 -1]
+        (extrude-linear{:height 2, :center true}
+       (project
                    (difference (union case-walls
                                       ;teensy-holder
                                           ; rj9-holder
                                       screw-insert-outers)
                                (translate [0 0 -10] screw-insert-screw-holes)))))))
+
+(spit "things/left-plate.scad"
+      (write-scad (mirror [-1 0 0]
+        (translate [0 0 -1]
+        (extrude-linear{:height 2, :center true}
+       (project
+                   (difference (union case-walls
+                                      ;teensy-holder
+                                          ; rj9-holder
+                                      screw-insert-outers)
+                               (translate [0 0 -10] screw-insert-screw-holes))))))))
 
 (spit "things/test.scad"
       (write-scad
