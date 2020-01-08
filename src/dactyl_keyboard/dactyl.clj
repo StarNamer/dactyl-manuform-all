@@ -147,10 +147,10 @@
         diode-wire-track (->> (cube 2 10 1.8)
                               (translate [-7 8 -2.1]))
         hotswap-base (union
-                      (difference hotswap-base-shape
-                                  hotswap-base-hold-shape)
-                      hotswap-pad-plus
-                      hotswap-pad-minus)
+                       (difference hotswap-base-shape
+                                   hotswap-base-hold-shape)
+                       hotswap-pad-plus
+                       hotswap-pad-minus)
         diode-holder (->> (cube 2 4 1.8)
                           (translate [-7 5 -2.1]))
         hotswap-holder (difference swap-holder
@@ -274,17 +274,17 @@
 
 (defn rotate-around-x [angle position]
   (mmul
-   [[1 0 0]
-    [0 (Math/cos angle) (- (Math/sin angle))]
-    [0 (Math/sin angle)    (Math/cos angle)]]
-   position))
+    [[1 0 0]
+     [0 (Math/cos angle) (- (Math/sin angle))]
+     [0 (Math/sin angle)    (Math/cos angle)]]
+    position))
 
 (defn rotate-around-y [angle position]
   (mmul
-   [[(Math/cos angle)     0 (Math/sin angle)]
-    [0                    1 0]
-    [(- (Math/sin angle)) 0 (Math/cos angle)]]
-   position))
+    [[(Math/cos angle)     0 (Math/sin angle)]
+     [0                    1 0]
+     [(- (Math/sin angle)) 0 (Math/cos angle)]]
+    position))
 
 (defn key-position [column row position]
   (apply-key-geometry (partial map +) rotate-around-x rotate-around-y column row position))
@@ -331,32 +331,32 @@
 (def connectors
   (apply union
          (concat
-          ;; Row connections
-          (for [column (range 0 (dec ncols))
-                row (range 0 lastrow)]
-            (triangle-hulls
-             (key-place (inc column) row web-post-tl)
-             (key-place column row web-post-tr)
-             (key-place (inc column) row web-post-bl)
-             (key-place column row web-post-br)))
+           ;; Row connections
+           (for [column (range 0 (dec ncols))
+                 row (range 0 lastrow)]
+             (triangle-hulls
+               (key-place (inc column) row web-post-tl)
+               (key-place column row web-post-tr)
+               (key-place (inc column) row web-post-bl)
+               (key-place column row web-post-br)))
 
-          ;; Column connections
-          (for [column columns
-                row (range 0 cornerrow)]
-            (triangle-hulls
-             (key-place column row web-post-bl)
-             (key-place column row web-post-br)
-             (key-place column (inc row) web-post-tl)
-             (key-place column (inc row) web-post-tr)))
+           ;; Column connections
+           (for [column columns
+                 row (range 0 cornerrow)]
+             (triangle-hulls
+               (key-place column row web-post-bl)
+               (key-place column row web-post-br)
+               (key-place column (inc row) web-post-tl)
+               (key-place column (inc row) web-post-tr)))
 
-          ;; Diagonal connections
-          (for [column (range 0 (dec ncols))
-                row (range 0 cornerrow)]
-            (triangle-hulls
-             (key-place column row web-post-br)
-             (key-place column (inc row) web-post-tr)
-             (key-place (inc column) row web-post-bl)
-             (key-place (inc column) (inc row) web-post-tl))))))
+           ;; Diagonal connections
+           (for [column (range 0 (dec ncols))
+                 row (range 0 cornerrow)]
+             (triangle-hulls
+               (key-place column row web-post-br)
+               (key-place column (inc row) web-post-tr)
+               (key-place (inc column) row web-post-bl)
+               (key-place (inc column) (inc row) web-post-tl))))))
 
 ;;;;;;;;;;;;
 ;; Thumbs ;;
@@ -414,19 +414,19 @@
 (defn thumb-1x-layout [shape]
   (case thumb-count
     :six (union
-          (thumb-br-place shape)
-          (thumb-bl-place shape)
-          (thumb-ml-place shape)
-          (thumb-mr-place shape))
-    :four (union
+           (thumb-br-place shape)
+           (thumb-bl-place shape)
            (thumb-ml-place shape)
            (thumb-mr-place shape))
+    :four (union
+            (thumb-ml-place shape)
+            (thumb-mr-place shape))
     :two (union)))
 
 (defn thumb-15x-layout [shape]
   (union
-   (thumb-tr-place shape)
-   (thumb-tl-place shape)))
+    (thumb-tr-place shape)
+    (thumb-tl-place shape)))
 
 (def larger-plate
   (let [plate-height (/ (- sa-double-length mount-height) 3)
@@ -437,14 +437,14 @@
 
 (def thumbcaps
   (union
-   (thumb-1x-layout (sa-cap 1))
-   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))))
+    (thumb-1x-layout (sa-cap 1))
+    (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))))
 
 (def thumb
   (union
-   (thumb-1x-layout single-plate)
-   (thumb-15x-layout single-plate)
-   (thumb-15x-layout larger-plate)))
+    (thumb-1x-layout single-plate)
+    (thumb-15x-layout single-plate)
+    (thumb-15x-layout larger-plate)))
 
 (def thumb-post-tr (translate [(- (/ mount-width 2) post-adj)  (- (/ mount-height  1.15) post-adj) 0] web-post))
 (def thumb-post-tl (translate [(+ (/ mount-width -2) post-adj) (- (/ mount-height  1.15) post-adj) 0] web-post))
@@ -453,91 +453,91 @@
 
 (def thumb-connectors
   (union
-   (triangle-hulls    ; top two
-    (thumb-tl-place thumb-post-tr)
-    (thumb-tl-place thumb-post-br)
-    (thumb-tr-place thumb-post-tl)
-    (thumb-tr-place thumb-post-bl))
-   (case thumb-count
-     :two (union)
-     :four (union)
-     :six (triangle-hulls
-           (thumb-br-place web-post-tr)
-           (thumb-br-place web-post-br)
-           (thumb-mr-place web-post-tl)
-           (thumb-mr-place web-post-bl)))
-   (case thumb-count
-     :two (union)
-     :four (union)
-     :six (triangle-hulls
-           (thumb-bl-place web-post-tr)
-           (thumb-bl-place web-post-br)
-           (thumb-ml-place web-post-tl)
-           (thumb-ml-place web-post-bl)))
-   (case thumb-count   ; centers of the bottom four
-     :two (union)
-     :four (triangle-hulls
-            (thumb-mr-place web-post-bl)
-            (thumb-ml-place web-post-bl)
-            (thumb-mr-place web-post-tl)
-            (thumb-ml-place web-post-bl)
-            (thumb-mr-place web-post-tr)
-            (thumb-ml-place web-post-br))
-     :six (triangle-hulls
-           (thumb-br-place web-post-tl)
-           (thumb-bl-place web-post-bl)
-           (thumb-br-place web-post-tr)
-           (thumb-bl-place web-post-br)
-           (thumb-mr-place web-post-tl)
-           (thumb-ml-place web-post-bl)
-           (thumb-mr-place web-post-tr)
-           (thumb-ml-place web-post-br)))
-   (case thumb-count    ; top two to the middle two, starting on the left
-     :two (union) ;(triangle-hulls (thumb-tl-place thumb-post-tl) (thumb-ml-place web-post-tr) (thumb-tl-place thumb-post-bl))
-     (triangle-hulls
-      (thumb-tl-place thumb-post-tl)
-      (thumb-ml-place web-post-tr)
-      (thumb-tl-place thumb-post-bl)
-      (thumb-ml-place web-post-br)
-      (thumb-tl-place thumb-post-br)
-      (thumb-mr-place web-post-tr)
-      (thumb-tr-place thumb-post-bl)
-      (thumb-mr-place web-post-br)
-      (thumb-tr-place thumb-post-br)))
-   (triangle-hulls    ; top two to the main keyboard, starting on the left
-    (thumb-tl-place thumb-post-tl)
-    (key-place 0 cornerrow web-post-bl)
-    (thumb-tl-place thumb-post-tr)
-    (key-place 0 cornerrow web-post-br)
-    (thumb-tr-place thumb-post-tl)
-    (key-place 1 cornerrow web-post-bl)
-    (thumb-tr-place thumb-post-tr)
-    (key-place 1 cornerrow web-post-br)
-    (key-place 2 lastrow web-post-tl)
-    (key-place 2 lastrow web-post-bl)
-    (thumb-tr-place thumb-post-tr)
-    (key-place 2 lastrow web-post-bl)
-    (thumb-tr-place thumb-post-br)
-    (key-place 2 lastrow web-post-br)
-    (key-place 3 lastrow web-post-bl)
-    (key-place 2 lastrow web-post-tr)
-    (key-place 3 lastrow web-post-tl)
-    (key-place 3 cornerrow web-post-bl)
-    (key-place 3 lastrow web-post-tr)
-    (key-place 3 cornerrow web-post-br)
-    (key-place 4 cornerrow web-post-bl))
-   (triangle-hulls
-    (key-place 1 cornerrow web-post-br)
-    (key-place 2 lastrow web-post-tl)
-    (key-place 2 cornerrow web-post-bl)
-    (key-place 2 lastrow web-post-tr)
-    (key-place 2 cornerrow web-post-br)
-    (key-place 3 cornerrow web-post-bl))
-   (triangle-hulls
-    (key-place 3 lastrow web-post-tr)
-    (key-place 3 lastrow web-post-br)
-    (key-place 3 lastrow web-post-tr)
-    (key-place 4 cornerrow web-post-bl))))
+    (triangle-hulls    ; top two
+                    (thumb-tl-place thumb-post-tr)
+                    (thumb-tl-place thumb-post-br)
+                    (thumb-tr-place thumb-post-tl)
+                    (thumb-tr-place thumb-post-bl))
+    (case thumb-count
+      :two (union)
+      :four (union)
+      :six (triangle-hulls
+             (thumb-br-place web-post-tr)
+             (thumb-br-place web-post-br)
+             (thumb-mr-place web-post-tl)
+             (thumb-mr-place web-post-bl)))
+    (case thumb-count
+      :two (union)
+      :four (union)
+      :six (triangle-hulls
+             (thumb-bl-place web-post-tr)
+             (thumb-bl-place web-post-br)
+             (thumb-ml-place web-post-tl)
+             (thumb-ml-place web-post-bl)))
+    (case thumb-count   ; centers of the bottom four
+      :two (union)
+      :four (triangle-hulls
+              (thumb-mr-place web-post-bl)
+              (thumb-ml-place web-post-bl)
+              (thumb-mr-place web-post-tl)
+              (thumb-ml-place web-post-bl)
+              (thumb-mr-place web-post-tr)
+              (thumb-ml-place web-post-br))
+      :six (triangle-hulls
+             (thumb-br-place web-post-tl)
+             (thumb-bl-place web-post-bl)
+             (thumb-br-place web-post-tr)
+             (thumb-bl-place web-post-br)
+             (thumb-mr-place web-post-tl)
+             (thumb-ml-place web-post-bl)
+             (thumb-mr-place web-post-tr)
+             (thumb-ml-place web-post-br)))
+    (case thumb-count    ; top two to the middle two, starting on the left
+      :two (union) ;(triangle-hulls (thumb-tl-place thumb-post-tl) (thumb-ml-place web-post-tr) (thumb-tl-place thumb-post-bl))
+      (triangle-hulls
+        (thumb-tl-place thumb-post-tl)
+        (thumb-ml-place web-post-tr)
+        (thumb-tl-place thumb-post-bl)
+        (thumb-ml-place web-post-br)
+        (thumb-tl-place thumb-post-br)
+        (thumb-mr-place web-post-tr)
+        (thumb-tr-place thumb-post-bl)
+        (thumb-mr-place web-post-br)
+        (thumb-tr-place thumb-post-br)))
+    (triangle-hulls    ; top two to the main keyboard, starting on the left
+                    (thumb-tl-place thumb-post-tl)
+                    (key-place 0 cornerrow web-post-bl)
+                    (thumb-tl-place thumb-post-tr)
+                    (key-place 0 cornerrow web-post-br)
+                    (thumb-tr-place thumb-post-tl)
+                    (key-place 1 cornerrow web-post-bl)
+                    (thumb-tr-place thumb-post-tr)
+                    (key-place 1 cornerrow web-post-br)
+                    (key-place 2 lastrow web-post-tl)
+                    (key-place 2 lastrow web-post-bl)
+                    (thumb-tr-place thumb-post-tr)
+                    (key-place 2 lastrow web-post-bl)
+                    (thumb-tr-place thumb-post-br)
+                    (key-place 2 lastrow web-post-br)
+                    (key-place 3 lastrow web-post-bl)
+                    (key-place 2 lastrow web-post-tr)
+                    (key-place 3 lastrow web-post-tl)
+                    (key-place 3 cornerrow web-post-bl)
+                    (key-place 3 lastrow web-post-tr)
+                    (key-place 3 cornerrow web-post-br)
+                    (key-place 4 cornerrow web-post-bl))
+    (triangle-hulls
+      (key-place 1 cornerrow web-post-br)
+      (key-place 2 lastrow web-post-tl)
+      (key-place 2 cornerrow web-post-bl)
+      (key-place 2 lastrow web-post-tr)
+      (key-place 2 cornerrow web-post-br)
+      (key-place 3 cornerrow web-post-bl))
+    (triangle-hulls
+      (key-place 3 lastrow web-post-tr)
+      (key-place 3 lastrow web-post-br)
+      (key-place 3 lastrow web-post-tr)
+      (key-place 4 cornerrow web-post-bl))))
 
 ;;;;;;;;;;
 ;; Case ;;
@@ -574,20 +574,20 @@
 
 (defn wall-brace [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
   (union
-   (hull
-    (place1 post1)
-    (place1 (translate (wall-locate1 dx1 dy1) post1))
-    (place1 (translate (wall-locate2 dx1 dy1) post1))
-    (place1 (translate (wall-locate3 dx1 dy1) post1))
-    (place2 post2)
-    (place2 (translate (wall-locate1 dx2 dy2) post2))
-    (place2 (translate (wall-locate2 dx2 dy2) post2))
-    (place2 (translate (wall-locate3 dx2 dy2) post2)))
-   (bottom-hull
-    (place1 (translate (wall-locate2 dx1 dy1) post1))
-    (place1 (translate (wall-locate3 dx1 dy1) post1))
-    (place2 (translate (wall-locate2 dx2 dy2) post2))
-    (place2 (translate (wall-locate3 dx2 dy2) post2)))))
+    (hull
+      (place1 post1)
+      (place1 (translate (wall-locate1 dx1 dy1) post1))
+      (place1 (translate (wall-locate2 dx1 dy1) post1))
+      (place1 (translate (wall-locate3 dx1 dy1) post1))
+      (place2 post2)
+      (place2 (translate (wall-locate1 dx2 dy2) post2))
+      (place2 (translate (wall-locate2 dx2 dy2) post2))
+      (place2 (translate (wall-locate3 dx2 dy2) post2)))
+    (bottom-hull
+      (place1 (translate (wall-locate2 dx1 dy1) post1))
+      (place1 (translate (wall-locate3 dx1 dy1) post1))
+      (place2 (translate (wall-locate2 dx2 dy2) post2))
+      (place2 (translate (wall-locate3 dx2 dy2) post2)))))
 
 (defn key-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2]
   (wall-brace (partial key-place x1 y1) dx1 dy1 post1
@@ -595,109 +595,109 @@
 
 (def case-walls
   (union
-   ; back wall
-   (for [x (range 0 ncols)] (key-wall-brace x 0 0 1 web-post-tl x       0 0 1 web-post-tr))
-   (for [x (range 1 ncols)] (key-wall-brace x 0 0 1 web-post-tl (dec x) 0 0 1 web-post-tr))
-   (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
-   ; right wall
-   (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
-   (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
-   (key-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 1 0 web-post-br)
-   ; left wall
-   (for [y (range 0 lastrow)]
-     (union
-      (wall-brace (partial left-key-place y 1) -1 0 web-post
-                  (partial left-key-place y -1) -1 0 web-post)
-      (hull (key-place 0 y web-post-tl)
-            (key-place 0 y web-post-bl)
-            (left-key-place y  1 web-post)
-            (left-key-place y -1 web-post))))
-   (for [y (range 1 lastrow)]
-     (union
-      (wall-brace (partial left-key-place (dec y) -1) -1 0 web-post
-                  (partial left-key-place      y   1) -1 0 web-post)
-      (hull (key-place 0 y       web-post-tl)
-            (key-place 0 (dec y) web-post-bl)
-            (left-key-place y        1 web-post)
-            (left-key-place (dec y) -1 web-post))))
-   (wall-brace (partial key-place 0 0) 0 1 web-post-tl (partial left-key-place 0 1) 0 1 web-post)
-   (wall-brace (partial left-key-place 0 1) 0 1 web-post (partial left-key-place 0 1) -1 0 web-post)
-   ; front wall
-   (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
-   (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-   (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
-   (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
-   (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
-   ; thumb walls
-   (case thumb-count
-     :two (union
-           (wall-brace thumb-tr-place  0 -1 thumb-post-br thumb-tr-place  0 -2 thumb-post-bl)
-           (wall-brace thumb-tr-place  0 -2 thumb-post-bl thumb-tl-place  0 -2 thumb-post-br)
-           (wall-brace thumb-tl-place  0 -2 thumb-post-br thumb-tl-place  0 -2 thumb-post-bl)
-           (wall-brace thumb-tl-place -2 -1 thumb-post-bl thumb-tl-place -2 -1 thumb-post-tl))
-     (union
-      (wall-brace thumb-mr-place  0  -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
-      (wall-brace thumb-mr-place  0  -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
-      (wall-brace thumb-ml-place -0.3 1 web-post-tr thumb-ml-place  0  1 web-post-tl)))
-   (case thumb-count ;; corners
-     :six (union
-           (wall-brace thumb-mr-place -1  0 web-post-bl thumb-mr-place  0 -1 web-post-bl)
-           ;(wall-brace thumb-ml-place -1  0 web-post-tl thumb-ml-place  0  1 web-post-tl)
-           (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
-           (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl)
-           (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl)
-           (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl))
-     :four (union)
-     :two (union))
-   ; thumb corners
-   (case thumb-count
-     :six (union
-           (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
-           (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
-           (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
-           (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
-           (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl))
-     :four (union
-            (wall-brace thumb-ml-place -1  0 web-post-bl thumb-mr-place -1  0 web-post-bl)
-            (wall-brace thumb-ml-place -1  0 web-post-tl thumb-ml-place -1  0 web-post-bl)
-            (wall-brace thumb-mr-place -1  0 web-post-bl thumb-mr-place  0 -1 web-post-bl)
-            (wall-brace thumb-ml-place -1  0 web-post-tl thumb-ml-place  0  1 web-post-tl))
-     :two (union
-           (wall-brace thumb-tl-place -2 -1 thumb-post-bl thumb-tl-place -0 -2 thumb-post-bl)))
-   ; thumb tweeners
-   (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
-   ; clunky bit on the top left thumb connection  (normal connectors don't work well)
-   (bottom-hull
-    (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
-    (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
-    (thumb-ml-place (translate (wall-locate2 -0.3 (case thumb-count :two 0 1)) web-post-tr))
-    (thumb-ml-place (translate (wall-locate3 -0.3 (case thumb-count :two 0 1)) web-post-tr)))
-   (hull
-    (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
-    (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
-    (thumb-ml-place (translate (wall-locate2 -0.3 (case thumb-count :two 0 1)) web-post-tr))
-    (thumb-ml-place (translate (wall-locate3 -0.3 (case thumb-count :two 0 1)) web-post-tr))
-    (thumb-tl-place thumb-post-tl))
-   (hull
-    (left-key-place cornerrow -1 web-post)
-    (left-key-place cornerrow -1 (translate (wall-locate1 -1 0) web-post))
-    (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
-    (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
-    (thumb-tl-place thumb-post-tl))
-   (hull
-    (left-key-place cornerrow -1 web-post)
-    (left-key-place cornerrow -1 (translate (wall-locate1 -1 0) web-post))
-    (key-place 0 cornerrow web-post-bl)
-    (key-place 0 cornerrow (translate (wall-locate1 -1 0) web-post-bl))
-    (thumb-tl-place thumb-post-tl))
-   (case thumb-count
-     :two (union)
-     (hull
-      (thumb-ml-place web-post-tr)
-      (thumb-ml-place (translate (wall-locate1 -0.3 1) web-post-tr))
-      (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
-      (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr))
-      (thumb-tl-place thumb-post-tl)))))
+    ; back wall
+    (for [x (range 0 ncols)] (key-wall-brace x 0 0 1 web-post-tl x       0 0 1 web-post-tr))
+    (for [x (range 1 ncols)] (key-wall-brace x 0 0 1 web-post-tl (dec x) 0 0 1 web-post-tr))
+    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
+    ; right wall
+    (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 web-post-tr lastcol y       1 0 web-post-br))
+    (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 web-post-br lastcol y 1 0 web-post-tr))
+    (key-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 1 0 web-post-br)
+    ; left wall
+    (for [y (range 0 lastrow)]
+      (union
+        (wall-brace (partial left-key-place y 1) -1 0 web-post
+                    (partial left-key-place y -1) -1 0 web-post)
+        (hull (key-place 0 y web-post-tl)
+              (key-place 0 y web-post-bl)
+              (left-key-place y  1 web-post)
+              (left-key-place y -1 web-post))))
+    (for [y (range 1 lastrow)]
+      (union
+        (wall-brace (partial left-key-place (dec y) -1) -1 0 web-post
+                    (partial left-key-place      y   1) -1 0 web-post)
+        (hull (key-place 0 y       web-post-tl)
+              (key-place 0 (dec y) web-post-bl)
+              (left-key-place y        1 web-post)
+              (left-key-place (dec y) -1 web-post))))
+    (wall-brace (partial key-place 0 0) 0 1 web-post-tl (partial left-key-place 0 1) 0 1 web-post)
+    (wall-brace (partial left-key-place 0 1) 0 1 web-post (partial left-key-place 0 1) -1 0 web-post)
+    ; front wall
+    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
+    (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
+    (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 1 -1 web-post-bl)
+    (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br))
+    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+    ; thumb walls
+    (case thumb-count
+      :two (union
+             (wall-brace thumb-tr-place  0 -1 thumb-post-br thumb-tr-place  0 -2 thumb-post-bl)
+             (wall-brace thumb-tr-place  0 -2 thumb-post-bl thumb-tl-place  0 -2 thumb-post-br)
+             (wall-brace thumb-tl-place  0 -2 thumb-post-br thumb-tl-place  0 -2 thumb-post-bl)
+             (wall-brace thumb-tl-place -2 -1 thumb-post-bl thumb-tl-place -2 -1 thumb-post-tl))
+      (union
+        (wall-brace thumb-mr-place  0  -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
+        (wall-brace thumb-mr-place  0  -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
+        (wall-brace thumb-ml-place -0.3 1 web-post-tr thumb-ml-place  0  1 web-post-tl)))
+    (case thumb-count ;; corners
+      :six (union
+             (wall-brace thumb-mr-place -1  0 web-post-bl thumb-mr-place  0 -1 web-post-bl)
+             ;(wall-brace thumb-ml-place -1  0 web-post-tl thumb-ml-place  0  1 web-post-tl)
+             (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
+             (wall-brace thumb-bl-place  0  1 web-post-tr thumb-bl-place  0  1 web-post-tl)
+             (wall-brace thumb-br-place -1  0 web-post-tl thumb-br-place -1  0 web-post-bl)
+             (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place -1  0 web-post-bl))
+      :four (union)
+      :two (union))
+    ; thumb corners
+    (case thumb-count
+      :six (union
+             (wall-brace thumb-br-place -1  0 web-post-bl thumb-br-place  0 -1 web-post-bl)
+             (wall-brace thumb-bl-place -1  0 web-post-tl thumb-bl-place  0  1 web-post-tl)
+             (wall-brace thumb-mr-place  0 -1 web-post-bl thumb-br-place  0 -1 web-post-br)
+             (wall-brace thumb-ml-place  0  1 web-post-tl thumb-bl-place  0  1 web-post-tr)
+             (wall-brace thumb-bl-place -1  0 web-post-bl thumb-br-place -1  0 web-post-tl))
+      :four (union
+              (wall-brace thumb-ml-place -1  0 web-post-bl thumb-mr-place -1  0 web-post-bl)
+              (wall-brace thumb-ml-place -1  0 web-post-tl thumb-ml-place -1  0 web-post-bl)
+              (wall-brace thumb-mr-place -1  0 web-post-bl thumb-mr-place  0 -1 web-post-bl)
+              (wall-brace thumb-ml-place -1  0 web-post-tl thumb-ml-place  0  1 web-post-tl))
+      :two (union
+             (wall-brace thumb-tl-place -2 -1 thumb-post-bl thumb-tl-place -0 -2 thumb-post-bl)))
+    ; thumb tweeners
+    (wall-brace thumb-tr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
+    ; clunky bit on the top left thumb connection  (normal connectors don't work well)
+    (bottom-hull
+      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
+      (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
+      (thumb-ml-place (translate (wall-locate2 -0.3 (case thumb-count :two 0 1)) web-post-tr))
+      (thumb-ml-place (translate (wall-locate3 -0.3 (case thumb-count :two 0 1)) web-post-tr)))
+    (hull
+      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
+      (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
+      (thumb-ml-place (translate (wall-locate2 -0.3 (case thumb-count :two 0 1)) web-post-tr))
+      (thumb-ml-place (translate (wall-locate3 -0.3 (case thumb-count :two 0 1)) web-post-tr))
+      (thumb-tl-place thumb-post-tl))
+    (hull
+      (left-key-place cornerrow -1 web-post)
+      (left-key-place cornerrow -1 (translate (wall-locate1 -1 0) web-post))
+      (left-key-place cornerrow -1 (translate (wall-locate2 -1 0) web-post))
+      (left-key-place cornerrow -1 (translate (wall-locate3 -1 0) web-post))
+      (thumb-tl-place thumb-post-tl))
+    (hull
+      (left-key-place cornerrow -1 web-post)
+      (left-key-place cornerrow -1 (translate (wall-locate1 -1 0) web-post))
+      (key-place 0 cornerrow web-post-bl)
+      (key-place 0 cornerrow (translate (wall-locate1 -1 0) web-post-bl))
+      (thumb-tl-place thumb-post-tl))
+    (case thumb-count
+      :two (union)
+      (hull
+        (thumb-ml-place web-post-tr)
+        (thumb-ml-place (translate (wall-locate1 -0.3 1) web-post-tr))
+        (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
+        (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr))
+        (thumb-tl-place thumb-post-tl)))))
 
 (def rj9-start  (map + [0 -3  0] (key-position 0 0 (map + (wall-locate3 0 1) [0 (/ mount-height  2) 0]))))
 (def rj9-position  [(first rj9-start) (second rj9-start) 11])
@@ -705,10 +705,10 @@
 (def rj9-space  (translate rj9-position rj9-cube))
 (def rj9-holder
   (translate
-   rj9-position
-   (difference rj9-cube
-               (union (translate [0 2 0] (cube 10.78  9 18.38))
-                      (translate [0 0 5] (cube 10.78 13  5))))))
+    rj9-position
+    (difference rj9-cube
+                (union (translate [0 2 0] (cube 10.78  9 18.38))
+                       (translate [0 0 5] (cube 10.78 13  5))))))
 
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
@@ -746,27 +746,27 @@
 (def trrs-holder-thickness-2x (* 2 trrs-holder-thickness))
 (def trrs-holder
   (union
-   (->> (cube (+ (first trrs-holder-size) trrs-holder-thickness-2x)
-              (+ trrs-holder-thickness (second trrs-holder-size))
-              (+ (last trrs-holder-size) trrs-holder-thickness))
-        (translate [(first trrs-holder-position)
-                    (second trrs-holder-position)
-                    (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2)]))))
+    (->> (cube (+ (first trrs-holder-size) trrs-holder-thickness-2x)
+               (+ trrs-holder-thickness (second trrs-holder-size))
+               (+ (last trrs-holder-size) trrs-holder-thickness))
+         (translate [(first trrs-holder-position)
+                     (second trrs-holder-position)
+                     (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2)]))))
 (def trrs-holder-hole
   (union
-  ; circle trrs hole
-   (->>
-    (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
-    (rotate (deg2rad  90) [1 0 0])
-    (translate [(first trrs-holder-position)
-                (+ (second trrs-holder-position)
-                   (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2))
-                (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
-  ; rectangular trrs holder
-   (->> (apply cube trrs-holder-hole-size)
-        (translate [(first trrs-holder-position)
-                    (+ (/ trrs-holder-thickness -2) (second trrs-holder-position))
-                    (+ (/ (last trrs-holder-hole-size) 2) trrs-holder-thickness)]))))
+    ; circle trrs hole
+    (->>
+      (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
+      (rotate (deg2rad  90) [1 0 0])
+      (translate [(first trrs-holder-position)
+                  (+ (second trrs-holder-position)
+                     (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2))
+                  (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
+    ; rectangular trrs holder
+    (->> (apply cube trrs-holder-hole-size)
+         (translate [(first trrs-holder-position)
+                     (+ (/ trrs-holder-thickness -2) (second trrs-holder-position))
+                     (+ (/ (last trrs-holder-hole-size) 2) trrs-holder-thickness)]))))
 
 (def pro-micro-position (map + (key-position 0 1 (wall-locate3 -1 0)) [-6 2 -15]))
 (def pro-micro-space-size [4 10 12]) ; z has no wall;
@@ -784,13 +784,13 @@
                    (last pro-micro-position)])))
 (def pro-micro-holder
   (difference
-   (->> (cube (first pro-micro-holder-size)
-              (second pro-micro-holder-size)
-              (last pro-micro-holder-size))
-        (translate [(first pro-micro-position)
-                    (second pro-micro-position)
-                    (last pro-micro-position)]))
-   pro-micro-space))
+    (->> (cube (first pro-micro-holder-size)
+               (second pro-micro-holder-size)
+               (last pro-micro-holder-size))
+         (translate [(first pro-micro-position)
+                     (second pro-micro-position)
+                     (last pro-micro-position)]))
+    pro-micro-space))
 
 (def teensy-width 20)
 (def teensy-height 12)
@@ -809,22 +809,22 @@
 
 (def teensy-holder
   (->>
-   (union
-    (->> (cube 3 teensy-holder-length (+ 6 teensy-width))
-         (translate [1.5 teensy-holder-offset 0]))
-    (->> (cube teensy-pcb-thickness teensy-holder-length 3)
-         (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
-    (->> (cube 4 teensy-holder-length 4)
-         (translate [(+ teensy-pcb-thickness 5) teensy-holder-offset (-  -1 (/ teensy-width 2))]))
-    (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)
-         (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
-    (->> (cube 4 teensy-holder-top-length 4)
-         (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
-   (translate [(- teensy-holder-width) 0 0])
-   (translate [-1.4 0 0])
-   (translate [(first teensy-top-xy)
-               (- (second teensy-top-xy) 1)
-               (/ (+ 6 teensy-width) 2)])))
+    (union
+      (->> (cube 3 teensy-holder-length (+ 6 teensy-width))
+           (translate [1.5 teensy-holder-offset 0]))
+      (->> (cube teensy-pcb-thickness teensy-holder-length 3)
+           (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
+      (->> (cube 4 teensy-holder-length 4)
+           (translate [(+ teensy-pcb-thickness 5) teensy-holder-offset (-  -1 (/ teensy-width 2))]))
+      (->> (cube teensy-pcb-thickness teensy-holder-top-length 3)
+           (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-top-offset (+ 1.5 (/ teensy-width 2))]))
+      (->> (cube 4 teensy-holder-top-length 4)
+           (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
+    (translate [(- teensy-holder-width) 0 0])
+    (translate [-1.4 0 0])
+    (translate [(first teensy-top-xy)
+                (- (second teensy-top-xy) 1)
+                (/ (+ 6 teensy-width) 2)])))
 
 (defn screw-insert-shape [bottom-radius top-radius height]
   (union (cylinder [bottom-radius top-radius] height)
@@ -873,41 +873,41 @@
 
 (def wire-posts
   (union
-   (thumb-ml-place (translate [-5 0 -2] (wire-post  1 0)))
-   (thumb-ml-place (translate [0 0 -2.5] (wire-post -1 6)))
-   (thumb-ml-place (translate [5 0 -2] (wire-post  1 0)))
-   (for [column (range 0 lastcol)
-         row (range 0 cornerrow)]
-     (union
-      (key-place column row (translate [-5 0 0] (wire-post 1 0)))
-      (key-place column row (translate [0 0 0] (wire-post -1 6)))
-      (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
+    (thumb-ml-place (translate [-5 0 -2] (wire-post  1 0)))
+    (thumb-ml-place (translate [0 0 -2.5] (wire-post -1 6)))
+    (thumb-ml-place (translate [5 0 -2] (wire-post  1 0)))
+    (for [column (range 0 lastcol)
+          row (range 0 cornerrow)]
+      (union
+        (key-place column row (translate [-5 0 0] (wire-post 1 0)))
+        (key-place column row (translate [0 0 0] (wire-post -1 6)))
+        (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
 (def model-right
   (difference
-   (union
-    key-holes
-    connectors
-    thumb
-    thumb-connectors
-    (difference
-     (union case-walls
-            screw-insert-outers
-            (if use-promicro-usb-hole?
-              (union pro-micro-holder
-                     trrs-usb-holder-holder)
-              (union usb-holder))  ;teensy-holder))
-            teensy-holder
-            (if use-trrs? trrs-holder ()))
-     (if use-promicro-usb-hole?
-       (union trrs-usb-holder-space
-              trrs-usb-jack)
-       usb-holder-hole)
-     (if use-trrs? trrs-holder-hole rj9-space)
-     screw-insert-holes)
-    (if-not use-trrs? rj9-holder ())
-    (if use-wire-post? wire-posts ()))
-   (translate [0 0 -20] (cube 350 350 40))))
+    (union
+      key-holes
+      connectors
+      thumb
+      thumb-connectors
+      (difference
+        (union case-walls
+               screw-insert-outers
+               (if use-promicro-usb-hole?
+                 (union pro-micro-holder
+                        trrs-usb-holder-holder)
+                 (union usb-holder))  ;teensy-holder))
+               teensy-holder
+               (if use-trrs? trrs-holder ()))
+        (if use-promicro-usb-hole?
+          (union trrs-usb-holder-space
+                 trrs-usb-jack)
+          usb-holder-hole)
+        (if use-trrs? trrs-holder-hole rj9-space)
+        screw-insert-holes)
+      (if-not use-trrs? rj9-holder ())
+      (if use-wire-post? wire-posts ()))
+    (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -934,53 +934,53 @@
 
 (spit "things/right-test.scad"
       (write-scad
-       (union
-        key-holes
-        connectors
-        thumb
-        thumb-connectors
-        case-walls
-            (if use-promicro-usb-hole?
-              (union pro-micro-holder
-                     trrs-usb-holder-holder)
-              (union usb-holder))  ;teensy-holder))
-            teensy-holder
-            (if use-trrs? trrs-holder ())
-     (if use-promicro-usb-hole?
-       (union trrs-usb-holder-space
-              trrs-usb-jack)
-       usb-holder-hole)
-        thumbcaps
-        caps
-        ;teensy-holder
-        rj9-holder
-        usb-holder-hole)))
+        (union
+          key-holes
+          connectors
+          thumb
+          thumb-connectors
+          case-walls
+          (if use-promicro-usb-hole?
+            (union pro-micro-holder
+                   trrs-usb-holder-holder)
+            (union usb-holder))  ;teensy-holder))
+          teensy-holder
+          (if use-trrs? trrs-holder ())
+          (if use-promicro-usb-hole?
+            (union trrs-usb-holder-space
+                   trrs-usb-jack)
+            usb-holder-hole)
+          thumbcaps
+          caps
+          ;teensy-holder
+          rj9-holder
+          usb-holder-hole)))
 
 
 (spit "things/right-plate.scad"
       (write-scad
         (translate [0 0 -1]
-        (extrude-linear{:height 2, :center true}
-       (project
-                   (difference (union case-walls
-                                      ;teensy-holder
-                                          ; rj9-holder
-                                      screw-insert-outers)
-                               (translate [0 0 -10] screw-insert-screw-holes)))))))
+                   (extrude-linear{:height 2, :center true}
+                                           (project
+                                             (difference (union case-walls
+                                                                ;teensy-holder
+                                                                ; rj9-holder
+                                                                screw-insert-outers)
+                                                         (translate [0 0 -10] screw-insert-screw-holes)))))))
 
 (spit "things/left-plate.scad"
       (write-scad (mirror [-1 0 0]
-        (translate [0 0 -1]
-        (extrude-linear{:height 2, :center true}
-       (project
-                   (difference (union case-walls
-                                      ;teensy-holder
-                                          ; rj9-holder
-                                      screw-insert-outers)
-                               (translate [0 0 -10] screw-insert-screw-holes))))))))
+                          (translate [0 0 -1]
+                                     (extrude-linear{:height 2, :center true}
+                                                             (project
+                                                               (difference (union case-walls
+                                                                                  ;teensy-holder
+                                                                                  ; rj9-holder
+                                                                                  screw-insert-outers)
+                                                                           (translate [0 0 -10] screw-insert-screw-holes))))))))
 
 (spit "things/test.scad"
       (write-scad
-       (difference usb-holder usb-holder-hole)))
+        (difference usb-holder usb-holder-hole)))
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
