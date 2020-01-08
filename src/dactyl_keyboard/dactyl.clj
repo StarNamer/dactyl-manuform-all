@@ -896,7 +896,8 @@
             (if use-promicro-usb-hole?
               (union pro-micro-holder
                      trrs-usb-holder-holder)
-              (union usb-holder)) ; teensy-holder))
+              (union usb-holder))  ;teensy-holder))
+            teensy-holder
             (if use-trrs? trrs-holder ()))
      (if use-promicro-usb-hole?
        (union trrs-usb-holder-space
@@ -911,7 +912,7 @@
 (spit "things/right.scad"
       (write-scad model-right))
 
-#_
+
 (def key-plate-right
   (union key-holes
          connectors
@@ -922,6 +923,7 @@
 (spit "things/key-plate-right.scad"
       (write-scad key-plate-right))
 
+#_
 (spit "things/plate-right.scad"
       (write-scad (->> single-plate
                        (translate [0 0 3]))))
@@ -938,9 +940,19 @@
         thumb
         thumb-connectors
         case-walls
+            (if use-promicro-usb-hole?
+              (union pro-micro-holder
+                     trrs-usb-holder-holder)
+              (union usb-holder))  ;teensy-holder))
+            teensy-holder
+            (if use-trrs? trrs-holder ())
+     (if use-promicro-usb-hole?
+       (union trrs-usb-holder-space
+              trrs-usb-jack)
+       usb-holder-hole)
         thumbcaps
         caps
-        teensy-holder
+        ;teensy-holder
         rj9-holder
         usb-holder-hole)))
 
@@ -950,7 +962,7 @@
        (cut
         (translate [0 0 -0.1]
                    (difference (union case-walls
-                                      teensy-holder
+                                      ;teensy-holder
                                           ; rj9-holder
                                       screw-insert-outers)
                                (translate [0 0 -10] screw-insert-screw-holes))))))
@@ -960,7 +972,7 @@
        (cut
         (translate [0 0 -0.1]
                    (difference (union case-walls
-                                      teensy-holder
+                                      ;teensy-holder
                                           ; rj9-holder
                                       screw-insert-outers)
                                (translate [0 0 -10] screw-insert-screw-holes)))))))
