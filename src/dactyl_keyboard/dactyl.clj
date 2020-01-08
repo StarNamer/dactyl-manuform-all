@@ -919,7 +919,7 @@
          thumb
          thumb-connectors))
 
-#_
+
 (spit "things/key-plate-right.scad"
       (write-scad key-plate-right))
 
@@ -963,6 +963,9 @@
                    (extrude-linear{:height 2, :center true}
                                            (project
                                              (difference (union case-walls
+                                                                key-plate-right                                            
+                                                                thumbcaps
+                                                                caps
                                                                 ;teensy-holder
                                                                 ; rj9-holder
                                                                 screw-insert-outers)
@@ -974,6 +977,9 @@
                                      (extrude-linear{:height 2, :center true}
                                                              (project
                                                                (difference (union case-walls
+                                                                                  key-plate-right
+                                                                                  thumbcaps
+                                                                                  caps
                                                                                   ;teensy-holder
                                                                                   ; rj9-holder
                                                                                   screw-insert-outers)
