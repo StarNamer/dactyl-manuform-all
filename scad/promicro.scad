@@ -56,28 +56,13 @@ color("gray")
         cube([ground_plate_length, ground_plate_width, ground_plate_thickness]);
 */
 
-module notch_bar(back_bar_mount=true) {
+module notch_bar() {
     // the main notch bar
     difference() {
         cube([promic_length - front_notch_depth, notch_bar_width, notch_bar_height]);
         color("yellow")
             translate([-0.5, -1, notch_bottom_level])
                 cube([promic_length - front_notch_depth + 1, notch_depth + 1, notch_height]);
-    }
-    if (back_bar_mount) {
-        // the back bar mount
-        translate([promic_length - front_notch_depth, 0, 0]) {
-            difference() {
-                cube([backbarmount_depth, notch_bar_width + backbarmount_overwidth, notch_bar_height]);
-                translate([-0.5, -1, notch_bottom_level + notch_height/2 - backbarmount_notch_height/2])
-                    cube([backbarmount_depth + 1, backbarmount_notch_depth + 1, backbarmount_notch_height]);
-                translate([backbarmount_depth/2, backbarmount_hole_indent, -0.5])
-                    cylinder(notch_bar_height + 1, backbarmount_hole_radius, backbarmount_hole_radius, $fn=30);
-            }
-        }
-        // the support block, extending the back bar towards the front
-        translate([promic_length - front_notch_depth - backbarmount_support_width, notch_bar_width, 0])
-            cube([backbarmount_support_width, backbarmount_overwidth, notch_bar_height]);
     }
 }
 
@@ -105,10 +90,10 @@ module usb_cut_away() {
 }
 
 
-module promic_mount(back_bar_mount=true) {
+module promic_mount() {
     // notch bars
-    translate([0, promic_width/2 - notch_depth]) notch_bar(back_bar_mount);
-    translate([0, -promic_width/2 + notch_depth]) mirror([0,1,0]) notch_bar(back_bar_mount);
+    translate([0, promic_width/2 - notch_depth]) notch_bar();
+    translate([0, -promic_width/2 + notch_depth]) mirror([0,1,0]) notch_bar();
 }
 
 module promic_front_cutaway() {
@@ -124,54 +109,7 @@ module promic_back_notch() {
     }
 }
 
-module promic_lock_bar() {
-    difference() {
-        translate([promic_length - front_notch_depth, notch_depth-promic_width/2, 0]) {
-            // fat bar in the middle
-            translate([0, lock_bar_hori_clearance, lock_bar_vert_clearance])
-                color("green")
-                    cube([
-                        backbarmount_depth,
-                        promic_width - 2*notch_depth - 2*lock_bar_hori_clearance,
-                        notch_bar_height - lock_bar_vert_clearance
-                    ]);
-            difference() {
-                //slim bar which goes into the mount
-                translate([
-                    0,
-                    -backbarmount_notch_depth + lock_bar_hori_clearance,
-                    notch_bottom_level + notch_height/2 - backbarmount_notch_height/2 + lock_bar_vert_clearance
-                ])
-                    color("green")
-                        cube([
-                            backbarmount_depth,
-                            promic_width - 2*notch_depth + 2*backbarmount_notch_depth - 2*lock_bar_hori_clearance,
-                            backbarmount_notch_height - 2*lock_bar_vert_clearance
-                        ]);
-                // cylinder cut-away for the screws…
-                // left
-                translate([
-                    backbarmount_depth/2, 
-                    - backbarmount_hole_indent + notch_depth
-                    -0.5
-                ])
-                    color("red")
-                        cylinder(notch_bar_height + 1, backbarmount_hole_radius, backbarmount_hole_radius, $fn=30);
-                //right
-                translate([
-                    backbarmount_depth/2, 
-                    backbarmount_hole_indent + promic_width - notch_depth
-                    -0.5
-                ])
-                    color("red")
-                        cylinder(notch_bar_height + 1, backbarmount_hole_radius, backbarmount_hole_radius, $fn=30);  
-            }
-        }
-        promic_back_notch();
-    }
-}
-promic_mount(false);
+promic_mount();
 promic_front_cutaway();
-//promic_lock_bar();
-
+promic_back_notch();
 
