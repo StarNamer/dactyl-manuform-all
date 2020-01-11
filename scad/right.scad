@@ -36,9 +36,14 @@ module promic_bar() {
         rotate(270,[0,0,1])
             rotate(270,[1,0,0]) {
                 difference() {
-                translate([32.2, -12, 0]) 
-                    cube([7.8, 24, 5]);
-                promic_back_notch();
+                    translate([31, -12, 0]) {
+                        difference() { 
+                            cube([9.0, 24, 5]);
+                            translate([-0.2, 3.5, 1]) cube([2, 3, 5]);
+                            translate([-0.2, 24-3-3.5, 1]) cube([2, 3, 5]);
+                        }
+                    }
+                    promic_back_notch();
                 }
             }
     screws();
@@ -80,8 +85,8 @@ intersection() {
 //translate([-90, -10, 0]) cube([49, 80, 70]);
 dactyl();
 }
-//promic_mount();
-//promic_bar();
+promic_mount();
+promic_bar();
 //
 //screw();
 //screws();

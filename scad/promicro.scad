@@ -16,20 +16,21 @@
 // y is “length”
 
 
-notch_depth = 0.5;
+notch_depth = 0.7;
 notch_bar_width = 3;
 notch_bar_height = 4.8;
 notch_bottom_level = 1.6;
-notch_height = 2;     // = PCB thickness
+notch_height = 1.8;     // = PCB thickness
 
 ground_plate_width = 26;
 ground_plate_length = 35;
 ground_plate_thickness = 1;
 
-promic_width = 18.8; 
-promic_length = 33.7;
+promic_width = 18.4; 
+promic_length = 33;
 
 front_notch_depth = 1.5;
+back_overhang = 0.6;
 
 usb_socket_width = 8.4;
 usb_socket_height = 3.4;
@@ -41,7 +42,7 @@ usb_plug_cutaway_bottom_level = 1;
 module notch_bar() {
     // the main notch bar
     difference() {
-        cube([promic_length - front_notch_depth, notch_bar_width, notch_bar_height]);
+        cube([promic_length - front_notch_depth - back_overhang, notch_bar_width, notch_bar_height]);
         color("yellow")
             translate([-0.5, -1, notch_bottom_level])
                 cube([promic_length - front_notch_depth + 1, notch_depth + 1, notch_height]);
@@ -85,9 +86,9 @@ module promic_front_cutaway() {
 
 module promic_back_notch() {
     translate([promic_length - front_notch_depth, notch_depth-promic_width/2, 0]) {
-        translate([-1, -notch_depth, notch_bottom_level])
+        translate([-2, -notch_depth, notch_bottom_level])
             color("pink")
-                cube([notch_depth + 0.24 + 1, promic_width, notch_height]);
+                cube([notch_depth + 0.24 + 2, promic_width, notch_height]);
     }
 }
 
