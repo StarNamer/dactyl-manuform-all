@@ -1,7 +1,7 @@
 use <promicro_plate.scad>
 use <promicro.scad>
 
-jack_diameter = 8.8;
+jack_diameter = 8.6;
 jack_front_diameter = 6.4;
 jack_nut_distance = 2.5;  // distance between the nut and the end of the thinner part with the thread
 jack_nut_diameter = 9;
