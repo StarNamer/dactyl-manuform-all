@@ -38,24 +38,6 @@ usb_plug_width = 13;
 usb_plug_height = 8.2;
 usb_plug_cutaway_bottom_level = 1;
 
-backbarmount_depth = 5;
-backbarmount_overwidth = 4; // how much the back bar is wider than the promic per side
-backbarmount_notch_depth = 5;
-backbarmount_notch_height = 2.8;
-backbarmount_hole_radius = 1.5;
-backbarmount_hole_indent = 2.8;
-backbarmount_support_width = 1.5;
-
-lock_bar_vert_clearance = 0.16; // clearance at the bottom and below and above the catches
-lock_bar_hori_clearance = 0.4;
-
-/*
-// additional ground plate
-color("gray")
-    translate([0, -ground_plate_width/2, -ground_plate_thickness])
-        cube([ground_plate_length, ground_plate_width, ground_plate_thickness]);
-*/
-
 module notch_bar() {
     // the main notch bar
     difference() {
