@@ -29,10 +29,70 @@
                                    0
                                    (/ plate-thickness 2)]))
         plate-half (union top-wall left-wall)]
-    (union plate-half
-           (->> plate-half
-                (mirror [1 0 0])
-                (mirror [0 1 0])))))
+    (->>
+      (difference
+        (union plate-half
+               (->> plate-half
+                    (mirror [1 0 0])
+                    (mirror [0 1 0])))
+        (->>
+          (cube 14 1 1)
+          (rotate (/ π 4) [1 0 0])
+          (translate [0 -7 0])
+        )
+      )
+    )
+))
+
+(def cutted-old-single-plate
+  (->>
+    (difference
+        old-single-plate
+        (->>
+          (cube 17.5 3 1.5)
+          (rotate (/ π 3.5) [1 0 0])
+          (translate [0 8.455 0])
+        )
+    )
+  )
+)
+
+(def extended-old-single-plate
+  (->>
+    (difference
+      (union
+        old-single-plate
+          (->>
+            (cube 17.4 2.8 2)
+            (translate [0 8.7 1])
+          )
+      )
+        (->>
+          (cube 17.5 2.4 2.4)
+          (rotate (/ π 4) [1 0 0])
+          (translate [0 10.1 0])
+        )
+    )
+  )
+)
+
+(def rev-extended-old-single-plate
+  (->>
+    (difference
+      (union
+        old-single-plate
+          (->>
+            (cube 17.4 3.4 2)
+            (translate [0 9.3 1])
+          )
+      )
+        (->>
+          (cube 17.5 2.8 2.5)
+          (translate [0 10.1 2.6])
+        )
+    )
+  )
+)
 
 (def alps-width 15.6)
 (def alps-notch-width 15.5)
@@ -169,8 +229,25 @@
                row rows
                :when (and (not (and (= column -1) (>= row 3))) (not (and (= column 0) (= row 4))))
                ]
-           (->> old-single-plate
-                (key-place column row)))))
+           (->> 
+             (if (= row 0)
+               (if (and (< column 4) (> column -1))
+                 (->>
+                   cutted-old-single-plate
+                      (key-place column row)
+                 )
+                 (->>
+                   rev-extended-old-single-plate
+                      (key-place column row)
+                 )
+               )
+               (->>
+                 extended-old-single-plate
+                    (key-place column row)
+                 )
+               )
+             )
+           )))
 
 (def caps
   (apply union
@@ -269,29 +346,29 @@
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
 
-(defn thumb-2x+1-column [shape]
+(defn thumb-2x+1-column [shape shape2]
   (union (thumb-place 1 -1/2 shape)
-         (thumb-place 1 1 shape)))
+         (thumb-place 1 1 shape2)))
 
 (defn thumb-2x+1-bottom-column [shape]
   (thumb-place 1 -1/2 shape))
 
-(defn thumb-1x-column [shape]
+(defn thumb-1x-column [shape shape2]
   (union (thumb-place 2 -1 shape)
          (thumb-place 2 0 shape)
-         (thumb-place 2 1 shape)))
+         (thumb-place 2 1 shape2)))
 
-(defn thumb-layout [shape]
+(defn thumb-layout [shape shape2]
   (union
    (thumb-2x-column shape)
-   (thumb-2x+1-column shape)
-   (thumb-1x-column shape)))
+   (thumb-2x+1-column shape shape2)
+   (thumb-1x-column shape shape2)))
 
 (defn thumb-bottom-layout [shape]
   (union
    (thumb-2x-column shape)
    (thumb-2x+1-bottom-column shape)
-   (thumb-1x-column shape)))
+   (thumb-1x-column shape shape)))
 
 (def double-plates
   (let [plate-height (/ (- sa-double-length mount-height) 2)
@@ -310,12 +387,12 @@
         top-plate (difference top-plate)]
     (union top-plate (mirror [0 1 0] top-plate))))
 
-(def thumbcaps
-  (union
-   (thumb-2x-column (sa-cap 2))
-   (thumb-place 1 -1/2 (sa-cap 2))
-   (thumb-place 1 1 (sa-cap 1))
-   (thumb-1x-column (sa-cap 1))))
+;(def thumbcaps
+;  (union
+;   (thumb-2x-column (sa-cap 2))
+;   (thumb-place 1 -1/2 (sa-cap 2))
+;   (thumb-place 1 1 (sa-cap 1))
+;   (thumb-1x-column (sa-cap 1))))
 
 (def thumb-connectors
   (union
@@ -403,9 +480,10 @@
 (def thumb
   (union
    thumb-connectors
-   (thumb-layout (rotate (/ π 2) [0 0 1] old-single-plate))
+   (thumb-layout extended-old-single-plate old-single-plate)
    (thumb-place 0 -1/2 double-plates)
-   (thumb-place 1 -1/2 double-plates)))
+   (thumb-place 1 -1/2 double-plates)
+   ))
 
 ;;;;;;;;;;
 ;; Case ;;
