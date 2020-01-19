@@ -74,3 +74,7 @@ You should now have a working keyboard, but everything inside is still loose. To
 This is the finished IO. It's not perfect, but it does the job!
 
 ![Imgur](https://i.imgur.com/olPG2hG.jpg)
+
+## License 
+
+This build guide and the in-depht documentation by OutstandingOof are licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike License Version 3.0](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/LICENSE-models).
