@@ -30,7 +30,7 @@ Picture of the printed left side:
 
 Notice that there is no hole for the OLED ribbon yet, as I added it to the model afterwards. The old model is still available as [old-ducktyl-left-5x6.stl](https://github.com/OutstandingOof/ducktyl-manuform/blob/master/things/old-ducktyl-left-5x6.stl) for people who want to be at the safe side, as the new model is not yet tested. Keep in mind though, that if you go with the old model, you will have to drill the hole by yourself. 
 
-Another thing I have to add is that if you want to mount the microcontrollers like I did, you'll have to take away parts of the back wall of the ports with a dremel to make the microcontroller fit it there. This is not a problem if you use an USB cable to bring the mirocontroller's USB port to the outside. 
+Another thing I have to add is that if you want to mount the microcontrollers like I did, you'll have to take away parts of the back wall of the ports with a dremel to make the microcontroller fit it there. This is not a problem if you use an USB cable to bring the microcontroller's USB port to the outside. 
 
 
 
