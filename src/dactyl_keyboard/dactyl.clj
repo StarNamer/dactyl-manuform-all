@@ -30,7 +30,7 @@
 
 (def inner-column true)                ; adds an extra inner column (one less row than
 
-(def inner-keycap-compatability false) ; changes inner-column to a 1x1u + 1x2u to better utilize ergodox keycap sets
+(def inner-keycap-compatability true) ; changes inner-column to use a 2u switch for better ergodox keycap compatability
 
 (def column-style :standard)
 
@@ -204,7 +204,7 @@
 (def innercolumn 0)
 
 ; Add or subtract a key-hole depending on our key-cap compatability flag
-(if (true? inner-keycap-compatability) (def innerrows (range 0 (- nrows 3))) (def innerrows (range 0 (- nrows 2))))
+(if (true? inner-keycap-compatability) (def innerrows (range 0 (- cornerrow 2))) (def innerrows (range 0 cornerrow)))
 
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height extra-height) 2)
@@ -304,6 +304,23 @@
              (->> single-plate
 ;               (rotate (/ π 2) [0 0 1])
                   (key-place 0 row))))))
+
+;placement for the last hole on the innermost column
+(def key-holes-inner-last
+  (if (true? inner-keycap-compatability)
+    (apply union
+           (for [row (range (- cornerrow 2) (- cornerrow 1))]
+             (->> single-plate
+;               (rotate (/ π 2) [0 0 1])
+                  (key-place 0 row))))))
+
+
+; OK this is where we are going to need to shift our inner-most column so that we can move it down
+; (def key-holes-inner) if (true ? (and inner-column inner-keycap-compatability)
+;       (apply union
+;             (for [row innerrows]
+;               (->> single-plate
+;                     (key-place 0 row))))))
 
 ;placement for the innermost column ;inner-keycap-compatability
 ; if (true ? (and inner-column inner-keycap-compatability)) {
@@ -924,6 +941,7 @@
                    (union
                     key-holes
                     key-holes-inner
+                    key-holes-inner-last
                     pinky-connectors
                     extra-connectors
                     connectors
