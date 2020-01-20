@@ -22,12 +22,6 @@
 (def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 
-(defn column-offset [column] (cond
-                               (= column 2) [0 2.82 -4.5]
-                               (>= column 4) [0 -10 5.64]            ; original [0 -5.8 5.64]
-                               :else [0 0 0]))
-
-(def thumb-offsets [4 -3 7])
 (def pinky-15u true)                   ; controls whether the outer column uses 1.5u keys
 (def first-15u-row 0)                   ; controls which should be the first row to have 1.5u keys on the outer column
 (def last-15u-row 3)                    ; controls which should be the last row to have 1.5u keys on the outer column
@@ -36,14 +30,16 @@
 
 (def inner-column true)                ; adds an extra inner column (one less row than
 
+(def inner-keycap-compatability false) ; changes inner-column to a 1x1u + 1x2u to better utilize ergodox keycap sets
+
 (def column-style :standard)
 
-
+; TODO:  Potentially a spot to change the offset
 (if (true? inner-column)
   (defn column-offset [column] (cond
   (<= column 1) [0 -2 0]
   (= column 3) [0 2.82 -4.5]
-  (>= column 5) [0 -12 5.64]            ; original [0 -5.8 5.64]
+  (>= column 5) [0 -10 5.64]            ; original [0 -12 5.64]
   :else [0 0 0]))
   (defn column-offset [column] (cond
   (= column 2) [0 2.82 -4.5]
@@ -51,7 +47,7 @@
   :else [0 0 0]))
   )
 
-(def thumb-offsets [6 -3 5])
+(def thumb-offsets [4 -3 5])
 
 (def keyboard-z-offset 17)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -74,7 +70,7 @@
 
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
-(def create-side-nubs? false)
+(def create-side-nubs? true)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
@@ -85,14 +81,15 @@
 (def lastcol (dec ncols))
 (if (true? extra-row) (def extra-cornerrow lastrow) (def extra-cornerrow cornerrow))
 (if (true? inner-column) (def innercol-offset 1) (def innercol-offset 0))
+(if (true? inner-keycap-compatability) (def inner-column-kepcap-offset 3) (def inner-column-kepcap-offset 2))
 
 ;;;;;;;;;;;;;;;;;
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;
 
 
-(def keyswitch-height 14.15) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.15)
+(def keyswitch-height 14.1) ;; Was 14.1, then 14.25
+(def keyswitch-width 14.1)
 
 (def sa-profile-key-height 12.7)
 (def sa-length 18.25)
@@ -147,6 +144,14 @@
         ]
     (union top-plate (mirror [0 0 0] top-plate))))
 
+(def double-plate
+  (let [plate-height (- sa-double-length mount-height)
+        top-plate (->> (cube mount-width plate-height web-thickness)
+                        (translate [0 (/ (+ plate-height mount-height) 2)
+                                    (- plate-thickness (/ web-thickness 2))]))
+        ]
+    (union top-plate (mirror [0 0 0] top-plate))))
+
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
 ;;;;;;;;;;;;;;;;
@@ -197,7 +202,9 @@
 (def rows (range 0 nrows))
 
 (def innercolumn 0)
-(def innerrows (range 0 (- nrows 2)))
+
+; Add or subtract a key-hole depending on our key-cap compatability flag
+(if (true? inner-keycap-compatability) (def innerrows (range 0 (- nrows 3))) (def innerrows (range 0 (- nrows 2))))
 
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height extra-height) 2)
@@ -210,7 +217,8 @@
 
 (defn offset-for-column [col, row]
   (if (and (true? pinky-15u) (= col lastcol) (<= row last-15u-row) (>= row first-15u-row)) 4.7625 0))
-(defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]
+
+  (defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]
   (let [column-angle (* β (- centercol column))
         placed-shape (->> shape
                           (translate-fn [(offset-for-column column, row) 0 (- row-radius)])
@@ -287,6 +295,7 @@
            (->> (sa-cap (if (and (true? pinky-15u) (= column lastcol)) 1.5 1))
                 (key-place column row)))))
 
+
 ;placement for the innermost column
 (def key-holes-inner
   (if (true? inner-column)
@@ -296,6 +305,24 @@
 ;               (rotate (/ π 2) [0 0 1])
                   (key-place 0 row))))))
 
+;placement for the innermost column ;inner-keycap-compatability
+; if (true ? (and inner-column inner-keycap-compatability)) {
+;   (def key-holes-inner
+;     (if (true? (and inner-column inner-keycap-compatability))
+;       (apply union
+;              (for [row innerrows]
+;                (->> single-plate
+;   ;               (rotate (/ π 2) [0 0 1])
+;                     (key-place 0 row))))))
+; } else {
+;   (def key-holes-inner
+;     (if (true? inner-column)
+;       (apply union
+;              (for [row innerrows]
+;                (->> single-plate
+;   ;               (rotate (/ π 2) [0 0 1])
+;                     (key-place 0 row))))))
+; }
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Web Connectors ;;
@@ -358,11 +385,16 @@
              (key-place (inc column) row web-post-bl)
              (key-place (inc column) (inc row) web-post-tl))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;  INNER COLUMN
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (true? inner-keycap-compatability) (def inner-corner-row (range 0 (- cornerrow 2))) (def inner-corner-row (range 0 (- cornerrow 1))))
+
 (def inner-connectors
   (if (true? inner-column)
     (apply union
          (concat
-          ;; Row connections
+          ;; Row connections  - nrows (+ inner-column-kepcap-offset)
           (for [column (range 0 1)
                 row (range 0 (- nrows 2))]
             (triangle-hulls
@@ -372,7 +404,7 @@
              (key-place column row web-post-br)))
 
           ;; Column connections
-          (for [row (range 0 (dec cornerrow))]
+          (for [row inner-corner-row]
             (triangle-hulls
              (key-place innercolumn row web-post-bl)
              (key-place innercolumn row web-post-br)
@@ -443,7 +475,7 @@
       ;  (rotate (deg2rad -23) [0 1 0])
       ;  (rotate (deg2rad  -3) [0 0 1])
        (rotate (deg2rad  10) [1 0 0])
-       (rotate (deg2rad -12) [0 1 0])
+       (rotate (deg2rad -10.5) [0 1 0])
        (rotate (deg2rad  10) [0 0 1])
        (translate thumborigin)
        (translate [-32 -15 -3])))
@@ -454,7 +486,7 @@
        (rotate (deg2rad -20) [0 1 0])
        (rotate (deg2rad  44) [0 0 1])
        (translate thumborigin)
-       (translate [-29 -40 -8])
+       (translate [-29 -40 -9])
        ))
 
 (defn thumb-ml-place [shape]
@@ -463,7 +495,7 @@
        (rotate (deg2rad -24) [0 1 0])
        (rotate (deg2rad  36) [0 0 1])
        (translate thumborigin)
-       (translate [-51 -25 -8])))
+       (translate [-51 -25 -9])))
 
 (defn thumb-br-place [shape]
   (->> shape
@@ -471,7 +503,7 @@
        (rotate (deg2rad -26) [0 1 0])
        (rotate (deg2rad  63) [0 0 1])
        (translate thumborigin)
-       (translate [-40.75 -55.3 -17.5])
+       (translate [-40.75 -55.3 -18.5])
        ))
       
 (defn thumb-bl-place [shape]
@@ -480,7 +512,7 @@
        (rotate (deg2rad -32) [0 1 0])
        (rotate (deg2rad  63) [0 0 1])
        (translate thumborigin)
-       (translate [-61 -43.3 -17])
+       (translate [-61 -43.3 -18])
        ))
 (defn thumb-1x-layout [shape]
   (union
