@@ -145,12 +145,20 @@
     (union top-plate (mirror [0 0 0] top-plate))))
 
 (def double-plate
-  (let [plate-height (- sa-double-length mount-height)
+  (let [plate-height (/ (- sa-double-length mount-height) 3)
         top-plate (->> (cube mount-width plate-height web-thickness)
                         (translate [0 (/ (+ plate-height mount-height) 2)
                                     (- plate-thickness (/ web-thickness 2))]))
         ]
     (union top-plate (mirror [0 0 0] top-plate))))
+
+(def larger-plate
+  (let [plate-height (/ (- sa-double-length mount-height) 3)
+        top-plate (->> (cube mount-width plate-height web-thickness)
+                        (translate [0 (/ (+ plate-height mount-height) 2)
+                                    (- plate-thickness (/ web-thickness 2))]))
+        ]
+    (union top-plate (mirror [0 1 0] top-plate))))
 
 ;;;;;;;;;;;;;;;;
 ;; SA Keycaps ;;
@@ -207,6 +215,7 @@
 (if (true? inner-keycap-compatability) (def innerrows (range 0 (- cornerrow 2))) (def innerrows (range 0 cornerrow)))
 
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
+
 (def row-radius (+ (/ (/ (+ mount-height extra-height) 2)
                       (Math/sin (/ α 2)))
                    cap-top-height))
@@ -302,18 +311,21 @@
     (apply union
            (for [row innerrows]
              (->> single-plate
-;               (rotate (/ π 2) [0 0 1])
                   (key-place 0 row))))))
 
 ;placement for the last hole on the innermost column
+; (def key-holes-inner-last
+;   (if (true? inner-keycap-compatability)
+;     (apply union
+;            (for [row (range (- cornerrow 2) (- cornerrow 1))]
+;              (->> single-plate
+;                  (key-place 0 (* row 1.5))(translate [0 0 -0.25]))))))
 (def key-holes-inner-last
   (if (true? inner-keycap-compatability)
     (apply union
            (for [row (range (- cornerrow 2) (- cornerrow 1))]
              (->> single-plate
-;               (rotate (/ π 2) [0 0 1])
-                  (key-place 0 row))))))
-
+                 (key-place 0 (* row 1.5)))))))
 
 ; OK this is where we are going to need to shift our inner-most column so that we can move it down
 ; (def key-holes-inner) if (true ? (and inner-column inner-keycap-compatability)
@@ -542,14 +554,6 @@
   (union
    (thumb-tr-place shape)
    (thumb-tl-place shape)))
-
-(def larger-plate
-  (let [plate-height (/ (- sa-double-length mount-height) 3)
-        top-plate (->> (cube mount-width plate-height web-thickness)
-                       (translate [0 (/ (+ plate-height mount-height) 2)
-                                   (- plate-thickness (/ web-thickness 2))]))
-        ]
-    (union top-plate (mirror [0 1 0] top-plate))))
 
 (def thumbcaps
   (union
