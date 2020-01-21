@@ -314,12 +314,6 @@
                   (key-place 0 row))))))
 
 ;placement for the last hole on the innermost column
-; (def key-holes-inner-last
-;   (if (true? inner-keycap-compatability)
-;     (apply union
-;            (for [row (range (- cornerrow 2) (- cornerrow 1))]
-;              (->> single-plate
-;                  (key-place 0 (* row 1.5))(translate [0 0 -0.25]))))))
 (def key-holes-inner-last
   (if (true? inner-keycap-compatability)
     (apply union
@@ -327,31 +321,16 @@
              (->> single-plate
                  (key-place 0 (* row 1.5)))))))
 
-; OK this is where we are going to need to shift our inner-most column so that we can move it down
-; (def key-holes-inner) if (true ? (and inner-column inner-keycap-compatability)
-;       (apply union
-;             (for [row innerrows]
-;               (->> single-plate
-;                     (key-place 0 row))))))
+; This version shifts the whole assembly down a 0.25MM so the 'edge' between the 
+; webbing isn't so visible but I'm not sure how that will impact keycaps so leaving out
+; for now.
+; (def key-holes-inner-last
+;   (if (true? inner-keycap-compatability)
+;     (apply union
+;            (for [row (range (- cornerrow 2) (- cornerrow 1))]
+;              (->> single-plate
+;                  (key-place 0 (* row 1.5))(translate [0 0 -0.25]))))))
 
-;placement for the innermost column ;inner-keycap-compatability
-; if (true ? (and inner-column inner-keycap-compatability)) {
-;   (def key-holes-inner
-;     (if (true? (and inner-column inner-keycap-compatability))
-;       (apply union
-;              (for [row innerrows]
-;                (->> single-plate
-;   ;               (rotate (/ π 2) [0 0 1])
-;                     (key-place 0 row))))))
-; } else {
-;   (def key-holes-inner
-;     (if (true? inner-column)
-;       (apply union
-;              (for [row innerrows]
-;                (->> single-plate
-;   ;               (rotate (/ π 2) [0 0 1])
-;                     (key-place 0 row))))))
-; }
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Web Connectors ;;
@@ -418,6 +397,8 @@
 ;  INNER COLUMN
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (if (true? inner-keycap-compatability) (def inner-corner-row (range 0 (- cornerrow 2))) (def inner-corner-row (range 0 (- cornerrow 1))))
+(if (true? inner-keycap-compatability) (def inner-corner-row2 (range 1.5 1.9 0.1)) (def inner-corner-row2 (range 0 (- cornerrow 0))))
+(if (true? inner-keycap-compatability) (def inner-corner-row3 (range 0.2 0.6 0.1)) (def inner-corner-row3 (range 0 (- cornerrow 0))))
 
 (def inner-connectors
   (if (true? inner-column)
@@ -448,6 +429,56 @@
              (key-place column (inc row) web-post-tr)
              (key-place (inc column) row web-post-bl)
              (key-place (inc column) (inc row) web-post-tl)))))))
+
+(def inner-keycap-compat-connectors
+  (if (true? inner-keycap-compatability)
+    (apply union
+          (concat
+          ;; Row connections  - nrows (+ inner-column-kepcap-offset)
+          (for [column (range 0 0)
+                row (range 0 (- nrows 2))]
+            (triangle-hulls
+              (key-place (inc column) row web-post-tl)
+              (key-place column row web-post-tr)
+              (key-place (inc column) row web-post-bl)
+              (key-place column row web-post-br)))
+
+          ;; Column connections
+          (for [row inner-corner-row3]
+            (triangle-hulls
+              (key-place innercolumn row web-post-bl)
+              (key-place innercolumn row web-post-br)
+              (key-place innercolumn (inc row) web-post-tl)
+              (key-place innercolumn (inc row) web-post-tr)))
+
+          ;; Column connections
+          (for [row inner-corner-row2]
+            (triangle-hulls
+              (key-place innercolumn row web-post-bl)
+              (key-place innercolumn row web-post-br)
+              (key-place innercolumn (inc row) web-post-tl)
+              (key-place innercolumn (inc row) web-post-tr)))
+
+          ;; Diagonal connections
+          (for [column (range 0 (dec ncols))
+                row (range 0 2)]
+            (triangle-hulls
+              (key-place column row web-post-br)
+              (key-place column (inc row) web-post-tr)
+              (key-place (inc column) row web-post-bl)
+              (key-place (inc column) (inc row) web-post-tl)))))))
+
+; (def inner-keycap-compat-connectors
+;   (if (true? inner-keycap-compatability)
+;     (apply union
+;           (concat
+;           ;; Column connections
+;           (for [row inner-corner-row2]
+;             (triangle-hulls
+;              (key-place innercolumn row web-post-bl)
+;              (key-place innercolumn row web-post-br)
+;              (key-place innercolumn (inc row) web-post-tl)
+;              (key-place innercolumn (inc row) web-post-tr)))
 
 (def extra-connectors
   (if (true? extra-row)
@@ -950,6 +981,7 @@
                     extra-connectors
                     connectors
                     inner-connectors
+                    inner-keycap-compat-connectors
                     thumb
                     thumb-connectors
                     (difference (union case-walls
