@@ -1,7 +1,6 @@
-* Daktil Keyboard
-
-Daktil is a fork of [[https://github.com/adereth/dactyl-keyboard][the Dactyl]], a parameterized, split-hand, concave, columnar, ergonomic keyboard.
-A number of them were built at [[http://ljudmila.org/][Ljudmila]], at the [[https://wiki.ljudmila.org/Tipkovnica_dactyl][PIFlab workshop]].
+* Balthazar Keyboard - Daktil
+  
+Balthzar Daktil Keyboard is a fork of [[https://github.com/adereth/dactyl-keyboard][the Dactyl]], a parameterized, split-hand, concave, columnar, ergonomic keyboard. It is an in progress prototype for the keyboard of the Balthazar personal computing device.
 
 [[file:resources/keyboards.jpg]]
 
