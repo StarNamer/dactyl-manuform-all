@@ -82,11 +82,11 @@ module dactyl() {
 
 
 intersection() {
-//translate([-90, -10, 0]) cube([49, 80, 70]);
+//translate([-90, -10, 0]) cube([67, 110, 70]);
 dactyl();
 }
-promic_mount();
-promic_bar();
+//promic_mount();
+//promic_bar();
 //
 //screw();
 //screws();
