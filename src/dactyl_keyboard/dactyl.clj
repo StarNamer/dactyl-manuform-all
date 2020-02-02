@@ -16,26 +16,26 @@
 (def nrows 5)
 (def ncols 6)
 
-(def α (/ π 12))                        ; curvature of the columns
+(def α (/ π 16))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
-;(def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
-(def tenting-angle 0)            ; or, change this for more precise tenting control
-(def column-style 
+(def tenting-angle (/ π 36))            ; or, change this for more precise tenting control
+;(def tenting-angle 0)            ; or, change this for more precise tenting control
+;(def column-style 
   ;(if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
- (def column-style :standard))
+ (def column-style :standard)
 
 (defn column-offset [column] (cond
   ;(= column 2) [0 2.82 -4.5]
-  (= column 2) [0 2.82 -8]
+  (= column 2) [0 2.82 -6]
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
 ;(def thumb-offsets [6 -3 7])
-(def thumb-offsets [-16 -3 7])
+(def thumb-offsets [-16 -3 2])
 
-(def keyboard-z-offset 15)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 7)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -156,6 +156,9 @@
 (def row-radius (+ (/ (/ (+ mount-height extra-height) 2)
                       (Math/sin (/ α 2)))
                    cap-top-height))
+(def row-radius-low (+ (/ (/ (+ mount-height extra-height) 2)
+                      (Math/sin (/ (/ π 72) 2)))
+                   cap-top-height))                   
 (def column-radius (+ (/ (/ (+ mount-width extra-width) 2)
                          (Math/sin (/ β 2)))
                       cap-top-height))
@@ -163,10 +166,12 @@
 (def column-base-angle (* β (- centercol 2)))
 
 (defn apply-key-geometry [translate-fn rotate-x-fn rotate-y-fn column row shape]
-  (let [column-angle (* β (- centercol column))   
+  (let [column-angle (* β (- centercol column))
+        row-angle (if (= row lastrow) (/ π 72) α)
+        row-radius (if (= row lastrow) row-radius-low row-radius)
         placed-shape (->> shape
                           (translate-fn [0 0 (- row-radius)])
-                          (rotate-x-fn  (* α (- centerrow row)))      
+                          (rotate-x-fn  (* row-angle (- centerrow row)))      
                           (translate-fn [0 0 row-radius])
                           (translate-fn [0 0 (- column-radius)])
                           (rotate-y-fn  column-angle)
@@ -189,6 +194,7 @@
                                 (rotate-y-fn  fixed-tenting)
                                 (translate-fn [0 (second (column-offset column)) 0])
                                 )]
+    ;(if (= row lastrow) (pr ":::" column row shape))
     (->> (case column-style
           :orthographic placed-shape-ortho 
           :fixed        placed-shape-fixed
@@ -789,7 +795,8 @@
                     (difference (union case-walls 
                                        ;screw-insert-outers 
                                        ;teensy-holder
-                                       usb-holder)
+                                       usb-holder
+                                       )
                                 rj9-space 
                                 usb-holder-hole
                                 ;screw-insert-holes
