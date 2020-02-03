@@ -35,7 +35,7 @@
 ;(def thumb-offsets [6 -3 7])
 (def thumb-offsets [-16 -3 2])
 
-(def keyboard-z-offset 7)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 8)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -601,8 +601,8 @@
    (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 1 0 web-post-tr)
 
    ;TODO LH these two connect to tow thumbpart
-   (key-wall-brace 1 lastrow   0 -1 web-post-bl 0 lastrow 0 -1 web-post-br)
-   (key-wall-brace 1 lastrow   0 -1 web-post-bl 1 lastrow 0 -1 web-post-br)
+   ;(key-wall-brace 1 lastrow   0 -1 web-post-bl 0 lastrow 0 -1 web-post-br)
+   (key-wall-brace 1 lastrow   1 -1 web-post-bl 1 lastrow 0 -1 web-post-br)
    
 
    (key-wall-brace 2 lastrow   0 -1 web-post-bl 1 lastrow 0 -1 web-post-br)
@@ -618,7 +618,9 @@
    ;(for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl x        0 -1 web-post-br))
    ;(for [x (range 5 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
    ; thumb walls
-   (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 -1 web-post-br)
+   ; TODO LH this is for connecting thumb and last row
+   (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 0 thumb-post-br)
+   (wall-brace thumb-tr-place  0 0 thumb-post-br thumb-tr-place  1 -3 web-post-tr)
 
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
    
