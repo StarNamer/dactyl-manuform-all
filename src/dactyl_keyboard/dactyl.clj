@@ -620,7 +620,9 @@
    ; thumb walls
    ; TODO LH this is for connecting thumb and last row
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-tr-place  0 0 thumb-post-br)
-   (wall-brace thumb-tr-place  0 0 thumb-post-br thumb-tr-place  1 -3 web-post-tr)
+   ;(wall-brace thumb-tr-place  0 0 thumb-post-br thumb-tr-place  1 -3 web-post-tr)
+   (wall-brace thumb-tr-place  0 0 thumb-post-br thumb-tr-place  0 0 web-post-br)
+   (wall-brace thumb-tr-place  0 0 web-post-br thumb-tr-place  0 -3 web-post-tr)
 
    (wall-brace thumb-mr-place  0 -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
    
