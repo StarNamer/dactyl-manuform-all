@@ -19,7 +19,7 @@
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 5)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centercol 4)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
@@ -32,7 +32,7 @@
 
 (def thumb-offsets [6 -3 -6])
 
-(def keyboard-z-offset 7)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 16)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -691,6 +691,28 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
+(def model-right-t (difference
+                   (union
+                    case-walls
+                    teensy-holder
+                    ;key-holes
+                    ;connectors
+                    ;thumb
+                    ;thumb-connectors
+                    ;(difference (union case-walls
+                    ;                   screw-insert-outers
+                    ;                   teensy-holder)
+                    ;                   ; usb-holder)
+                    ;            ; rj9-space
+                    ;            ; usb-holder-hole
+                    ;            screw-insert-holes)
+                    ;; rj9-holder
+                    ;wire-posts
+                    ;; thumbcaps
+                    ;; caps
+                    )
+                   (translate [0 0 -20] (cube 350 350 40))
+                  ))
 
 (def model-right (difference
                    (union
@@ -713,13 +735,13 @@
                    (translate [0 0 -20] (cube 350 350 40))
                   ))
 
-(spit "things/right.scad"
+(spit "viklund/right.scad"
       (write-scad model-right))
 
-(spit "things/left.scad"
+(spit "viklund/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
 
-(spit "things/right-test.scad"
+(spit "viklund/right-test.scad"
       (write-scad
                    (union
                     key-holes
@@ -729,20 +751,20 @@
                     case-walls
                     thumbcaps
                     caps
-                    teensy-holder
-                    ; rj9-holder
-                    ; usb-holder-hole
-                    ; usb-holder-hole
+                    ;teensy-holder
+                    ;rj9-holder
+                    ;usb-holder-hole
+                    ;usb-holder-hole
                     ; ; teensy-holder-hole
-                    ;             screw-insert-outers
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout
-                    ;             rj9-space
-                                ; wire-posts
+                                 screw-insert-outers
+                                 ;teensy-screw-insert-holes
+                                 ;teensy-screw-insert-outers
+                                 ;usb-cutout
+                                 ;rj9-space
+                                 ;wire-posts
                   )))
 
-(spit "things/right-plate.scad"
+(spit "viklund/right-plate.scad"
       (write-scad
                    (cut
                      (translate [0 0 -0.1]
@@ -753,7 +775,7 @@
                                    (translate [0 0 -10] screw-insert-screw-holes))
                   ))))
 
-(spit "things/test.scad"
+(spit "viklund/test.scad"
       (write-scad
          (difference usb-holder usb-holder-hole)))
 
