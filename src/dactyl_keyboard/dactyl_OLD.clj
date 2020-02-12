@@ -5,8 +5,6 @@
             [scad-clj.model :refer :all]
             [unicode-math.core :refer :all]))
 
-(def kailh?
-  (== (compare (System/getenv "SWITCH_TYPE") "kailh") 0))
 
 (defn deg2rad [degrees]
   (* (/ degrees 180) pi))
@@ -79,14 +77,10 @@
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
                                   (/ plate-thickness 2)]))
-        left-wall (->> (cube (if kailh? 2 1.5) (+ keyswitch-height 3) plate-thickness)
+        left-wall (->> (cube 1.5 (+ keyswitch-height 3) plate-thickness)
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        kailh-cutout (->> (cube (/ keyswitch-width 3) 1.6 plate-thickness)
-                          (translate [0
-                                  (+ (/ 1.5 2) (+ (/ keyswitch-height 2)))
-                                  (/ plate-thickness)]))
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
@@ -94,9 +88,7 @@
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
                                              (/ plate-thickness 2)]))))
-        plate-half (if kailh? (union (difference top-wall kailh-cutout) left-wall)
-                              (union top-wall left-wall (with-fn 100 side-nub))
-                    )]
+        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -765,12 +757,6 @@
       (write-scad 
          (difference usb-holder usb-holder-hole)))
 
-(if kailh?
-  (spit "things/switch-hole.scad"
-      (write-scad single-plate)))
 
-(if kailh?
-  (spit "things/teensy-holder.scad"
-      (write-scad teensy-holder)))
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
