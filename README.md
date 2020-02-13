@@ -1,4 +1,4 @@
-# Dactyl Manu Tide
+# Dactyl Manu Tide (Work in Progress, Not Ready to Print)
 
 ![test print](main.png)
 ![test print](https://i.redd.it/fhacqnvk64241.jpg)
