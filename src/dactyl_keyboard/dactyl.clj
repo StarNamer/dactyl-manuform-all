@@ -14,7 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (def nrows 5)
-(def ncols 7)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -26,11 +26,14 @@
 (def first-15u-row 0)                   ; controls which should be the first row to have 1.5u keys on the outer column
 (def last-15u-row 3)                    ; controls which should be the last row to have 1.5u keys on the outer column
 
-(def extra-row true)                   ; adds an extra bottom row to the outer columns
-(def inner-column true)                ; adds an extra inner column (two less rows than nrows)
-(def mini-thumb false)                  ; toggles between the default thumb cluster and mini thumb cluster
+(def extra-row false)                   ; adds an extra bottom row to the outer columns
+(def inner-column false)                ; adds an extra inner column (two less rows than nrows)
+(def mini-thumb true)                  ; toggles between the default thumb cluster and mini thumb cluster
 
 (def column-style :standard)
+
+(def web-thickness 3.5)
+(def sa-double-length 37.5)
 
 (if (true? inner-column)
   (defn column-offset [column] (cond
@@ -67,7 +70,7 @@
 
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
-(def create-side-nubs? false)
+(def create-side-nubs? true)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
