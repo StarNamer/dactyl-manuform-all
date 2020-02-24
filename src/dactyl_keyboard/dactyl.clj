@@ -8,6 +8,9 @@
 (def kailh?
   (== (compare (System/getenv "SWITCH_TYPE") "kailh") 0))
 
+(def wire-posts?
+  (== (compare (System/getenv "WIRE_POSTS") "yes") 0))
+
 (defn deg2rad [degrees]
   (* (/ degrees 180) pi))
 
@@ -15,13 +18,16 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 5)
+; (def nrows 4)
+(def nrows (Integer/parseInt (System/getenv "ROWS"))) 
+; (def ncols 5)
+(def ncols (Integer/parseInt (System/getenv "COLS"))) 
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
+; (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centercol (if (> ncols 5) 2 3))      ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style 
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
@@ -34,7 +40,8 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+; (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset (if (= centercol 2) 16 9))    ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -714,7 +721,8 @@
                                 usb-holder-hole
                                 screw-insert-holes)
                     rj9-holder
-                    wire-posts
+                    (if wire-posts? wire-posts ())
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
