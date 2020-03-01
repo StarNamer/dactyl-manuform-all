@@ -4,6 +4,7 @@
 .repl-*
 .nrepl-*
 
+*.swp
 .lein-*
 *.gcode
 *.scad
