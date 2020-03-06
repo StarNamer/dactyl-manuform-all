@@ -10,7 +10,7 @@ module right_plate(){
     ];
     difference(){
         translate([0,-135.5]) {
-            linear_extrude(height=2.5) 
+            linear_extrude(height=2.6) 
             import(file="right-plate-shape.svg");
 
         }
