@@ -83,7 +83,7 @@
                                    0
                                    (/ plate-thickness 2)]))
         clip-hole (->> (cube 6 6 6)
-                       (translate [0 (- (/ keyswitch-width 2) 1.8) -0.7]) ; 0.2 => 0.8 mm clipping height
+                       (translate [0 (- (/ keyswitch-width 2) 1.8) -0.5]) ; 0.2 => 0.8 mm clipping height
                     )
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
