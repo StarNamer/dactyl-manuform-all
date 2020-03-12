@@ -5,7 +5,7 @@ module right_plate(){
         [14.5, 60.2],
         [75.8, 37.2],
         [14.5, 146.9],
-        [95.6, 166],
+        [95.5, 166.2],
         [151.5,  117.9],
     ];
     difference(){
@@ -16,7 +16,7 @@ module right_plate(){
         }
         for(p = holes){
             translate(p) rotate(180, [1,0,0]) translate([0, 0, -0.2])
-                screw_flat_head(d=3.2, dh=5.8, ah=90, l=5, head_elongation=2);
+                screw_flat_head(d=3.5, dh=5.8, ah=90, l=5, head_elongation=2);
         }
     }
 }
