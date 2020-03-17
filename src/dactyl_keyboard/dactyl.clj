@@ -18,6 +18,7 @@
 (def nrows 4)  ; for 2 & 3 columns only, the rest is less by 1
 (def ncols 5)
 (def switch-type :kailh-low)  ; possible values :kailh-low, :alps (original)
+(def inter-conn-port :trrs)  ; [:trrs :rj9 :none]
 
 (def α (/ π 9))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -617,6 +618,17 @@
                               (union (translate [0 2 0] (cube 10.78  9 18.38))
                                      (translate [0 0 5] (cube 10.78 13  5))))))
 
+(def trrs-space (->> (binding [*fn* 30] (cylinder 3 6))
+                    (rotate (/ π 2) [1 0 0])
+                    (translate rj9-position)))
+
+(def inter-conn-port-space
+  (if (= inter-conn-port :trrs) trrs-space
+    (if (= inter-conn-port :rj9) rj9-space)))
+
+(def inter-conn-port-holder
+  (if (= inter-conn-port :rj9) rj9-holder))
+
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
 (def usb-holder-thickness 4)
@@ -829,10 +841,10 @@
                                        screw-insert-outers 
                                        teensy-holder
                                        usb-holder)
-                                rj9-space 
+                                inter-conn-port-space
                                 usb-holder-hole
                                 screw-insert-holes)
-                    rj9-holder
+                    inter-conn-port-holder
                     trackpoint-mount
                     ; TODO uncomment & adapt wire-posts after trackpoint's done
                     ; wire-posts
