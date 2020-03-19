@@ -19,6 +19,9 @@
 (def ncols 5)
 (def switch-type :kailh-low)  ; possible values :kailh-low, :alps (original)
 (def inter-conn-port :trrs)  ; [:trrs :rj9 :none]
+; :standard means usb port hole
+; :hole is just a hole for a usb cable which should be plugged in to the controller
+(def host-connection-type :hole)  ; [:standard :hole]
 
 (def α (/ π 9))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -639,6 +642,25 @@
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
 
+(def cable-hole 
+  (let [radius 2
+        offset-z 5
+        conductor-width (* radius 2)
+        conductor-height (+ radius offset-z)
+        hole (->> (binding [*fn* 30] (cylinder radius 20))
+                  (rotate (/ π 2) [1 0 0])
+                  (translate [(first usb-holder-position) (second usb-holder-position) (+ radius offset-z)]))
+        conductor (->> (cube conductor-width conductor-width conductor-height)
+                       (translate [(first usb-holder-position) (second usb-holder-position) (/ conductor-height 2)]))]
+    (union hole
+           conductor)))
+
+(def host-connection-hole
+  (if (= host-connection-type :standard) usb-holder-hole cable-hole))
+
+(def host-connection-holder
+  (if (= host-connection-type :standard) usb-holder))
+
 (def teensy-width 20)  
 (def teensy-height 12)
 (def teensy-length 33)
@@ -840,9 +862,9 @@
                     (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
-                                       usb-holder)
+                                       host-connection-holder)
                                 inter-conn-port-space
-                                usb-holder-hole
+                                host-connection-hole
                                 screw-insert-holes)
                     inter-conn-port-holder
                     trackpoint-mount
