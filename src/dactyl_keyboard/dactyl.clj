@@ -16,8 +16,8 @@
 (def nrows 4)
 (def ncols 5)
 
-(def α (/ π 12))                        ; curvature of the columns
-(def β (/ π 36))                        ; curvature of the rows
+(def α (/ π 10))                        ; curvature of the columns
+(def β (/ π 18))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
@@ -30,9 +30,9 @@
   (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
 
-(def thumb-offsets [6 -3 7])
+(def thumb-offsets [-5 -4 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 7)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -369,7 +369,7 @@
 (def thumbcaps
   (union
    (thumb-1x-layout (sa-cap 1))
-   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))))
+   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1)))))
 
 
 (def thumb
@@ -631,7 +631,7 @@
           (->> (cube 4 teensy-holder-top-length 4)
                (translate [(+ teensy-pcb-thickness 5) teensy-holder-top-offset (+ 1 (/ teensy-width 2))])))
         (translate [(- teensy-holder-width) 0 0])
-        (translate [-1.4 0 0])
+        (translate [2 0 0])
         (translate [(first teensy-top-xy) 
                     (- (second teensy-top-xy) 1) 
                     (/ (+ 6 teensy-width) 2)])
@@ -699,16 +699,11 @@
                     thumb
                     thumb-connectors
                     (difference (union case-walls 
-                                       screw-insert-outers 
                                        teensy-holder
                                        usb-holder)
-                                rj9-space 
-                                usb-holder-hole
-                                screw-insert-holes)
-                    rj9-holder
-                    wire-posts
-                    ; thumbcaps
-                    ; caps
+                                usb-holder-hole)
+                     ;thumbcaps
+                     ;caps
                     )
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
@@ -727,10 +722,10 @@
                     thumb
                     thumb-connectors
                     case-walls 
-                    thumbcaps
-                    caps
+                    ;thumbcaps
+                    ;caps
                     teensy-holder
-                    rj9-holder
+                    ;rj9-holder
                     usb-holder-hole
                     ; usb-holder-hole
                     ; ; teensy-holder-hole
@@ -747,10 +742,7 @@
                    (cut
                      (translate [0 0 -0.1]
                        (difference (union case-walls
-                                          teensy-holder
-                                          ; rj9-holder
-                                          screw-insert-outers)
-                                   (translate [0 0 -10] screw-insert-screw-holes))
+                                          teensy-holder))
                   ))))
 
 (spit "things/test.scad"
