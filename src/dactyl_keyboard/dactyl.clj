@@ -1003,7 +1003,7 @@
          ; thumb cluster, closest to user
          (screw-insert 1 lastrow         bottom-radius top-radius height [-2 -13 0])
          ; thumb cluster left
-         (screw-insert 0 lastrow   bottom-radius top-radius height [16 -80 0])
+         (screw-insert 0 lastrow   bottom-radius top-radius height [19 -80 0])
 ))
 
 ; Hole Depth Y: 4.4
