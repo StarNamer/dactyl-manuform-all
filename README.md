@@ -1,9 +1,9 @@
-# The Dactyl Keyboard
-The Dactyl is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
+# The Trochee Keyboard
+The Trochee is a parameterized, single-handed, concave, columnar, ergonomic keyboard based on the [Dactyl](https://github.com/adereth/dactyl-keyboard):
 
 <img src="https://raw.githubusercontent.com/adereth/dactyl-cave/master/resources/glamourshot.png"/>
 
-There's a talk about the motivation and design of the Dactyl that helps provide context for this repo:
+There's a talk about the motivation and design of the Dactyl that helps provide context:
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/uk3A41U0iO4/0.jpg)](https://www.youtube.com/watch?v=uk3A41U0iO4)
 
