@@ -1,6 +1,6 @@
 # trochee
 
-The Trochee keyboard is a parameterized, single-handed, concave, columnar, ergonomic keyboard based on the [Dactyl](https://github.com/adereth/dactyl-keyboard):
+The Trochee keyboard is a parameterized, single-handed, concave, columnar, ergonomic keyboard based on the [Dactyl](https://github.com/adereth/dactyl-keyboard) (Pictured below):
 
 <img src="https://raw.githubusercontent.com/adereth/dactyl-cave/master/resources/glamourshot.png"/>
 
