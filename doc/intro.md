@@ -1,3 +1,3 @@
-# Introduction to dactyl-cave
+# Introduction to trochee
 
-TODO: write [great documentation](http://jacobian.org/writing/great-documentation/what-to-write/)
+TODO: write [great documentation](http://jacobian.org/writing/what-to-write/)
