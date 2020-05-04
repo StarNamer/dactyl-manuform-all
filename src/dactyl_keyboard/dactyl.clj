@@ -836,7 +836,8 @@
                              (key-place (inc column) row web-post-tl)
                              (key-place column row web-post-tr)
                              (key-place (inc column) row half-post-bl)
-                             (key-place column row half-post-br))))
+                             (key-place column row half-post-br)))
+                        )
          column-connections (for [column columns
                                   row (drop-last rows)
                                   :when (or (not= column 0)
@@ -880,12 +881,16 @@
                      (for [x (range 0 4)]
                        (hull (bottom-place right-wall-column x (translate [right-offset 0 1] (wall-cube-bottom 1/2)))
                              (key-place 5 x web-post-br)
-                             (key-place 5 x web-post-tr)))
+                             (key-place 5 x web-post-tr)
+                       )
+                     )
                      (for [x (range 0 4)]
                        (hull (bottom-place right-wall-column x (translate [right-offset 0 1] (wall-cube-bottom 1/2)))
                              (bottom-place right-wall-column (inc x) (translate [right-offset 0 1] (wall-cube-bottom 1/2)))
                              (key-place 5 x web-post-br)
-                             (key-place 5 (inc x) web-post-tr)))
+                             (key-place 5 (inc x) web-post-tr)
+                        )
+                     )
                      [(union
                        (hull (bottom-place right-wall-column 0 (translate [right-offset 0 1] (wall-cube-bottom 1/2)))
                              (bottom-place right-wall-column 0.017 (translate [(- right-offset 0.29) -1 1.15] (wall-cube-bottom 1)))
@@ -895,15 +900,18 @@
                              (key-place 5 4 half-post-br))
                        (hull (bottom-place right-wall-column 4 (translate [right-offset 0 1] (wall-cube-bottom 1/2)))
                              (key-place 5 4 half-post-br)
-                             (key-place 5 4 web-post-tr)))])
+                             (key-place 5 4 web-post-tr))
+                     )]
+                  )
          back-wall (concat
                     (for [x (range 1 6)]
                       (union
                        (hull
                              (do (bottom-place (- x 1/2) 0 (translate [0 back-offset 1] wall-cube-bottom-back)))
                               (if (= x 5)
-                               (do (bottom-place (+ x 1/2) 0 (translate [10.6 (- back-offset 0.35) 1.30] wall-cube-bottom-back)))
-                               (do (bottom-place (+ x 1/2) 0 (translate [0 back-offset 1] wall-cube-bottom-back))))
+                               (do (bottom-place (+ x 1/2) 0 (translate [-1 (- back-offset 0.35) 0.8] wall-cube-bottom-back)))
+                               (do (bottom-place (+ x 1/2) 0 (translate [0 back-offset 1] wall-cube-bottom-back)))
+                              )
                              (key-place x 0 web-post-tl)
                              (key-place x 0 web-post-tr))
                        (hull (bottom-place (- x 1/2) 0 (translate [0 back-offset 1] wall-cube-bottom-back))
@@ -1144,10 +1152,10 @@
                              (key-place 1/2 3/2))
 
         lower-to-bottom #(translate [0 0 (+ (- cover-sphere-radius) -5.5)] %)
-        bl (->> cover-sphere lower-to-bottom (key-place 0 1/2))
-        br (->> cover-sphere lower-to-bottom (key-place 1 1/2))
-        tl (->> cover-sphere lower-to-bottom (key-place 0 5/2))
-        tr (->> cover-sphere lower-to-bottom (key-place 1 5/2))
+        bl (->> cover-sphere lower-to-bottom (key-place 0 0))
+        br (->> cover-sphere lower-to-bottom (key-place 1 0))
+        tl (->> cover-sphere lower-to-bottom (key-place 0 3))
+        tr (->> cover-sphere lower-to-bottom (key-place 1 3))
 
         mlb (->> cover-sphere
                  (translate [(- cover-sphere-x) 0 (+ (- height) -1)])
@@ -1169,7 +1177,9 @@
       (hull cover-sphere-tl tl mlb mlt)
       (hull cover-sphere-bl bl mlb mlt)
       (hull cover-sphere-tr tr mrb mrt)
-      (hull cover-sphere-br br mrb mrt))))
+      (hull cover-sphere-br br mrb mrt)
+   ))
+)
 
 (def io-exp-width 10)
 (def io-exp-height 8)
@@ -1177,7 +1187,7 @@
 
 (def teensy-width 20)
 (def teensy-height 12)
-(def teensy-length 33)
+(def teensy-length 53)
 
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
@@ -1212,7 +1222,7 @@
 (def teensy-pcb-thickness 1.6)
 (def teensy-offset-height 5)
 
-(def teensy-pcb (->> (cube 18 30.5 teensy-pcb-thickness)
+(def teensy-pcb (->> (cube 18 53 teensy-pcb-thickness)
                      (translate [0 0 (+ (/ teensy-pcb-thickness -2) (- teensy-offset-height))])
                      (key-place 1/2 3/2)
                      (color [1 0 0])))
@@ -1229,7 +1239,7 @@
                (key-place 1/2 2)
                (color [0 0 1]))
           (->> (cube 5 5 (+ teensy-pcb-thickness 5))
-               (translate [0 (/ 30.5 -2) (+ (- teensy-offset-height)
+               (translate [0 (/ 53 -2) (+ (- teensy-offset-height)
                                             #_(/ (+ teensy-pcb-thickness 5) -2)
                                             )])
                (key-place 1/2 3/2)
@@ -1237,7 +1247,7 @@
 
           ))
    teensy-pcb
-   (->> (cube 18 31 (+ teensy-pcb-thickness 1))
+   (->> (cube 18 51 (+ teensy-pcb-thickness 1))
         (translate [0 1.5 (+ (/ teensy-pcb-thickness -2) (- teensy-offset-height) -1.5)])
         (key-place 1/2 3/2)
         (color [1 0 0]))
@@ -1432,7 +1442,7 @@
                                 (translate [-7.3 -80.6 28])
                                 stand-place)
 
-        back-pos-rect-1 (->> (prism 12 10 60 3 4)
+        back-pos-rect-1 (->> (prism 24 10 60 3 4)
                              (rotate (/ π 2) [0 0 1])
                              (rotate (/ π 9) [-1 0 0])
                              (translate [5 -56 11.8])
