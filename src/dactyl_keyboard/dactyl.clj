@@ -582,6 +582,9 @@
      (thumb-tl-place thumb-post-tl))
   ))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Connector Cutouts ;;
+;;;;;;;;;;;;;;;;;;;;;;;
 
 (def rj9-start  (map + [0 -3  0] (key-position 0 0 (map + (wall-locate3 0 1) [0 (/ mount-height  2) 0]))))
 (def rj9-position  [(first rj9-start) (second rj9-start) 11])
@@ -601,6 +604,10 @@
 (def usb-holder-hole
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+
+;;;;;;;;;;;;;;;;;;;;;;
+;; Controller Mount ;;
+;;;;;;;;;;;;;;;;;;;;;;
 
 (def teensy-width 20)  
 (def teensy-height 12)
@@ -637,6 +644,10 @@
                     (/ (+ 6 teensy-width) 2)])
            ))
 
+;;;;;;;;;;;;;;;;;;;
+;; Screw Inserts ;;
+;;;;;;;;;;;;;;;;;;;
+
 (defn screw-insert-shape [bottom-radius top-radius height] 
    (union (cylinder [bottom-radius top-radius] height)
           (translate [0 0 (/ height 2)] (sphere top-radius))))
@@ -669,6 +680,10 @@
 (def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
 
+;;;;;;;;;;;;;;;;
+;; Wire Posts ;;
+;;;;;;;;;;;;;;;;
+
 (def wire-post-height 7)
 (def wire-post-overhang 3.5)
 (def wire-post-diameter 2.6)
@@ -691,6 +706,9 @@
         (key-place column row (translate [0 0 0] (wire-post -1 6)))
         (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; Model Generation ;;
+;;;;;;;;;;;;;;;;;;;;;;
 
 (def model-right (difference 
                    (union
@@ -713,9 +731,9 @@
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
 
-;;;;;;;;;;;;;;;;;;;;;;
-;; Model Generation ;;
-;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;
+;; Spitting ;;
+;;;;;;;;;;;;;;
 
 (spit "things/right.scad"
       (write-scad model-right))
