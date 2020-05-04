@@ -116,11 +116,11 @@
                               (translate [0 0 row-radius]))
         column-row-offset (cond
                         (= column 2) [0 2.4 -4.5]
-                        (= column 4) [0 -5.8 5.64]
-                        (and (= column 5) (not= row 4)) [5.2 -5.8 7.01]
-                        (and (= column 5) (= row 4)) [0.5 -5.8 5.7]
-                        (and (= column 6) (= row 4)) [8.9 -5.8 8] ; extended connector
-                        (= column 6) [9 -5.8 8] ; extended connector
+                        (>= column 4) [0 -5.8 5.64]
+                        ; (and (= column 5) (not= row 4)) [0.5 -5.8 7.01]
+                        ; (and (= column 5) (= row 4)) [0.5 -5.8 5.7]
+                        ; (and (= column 6) (= row 4)) [0.5 -5.8 5.7] ; extended connector
+                        ; (= column 6) [0.5 -5.8 5.7] ; extended connector
                         :else [0 0 0])
         column-angle (* β (- 2 column))
         placed-shape (->> row-placed-shape
@@ -194,7 +194,7 @@
                row rows
                :when (or (not= column 0)
                          (not= row 4))]
-           (->> (sa-cap (if (and (= column 5) (not= row 4)) 1.5 1))
+           (->> (sa-cap (if (and (= column 5) (not= row 4)) 1 1))
                 (key-place column row)))))
 
 (defn prism [w l h taper-1 taper-2]
@@ -243,7 +243,7 @@
   (apply union
          (concat
           ;; Row connections
-          (for [column columns ;(drop-last columns)
+          (for [column (drop-last columns)
                 row rows
                 :when (or (not= column 0)
                           (not= row 4))]
@@ -265,7 +265,7 @@
              (key-place column (inc row) web-post-tr)))
 
           ;; Diagonal connections
-          (for [column columns;(drop-last columns)
+          (for [column (drop-last columns)
                 row (drop-last rows)
                 :when (or (not= column 0)
                           (not= row 3))]
@@ -435,7 +435,7 @@
 ;;;;;;;;;;
 
 ;; In column units
-(def right-wall-column (+ (last columns) 1.1))
+(def right-wall-column (+ (last columns) 1/2))
 (def left-wall-column (- (first columns) 1/2))
 (def thumb-back-y 0.93)
 (def thumb-case-z 3)
@@ -531,10 +531,6 @@
            (place (- right-wall-column 1) 4 (translate [0 1 1] wall-cube-bottom-front))
            (key-place 5 4 web-post-bl)
            (key-place 5 4 web-post-br))
-     (hull (place right-wall-column 4 (translate [-1 1 1] wall-cube-bottom-front))
-           (place (- right-wall-column 1) 4 (translate [0 1 1] wall-cube-bottom-front))
-           (key-place 6 4 web-post-bl)
-           (key-place 5 4 web-post-br))
      (hull (place (+ 4 1/2) 4 (translate [0 1 1] wall-cube-bottom-front))
            (place (- right-wall-column 1) 4 (translate [0 1 1] wall-cube-bottom-front))
            (key-place 4 4 web-post-br)
@@ -542,7 +538,8 @@
      (hull (place 0.75 4 (translate [0 1.73 -0.805] wall-cube-bottom-front))
            (place 1.5 4 (translate [0 1 1] wall-cube-bottom-front))
            (key-place 1 4 (translate [0.001 0 0] web-post-bl))
-           (key-place 1 4 (translate [0.001 0 0] web-post-br))))))
+           (key-place 1 4 (translate [0.001 0 0] web-post-br)))
+)))
 
           ; It's not clear why the above translateions of 0.001 units are needed
           ; but they resolve an issue where the normals were invered.
@@ -562,7 +559,7 @@
            (hull (place 5 0 (translate [0 -0.91 1.32] wall-cube-bottom-back))
                  (place right-wall-column 0 (translate [-1.2 -1.52 0.91] wall-cube-bottom-back))
                  (key-place 5 0 web-post-tl)
-                 (key-place 5 0 (translate [5.6 0 0.05] web-post-tr)))
+                 (key-place 5 0 web-post-tr))
 
            (apply union
                   (for [x (range 1 5)]
@@ -573,14 +570,19 @@
                            (key-place x 0 web-post-tr))
                      (hull (place (- x 1/2) 0 (translate [0 -1 1] wall-cube-bottom-back))
                            (key-place x 0 web-post-tl)
-                           (key-place (- x 1) 0 web-post-tr))))))
+                           (key-place (- x 1) 0 web-post-tr))
+                           ))
+            ))
 
          (hull (place (- 5 1/2) 0 (translate [0 -1 1] wall-cube-bottom-back))
                (place 5 0 (translate [0 -0.91 1.32] wall-cube-bottom-back))
                (key-place 4 0 web-post-tr)
-               (key-place 5 0 web-post-tl)))
+               (key-place 5 0 web-post-tl))
+      )
+
       (union case-back-cutout
-             case-inside-cutout))))
+             case-inside-cutout)
+)))
 
 (def right-wall
   (let [place case-place]
@@ -589,22 +591,27 @@
             (concat
              (for [x (range 0 5)]
                (union
-                (hull (place right-wall-column x (translate [-1 -1 1] (wall-cube-bottom 1/2)))
-                      (place 6 x web-post-br)
-                      (place 6 x web-post-tr))))
+                (hull (place right-wall-column x (translate [0 -0.91 1.32] (wall-cube-bottom 1/2)))
+                      (key-place 5 x web-post-br)
+                      (key-place 5 x web-post-tr))
+                  ))
              (for [x (range 0 4)]
                (union
-                (hull (place right-wall-column x (translate [-1 -1 1] (wall-cube-bottom 1/2)))
-                      (place right-wall-column (inc x) (translate [-1 -1 1] (wall-cube-bottom 1/2)))
-                      (place 6 x web-post-br)
-                      (place 6 (inc x) web-post-tr))))
+                (hull (place right-wall-column x (translate [0 -0.91 1.32] (wall-cube-bottom 1/2)))
+                      (place right-wall-column (inc x) (translate [0 -0.91 1.32] (wall-cube-bottom 1/2)))
+                      (key-place 5 x web-post-br)
+                      (key-place 5 (inc x) web-post-tr))
+            ))
              [(union
-               (hull (place right-wall-column 0 (translate [-1 -1 1] (wall-cube-bottom 1/2)))
-                     (place right-wall-column 0 (translate [-1.2 -1.5 0.9] (wall-cube-bottom 1)))
-                     (place 6 0 web-post-tr))
-               (hull (place right-wall-column 4 (translate [-1 -1 1] (wall-cube-bottom 1/2)))
+               (hull (place right-wall-column 0 (translate [0 -0.91 1.32] (wall-cube-bottom 1/2)))
+                     (place right-wall-column 0 (translate [-1.2 -1.5 0.91] (wall-cube-bottom 1)))
+                     (key-place 5 0 web-post-tr))
+               (hull (place right-wall-column 4 (translate [0 -0.91 1.32] (wall-cube-bottom 1/2)))
                      (place right-wall-column 4 (translate [-1 1 1] (wall-cube-bottom 0)))
-                     (place 6 4 web-post-br)))])))))
+                     (key-place 5 4 web-post-br))
+             )]
+            ))
+)))
 
 (def left-wall
   (let [place case-place]
