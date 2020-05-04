@@ -713,6 +713,10 @@
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
 
+;;;;;;;;;;;;;;;;;;;;;;
+;; Model Generation ;;
+;;;;;;;;;;;;;;;;;;;;;;
+
 (spit "things/right.scad"
       (write-scad model-right))
  
