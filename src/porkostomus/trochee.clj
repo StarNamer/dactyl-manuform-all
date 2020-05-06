@@ -40,50 +40,50 @@
                 (model/mirror [1 0 0])
                 (model/mirror [0 1 0])))))
 
+(comment
+  (spit "resources/single-plate.scad"
+        (scad/write-scad single-plate)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Placement Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def columns (range 0 7))
-(def rows (range 0 8))
-
-(def π 3.14159)
-
+(def π Math/PI)
 (def α (/ π 12))
 (def β (/ π 36))
+
+α
+β
+
+(def columns (range 0 8))
+(def rows (range 0 9))
+
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height 1/2) 2)
                       (Math/sin (/ α 2)))
                    cap-top-height))
-(def column-radius (+ (/ (/ (+ mount-width 2.0) 2)
+(def column-radius 
+  (+ (/ (/ (+ mount-width 7.5) 2)
                          (Math/sin (/ β 2)))
                       cap-top-height))
+
+column-radius
+row-radius
 
 (defn key-place [column row shape]
   (let [row-placed-shape (->> shape
                               (model/translate [0 0 (- row-radius)])
                               (model/rotate (* α (- 2 row)) [1 0 0])
                               (model/translate [0 0 row-radius]))
-        column-offset (cond
-                        (= column 2) [0 2.82 -3.0] ;;was moved -4.5
-                        (>= column 4) [0 -5.8 5.64]
-                        :else [0 0 0])
-        column-angle (* β (- 2 column))
-        placed-shape (->> row-placed-shape
-                          (model/translate [0 0 (- column-radius)])
-                          (model/rotate column-angle [0 1 0])
-                          (model/translate [0 0 column-radius])
-                          (model/translate column-offset))]
-    (->> placed-shape
-         (model/rotate (/ π 12) [0 1 0])
-         (model/translate [0 0 13]))))
-
-(defn case-place [column row shape]
-  (let [row-placed-shape (->> shape
-                              (model/translate [0 0 (- row-radius)])
-                              (model/rotate (* α (- 2 row)) [1 0 0])
-                              (model/translate [0 0 row-radius]))
-        column-offset [0 -4.35 5.64]
+        column-offset (case column
+                        0 [0 12 0]
+                        1 [0 8 0]
+                        2 [0 4 0]
+                        3 [0 0 0]
+                        4 [0 0 0]
+                        5 [0 4 0]
+                        6 [0 8 0]
+                        7 [0 12 0])
         column-angle (* β (- 2 column))
         placed-shape (->> row-placed-shape
                           (model/translate [0 0 (- column-radius)])
@@ -97,11 +97,13 @@
 (def key-holes
   (apply model/union
          (for [column columns
-               row rows
-               :when (or (not= column 0)
-                         (not= row 4))]
+               row rows]
            (->> single-plate
                 (key-place column row)))))
+
+(comment
+   (spit "resources/key-holes.scad"
+         (scad/write-scad key-holes)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Web Connectors ;;
@@ -129,9 +131,7 @@
          (concat
           ;; Row connections
           (for [column (drop-last columns)
-                row rows
-                :when (or (not= column 0)
-                          (not= row 4))]
+                row rows]
             (triangle-hulls
              (key-place (inc column) row web-post-tl)
              (key-place column row web-post-tr)
@@ -140,9 +140,7 @@
 
           ;; Column connections
           (for [column columns
-                row (drop-last rows)
-                :when (or (not= column 0)
-                          (not= row 3))]
+                row (drop-last rows)]
             (triangle-hulls
              (key-place column row web-post-bl)
              (key-place column row web-post-br)
@@ -151,9 +149,7 @@
 
           ;; Diagonal connections
           (for [column (drop-last columns)
-                row (drop-last rows)
-                :when (or (not= column 0)
-                          (not= row 3))]
+                row (drop-last rows)]
             (triangle-hulls
              (key-place column row web-post-br)
              (key-place column (inc row) web-post-tr)
@@ -162,11 +158,16 @@
 
 
 (comment
+
+  (spit "resources/switch-hole.scad"
+        (scad/write-scad single-plate))
+
+  (spit "resources/connectors.scad"
+        (scad/write-scad connectors))
   
-   (spit "resources/switch-hole.scad"
-         (scad/write-scad single-plate))
-  
-(spit "resources/switch-holes.scad"
-      (scad/write-scad (model/union connectors key-holes)))
+  (spit "resources/key-holes.scad"
+        (scad/write-scad key-holes))
   
   )
+(spit "resources/switch-holes.scad"
+      (scad/write-scad (model/union connectors key-holes)))
