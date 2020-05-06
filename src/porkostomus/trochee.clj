@@ -76,14 +76,14 @@ row-radius
                               (model/rotate (* α (- 2 row)) [1 0 0])
                               (model/translate [0 0 row-radius]))
         column-offset (case column
-                        0 [0 12 0]
-                        1 [0 8 0]
-                        2 [0 4 0]
+                        0 [0 12 10]
+                        1 [0 8 6]
+                        2 [0 4 2]
                         3 [0 0 0]
                         4 [0 0 0]
-                        5 [0 4 0]
-                        6 [0 8 0]
-                        7 [0 12 0])
+                        5 [0 4 2]
+                        6 [0 8 6]
+                        7 [0 12 10])
         column-angle (* β (- 2 column))
         placed-shape (->> row-placed-shape
                           (model/translate [0 0 (- column-radius)])
