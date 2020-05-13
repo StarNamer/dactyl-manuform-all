@@ -15,3 +15,16 @@ Obviously note that there is no thumb cluster. Having never gotten accustomed to
 ![Right-hand Dvorak](../resources/KB_Dvorak_Right.svg)
 
 8 columns were chosen since it will just fit the letters in this configuration. It should be no wider as to minimize lateral finger movement, so we add 4 rows on top for the numbers and less-used punctuation keys.
+
+* All keys are to be the same size, and none repeated.
+
+Since all keys are easily in reach, no duplication or oversizing is necessary. Doing this frees up the bottom row for:
+
+1. Ctrl (Command)
+2. fn modifer
+3. Super (Win)
+4. Meta (Alt)
+5. Space
+6. Shift
+7. Enter
+8. Backspace
