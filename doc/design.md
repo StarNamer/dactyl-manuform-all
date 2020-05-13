@@ -6,7 +6,7 @@ A few models will be made to house an [AtomicPi](https://www.amazon.com/Atomic-P
 
 ## Key layout
 
-I'm starting with an extremely simple "unified" design:
+I'm starting with an extremely simple "unified" design, a compact 72-key layout that is 8 columns of 9:
 
 ![Unified design](../resources/switch-holes.png)
 
