@@ -14,4 +14,4 @@ Obviously note that there is no thumb cluster. Having never gotten accustomed to
 
 ![Right-hand Dvorak](../resources/KB_Dvorak_Right.svg)
 
-8 columns were chosen since it will just fit the letters in this configuration, with 4 extra rows on top for the numbers and less-used punctuation keys.
+8 columns were chosen since it will just fit the letters in this configuration. It should be no wider as to minimize lateral finger movement, so we add 4 rows on top for the numbers and less-used punctuation keys.
