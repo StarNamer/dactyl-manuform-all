@@ -10,4 +10,8 @@ I'm starting with an extremely simple "unified" design, a compact 72-key layout 
 
 ![Unified design](../resources/switch-holes.png)
 
-Obviously note that there is no thumb cluster. Having never gotten accustomed to one I likely don't know what I'm missing, but removing it really appeals to me in terms of symmetry and space economy. This also allows a single design to be used for left/right handed DVORAK, for example.
+Obviously note that there is no thumb cluster. Having never gotten accustomed to one I likely don't know what I'm missing, but removing it really appeals to me in terms of symmetry and space economy. This also allows a single design to be used for left/right handed DVORAK, for example:
+
+![Right-hand Dvorak](../resources/KB_Dvorak_Right.svg)
+
+8 columns were chosen since it will just fit the letters in this configuration, with 4 extra rows on top for the numbers and less-used punctuation keys.
