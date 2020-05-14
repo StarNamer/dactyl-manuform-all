@@ -52,23 +52,17 @@
 (def α (/ π 12))
 (def β (/ π 36))
 
-α
-β
-
 (def columns (range 0 8))
-(def rows (range 0 9))
+(def rows (range 0 8))
 
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height 1/2) 2)
                       (Math/sin (/ α 2)))
                    cap-top-height))
 (def column-radius 
-  (+ (/ (/ (+ mount-width 7.5) 2)
+  (+ (/ (/ (+ mount-width 5) 2)
                          (Math/sin (/ β 2)))
                       cap-top-height))
-
-column-radius
-row-radius
 
 (defn key-place [column row shape]
   (let [row-placed-shape (->> shape
