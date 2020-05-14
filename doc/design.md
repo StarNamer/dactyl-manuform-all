@@ -16,4 +16,4 @@ Obviously note that there is no thumb cluster. Having never gotten accustomed to
 
 ![Right-hand Dvorak](../resources/trochee-layout.png)
 
-8 columns were chosen since it will just fit the letters in this configuration. It should be no wider as to minimize lateral finger movement, with 3 extra rows on top for the numbers, arrows and other less frequently used keys.
+Shown above is the RH layout, a mirror image of which will be the LH version. 8 columns were chosen since it will just fit the letters in this configuration. It should be no wider as to minimize lateral finger movement, with 3 extra rows on top for the numbers, arrows and other less frequently used keys.
