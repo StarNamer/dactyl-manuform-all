@@ -2,7 +2,7 @@
 
 The Trochee keyboard is a parameterized, single-handed, concave, columnar, ergonomic keyboard. See the [design documentation](./doc/design.md) for full details.
 
-![Maltron single-handed keyboard](./resources/switch-holes.png)
+![Trochee design](./resources/keys-in-holes.png)
 
 It is based on the [Dactyl](https://github.com/adereth/dactyl-keyboard) (Pictured below):
 

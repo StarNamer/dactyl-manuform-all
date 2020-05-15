@@ -10,7 +10,7 @@ A few models will be made to house an [AtomicPi](https://www.amazon.com/Atomic-P
 
 I'm starting with an extremely simple "unified" design, a compact 64-key layout that is an 8x8 square:
 
-![Unified design](../resources/switch-holes.png)
+![Unified design](../resources/keys-in-holes.png)
 
 Obviously note that there is no thumb cluster. Having never gotten accustomed to one I likely don't know what I'm missing, but removing it really appeals to me in terms of symmetry and space economy. This also allows a single design to be used for a modified left/right handed Dvorak layout:
 

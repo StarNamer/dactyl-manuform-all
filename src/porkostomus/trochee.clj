@@ -44,41 +44,84 @@
   (spit "resources/single-plate.scad"
         (scad/write-scad single-plate)))
 
+;;;;;;;;;;;;;;;;
+;; SA Keycaps ;;
+;;;;;;;;;;;;;;;;
+
+(def sa-length 18.25)
+(def sa-double-length 37.5)
+(def sa-cap {1 (let [bl2 (/ 18.5 2)
+                     m (/ 17 2)
+                     key-cap (model/hull (->> (model/polygon [[bl2 bl2] [bl2 (- bl2)] [(- bl2) (- bl2)] [(- bl2) bl2]])
+                                        (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                        (model/translate [0 0 0.05]))
+                                   (->> (model/polygon [[m m] [m (- m)] [(- m) (- m)] [(- m) m]])
+                                        (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                        (model/translate [0 0 6]))
+                                   (->> (model/polygon [[6 6] [6 -6] [-6 -6] [-6 6]])
+                                        (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                        (model/translate [0 0 12])))]
+                 (->> key-cap
+                      (model/translate [0 0 (+ 5 plate-thickness)])
+                      (model/color [220/255 163/255 163/255 1])))
+             2 (let [bl2 (/ sa-double-length 2)
+                     bw2 (/ 18.25 2)
+                     key-cap (model/hull (->> (model/polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
+                                        (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                        (model/translate [0 0 0.05]))
+                                   (->> (model/polygon [[6 16] [6 -16] [-6 -16] [-6 16]])
+                                        (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                        (model/translate [0 0 12])))]
+                 (->> key-cap
+                      (model/translate [0 0 (+ 5 plate-thickness)])
+                      (model/color [127/255 159/255 127/255 1])))
+             1.5 (let [bl2 (/ 18.25 2)
+                       bw2 (/ 28 2)
+                       key-cap (model/hull (->> (model/polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
+                                          (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                          (model/translate [0 0 0.05]))
+                                     (->> (model/polygon [[11 6] [-11 6] [-11 -6] [11 -6]])
+                                          (model/extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                          (model/translate [0 0 12])))]
+                   (->> key-cap
+                        (model/translate [0 0 (+ 5 plate-thickness)])
+                        (model/color [240/255 223/255 175/255 1])))})
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Placement Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def π Math/PI)
-(def α (/ π 12))
-(def β (/ π 36))
+(def α (/ π 14))
+(def β (/ π 20))
 
 (def columns (range 0 8))
-(def rows (range 0 8))
+(def rows (range -2 6))
 
 (def cap-top-height (+ plate-thickness sa-profile-key-height))
 (def row-radius (+ (/ (/ (+ mount-height 1/2) 2)
                       (Math/sin (/ α 2)))
                    cap-top-height))
 (def column-radius 
-  (+ (/ (/ (+ mount-width 5) 2)
+  (+ (/ (/ (+ mount-width 5.0) 2)
                          (Math/sin (/ β 2)))
                       cap-top-height))
 
 (defn key-place [column row shape]
   (let [row-placed-shape (->> shape
                               (model/translate [0 0 (- row-radius)])
-                              (model/rotate (* α (- 2 row)) [1 0 0])
+                              (model/rotate (* α (- 1.5 row)) [1 0 0])
                               (model/translate [0 0 row-radius]))
         column-offset (case column
-                        0 [0 12 10]
-                        1 [0 8 6]
-                        2 [0 4 2]
+                        0 [0 0 0]
+                        1 [0 0 0]
+                        2 [0 0 0]
                         3 [0 0 0]
                         4 [0 0 0]
-                        5 [0 4 2]
-                        6 [0 8 6]
-                        7 [0 12 10])
-        column-angle (* β (- 2 column))
+                        5 [0 0 0]
+                        6 [0 0 0]
+                        7 [0 0 0])
+        column-angle (* β (- 3.5 column))
         placed-shape (->> row-placed-shape
                           (model/translate [0 0 (- column-radius)])
                           (model/rotate column-angle [0 1 0])
@@ -95,9 +138,21 @@
            (->> single-plate
                 (key-place column row)))))
 
+(def caps
+  (apply model/union
+         (for [column columns
+               row rows]
+           (->> (sa-cap (if (= column 5) 1 1))
+                (key-place column row)))))
+
+(spit "resources/caps.scad"
+      (scad/write-scad caps))
+
 (comment
    (spit "resources/key-holes.scad"
-         (scad/write-scad key-holes)))
+         (scad/write-scad key-holes))
+  
+  )
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Web Connectors ;;
@@ -164,4 +219,7 @@
   
   )
 (spit "resources/switch-holes.scad"
-      (scad/write-scad (model/union connectors key-holes)))
+      (scad/write-scad (model/union connectors key-holes )))
+
+(spit "resources/keys-in-holes.scad"
+      (scad/write-scad (model/union connectors key-holes caps)))
