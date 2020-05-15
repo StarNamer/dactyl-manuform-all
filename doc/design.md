@@ -12,8 +12,12 @@ I'm starting with an extremely simple "unified" design, a compact 64-key layout 
 
 ![Unified design](../resources/keys-in-holes.png)
 
-Obviously note that there is no thumb cluster. Having never gotten accustomed to one I likely don't know what I'm missing, but removing it really appeals to me in terms of symmetry and space economy. This also allows a single design to be used for a modified left/right handed Dvorak layout:
+Obviously note that there is no separate thumb cluster. Having never gotten accustomed to one I likely don't know what I'm missing, but removing it really appeals to me in terms of symmetry and space economy. The Maltron is essentially a bowl-shape anyway, I just decided to take it to its logical extreme. This also allows a single design to be used for a modified left/right handed Dvorak layout:
 
 ![Right-hand Dvorak](../resources/trochee-layout.png)
 
 Shown above is the RH layout, a mirror image of which will be the LH version. 8 columns were chosen since it will just fit the letters in this configuration. It should be no wider as to minimize lateral finger movement, with 3 extra rows on top for the numbers, arrows and other less frequently used keys.
+
+## Switches
+
+* See [issue #3](https://github.com/porkostomus/trochee/issues/3)
