@@ -34,7 +34,7 @@
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;;;;;General ;;;;;;;;;;;;;		
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@
-(def row-size 0)							;;0 for dactyl, 1 for lightcycle-  MAKE SURE alpha_ergo_style is 0 for lightcycle
+(def row-size 1)							;;0 for dactyl, 1 for lightcycle-  MAKE SURE alpha_ergo_style is 0 for lightcycle
 (def switch-type 1)							;;;0= box 1=cherry 2= Alps		-88
 (def bottom-side-width 1.2) 					;Default 1.2  Originally 1 ;;Width of the bottom sides
 (def top-case-thickness 1.25)					;Default 1.25  Originally 1
@@ -58,12 +58,12 @@
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;;;;;Thumb cluster;;;;;;;;;;;;;		
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@
-(def thumb-type 2)  							;;; 0=5x 2/1.25u (ie lightcycle default) ----- 1=8x1U-----2= 2x2u(default)
+(def thumb-type 0)  							;;; 0=5x 2/1.25u (ie lightcycle default) ----- 1=8x1U-----2= 2x2u(default)
 (def additional-thumb-x-offset 0)  				;;additional offset for thumb cluster-0 by default
 (def thumb-front-back-curve (deg2rad 15))		;default 15 Key curve
 (def thumb-left-right-curve (deg2rad 5))		;;default 5 Key curve
 (def thumb-extra-width-column 2)				;;default 2
-(def left-right-thumb-tilt 15)					;;default 15 degrees  Serious down tilt =-45 which is about the limit this can go
+(def left-right-thumb-tilt -20)					;;default 15 degrees  Serious down tilt =-45 which is about the limit this can go
 (def front-back-thumb-tilt 15)   		 		;default 14 for better bottom fit originally 15
 (def  thumb-extra-width-row 1)					;;default 1
 (def top-z-offset-thumb 0)						;;The z offset of the thumb cluster.  Seperate from main offset
@@ -73,7 +73,7 @@
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;;;;;;;;;Wrist rest;;;;;;;;;;		
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@
-(def wrist-rest-on 1) 							;;0 for no rest 1 for a rest connection cut out in bottom case	
+(def wrist-rest-on 0) 							;;0 for no rest 1 for a rest connection cut out in bottom case
 (def wrist-rest-back-height 46)					;;Default 46 height of the back of the wrist rest
 (def wrist-rest-angle 20) 						;;Default 20 angle of the wrist rest
 (def wrist-rest-rotation-angle 0)				;;Default 9 The angle in counter clockwise the wrist rest is at			
