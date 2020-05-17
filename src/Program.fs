@@ -9,7 +9,10 @@ open Dactyl.Placement
 open Dactyl.Variables
 open Dactyl.Connections
 open Dactyl.Thumb
+open Dactyl.SingleJoint
 open Dactyl.Case
+open Dactyl.Part1
+open Dactyl.Part2
 open FSharpx.Collections
 
 
@@ -32,7 +35,15 @@ let model_right =
 [<EntryPoint>]
 let main argv =
 
-    use sw = new StreamWriter("../things/walls.scad")
-    [model_right] |> List.collect id |> print sw 
+    use sw = new StreamWriter("../things/firstTwo.scad")
+    [firstTwo] |> List.collect id |> print sw 
 
+    use sw = new StreamWriter("../things/secondTwo.scad")
+    [secondTwo;] |> List.collect id |> print sw 
+
+    use sw = new StreamWriter("../things/jointSnap.scad")
+    [ jointBoltRightWithBlock block] |> List.collect id |> print sw 
+
+    use sw = new StreamWriter("../things/jointBlock.scad")
+    [ jointBlock] |> List.collect id |> print sw 
     0 // return an integer exit code

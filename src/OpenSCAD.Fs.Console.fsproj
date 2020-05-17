@@ -6,8 +6,12 @@
   <ItemGroup>
     <Compile Include="Variables.fs" />
     <Compile Include="SinglePlate.fs" />
+    <Compile Include="SingleJoint.fs" />
     <Compile Include="Placement.fs" />
     <Compile Include="Connections.fs" />
+    <Compile Include="Part1.fs" />
+    <Compile Include="Part2.fs" />
+    <Compile Include="Part3.fs" />
     <Compile Include="Thumb.fs" />
     <Compile Include="Case.fs" />
     <Compile Include="Program.fs" />

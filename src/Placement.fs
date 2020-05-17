@@ -7,6 +7,7 @@ open OpenSCAD.Fs.Lib
 open OpenSCAD.Fs.Lib.Operator
 open OpenSCAD.Fs.Lib.Combinator
 open MathNet.Numerics.LinearAlgebra
+open Dactyl.SingleJoint
 
 let columns = [0 .. ncols - 1]
 let rows = [0 .. nrows - 1]
@@ -82,3 +83,61 @@ let rotate_around_y angle position =
 
 let key_position column row position =
     apply_key_geometry (List.map2 (fun x y -> x + y)) rotate_around_x rotate_around_y column row position
+
+let web_thickness = 4.0
+let post_size = 0.1
+let web_post = 
+    centeredCube [post_size; post_size; web_thickness]
+    |> translate [0.0; 0.0; (web_thickness / -2.0) + plate_thickness]
+
+let post_adj = post_size / 2.0
+let web_post_tr = translate [(mount_width / 2.0) - post_adj; (mount_height / 2.0) - post_adj; 0.0] web_post
+let web_post_tl = translate [(mount_width / -2.0) + post_adj; (mount_height / 2.0) - post_adj; 0.0] web_post
+let web_post_bl = translate [(mount_width / -2.0) + post_adj; (mount_height / -2.0) + post_adj; 0.0] web_post
+let web_post_br = translate [(mount_width / 2.0) - post_adj; (mount_height / -2.0) + post_adj; 0.0] web_post
+
+let jointBlockTr block = translate [(mount_width / 2.0) - 1.5; (mount_width / 2.0) + 2.5; 1.0 - plate_thickness] block
+let jointBlockTl block = translate [(mount_width / -2.0) + 1.5; (mount_width / 2.0) + 2.5; 1.0 - plate_thickness] block
+
+let triangle_hulls shapes =
+    shapes
+    |> List.windowed 3
+    |> List.map (fun l -> l |> hull)
+    |> List.collect id
+    |> union
+
+let movePostsColumn column row = 
+    [ key_place (column + 1.0)  row web_post_tl 
+    ; key_place column  row web_post_tr
+    ; key_place (column + 1.0) row web_post_bl
+    ; key_place column  row web_post_br]
+    |> List.collect id
+
+let movePostsRow column row =
+    [ key_place column row web_post_bl
+    ; key_place column row web_post_br
+    ; key_place column (row + 1) web_post_tl
+    ; key_place column (row + 1) web_post_tr]
+    |> List.collect id
+
+let movePostsDiagonal column row =
+    [ key_place column row web_post_br
+    ; key_place column (row + 1) web_post_tr
+    ; key_place (column + 1.0) row web_post_bl
+    ; key_place (column + 1.0) (row + 1) web_post_tl]
+    |> List.collect id
+
+let keyHoleColumn column toRow = 
+    [for row in 0 .. toRow do key_place column row single_plate] |> List.collect id
+
+let connectionColumn column toRow =
+    [ for row in 0 .. toRow do movePostsColumn column row |> triangle_hulls 
+    ] |> List.collect id
+
+let connectionRow column toRow =
+    [ for row in 0 .. toRow do movePostsRow column row |> triangle_hulls 
+    ] |> List.collect id
+
+let connectionDiagonal column toRow =
+    [ for row in 0 .. toRow do movePostsDiagonal column row |> triangle_hulls
+    ] |> List.collect id

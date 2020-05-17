@@ -6,8 +6,8 @@ open OpenSCAD.Fs.Lib.Combinator
 open FSharpx.Collections
 open Dactyl.Variables
 
-let keyswitch_height = 14.4
-let keyswitch_width = 14.4
+let keyswitch_height = 14.3
+let keyswitch_width = 14.3
 
 let mount_width = keyswitch_width + 3.0
 let mount_height = keyswitch_height + 3.0
