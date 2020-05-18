@@ -14,6 +14,7 @@ open Dactyl.Case
 open Dactyl.Part1
 open Dactyl.Part2
 open FSharpx.Collections
+open Dactyl.Part3
 
 
 let model_right =
@@ -39,11 +40,11 @@ let main argv =
     [firstTwo] |> List.collect id |> print sw 
 
     use sw = new StreamWriter("../things/secondTwo.scad")
-    [secondTwo;] |> List.collect id |> print sw 
+    [secondTwo] |> List.collect id |> print sw 
 
-    use sw = new StreamWriter("../things/jointSnap.scad")
-    [ jointBoltRightWithBlock block] |> List.collect id |> print sw 
+    use sw = new StreamWriter("../things/part4.scad")
+    [part4] |> List.collect id |> print sw 
 
-    use sw = new StreamWriter("../things/jointBlock.scad")
-    [ jointBlock] |> List.collect id |> print sw 
+    use sw = new StreamWriter("../things/parts.scad")
+    [firstTwo; secondTwo; thirdTwo; part4] |> List.collect id |> print sw 
     0 // return an integer exit code

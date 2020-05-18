@@ -41,7 +41,7 @@ let jointBlock =
 let shaft =
     centeredCylinder
     |> Cylinder.resize 3.0
-    |> Cylinder.radius 1.95
+    |> Cylinder.radius 1.9
     |> Cylinder.fragmentNumber 30.0
     |> Cylinder.toObject
     |> rotate 90.0<deg> [0.0; 1.0; 0.0]
@@ -49,7 +49,7 @@ let shaft =
 let boltTip = 
     centeredCylinder
     |> Cylinder.resize 1.0
-    |> Cylinder.bottomRadius 1.95
+    |> Cylinder.bottomRadius 1.9
     |> Cylinder.topRadius 1.8
     |> Cylinder.fragmentNumber 30.0
     |> Cylinder.toObject
@@ -62,10 +62,6 @@ let jointBolt =
     |> union
 
 let jointBoltRightWithBlock block =
-    let b = 
-        block
-        |> translate [-3.0; 0.0; 0.0]
-
     [jointBolt; block]
     |> List.collect id
     |> union

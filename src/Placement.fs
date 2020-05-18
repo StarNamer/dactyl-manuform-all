@@ -135,9 +135,9 @@ let connectionColumn column toRow =
     ] |> List.collect id
 
 let connectionRow column toRow =
-    [ for row in 0 .. toRow do movePostsRow column row |> triangle_hulls 
+    [ for row in -1 .. toRow do movePostsRow column row |> triangle_hulls 
     ] |> List.collect id
 
 let connectionDiagonal column toRow =
-    [ for row in 0 .. toRow do movePostsDiagonal column row |> triangle_hulls
+    [ for row in -1 .. toRow do movePostsDiagonal column row |> triangle_hulls
     ] |> List.collect id
