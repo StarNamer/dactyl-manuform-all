@@ -24,7 +24,7 @@ type ColumnStyle =
 let column_style =
     if nrows > 5 then Orhtographic else Standard
 
-let thumb_offsets = [6.0; -3.0; 7.0]
+let thumb_offsets = [6.0; -10.0; 7.0]
 
 let keyboard_z_offset = 9.0
 

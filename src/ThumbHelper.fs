@@ -21,7 +21,7 @@ let thumb_tr_place shape =
     shape
     |> rotate 10.0<deg> [1.0; 0.0; 0.0]
     |> rotate -23.0<deg> [0.0; 1.0; 0.0]
-    |> rotate 10.0<deg> [0.0; 0.0; 1.0]
+    |> rotate 20.0<deg> [0.0; 0.0; 1.0]
     |> translate thumborigin
     |> translate [-12.0; -16.0; 3.0]
 
@@ -29,7 +29,7 @@ let thumb_tl_place shape =
     shape
     |> rotate 10.0<deg> [1.0; 0.0; 0.0]
     |> rotate -23.0<deg> [0.0; 1.0; 0.0]
-    |> rotate 10.0<deg> [0.0; 0.0; 1.0]
+    |> rotate 20.0<deg> [0.0; 0.0; 1.0]
     |> translate thumborigin
     |> translate [-32.0; -15.0; -2.0]
 
@@ -39,7 +39,7 @@ let thumb_mr_place shape =
     |> rotate -34.0<deg> [0.0; 1.0; 0.0]
     |> rotate 48.0<deg> [0.0; 0.0; 1.0]
     |> translate thumborigin
-    |> translate [-29.0; -40.0; -13.0]
+    |> translate [-26.0; -40.0; -13.0]
 
 let thumb_ml_place shape =
     shape
@@ -47,7 +47,7 @@ let thumb_ml_place shape =
     |> rotate -34.0<deg> [0.0; 1.0; 0.0]
     |> rotate 40.0<deg> [0.0; 0.0; 1.0]
     |> translate thumborigin
-    |> translate [-51.0; -25.0; -12.0]
+    |> translate [-47.0; -25.0; -12.0]
 
 let thumb_br_place shape =
     shape

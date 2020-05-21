@@ -29,6 +29,8 @@ let model_right =
 
 [<EntryPoint>]
 let main argv =
+    use sw = new StreamWriter("../things/right.scad")
+    [model_right] |> List.collect id |> print sw 
 
     use sw = new StreamWriter("../things/firstTwo.scad")
     [KeyHoles.part1] |> List.collect id |> print sw 
@@ -53,10 +55,13 @@ let main argv =
         [ KeyHoles.part1
         ; KeyHoles.part2
         ; KeyHoles.part3
+        ; KeyHoles.thumb
         ; Case.topWall
         ; Case.rightWall
         ; Case.frontWall
         ; Case.leftWall
+        ; Case.thumbWall
+        ; Case.thumbConnectionLeft
         ] |> List.collect id |> union
 
     [all; cube] |> List.collect id |> difference |> print sw 

@@ -6,6 +6,7 @@ open OpenSCAD.Fs.Lib.Combinator
 open OpenSCAD.Fs.Lib
 open OpenSCAD.Fs.Lib.Operator
 open Dactyl.SinglePlate
+open Dactyl.ThumbHelper
 
 
 let part1 =
@@ -112,6 +113,20 @@ let part2 =
         ] 
         |> List.collect id
 
+
+    let columnFill =
+        let movePostsColumn column row = 
+            [ key_place column row web_post_tr
+            ; key_place column row web_post_br
+            ; key_place (column + 1.0) row web_post_tl 
+            ; key_place column row web_post_br
+            ; key_place column (row + 1) web_post_tr
+            ; key_place (column + 1.0)  row web_post_tl 
+            ] |> List.collect id
+
+        movePostsColumn 3.0 lastrow 
+        |> triangle_hulls 
+
     let fst = keyHoleColumn 2.0 lastrow
     let snd = keyHoleColumn 3.0 lastrow
     let conFstCols = connectionColumn 1.0 cornerrow
@@ -124,7 +139,7 @@ let part2 =
     let conThdDiag = connectionDiagonal 3.0 (cornerrow)
 
     [fst; snd
-    ; conFstCols; conSndCols; conThdCols
+    ; conFstCols; conSndCols; conThdCols; columnFill
     ; conFstRow; conSndRow 
     ; conFstDiag; conSndDiag; conThdDiag
     ; jointBolts] |> List.collect id |> union
@@ -169,6 +184,55 @@ let part3 =
     ; conFstRow; conSndRow
     ; conDiag
     ; jointBlocks ] |> List.collect id |> union
+
+let thumb_top_main_connection =
+    [ thumb_tl_place thumb_post_tl
+    ; key_place 0.0 lastrow web_post_tl
+    ; thumb_tl_place thumb_post_tr
+    ; key_place 0.0 lastrow web_post_tr
+    ; thumb_tr_place thumb_post_tl
+    ; key_place 1.0 lastrow web_post_tl
+    ; thumb_tr_place thumb_post_tr
+    ; key_place 1.0 lastrow web_post_tr
+    ; key_place 2.0 lastrow web_post_bl
+    ; thumb_tr_place thumb_post_tr
+    ; key_place 2.0 (lastrow + 1) web_post_tl
+    ; thumb_tr_place thumb_post_br
+    ]
+    |> List.collect id
+    |> triangle_hulls
+
+let thumb =
+    let fill =
+        [ key_place 1.0 lastrow web_post_tr
+        ; key_place 2.0 lastrow web_post_tl
+        ; key_place 2.0 lastrow web_post_bl
+        ]
+        |> List.collect id
+        |> triangle_hulls
+
+    let connections =
+        [ thumb_top_two_connection
+        ; thumb_bottom_right_connection
+        ; thumb_bottom_left_connection
+        ; thumb_center_connection
+        ; thumb_top_middle_connection
+        ; thumb_top_main_connection
+        //; thumb_add_one_connection
+        //; thumb_add_two_connections 
+        ]
+        |> List.collect id
+        |> union
+        
+    let keyHoles =
+        [ thumb_1x_layout single_plate 
+        ; thumb_15x_layout single_plate  
+        ; thumb_15x_layout larger_plate
+        ] 
+        |> List.collect id
+        |> union
+
+    [keyHoles; connections; fill] |> List.collect id |> union
 
 
 
