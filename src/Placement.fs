@@ -48,20 +48,10 @@ let apply_key_geometry translate_fn rotate_x_fn rotate_y_fn column row shape =
     |> rotate_y_fn tenting_angle
     |> translate_fn [0.0; 0.0; keyboard_z_offset]
     
-
 let key_place column row shape =
     let rot_x angle obj = rotate angle [1.0; 0.0; 0.0] obj
     let rot_y angle obj = rotate angle [0.0; 1.0; 0.0] obj
     apply_key_geometry translate rot_x rot_y column row shape
-
-let key_holes =
-    [for column in columns do
-        for row in rows do
-            if column = 2 then yield single_plate |> key_place (float(column)) row
-            if column = 3 then yield single_plate |> key_place (float(column)) row
-            if row <> lastrow then yield single_plate |> key_place (float(column)) row]
-    |> List.collect id
-    |> union
 
 let rotate_around_x angle position =
     let angleRad = angle |> degToRad

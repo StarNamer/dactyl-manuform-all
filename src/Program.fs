@@ -5,16 +5,10 @@ open OpenSCAD.Fs.Lib.Combinator
 open OpenSCAD.Fs.Lib.Projection
 open System.IO
 open Dactyl.SinglePlate
-open Dactyl.Placement
-open Dactyl.Variables
 open Dactyl.Connections
-open Dactyl.Thumb
-open Dactyl.SingleJoint
-open Dactyl.Case
-open Dactyl.Part1
-open Dactyl.Part2
+open Dactyl
 open FSharpx.Collections
-open Dactyl.Part3
+open Dactyl.Original
 
 
 let model_right =
@@ -37,14 +31,33 @@ let model_right =
 let main argv =
 
     use sw = new StreamWriter("../things/firstTwo.scad")
-    [firstTwo] |> List.collect id |> print sw 
+    [KeyHoles.part1] |> List.collect id |> print sw 
 
     use sw = new StreamWriter("../things/secondTwo.scad")
-    [secondTwo] |> List.collect id |> print sw 
+    [KeyHoles.part2] |> List.collect id |> print sw 
 
-    use sw = new StreamWriter("../things/part4.scad")
-    [part4] |> List.collect id |> print sw 
+    use sw = new StreamWriter("../things/thirdTwo.scad")
+    [KeyHoles.part3] |> List.collect id |> print sw 
+
+    use sw = new StreamWriter("../things/topWall.scad")
+    [Case.topWall] |> List.collect id |> print sw 
+
+    use sw = new StreamWriter("../things/rightWall.scad")
+    [Case.rightWall] |> List.collect id |> print sw 
+
+    let cube =
+         centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -20.0]
 
     use sw = new StreamWriter("../things/parts.scad")
-    [firstTwo; secondTwo; thirdTwo; part4] |> List.collect id |> print sw 
+    let all = 
+        [ KeyHoles.part1
+        ; KeyHoles.part2
+        ; KeyHoles.part3
+        ; Case.topWall
+        ; Case.rightWall
+        ; Case.frontWall
+        ; Case.leftWall
+        ] |> List.collect id |> union
+
+    [all; cube] |> List.collect id |> difference |> print sw 
     0 // return an integer exit code

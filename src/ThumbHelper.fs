@@ -1,4 +1,4 @@
-module Dactyl.Thumb
+module Dactyl.ThumbHelper
 
 open System
 open OpenSCAD.Fs.Lib
@@ -90,14 +90,6 @@ let larger_plate =
     |> union
 
 let thumb_caps = 0.0 //TODO
-
-let thumb =
-    [ thumb_1x_layout single_plate 
-    ; thumb_15x_layout single_plate  
-    ; thumb_15x_layout larger_plate] 
-    |> List.collect id
-    |> union
-
 
 let thumb_post_tr = translate [(mount_width / 2.0) - post_adj; (mount_height / 1.15) - post_adj; 0.0] web_post
 let thumb_post_tl = translate [(mount_width / -2.0) + post_adj; (mount_height / 1.15) - post_adj; 0.0] web_post
@@ -196,17 +188,5 @@ let thumb_add_two_connections =
     |> List.collect id
     |> triangle_hulls
 
-let thumb_connections =
-    [ thumb_top_two_connection
-    ; thumb_bottom_right_connection
-    ; thumb_bottom_left_connection
-    ; thumb_center_connection
-    ; thumb_top_middle_connection
-    ; thumb_top_main_connection
-    ; thumb_add_one_connection
-    ; thumb_add_two_connections 
-    ]
-    |> List.collect id
-    |> union
 
 

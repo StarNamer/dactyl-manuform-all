@@ -9,11 +9,11 @@
     <Compile Include="SingleJoint.fs" />
     <Compile Include="Placement.fs" />
     <Compile Include="Connections.fs" />
-    <Compile Include="Thumb.fs" />
+    <Compile Include="ThumbHelper.fs" />
+    <Compile Include="CaseHelper.fs" />
+    <Compile Include="OriginalDactyl.fs" />
+    <Compile Include="KeyHoles.fs" />
     <Compile Include="Case.fs" />
-    <Compile Include="Part1.fs" />
-    <Compile Include="Part2.fs" />
-    <Compile Include="Part3.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
