@@ -24,8 +24,8 @@ let part1 =
         [ key_place 0.0 0 (jointBlockTl (block 1.3))
         ; key_place 1.0 0 (jointBlockTl (block 1.3))
         //Bottom
-        ; key_place 0.0 4 (jointBlockTl (block -1.1))
-        ; key_place 1.0 4 (jointBlockTl (block -1.1))
+        ; key_place 0.0 4 (jointBlockTl (block -0.9))
+        ; key_place 1.0 4 (jointBlockTl (block -1.0))
         //Sides
         ; key_place 0.0 1 (jointBlockTl (sideBlock 0.2))
         ; key_place 0.0 2 (jointBlockTl (sideBlock 0.2))
@@ -203,6 +203,47 @@ let thumb_top_main_connection =
     |> triangle_hulls
 
 let thumb =
+    let jointBlock =
+        let slope =
+            centeredCube [6.0; 9.0; 9.0]
+            |> rotate 20.0<deg> [0.0; 1.0; 0.0]
+            |> rotate 20.0<deg> [0.0; 0.0; 1.0]
+            |> translate [-5.5; 0.0; 1.0]
+
+        let block = 
+            centeredCube [5.0; 7.0; 7.0]
+            |> translate [-3.9; 0.0; 0.5]
+            
+        [block; slope]
+        |> List.collect id
+        |> difference
+
+    let bigBlock = 
+        let slope =
+            centeredCube [3.0; 9.0; 9.0]
+            |> rotate 105.0<deg> [0.0; 1.0; 0.0]
+            |> translate [-5.5; 0.0; 9.0]
+
+        let block = 
+            centeredCube [7.0; 7.0; 11.0]
+            |> translate [-4.9; 0.0; 2.5]
+
+        [block; slope]
+        |> List.collect id
+        |> difference
+
+    let jointBolts =
+        let jbl block y =
+            block
+            |> jointBoltLeftWithBlock
+            |> rotate -90.0<deg> [0.0; 0.0; 1.0]
+            |> jointBlockTr
+            |> translate [(mount_width / -2.0) + 1.5; y; 0.0]
+
+        [ key_place 0.0 4 (jbl jointBlock -1.2)
+        ; key_place 1.0 4 (jbl bigBlock -1.3)
+        ] |> List.collect id
+
     let fill =
         [ key_place 1.0 lastrow web_post_tr
         ; key_place 2.0 lastrow web_post_tl
@@ -218,8 +259,6 @@ let thumb =
         ; thumb_center_connection
         ; thumb_top_middle_connection
         ; thumb_top_main_connection
-        //; thumb_add_one_connection
-        //; thumb_add_two_connections 
         ]
         |> List.collect id
         |> union
@@ -232,7 +271,10 @@ let thumb =
         |> List.collect id
         |> union
 
-    [keyHoles; connections; fill] |> List.collect id |> union
+    [ keyHoles
+    ; connections
+    ; fill
+    ; jointBolts] |> List.collect id |> union
 
 
 
