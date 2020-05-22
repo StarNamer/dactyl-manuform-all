@@ -14,6 +14,7 @@
     <Compile Include="OriginalDactyl.fs" />
     <Compile Include="KeyHoles.fs" />
     <Compile Include="Case.fs" />
+    <Compile Include="Teensy.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

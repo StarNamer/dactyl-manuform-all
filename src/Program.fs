@@ -47,6 +47,9 @@ let main argv =
     use sw = new StreamWriter("../things/rightWall.scad")
     [Case.rightWall] |> List.collect id |> print sw 
 
+    use sw = new StreamWriter("../things/teensy.scad")
+    [Teensy.holder] |> List.collect id |> print sw 
+
     let cube =
          centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -20.0]
 
@@ -55,13 +58,14 @@ let main argv =
         [ KeyHoles.part1
         ; KeyHoles.part2
         ; KeyHoles.part3
-        ; KeyHoles.thumb
+        //; KeyHoles.thumb
         ; Case.topWall
         ; Case.rightWall
         ; Case.frontWall
         ; Case.leftWall
-        ; Case.thumbWall
-        ; Case.thumbConnectionLeft
+        //; Case.thumbWall
+        //; Case.thumbConnectionLeft
+        ; Teensy.holder
         ] |> List.collect id |> union
 
     [all; cube] |> List.collect id |> difference |> print sw 
