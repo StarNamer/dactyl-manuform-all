@@ -727,19 +727,19 @@
                     connectors
                     thumb
                     thumb-connectors
-                    (difference (union ; case-walls
-                                       screw-insert-outers
+                    ;(difference (union ; case-walls
+                                       ; screw-insert-outers
                                       ;  teensy-holder
-                                       usb-holder)
+                                       ; usb-holder)
                                 ; rj9-space
-                                trrs-hole-just-circle
-                                usb-holder-hole
-                                screw-insert-holes)
+                                ;trrs-hole-just-circle
+                                ;usb-holder-hole
+                                ;screw-insert-holes)
                     ; rj9-holder
                     ; wire-posts
                     ; thumbcaps
-                    ; caps
-                    )
+                    ; cps
+                    ;)
                    (translate [0 0 -20] (cube 350 350 40))
                   ))
 
