@@ -10,11 +10,11 @@ open Dactyl.Variables
 open FSharpx.Collections
 
 let row_connections =
-    [for column in 0 .. ncols - 2 do
-        for row in 0 .. lastrow - 1 do
-            [ key_place (float(column + 1)) row web_post_tl 
+    [for column in 0.0 .. ncols - 2.0 do
+        for row in 0.0 .. lastrow - 1.0 do
+            [ key_place (float(column + 1.0)) row web_post_tl 
             ; key_place (float(column)) row web_post_tr
-            ; key_place (float(column + 1)) row web_post_bl
+            ; key_place (float(column + 1.0)) row web_post_bl
             ; key_place (float(column)) row web_post_br]
             |> List.collect id
             |> triangle_hulls ]
@@ -22,22 +22,22 @@ let row_connections =
 
 let column_connections = 
     [for column in columns do
-        for row in 0 .. cornerrow - 1 do
+        for row in 0.0 .. cornerrow - 1.0 do
             [ key_place (float(column)) row web_post_bl
             ; key_place (float(column)) row web_post_br
-            ; key_place (float(column)) (row + 1) web_post_tl
-            ; key_place (float(column)) (row + 1) web_post_tr]
+            ; key_place (float(column)) (row + 1.0) web_post_tl
+            ; key_place (float(column)) (row + 1.0) web_post_tr]
             |> List.collect id
             |> triangle_hulls ]
     |> List.collect id
 
 let diagonal_connections = 
-    [for column in 0 .. ncols - 2 do
-        for row in 0 .. cornerrow - 1 do
+    [for column in 0.0 .. ncols - 2.0 do
+        for row in 0.0 .. cornerrow - 1.0 do
             [ key_place (float(column)) row web_post_br
-            ; key_place (float(column)) (row + 1) web_post_tr
-            ; key_place (float(column + 1)) row web_post_bl
-            ; key_place (float(column + 1)) (row + 1) web_post_tl]
+            ; key_place (float(column)) (row + 1.0) web_post_tr
+            ; key_place (float(column + 1.0)) row web_post_bl
+            ; key_place (float(column + 1.0)) (row + 1.0) web_post_tl]
             |> List.collect id
             |> triangle_hulls ]
     |> List.collect id

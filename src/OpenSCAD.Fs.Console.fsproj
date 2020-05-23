@@ -15,12 +15,13 @@
     <Compile Include="KeyHoles.fs" />
     <Compile Include="Case.fs" />
     <Compile Include="Teensy.fs" />
+    <Compile Include="Screws.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharpx.Collections" Version="2.1.2" />
     <PackageReference Include="MathNet.Numerics" Version="4.9.1" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.9.1" />
-    <PackageReference Include="OSCFS" Version="0.1.0" />
+    <PackageReference Include="OSCFS" Version="0.3.0" />
   </ItemGroup>
 </Project>

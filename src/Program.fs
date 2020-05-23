@@ -6,6 +6,7 @@ open OpenSCAD.Fs.Lib.Projection
 open System.IO
 open Dactyl.SinglePlate
 open Dactyl.Connections
+open Dactyl.Screws
 open Dactyl
 open FSharpx.Collections
 open Dactyl.Original
@@ -54,18 +55,27 @@ let main argv =
          centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -20.0]
 
     use sw = new StreamWriter("../things/parts.scad")
+    let walls = 
+        [ Case.topWall
+        ; Case.rightWall
+        ; Case.frontWall
+        ; Case.thumbWall
+        ; Case.thumbConnectionLeft
+        ; Case.leftWall
+        ; Teensy.holder
+        ; screwInsertOuters
+        ] |> List.collect id |> union
+
+
+
     let all = 
         [ KeyHoles.part1
         ; KeyHoles.part2
         ; KeyHoles.part3
-        //; KeyHoles.thumb
-        ; Case.topWall
-        ; Case.rightWall
-        ; Case.frontWall
-        ; Case.leftWall
-        //; Case.thumbWall
-        //; Case.thumbConnectionLeft
-        ; Teensy.holder
+        ;   [ walls
+            ; screwInsertHoles
+        ] |> List.collect id |> difference
+        ; KeyHoles.thumb
         ] |> List.collect id |> union
 
     [all; cube] |> List.collect id |> difference |> print sw 

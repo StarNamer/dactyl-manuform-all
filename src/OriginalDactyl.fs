@@ -12,21 +12,21 @@ open OpenSCAD.Fs.Lib.Operator
 let key_holes =
     [for column in columns do
         for row in rows do
-            if column = 2 then yield single_plate |> key_place (float(column)) row
-            if column = 3 then yield single_plate |> key_place (float(column)) row
+            if column = 2.0 then yield single_plate |> key_place (float(column)) row
+            if column = 3.0 then yield single_plate |> key_place (float(column)) row
             if row <> lastrow then yield single_plate |> key_place (float(column)) row]
     |> List.collect id
     |> union
 
 let back_wall =
-    [ [for x in 0 .. ncols - 1 do key_wall_brace (float(x)) 0 0.0 1.0 web_post_tl (float(x)) 0 0.0 1.0 web_post_tr] |> List.collect id
-    ; [for x in 1 .. ncols - 1 do key_wall_brace (float(x)) 0 0.0 1.0 web_post_tl (float(x - 1)) 0 0.0 1.0 web_post_tr] |> List.collect id
-    ; key_wall_brace (float(lastcol)) 0 0.0 1.0 web_post_tr (float(lastcol)) 0 1.0 0.0 web_post_tr
+    [ [for x in 0.0 .. ncols - 1.0 do key_wall_brace (float(x)) 0.0 0.0 1.0 web_post_tl (float(x)) 0.0 0.0 1.0 web_post_tr] |> List.collect id
+    ; [for x in 1.0 .. ncols - 1.0 do key_wall_brace (float(x)) 0.0 0.0 1.0 web_post_tl (float(x - 1.0)) 0.0 0.0 1.0 web_post_tr] |> List.collect id
+    ; key_wall_brace (float(lastcol)) 0.0 0.0 1.0 web_post_tr (float(lastcol)) 0.0 1.0 0.0 web_post_tr
     ] |> List.collect id
 
 let right_wall =
-    [ [ for y in 0 .. lastrow - 1 do key_wall_brace (float(lastcol)) y 1.0 0.0 web_post_tr (float(lastcol)) y 1.0 0.0 web_post_br ] |> List.collect id
-    ; [ for y in 1 .. lastrow - 1 do key_wall_brace (float(lastcol)) (y - 1) 1.0 0.0 web_post_br (float(lastcol)) y 1.0 0.0 web_post_tr] |> List.collect id
+    [ [ for y in 0.0 .. lastrow - 1.0 do key_wall_brace (float(lastcol)) y 1.0 0.0 web_post_tr (float(lastcol)) y 1.0 0.0 web_post_br ] |> List.collect id
+    ; [ for y in 1.0 .. lastrow - 1.0 do key_wall_brace (float(lastcol)) (y - 1.0) 1.0 0.0 web_post_br (float(lastcol)) y 1.0 0.0 web_post_tr] |> List.collect id
     ; key_wall_brace (float(lastcol)) cornerrow 0.0 -1.0 web_post_br (float(lastcol)) cornerrow 1.0 0.0 web_post_br
     ] |> List.collect id
 
@@ -39,29 +39,29 @@ let left_wall =
         ] |> List.collect id |> hull
 
     let one = 
-        [ for y in 0 .. lastrow - 1 do 
+        [ for y in 0.0 .. lastrow - 1.0 do 
            [ wall_brace (left_key_place y 1.0) -1.0 0.0 web_post (left_key_place y -1.0) -1.0 0.0 web_post
            ; inner y y] |> List.collect id |> union
            ] |> List.collect id
 
     let two =
-        [ for y in 1 .. lastrow - 1 do
-            [ wall_brace (left_key_place (y - 1) -1.0) -1.0 0.0 web_post (left_key_place y 1.0) -1.0 0.0 web_post
-            ; inner y (y - 1)] |> List.collect id |> union
+        [ for y in 1.0 .. lastrow - 1.0 do
+            [ wall_brace (left_key_place (y - 1.0) -1.0) -1.0 0.0 web_post (left_key_place y 1.0) -1.0 0.0 web_post
+            ; inner y (y - 1.0)] |> List.collect id |> union
         ] |> List.collect id
 
     [ one
     ; two
-    ; wall_brace (key_place 0.0 0) 0.0 1.0 web_post_tl (left_key_place 0 1.0) 0.0 1.0 web_post
-    ; wall_brace (left_key_place 0 1.0) 0.0 1.0 web_post (left_key_place 0 1.0) -1.0 0.0 web_post
+    ; wall_brace (key_place 0.0 0.0) 0.0 1.0 web_post_tl (left_key_place 0.0 1.0) 0.0 1.0 web_post
+    ; wall_brace (left_key_place 0.0 1.0) 0.0 1.0 web_post (left_key_place 0.0 1.0) -1.0 0.0 web_post
     ] |> List.collect id
 
 let front_wall =
-    [ key_wall_brace (float(lastcol)) 0 0.0 1.0 web_post_tr (float(lastcol)) 0 1.0 0.0 web_post_tr
+    [ key_wall_brace (float(lastcol)) 0.0 0.0 1.0 web_post_tr (float(lastcol)) 0.0 1.0 0.0 web_post_tr
     ; key_wall_brace 3.0 lastrow 0.0 -1.0 web_post_bl 3.0 lastrow 0.5 -1.0 web_post_br
     ; key_wall_brace 3.0 lastrow 0.5 -1.0 web_post_br 4.0 cornerrow 1.0 -1.0 web_post_bl
-    ; [for x in 4 .. ncols - 1 do key_wall_brace (float(x)) cornerrow 0.0 -1.0 web_post_bl (float(x)) cornerrow 0.0 -1.0 web_post_br] |> List.collect id
-    ; [for x in 5 .. ncols - 1 do key_wall_brace (float(x)) cornerrow 0.0 -1.0 web_post_bl (float(x - 1)) cornerrow 0.0 -1.0 web_post_br] |> List.collect id
+    ; [for x in 4.0 .. ncols - 1.0 do key_wall_brace (float(x)) cornerrow 0.0 -1.0 web_post_bl (float(x)) cornerrow 0.0 -1.0 web_post_br] |> List.collect id
+    ; [for x in 5.0 .. ncols - 1.0 do key_wall_brace (float(x)) cornerrow 0.0 -1.0 web_post_bl (float(x - 1.0)) cornerrow 0.0 -1.0 web_post_br] |> List.collect id
     ] |> List.collect id
 
 

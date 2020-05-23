@@ -9,8 +9,8 @@ open OpenSCAD.Fs.Lib.Combinator
 open MathNet.Numerics.LinearAlgebra
 open Dactyl.SingleJoint
 
-let columns = [0 .. ncols - 1]
-let rows = [0 .. nrows - 1]
+let columns = [0.0 .. ncols - 1.0]
+let rows = [0.0 .. nrows - 1.0]
 let sa_profile_key_height = 12.7
 
 let cap_top_height = (plate_thickness + sa_profile_key_height)
@@ -106,28 +106,28 @@ let movePostsColumn column row =
 let movePostsRow column row =
     [ key_place column row web_post_bl
     ; key_place column row web_post_br
-    ; key_place column (row + 1) web_post_tl
-    ; key_place column (row + 1) web_post_tr]
+    ; key_place column (row + 1.0) web_post_tl
+    ; key_place column (row + 1.0) web_post_tr]
     |> List.collect id
 
 let movePostsDiagonal column row =
     [ key_place column row web_post_br
-    ; key_place column (row + 1) web_post_tr
+    ; key_place column (row + 1.0) web_post_tr
     ; key_place (column + 1.0) row web_post_bl
-    ; key_place (column + 1.0) (row + 1) web_post_tl]
+    ; key_place (column + 1.0) (row + 1.0) web_post_tl]
     |> List.collect id
 
 let keyHoleColumn column toRow = 
-    [for row in 0 .. toRow do key_place column row single_plate] |> List.collect id
+    [for row in 0.0 .. toRow do key_place column row single_plate] |> List.collect id
 
 let connectionColumn column toRow =
-    [ for row in 0 .. toRow do movePostsColumn column row |> triangle_hulls 
+    [ for row in 0.0 .. toRow do movePostsColumn column row |> triangle_hulls 
     ] |> List.collect id
 
 let connectionRow column toRow =
-    [ for row in -1 .. toRow do movePostsRow column row |> triangle_hulls 
+    [ for row in -1.0 .. toRow do movePostsRow column row |> triangle_hulls 
     ] |> List.collect id
 
 let connectionDiagonal column toRow =
-    [ for row in -1 .. toRow do movePostsDiagonal column row |> triangle_hulls
+    [ for row in -1.0 .. toRow do movePostsDiagonal column row |> triangle_hulls
     ] |> List.collect id

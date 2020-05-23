@@ -21,18 +21,18 @@ let part1 =
 
     let jointBlocks =
         //Top
-        [ key_place 0.0 0 (jointBlockTl (block 1.3))
-        ; key_place 1.0 0 (jointBlockTl (block 1.3))
+        [ key_place 0.0 0.0 (jointBlockTl (block 1.3))
+        ; key_place 1.0 0.0 (jointBlockTl (block 1.3))
         //Bottom
-        ; key_place 0.0 4 (jointBlockTl (block -0.9))
-        ; key_place 1.0 4 (jointBlockTl (block -1.0))
+        ; key_place 0.0 4.0 (jointBlockTl (block -0.9))
+        ; key_place 1.0 4.0 (jointBlockTl (block -1.0))
         //Sides
-        ; key_place 0.0 1 (jointBlockTl (sideBlock 0.2))
-        ; key_place 0.0 2 (jointBlockTl (sideBlock 0.2))
-        ; key_place 0.0 3 (jointBlockTl (sideBlock 0.2))
-        ; key_place 1.0 1 (jointBlockTr (sideBlock -0.2))
-        ; key_place 1.0 2 (jointBlockTr (sideBlock -0.2))
-        ; key_place 1.0 3 (jointBlockTr (sideBlock -0.2))
+        ; key_place 0.0 1.0 (jointBlockTl (sideBlock 0.2))
+        ; key_place 0.0 2.0 (jointBlockTl (sideBlock 0.2))
+        ; key_place 0.0 3.0 (jointBlockTl (sideBlock 0.2))
+        ; key_place 1.0 1.0 (jointBlockTr (sideBlock -0.2))
+        ; key_place 1.0 2.0 (jointBlockTr (sideBlock -0.2))
+        ; key_place 1.0 3.0 (jointBlockTr (sideBlock -0.2))
         ] 
         |> List.collect id
 
@@ -98,18 +98,18 @@ let part2 =
             |> translate [(mount_width / 2.0) - 1.5; y; 0.0]
             
         //Top
-        [ key_place 2.0 0 (jointBlockTl (block 1.3))
-        ; key_place 3.0 0 (jointBlockTl (block 1.3))
+        [ key_place 2.0 0.0 (jointBlockTl (block 1.3))
+        ; key_place 3.0 0.0 (jointBlockTl (block 1.3))
         //bottom
-        ; key_place 2.0 5 (jointBlockTl (block -1.0))
-        ; key_place 3.0 5 (jointBlockTl (block -0.9))
+        ; key_place 2.0 5.0 (jointBlockTl (block -1.0))
+        ; key_place 3.0 5.0 (jointBlockTl (block -0.9))
         //Sides
-        ; key_place 1.0 1 jbl
-        ; key_place 1.0 2 jbl
-        ; key_place 1.0 3 jbl
-        ; key_place 4.0 1 (jbr 25.0)
-        ; key_place 4.0 2 (jbr 45.0)
-        ; key_place 4.0 3 (jbr 65.0)
+        ; key_place 1.0 1.0 jbl
+        ; key_place 1.0 2.0 jbl
+        ; key_place 1.0 3.0 jbl
+        ; key_place 4.0 1.0 (jbr 25.0)
+        ; key_place 4.0 2.0 (jbr 45.0)
+        ; key_place 4.0 3.0 (jbr 65.0)
         ] 
         |> List.collect id
 
@@ -120,7 +120,7 @@ let part2 =
             ; key_place column row web_post_br
             ; key_place (column + 1.0) row web_post_tl 
             ; key_place column row web_post_br
-            ; key_place column (row + 1) web_post_tr
+            ; key_place column (row + 1.0) web_post_tr
             ; key_place (column + 1.0)  row web_post_tl 
             ] |> List.collect id
 
@@ -156,18 +156,18 @@ let part3 =
 
     let jointBlocks =
         //Top
-        [ key_place 4.0 0 (jointBlockTl (block 1.3))
-        ; key_place 5.0 0 (jointBlockTl (block 1.3))
+        [ key_place 4.0 0.0 (jointBlockTl (block 1.3))
+        ; key_place 5.0 0.0 (jointBlockTl (block 1.3))
         //Bottom
-        ; key_place 4.0 4 (jointBlockTl (block -0.9))
-        ; key_place 5.0 4 (jointBlockTl (block -0.9))
+        ; key_place 4.0 4.0 (jointBlockTl (block -0.9))
+        ; key_place 5.0 4.0 (jointBlockTl (block -0.9))
         //Sides
-        ; key_place 4.0 1 (jointBlockTl (sideBlock 0.2))
-        ; key_place 4.0 2 (jointBlockTl (sideBlock 0.2))
-        ; key_place 4.0 3 (jointBlockTl (sideBlock 0.2))
-        ; key_place 5.0 1 (jointBlockTr (sideBlock -0.2))
-        ; key_place 5.0 2 (jointBlockTr (sideBlock -0.2))
-        ; key_place 5.0 3 (jointBlockTr (sideBlock -0.2))
+        ; key_place 4.0 1.0 (jointBlockTl (sideBlock 0.2))
+        ; key_place 4.0 2.0 (jointBlockTl (sideBlock 0.2))
+        ; key_place 4.0 3.0 (jointBlockTl (sideBlock 0.2))
+        ; key_place 5.0 1.0 (jointBlockTr (sideBlock -0.2))
+        ; key_place 5.0 2.0 (jointBlockTr (sideBlock -0.2))
+        ; key_place 5.0 3.0 (jointBlockTr (sideBlock -0.2))
         ] 
         |> List.collect id
 
@@ -196,7 +196,7 @@ let thumb_top_main_connection =
     ; key_place 1.0 lastrow web_post_tr
     ; key_place 2.0 lastrow web_post_bl
     ; thumb_tr_place thumb_post_tr
-    ; key_place 2.0 (lastrow + 1) web_post_tl
+    ; key_place 2.0 (lastrow + 1.0) web_post_tl
     ; thumb_tr_place thumb_post_br
     ]
     |> List.collect id
@@ -240,8 +240,8 @@ let thumb =
             |> jointBlockTr
             |> translate [(mount_width / -2.0) + 1.5; y; 0.0]
 
-        [ key_place 0.0 4 (jbl jointBlock -1.2)
-        ; key_place 1.0 4 (jbl bigBlock -1.3)
+        [ key_place 0.0 4.0 (jbl jointBlock -1.2)
+        ; key_place 1.0 4.0 (jbl bigBlock -1.3)
         ] |> List.collect id
 
     let fill =

@@ -16,8 +16,8 @@ let teensyHolderHeight = teensyWidth + 6.0
 let teensyHolderTopLength = 18.0
 let teensyOffsetHeight = 18.0
 
-let teensyTopXY = key_position 0.0 (centerrow - 1) (wall_locate3 -1.0 0.0)
-let teensyBottomXY = key_position 0.0 (centerrow + 1) (wall_locate3 -1.0 0.0)
+let teensyTopXY = key_position 0.0 (centerrow - 1.0) (wall_locate3 -1.0 0.0)
+let teensyBottomXY = key_position 0.0 (centerrow + 1.0) (wall_locate3 -1.0 0.0)
 let teensyHolderLength = teensyTopXY.[1] - teensyBottomXY.[1]
 let teensyHolderOffset = teensyHolderLength / -2.0
 let teensyHolderTopOffset = (teensyHolderTopLength / 2.0) - teensyHolderLength
