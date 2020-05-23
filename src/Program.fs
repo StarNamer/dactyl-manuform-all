@@ -48,6 +48,9 @@ let main argv =
     use sw = new StreamWriter("../things/rightWall.scad")
     [Case.rightWall] |> List.collect id |> print sw 
 
+    use sw = new StreamWriter("../things/leftWall.scad")
+    [Case.leftWall] |> List.collect id |> print sw 
+
     use sw = new StreamWriter("../things/teensy.scad")
     [Teensy.holder] |> List.collect id |> print sw 
 
@@ -59,9 +62,9 @@ let main argv =
         [ Case.topWall
         ; Case.rightWall
         ; Case.frontWall
+        ; Case.leftWall
         ; Case.thumbWall
         ; Case.thumbConnectionLeft
-        ; Case.leftWall
         ; Teensy.holder
         ; screwInsertOuters
         ] |> List.collect id |> union

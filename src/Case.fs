@@ -24,7 +24,15 @@ let topWall =
         |> List.collect id
         |> difference
 
+    let firstJointXY = key_position 0.0 0.0 (wall_locate1 0.6 4.9)
+
     let jointBolts =
+        let jbt z =
+            SingleJoint.jointBlock
+            |> rotate -90.0<deg> [1.0; 0.0; 0.0]
+            |> jointBlockTl
+            |> translate [firstJointXY.[0]; firstJointXY.[1]; z]
+
         let jbl =
             jointBlock
             |> jointBoltLeftWithBlock
@@ -38,6 +46,8 @@ let topWall =
         ; key_place 3.0 0.0 jbl
         ; key_place 4.0 0.0 jbl
         ; key_place 5.0 0.0 jbl
+        ; jbt 12.0
+        ; jbt 30.0
         ] |> List.collect id
 
     let bla x1 y1 dx dy block = 
@@ -130,9 +140,9 @@ let frontWall =
 let leftWall =
     let jointBlock =
         let slope =
-            centeredCube [3.0; 8.0; 8.0]
-            |> rotate 55.0<deg> [0.0; 1.0; 0.0]
-            |> translate [-6.0; 0.0; 4.0]
+            centeredCube [3.0; 8.0; 8.5]
+            |> rotate 50.0<deg> [0.0; 1.0; 0.0]
+            |> translate [-6.2; 0.0; 4.0]
 
         let block = 
             centeredCube [7.0; 7.0; 7.0]
@@ -142,7 +152,24 @@ let leftWall =
         |> List.collect id
         |> difference
 
+    let firstJointXY = key_position 0.0 0.0 (wall_locate1 0.4 4.9)
+    let lastJointXY = key_position 0.0 lastrow (wall_locate3 -1.0 0.9)
+
     let jointBolts =
+        let jbt height =
+            jointBlock
+            |> jointBoltRightWithBlock
+            |> rotate -90.0<deg> [1.0; 0.0; 0.0]
+            |> jointBlockTl
+            |> translate [firstJointXY.[0]; firstJointXY.[1]; height]
+
+        let jbw = 
+            SingleJoint.jointBlock
+            |> rotate 90.0<deg> [1.0; 0.0; 0.0]
+            |> rotate -90.0<deg> [0.0; 0.0; 1.0]
+            |> jointBlockTl
+            |> translate [lastJointXY.[0]; lastJointXY.[1]; 18.0]
+
         let jbl =
             jointBlock
             |> jointBoltRightWithBlock
@@ -152,6 +179,9 @@ let leftWall =
         [ key_place 0.0 1.0 jbl
         ; key_place 0.0 2.0 jbl
         ; key_place 0.0 3.0 jbl
+        ; jbt 12.0
+        ; jbt 30.0
+        ; jbw
         ] |> List.collect id
 
     let inner y1 y2 =
@@ -199,6 +229,34 @@ let thumbWall =
     ] |> List.collect id
 
 let thumbConnectionLeft =
+    let jointBlock =
+        let slope =
+            centeredCube [5.0; 8.0; 10.0]
+            |> rotate 60.0<deg> [0.0; 1.0; 0.0]
+            |> translate [-8.5; 0.0; 3.0]
+
+        let block = 
+            centeredCube [9.0; 7.0; 7.0]
+            |> translate [-5.9; 0.0; 0.5]
+            
+        [block; slope]
+        |> List.collect id
+        |> difference
+
+    let topXY = key_position 0.0 lastrow (wall_locate3 -1.0 0.9)
+
+    let jointBolts =
+        let jbl =
+            jointBlock
+            |> jointBoltRightWithBlock
+            |> rotate 90.0<deg> [1.0; 0.0; 0.0]
+            |> rotate 90.0<deg> [0.0; 0.0; 1.0]
+            |> rotate 180.0<deg> [0.0; 1.0; 0.0]
+            |> jointBlockTl
+            |> translate [topXY.[0]; topXY.[1] - 0.3; 18.0]
+
+        [ jbl ] |> List.collect id
+
     let part1 = 
         [ left_key_place (lastrow) 1.0 (translate (wall_locate2 -1.0 0.0) web_post)
         ; left_key_place (lastrow) 1.0 (translate (wall_locate3 -1.0 0.0) web_post)
@@ -238,4 +296,4 @@ let thumbConnectionLeft =
         ; thumb_tl_place thumb_post_tl
         ] |> List.collect id |> hull
 
-    [part1; part2; part3; part4; part5] |> List.collect id
+    [part1; part2; part3; part4; part5; jointBolts] |> List.collect id
