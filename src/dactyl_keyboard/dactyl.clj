@@ -8,7 +8,7 @@
 (def ^:const LEFT 1)
 (def ^:const RIGHT 2)
 (def ^:const FAST_RENDER false)
-(def ^:const RESTS_SEPERATE false)
+(def ^:const RESTS_SEPERATE true) ;; max-edit: removing wrist rest, was false
 (def ^:const STANDS_SEPERATE false)
 
 ;;;;;;;;;;;;;;;;;
@@ -302,7 +302,7 @@
          (translate [mount-width 0 0])
          (rotate (* π (- 1/4 3/16)) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (translate [-52 -45 40]))))
+         (translate [-54 -45 30])))) ;; max-edit: lowering thumb cluster, was [-52 -45 40]
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
@@ -723,9 +723,11 @@
         thumb-br (->> web-post-br
                       (translate [-0 (- plate-height) 0]))
         thumb-bottom (->> (cube 3 3 0.001)
-                       (translate [13.6 -15 -8]))
+                       (translate [13.6 -15 0]))
+                       ;(translate [14.4 -15 -2.3])) ;;max-edit prevent case intrusion on thumb area
         thumb-top (->> (cube 1 1 1)
                        (translate [13 -11.7 -5.4]))]
+                       ;(translate [13 -5 -4.4]))] ;;max-edit prevent case intrusion on thumb area
      (hull (place thumb-right-wall wall (translate [-1 1.5 thumb-case-z] wall-cube-bottom-front))
            (key-place 1 4 web-post-bl)
            (place 0 -1/2 thumb-br)
@@ -773,10 +775,12 @@
                 (->> (cube stand-diameter stand-diameter stand-radius)
                      (translate [0 0 (/ stand-radius -2)])
                       placement)
-                (->> (sphere bumper-radius)
-                     (translate [0 0 (+ (/ stand-radius -2) -4.5)])
-                      placement
-                     (bottom 1.5)))))
+                ;;;;;; max-edit: removing leg center cutouts (effect is to remove walls) 
+                ; (->> (sphere bumper-radius) 
+                ;      (translate [0 0 (+ (/ stand-radius -2) -4.5)])
+                ;       placement
+                ;      (bottom 1.5))
+                )))
 
 (def bottom-plate
   (union
@@ -1524,7 +1528,7 @@
              (difference bottom-plate
                          case-tolerance
                          (hull teensy-cover)
-                          (if RESTS_SEPERATE rest-alignment)
+                         ;;(if RESTS_SEPERATE rest-alignment) ;;max-edit: removing holes used for wrist rest
                          teensy-cover
                          trrs-cutout
                          screw-holes
@@ -1542,7 +1546,7 @@
               (difference bottom-plate
                           case-tolerance
                           (hull io-exp-cover)
-                          (if RESTS_SEPERATE rest-alignment)
+                          ;;(if RESTS_SEPERATE rest-alignment) ;;max-edit: removing holes used for wrist rest
                           io-exp-cover
                           trrs-cutout
                           screw-holes
@@ -1573,6 +1577,15 @@
           trrs-hole-just-circle
           screw-holes)))))
 
+;;max-edit: to ensure case doesn't intrude on keycap space
+(def dactyl-full-right
+  (union
+    dactyl-bottom-right
+    dactyl-top-right
+    ;dactyl-keycaps-right
+    ))
+    
+
 ;;;;;;;;;;;;;
 ;; Outputs ;;
 ;;;;;;;;;;;;;
@@ -1594,6 +1607,10 @@
 
 (spit "things/dactyl-keycaps-right.scad"
       (write-scad dactyl-keycaps-right))
+
+;;max-edit: to ensure case doesn't intrude on keycap space
+(spit "things/dactyl-full-right.scad"
+      (write-scad dactyl-full-right))
 
 (if RESTS_SEPERATE
   (do
