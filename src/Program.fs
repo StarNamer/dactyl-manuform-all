@@ -30,8 +30,11 @@ let model_right =
 
 [<EntryPoint>]
 let main argv =
-    use sw = new StreamWriter("../things/right.scad")
-    [model_right] |> List.collect id |> print sw 
+    let cube =
+         centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -19.99]
+
+    use sw = new StreamWriter("../things/frontWall.scad")
+    [Case.frontWall; cube] |> List.collect id |> difference |> print sw 
 
     use sw = new StreamWriter("../things/firstTwo.scad")
     [KeyHoles.part1] |> List.collect id |> print sw 
@@ -43,10 +46,10 @@ let main argv =
     [KeyHoles.part3] |> List.collect id |> print sw 
 
     use sw = new StreamWriter("../things/topWall.scad")
-    [Case.topWall] |> List.collect id |> print sw 
+    [Case.topWall; cube] |> List.collect id |> difference |> print sw 
 
     use sw = new StreamWriter("../things/rightWall.scad")
-    [Case.rightWall] |> List.collect id |> print sw 
+    [Case.rightWall; cube] |> List.collect id |> difference |> print sw 
 
     use sw = new StreamWriter("../things/leftWall.scad")
     [Case.leftWall] |> List.collect id |> print sw 
@@ -54,8 +57,6 @@ let main argv =
     use sw = new StreamWriter("../things/teensy.scad")
     [Teensy.holder] |> List.collect id |> print sw 
 
-    let cube =
-         centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -20.0]
 
     use sw = new StreamWriter("../things/parts.scad")
     let walls = 
@@ -68,8 +69,6 @@ let main argv =
         ; Teensy.holder
         ; screwInsertOuters
         ] |> List.collect id |> union
-
-
 
     let all = 
         [ KeyHoles.part1
