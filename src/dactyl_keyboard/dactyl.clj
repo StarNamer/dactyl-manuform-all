@@ -70,35 +70,36 @@
 
 (def round-case true)
 
-(def nrows 4)
+(def nrows 5)
 (def ncols 6)
 
-(def α (/ π 12))                        ; curvature of the columns
+(def α (/ π 18))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
-(def centerrow (- nrows 2.5))             ; controls front-back tilt
-(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centerrow (- nrows 3))             ; controls front-back tilt
+(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
 (def pinky-15u false)
 
-(defn column-offset [column] (cond
-                               (= column 2) [0 2.82 -4.0]
-                               (= column 4) [0 -15 4.64]            ; original [0 -5.8 5.64]
-                               (= column 5) [0 -14 4.64]            ; original [0 -5.8 5.64]
-                               :else [0 0 0]))
+(defn column-offset [column]
+  (cond
+    (= column 2) [0 2.82 -4.0]
+    (= column 4) [0 -15 2.5]            ; original [0 -5.8 5.64]
+    (= column 5) [0 -15 3.0]            ; original [0 -5.8 5.64]
+    :else [0 0 0]))
 
 (def thumb-offsets [4 -3 7])
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 0.5)                  ; original= 0.5
+(def extra-height 1)                  ; original= 0.5
 
-(def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
+(def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def wall-thickness 3)                  ; wall thickness parameter; originally 5
+(def wall-thickness 2)                  ; wall thickness parameter; originally 5
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -136,7 +137,7 @@
 (def cornerrow (dec lastrow))
 (def lastcol (dec ncols))
 
-(def rounding-radius 1)
+(def rounding-radius 0.25)
 ;(def rounding-radius 0)
 
 ;;;;;;;;;;;;;;;;;
@@ -809,7 +810,7 @@
       [left-wall-x-offset 0 left-wall-z-offset]
       (key-position 0 0 [0 0 0])
       [(* mount-width -0.5) (* mount-width 0.5) 0]
-      [(* oled-holder-width -0.5) (* oled-holder-height -0.5) 0]
+      [(* oled-holder-width -0.7) (* oled-holder-height -0.5) 0]
       [(* xdir oled-holder-width 0.5) (* ydir oled-holder-height 0.5) 0]
       [-3 6 -7]
       )
@@ -860,7 +861,7 @@
 
       (key-place 0 0 web-post-bl)
       (left-wall-plate-place 1 1 oled-post)
-      (left-wall-plate-place 1 -1 oled-post)
+      (key-place 0 1 web-post-tl)
 
       (left-wall-plate-place 1 -1 oled-post)
       (left-wall-plate-place -1 -1 oled-post)
@@ -894,6 +895,14 @@
       (key-place 0 2 web-post-tl)
       (key-place 0 2 web-post-bl)
       (thumb-tm-place web-post-tl)
+
+      (key-place 0 2 web-post-bl)
+      (thumb-tm-place web-post-tl)
+      (key-place 0 3 web-post-tl)
+
+      (key-place 0 3 web-post-tl)
+      (thumb-tm-place web-post-tl)
+      (key-place 0 3 web-post-bl)
       )))
 
 (def case-walls
@@ -1235,19 +1244,19 @@
           )
         ))
 
-;(spit "things/left.scad"
-      ;(write-scad (mirror [-1 0 0] model-right)))
+(spit "things/left.scad"
+      (write-scad (mirror [-1 0 0] model-right)))
 
-;(spit "things/right-test.scad"
-      ;(write-scad
-        ;(union
-          ;model-right
-          ;caps
-			;;(if (== bottom-cover 1) (->> model-plate-right))
-			;(if (== wrist-rest-on 1) (->> wrist-rest-build 		)		)
-          ;)
-        ;)
-      ;)
+(spit "things/right-test.scad"
+      (write-scad
+        (union
+          model-right
+          caps
+			;(if (== bottom-cover 1) (->> model-plate-right))
+			(if (== wrist-rest-on 1) (->> wrist-rest-build 		)		)
+          )
+        )
+      )
 
 
 (spit "things/right-plate.scad"
@@ -1258,16 +1267,18 @@
           )
         ))
 
+(spit "things/left-plate.scad"
+      (write-scad (mirror [-1 0 0] plate-right)))
 
-;(spit "things/wrist-rest.scad"
-      ;(write-scad wrist-rest-build))
+(spit "things/wrist-rest.scad"
+      (write-scad wrist-rest-build))
 
-;(spit "things/caps-crash-test.scad"
-      ;(write-scad
-       ;(intersection model-right caps)))
+(spit "things/caps-crash-test.scad"
+      (write-scad
+       (intersection model-right caps)))
 
-;(spit "things/test.scad"
-      ;(write-scad
-       ;(difference trrs-holder trrs-holder-hole)))
+; (spit "things/test.scad"
+;       (write-scad
+;        (difference trrs-holder trrs-holder-hole)))
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
