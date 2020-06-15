@@ -302,7 +302,7 @@
          (translate [mount-width 0 0])
          (rotate (* π (- 1/4 3/16)) [0 0 1])
          (rotate (/ π 12) [1 1 0])
-         (translate [-54 -45 30])))) ;; max-edit: lowering thumb cluster, was [-52 -45 40]
+         (translate [-53 -45 35])))) ;; max-edit: lowering thumb cluster, was [-52 -45 40]
 
 (defn thumb-2x-column [shape]
   (thumb-place 0 -1/2 shape))
@@ -327,14 +327,15 @@
         top-plate (->> (cube mount-width plate-height web-thickness)
                        (translate [0 (/ (+ plate-height mount-height) 2)
                                    (- plate-thickness (/ web-thickness 2))]))
-        ; Costar or WASD stabilizers
-        stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
-                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
-                                      (color [1 0 0 1/2]))
-                                 (->> (cube 16 3.5 web-thickness)
-                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
-                                      (color [1 0 0 1/2])))
-        top-plate (difference top-plate stabilizer-cutout)]
+        ;; Costar or WASD stabilizers ;; max-edit: removing stab holes to prevent wall thickness interference
+        ; stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
+        ;                               (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
+        ;                               (color [1 0 0 1/2]))
+        ;                          (->> (cube 16 3.5 web-thickness)
+        ;                               (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
+        ;                               (color [1 0 0 1/2])))
+        ; top-plate (difference top-plate stabilizer-cutout)
+        ]
     (union top-plate (mirror [0 1 0] top-plate))))
 
 (def thumbcaps
@@ -418,7 +419,7 @@
                       (key-place 0 3 web-post-tl)
                       (thumb-place 1 1 web-post-br)
                       (thumb-place 1 1 web-post-tr))
-      (hull (thumb-place 0 -1/2 web-post-tr)
+      (hull ;(thumb-place 0 -1/2 web-post-tr) max-edit: seems unnecessary and I think it stops top and bottom from properly fitting
             (thumb-place 0 -1/2 thumb-tr)
             (key-place 1 4 web-post-bl)
             (key-place 1 4 web-post-tl))))))
@@ -731,8 +732,9 @@
      (hull (place thumb-right-wall wall (translate [-1 1.5 thumb-case-z] wall-cube-bottom-front))
            (key-place 1 4 web-post-bl)
            (place 0 -1/2 thumb-br)
-           (case-place 0 4 thumb-top)
-           (case-place 0 4 (translate [-1 10 0] thumb-bottom)))))
+           ;(case-place 0 4 thumb-top) ;;max-edit: removing top portion bump that may interfere with thumb key
+           ;(case-place 0 4 (translate [-1 10 0] thumb-bottom))  ;;max-edit: removing top portion bump that may interfere with thumb key
+           )))
 
 (def new-case
     (union front-wall
@@ -985,7 +987,7 @@
                            (thumb-place 1 1 web-post-tl)
                            (thumb-place 2 1 web-post-tl))
                           (hull
-                           (thumb-place 1 1 web-post-tr)
+                           (thumb-place 1 1 web-post-tr) ;;max-edit: removing this bump on lower case that appears to contact top portion
                            (key-place 0 3 web-post-tl)
                            (thumb-place 1 1 web-post-br)
                            (key-place 0 3 web-post-bl)
@@ -1179,13 +1181,14 @@
 (def io-exp-cover (circuit-cover io-exp-width io-exp-length io-exp-height))
 (def teensy-cover (circuit-cover teensy-width teensy-length teensy-height))
 
-(def trrs-diameter 6.6)
+(def trrs-diameter 10) ;;max-edit: allowing more cable compatibility (previous hole is too small)
 (def trrs-radius (/ trrs-diameter 2))
 (def trrs-hole-depth 10)
 
-(def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
+(def trrs-hole (->> (union ;(cylinder trrs-radius trrs-hole-depth) ;;max-edit: removing cylinder portion of cutout because it cuts too far down with bigger radius
                            (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
-                                (translate [0 (/ (+ trrs-radius 5) 2) 0])))
+                                (translate [0 (/ (+ trrs-radius 5) 2) 0]))
+                           )
                     (rotate (/ π 2) [1 0 0])
                     (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
                     (with-fn 50)))
