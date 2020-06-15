@@ -987,11 +987,11 @@
                            (thumb-place 1 1 web-post-tl)
                            (thumb-place 2 1 web-post-tl))
                           (hull
-                           (thumb-place 1 1 web-post-tr) ;;max-edit: removing this bump on lower case that appears to contact top portion
-                           (key-place 0 3 web-post-tl)
-                           (thumb-place 1 1 web-post-br)
-                           (key-place 0 3 web-post-bl)
-                           (thumb-place 1/2 thumb-back-y (translate [-0.2 thumb-back-offset thumb-ridge-height] wall-cube-bottom-back))
+                           ; (thumb-place 1 1 web-post-tr) ;;max-edit: removing this bump on lower case that appears to contact top portion
+                           ; (key-place 0 3 web-post-tl)
+                           ; (thumb-place 1 1 web-post-br)
+                           ; (key-place 0 3 web-post-bl)
+                           ; (thumb-place 1/2 thumb-back-y (translate [-0.2 thumb-back-offset thumb-ridge-height] wall-cube-bottom-back))
                            (thumb-place 1/2 thumb-back-y (translate [-3.2 (+ thumb-back-offset 0.07) thumb-ridge-height] wall-cube-bottom-back))
                            (bottom-place left-wall-column 1.6666 (translate [left-offset 0 (- thumb-ridge-height 0.2)] wall-cube-bottom-front))
                            (key-place 0 3 web-post-tl)
