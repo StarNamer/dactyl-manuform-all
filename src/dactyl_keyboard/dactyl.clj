@@ -77,18 +77,22 @@
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
                                   (/ plate-thickness 2)]))
-        left-wall (->> (cube 1.5 (+ keyswitch-height 3) plate-thickness)
+        left-wall (->> (cube 2 (+ keyswitch-height 3) plate-thickness)
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
+        kailh-cutout (->> (cube (/ keyswitch-width 3) 1.6 plate-thickness)
+                          (translate [0
+                                  (+ (/ 1.5 2) (+ (/ keyswitch-height 2)))
+                                  (/ plate-thickness)]))
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
-                      (hull (->> (cube 1.5 2.75 plate-thickness)
+(hull (->> (cube 1.5 2.75 plate-thickness)
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
                                              (/ plate-thickness 2)]))))
-        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
+        plate-half (union (difference top-wall kailh-cutout) left-wall)]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -601,6 +605,31 @@
 (def usb-holder-hole
     (->> (apply cube usb-holder-size)
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
+(def trrs-diameter 9)
+(def trrs-radius (/ trrs-diameter 2))
+(def trrs-hole-depth 10)
+
+(def trrs-hole (->> (union (cylinder trrs-radius trrs-hole-depth)
+                           (->> (cube trrs-diameter (+ trrs-radius 5) trrs-hole-depth)
+                                (translate [0 (/ (+ trrs-radius 5) 2) 0])))
+                    (rotate (/ π 2) [1 0 0])
+                    (translate [0 (+ (/ mount-height 2) 4) (- trrs-radius)])
+                    (with-fn 50)))
+(def trrs-hole-just-circle
+  (->> (cylinder trrs-radius trrs-hole-depth)
+       (rotate (/ π 2) [1 0 0])
+       (translate rj9-position)
+       (with-fn 50)))
+
+(def trrs-box-hole (->> (cube 14 14 7 )
+                        (translate [0 1 -3.5])))
+
+
+(def trrs-cutout
+  (->> (union trrs-hole
+              trrs-box-hole)
+      (translate rj9-position)))
+
 
 (def teensy-width 20)  
 (def teensy-height 12)
@@ -700,13 +729,14 @@
                     thumb-connectors
                     (difference (union case-walls 
                                        screw-insert-outers 
-                                       teensy-holder
+                                      ;  teensy-holder
                                        usb-holder)
-                                rj9-space 
+                                ; rj9-space
+                                trrs-hole-just-circle
                                 usb-holder-hole
                                 screw-insert-holes)
-                    rj9-holder
-                    wire-posts
+                    ; rj9-holder
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
@@ -757,6 +787,10 @@
       (write-scad 
          (difference usb-holder usb-holder-hole)))
 
+(spit "things/switch-hole.scad"
+      (write-scad single-plate))
 
+(spit "things/teensy-holder.scad"
+      (write-scad teensy-holder))
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
