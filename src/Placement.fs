@@ -74,8 +74,8 @@ let rotate_around_y angle position =
 let key_position column row position =
     apply_key_geometry (List.map2 (fun x y -> x + y)) rotate_around_x rotate_around_y column row position
 
-let web_thickness = 4.0
-let post_size = 0.1
+let web_thickness = 5.0
+let post_size = 0.01
 let web_post = 
     centeredCube [post_size; post_size; web_thickness]
     |> translate [0.0; 0.0; (web_thickness / -2.0) + plate_thickness]

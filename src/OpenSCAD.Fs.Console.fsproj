@@ -16,6 +16,7 @@
     <Compile Include="Case.fs" />
     <Compile Include="Teensy.fs" />
     <Compile Include="Screws.fs" />
+    <Compile Include="PCB.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

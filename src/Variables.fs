@@ -6,7 +6,7 @@ open OpenSCAD.Fs.Lib
 
 let nrows = 5.0
 let ncols = 6.0
-let plate_thickness = 4.0
+let plate_thickness = 5.0
 
 let alphaDeg = 15.0<deg> //curvature of the columns
 let betaDeg = 5.0<deg> // curvature of the rows

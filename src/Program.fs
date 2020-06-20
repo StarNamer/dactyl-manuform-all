@@ -21,9 +21,8 @@ let model_right =
         ; case
         ] |> List.collect id |> union
 
-    let cube =
-         centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -20.0]
-
+    let cube = centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -20.0]
+    
     [model; cube]
     |> List.collect id
     |> difference
@@ -31,10 +30,13 @@ let model_right =
 [<EntryPoint>]
 let main argv =
     let cube =
-         centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -19.99]
+         centeredCube [350.0; 350.0; 40.0] |> translate [0.0; 0.0; -21.99]
 
-    use sw = new StreamWriter("../things/frontWall.scad")
-    [Case.frontWall; cube] |> List.collect id |> difference |> print sw 
+    use sw = new StreamWriter("../things/front.scad")
+    let front = 
+        [Case.frontWall; Case.thumbWall; Case.thumbConnectionLeft; KeyHoles.thumb]
+        |> List.collect id |> union 
+    [front; cube] |> List.collect id |> difference |> print sw 
 
     use sw = new StreamWriter("../things/firstTwo.scad")
     [KeyHoles.part1] |> List.collect id |> print sw 
@@ -57,6 +59,11 @@ let main argv =
     use sw = new StreamWriter("../things/teensy.scad")
     [Teensy.holder] |> List.collect id |> print sw 
 
+    use sw = new StreamWriter("../things/pcbdummy.scad")
+    [PCB.PCBDummy ] |> List.collect id |> print sw 
+
+    use sw = new StreamWriter("../things/single.scad")
+    [single_plate] |> List.collect id |> print sw 
 
     use sw = new StreamWriter("../things/parts.scad")
     let walls = 
@@ -67,7 +74,7 @@ let main argv =
         ; Case.thumbWall
         ; Case.thumbConnectionLeft
         ; Teensy.holder
-        ; screwInsertOuters
+        //; screwInsertOuters
         ] |> List.collect id |> union
 
     let all = 
@@ -75,9 +82,10 @@ let main argv =
         ; KeyHoles.part2
         ; KeyHoles.part3
         ;   [ walls
-            ; screwInsertHoles
+            //; screwInsertHoles
         ] |> List.collect id |> difference
         ; KeyHoles.thumb
+        ; PCB.PCBs
         ] |> List.collect id |> union
 
     [all; cube] |> List.collect id |> difference |> print sw 

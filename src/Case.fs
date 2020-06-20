@@ -59,8 +59,8 @@ let topWall =
         ; key_place 3.0 0.0 jbl
         ; key_place 4.0 0.0 jbl
         ; key_place 5.0 0.0 jbl
-        ; jbt jointBlockTl [firstJointXY.[0]; firstJointXY.[1]; 12.0]
-        ; jbt jointBlockTl [firstJointXY.[0]; firstJointXY.[1]; 30.0]
+        ; jbt jointBlockTl [firstJointXY.[0] + 0.6; firstJointXY.[1]; 12.0]
+        ; jbt jointBlockTl [firstJointXY.[0] + 0.6; firstJointXY.[1]; 30.0]
         ; jbt jointBlockTr [lastJointXY.[0] - 1.5; lastJointXY.[1]; 14.0]
         ] |> List.collect id
 
@@ -128,9 +128,9 @@ let rightWall =
             |> translate [0.1; 0.0; 0.0]
 
         [ key_place 5.0 1.0 jbl
-        ; key_place 5.0 2.0 jbl
+        //; key_place 5.0 2.0 jbl
         ; key_place 5.0 3.0 jbl
-        ; jbt jointBlockTr [firstJointXY.[0] - 1.2; firstJointXY.[1]; 14.0]
+        ; jbt jointBlockTr [firstJointXY.[0] - 1.0; firstJointXY.[1]; 14.0]
         ; jbb jointBlockTr [lastJointXY.[0]; lastJointXY.[1] + 0.5; 6.7]
         ] |> List.collect id
 
@@ -214,7 +214,7 @@ let leftWall =
             |> jointBoltRightWithBlock
             |> rotate -90.0<deg> [1.0; 0.0; 0.0]
             |> jointBlockTl
-            |> translate [firstJointXY.[0]; firstJointXY.[1]; height]
+            |> translate [firstJointXY.[0] + 0.3; firstJointXY.[1]; height]
 
         let jbw = 
             SingleJoint.jointBlock
@@ -230,7 +230,7 @@ let leftWall =
             |> translate [-0.1; 0.0; 0.0]
 
         [ key_place 0.0 1.0 jbl
-        ; key_place 0.0 2.0 jbl
+        //; key_place 0.0 2.0 jbl
         ; key_place 0.0 3.0 jbl
         ; jbt 12.0
         ; jbt 30.0

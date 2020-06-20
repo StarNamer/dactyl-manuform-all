@@ -28,10 +28,10 @@ let part1 =
         ; key_place 1.0 4.0 (jointBlockTl (block -1.0))
         //Sides
         ; key_place 0.0 1.0 (jointBlockTl (sideBlock 0.2))
-        ; key_place 0.0 2.0 (jointBlockTl (sideBlock 0.2))
+        //; key_place 0.0 2.0 (jointBlockTl (sideBlock 0.2))
         ; key_place 0.0 3.0 (jointBlockTl (sideBlock 0.2))
         ; key_place 1.0 1.0 (jointBlockTr (sideBlock -0.2))
-        ; key_place 1.0 2.0 (jointBlockTr (sideBlock -0.2))
+        //; key_place 1.0 2.0 (jointBlockTr (sideBlock -0.2))
         ; key_place 1.0 3.0 (jointBlockTr (sideBlock -0.2))
         ] 
         |> List.collect id
@@ -54,11 +54,11 @@ let part2 =
         let slope =
             centeredCube [3.0; 8.0; 7.0]
             |> rotate 45.0<deg> [0.0; 1.0; 0.0]
-            |> translate [-4.0; 0.0; 4.5]
+            |> translate [-5.0; 0.0; 4.5]
 
         let block = 
-            centeredCube [5.0; 7.0; 7.0]
-            |> translate [-3.9; 0.0; 0.5]
+            centeredCube [5.0; 7.0; 7.5]
+            |> translate [-3.9; 0.0; 1.0]
             
         [block; slope]
         |> List.collect id
@@ -68,13 +68,13 @@ let part2 =
         let slope =
             centeredCube [4.0; 8.0; 15.0]
             |> rotate (deg * 1.0<deg>) [0.0; 1.0; 0.0]
-            |> translate [-4.0; 0.0; 5.0]
+            |> translate [-4.0; 0.0; 6.0]
 
         let block = 
-            centeredCube [5.0; 7.0; 7.0]
-            |> translate [-3.9; 0.0; 0.5]
+            centeredCube [4.0; 7.0; 8.0]
+            |> translate [-3.4; 0.0; 1.0]
             
-        [block; slope]
+        [block; slope ]
         |> List.collect id
         |> difference
 
@@ -105,11 +105,11 @@ let part2 =
         ; key_place 3.0 5.0 (jointBlockTl (block -0.9))
         //Sides
         ; key_place 1.0 1.0 jbl
-        ; key_place 1.0 2.0 jbl
+        //; key_place 1.0 2.0 jbl
         ; key_place 1.0 3.0 jbl
         ; key_place 4.0 1.0 (jbr 25.0)
-        ; key_place 4.0 2.0 (jbr 45.0)
-        ; key_place 4.0 3.0 (jbr 65.0)
+        //; key_place 4.0 2.0 (jbr 45.0)
+        ; key_place 4.0 3.0 (jbr 60.0)
         ] 
         |> List.collect id
 
@@ -163,10 +163,10 @@ let part3 =
         ; key_place 5.0 4.0 (jointBlockTl (block -0.9))
         //Sides
         ; key_place 4.0 1.0 (jointBlockTl (sideBlock 0.2))
-        ; key_place 4.0 2.0 (jointBlockTl (sideBlock 0.2))
+        //; key_place 4.0 2.0 (jointBlockTl (sideBlock 0.2))
         ; key_place 4.0 3.0 (jointBlockTl (sideBlock 0.2))
         ; key_place 5.0 1.0 (jointBlockTr (sideBlock -0.2))
-        ; key_place 5.0 2.0 (jointBlockTr (sideBlock -0.2))
+        //; key_place 5.0 2.0 (jointBlockTr (sideBlock -0.2))
         ; key_place 5.0 3.0 (jointBlockTr (sideBlock -0.2))
         ] 
         |> List.collect id
@@ -262,10 +262,12 @@ let thumb =
         ]
         |> List.collect id
         |> union
+
+    let rotatedPlate = single_plate |> rotate 90.0<deg> [0.0; 0.0; 1.0]
         
     let keyHoles =
-        [ thumb_1x_layout single_plate 
-        ; thumb_15x_layout single_plate  
+        [ thumb_1x_layout rotatedPlate 
+        ; thumb_15x_layout rotatedPlate  
         ; thumb_15x_layout larger_plate
         ] 
         |> List.collect id
