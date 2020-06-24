@@ -303,7 +303,7 @@
         row-radius (+ (/ (/ (+ mount-height 1) 2)
                          (Math/sin (/ α 2)))
                       cap-top-height)
-        β (* (/ π 16) -1)
+        β (* (/ π 24) -1)
         column-radius (+ (/ (/ (+ mount-width 4) 2)
                             (Math/sin (/ β 2)))
                          cap-top-height)
@@ -680,8 +680,8 @@
               (translate [-2 0 0]))
          ))
 (def screw-insert-height 3.8)
-(def screw-insert-bottom-radius (/ 5.31 2))
-(def screw-insert-top-radius (/ 5.1 2))
+(def screw-insert-bottom-radius (/ 3.2 2))
+(def screw-insert-top-radius (/ 3.1 2))
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
 (def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
@@ -713,7 +713,7 @@
 
 (def usb-holder-position (map + [17 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
 (def usb-holder-cube   (cube 15 12 2))
-(def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
+(def usb-holder-space  (translate (map + usb-holder-position [0 1 3]) (cube 15 14 6)))
 (def usb-holder-holder (translate usb-holder-position (cube 19 12 4)))
 
 (def usb-jack (translate (map + usb-holder-position [0 14 3]) (cube 8.2 20.1 2.8)))
@@ -763,12 +763,12 @@
                     (difference (union case-walls
                                        screw-insert-outers
                                        pro-micro-holder
-                                       ;usb-holder-holder
+                                       usb-holder-holder
                                        trrs-holder)
                                        ; teensy-holder)
                                        ; usb-holder)
-                                ;usb-holder-space
-                                ;usb-jack
+                                usb-holder-space
+                                usb-jack
                                 trrs-holder-hole
                                 ; rj9-space
                                 ; usb-holder-hole
