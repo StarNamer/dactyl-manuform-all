@@ -13,8 +13,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 5)
+(def nrows 5)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -718,29 +718,39 @@
  
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
-                  
+
 (spit "things/right-test.scad"
       (write-scad 
-                   (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    case-walls 
-                    thumbcaps
-                    caps
-                    teensy-holder
-                    rj9-holder
-                    usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers 
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout 
-                    ;             rj9-space 
-                                ; wire-posts
+            (intersection
+                  model-right
+                  (translate [-75 -70 20] (rotate (/ π 4) [0 0 1] (cube 40 80 40)))
+                  ;(rotate (/ π 4) [0 0 1] (cube 40 40 40))
+                  ;(translate [-70 -70 0] (cube 40 40 40))
                   )))
+
+                  
+;(spit "things/right-test.scad"
+      ;(write-scad 
+                   ;(union
+                    ;key-holes
+                    ;connectors
+                    ;thumb
+                    ;thumb-connectors
+                    ;case-walls 
+                    ;thumbcaps
+                    ;caps
+                    ;teensy-holder
+                    ;rj9-holder
+                    ;usb-holder-hole
+                    ;; usb-holder-hole
+                    ;; ; teensy-holder-hole
+                    ;;             screw-insert-outers 
+                    ;;             teensy-screw-insert-holes
+                    ;;             teensy-screw-insert-outers
+                    ;;             usb-cutout 
+                    ;;             rj9-space 
+                                ;; wire-posts
+                  ;)))
 
 (spit "things/right-plate.scad"
       (write-scad 
