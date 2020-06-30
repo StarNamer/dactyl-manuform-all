@@ -72,8 +72,13 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
+(def clip-plate-thickness 1.5) ;; The thickness of the steel plate the switches expect
+
 (def single-plate
-  (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+  (let [
+        top-wall (->> (difference
+                            (cube (+ keyswitch-width 3) 1.5 plate-thickness)
+                            (translate [0 (- 1 1.5) (- clip-plate-thickness)] (cube 6 1.5 plate-thickness)))
                       (translate [0
                                   (+ (/ 1.5 2) (/ keyswitch-height 2))
                                   (/ plate-thickness 2)]))
@@ -81,7 +86,7 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        side-nub (->> (binding [*fn* 30] (cylinder 1 2.75))
+        side-nub (->> (binding [*fn* 30] (cylinder 0.75 2.75)) ; Was 1 2.75
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
                       (hull (->> (cube 1.5 2.75 plate-thickness)
@@ -764,8 +769,12 @@
                   ))))
 
 (spit "things/test.scad"
-      (write-scad 
-         (difference usb-holder usb-holder-hole)))
+      (write-scad single-plate))
+
+
+;(spit "things/test.scad"
+      ;(write-scad 
+         ;(difference usb-holder usb-holder-hole)))
 
 
 
