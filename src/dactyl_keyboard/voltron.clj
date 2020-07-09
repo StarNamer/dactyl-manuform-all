@@ -288,8 +288,8 @@
                             (Math/sin (/ β 2)))
                          cap-top-height)
         #_(+ (/ (/ (+ pillar-width 5) 2)
-                            (Math/sin (/ β 2)))
-                         cap-top-height)]
+                (Math/sin (/ β 2)))
+             cap-top-height)]
     (->> shape
          (translate [0 0 (- row-radius)])
          (rotate (* α row) [1 0 0])
@@ -301,24 +301,6 @@
          (rotate (* π (- 1/4 3/16)) [0 0 1])
          (rotate (/ π 12) [1 1 0])
          (translate [-52 -45 40]))))
-
-(defn thumb-2x-column [shape]
-  (thumb-place 0 -1/2 shape))
-
-(defn thumb-2x+1-column [shape]
-  (union (thumb-place 1 -1/2 shape)
-         (thumb-place 1 1 shape)))
-
-(defn thumb-1x-column [shape]
-  (union (thumb-place 2 -1 shape)
-         (thumb-place 2 0 shape)
-         (thumb-place 2 1 shape)))
-
-(defn thumb-layout [shape]
-  (union
-   (thumb-2x-column shape)
-   (thumb-2x+1-column shape)
-   (thumb-1x-column shape)))
 
 (def double-plates
   (let [plate-height (/ (- sa-double-length mount-height) 2)
@@ -332,101 +314,120 @@
                                  (->> (cube 16 3.5 web-thickness)
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
                                       (color [1 0 0 1/2])))
-        top-plate (difference top-plate stabilizer-cutout)]
-    (union top-plate (mirror [0 1 0] top-plate))))
+        top-plate (difference top-plate stabilizer-cutout)
+        ]
+    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))))
+
+(defn extended-plate-height [size] (/ (- (* (+ 1 sa-length) size) mount-height) 2))
+
+(defn extended-plates [size]
+  (let [plate-height (extended-plate-height size)
+        top-plate (->> (cube mount-width plate-height web-thickness)
+                       (translate [0 (/ (+ plate-height mount-height) 2)
+                                   (- plate-thickness (/ web-thickness 2))]))]
+    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))
+    ))
+
+(defn thumb-layout [shape]
+  (union
+   (thumb-place 0 -1/2 (union shape (extended-plates 2)))
+   (thumb-place 1 3/4 (union shape (extended-plates 1.5)))
+   (thumb-place 1 -3/4 (union shape (extended-plates 1.5)))
+   (thumb-place 2 -1 (union shape (extended-plates 1)))
+   (thumb-place 2 1/2 (union shape (extended-plates 2)))
+   ))
 
 (def thumbcaps
   (union
-   (thumb-2x-column (sa-cap 2))
-   (thumb-place 1 -1/2 (sa-cap 2))
-   (thumb-place 1 1 (sa-cap 1))
-   (thumb-1x-column (sa-cap 1))))
+   (thumb-place 0 -1/2 (sa-cap 2))
+   (thumb-place 1 3/4 (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))
+   (thumb-place 1 -3/4 (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))
+   (thumb-place 2 -1 (sa-cap 1))
+   (thumb-place 2 1/2 (sa-cap 2))))
 
 (def thumb-connectors
   (union
-   (apply union
-          (concat
-           (for [column [2] row [1]]
-             (triangle-hulls (thumb-place column row web-post-br)
-                             (thumb-place column row web-post-tr)
-                             (thumb-place (dec column) row web-post-bl)
-                             (thumb-place (dec column) row web-post-tl)))
-           (for [column [2] row [0 1]]
-             (triangle-hulls
-              (thumb-place column row web-post-bl)
-              (thumb-place column row web-post-br)
-              (thumb-place column (dec row) web-post-tl)
-              (thumb-place column (dec row) web-post-tr)))))
-   (let [plate-height (/ (- sa-double-length mount-height) 2)
-         thumb-tl (->> web-post-tl
-                       (translate [0 plate-height 0]))
-         thumb-bl (->> web-post-bl
-                       (translate [0 (- plate-height) 0]))
-         thumb-tr (->> web-post-tr
-                       (translate [0 plate-height 0]))
-         thumb-br (->> web-post-br
-                       (translate [0 (- plate-height) 0]))]
+   #_(apply union
+            (concat
+             (for [column [2] row [1]]
+               (triangle-hulls (thumb-place column row web-post-br)
+                               (thumb-place column row web-post-tr)
+                               (thumb-place (dec column) row web-post-bl)
+                               (thumb-place (dec column) row web-post-tl)))
+             (for [column [2] row [0 1]]
+               (triangle-hulls
+                (thumb-place column row web-post-bl)
+                (thumb-place column row web-post-br)
+                (thumb-place column (dec row) web-post-tl)
+                (thumb-place column (dec row) web-post-tr)))))
+   (let [thumb-tl #(->> web-post-tl
+                        (translate [0 (extended-plate-height %) 0]))
+         thumb-bl #(->> web-post-bl
+                        (translate [0 (- (extended-plate-height %)) 0]))
+         thumb-tr #(->> web-post-tr
+                        (translate [0 (extended-plate-height %) 0]))
+         thumb-br #(->> web-post-br
+                        (translate [0 (- (extended-plate-height %)) 0]))]
      (union
 
-      ;;Connecting the two doubles
-      (triangle-hulls (thumb-place 0 -1/2 thumb-tl)
-                      (thumb-place 0 -1/2 thumb-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 -1/2 thumb-br))
+      ;;Connecting the double to 1.5
+      (triangle-hulls (thumb-place 0 -1/2 (thumb-tl 2))
+                      (thumb-place 0 -1/2 (thumb-bl 2))
+                      (thumb-place 1 -3/4 (thumb-br 1.5))
+                      (thumb-place 0 -1/2 (thumb-tl 2))
+                      (thumb-place 1 -3/4 (thumb-tr 1.5))
+                      (thumb-place 1 3/4 (thumb-br 1.5)))
 
-      ;;Connecting the double to the one above it
-      (triangle-hulls (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 -1/2 thumb-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-bl))
+      (triangle-hulls (thumb-place 1 3/4 (thumb-br 1.5))
+                      (thumb-place 1 3/4 (thumb-bl 1.5))
+                      (thumb-place 1 -3/4 (thumb-tr 1.5))
+                      (thumb-place 1 -3/4 (thumb-tl 1.5)))
 
-      ;;Connecting the 4 with the double in the bottom left
-      (triangle-hulls (thumb-place 1 1 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tl)
-                      (thumb-place 2 1 web-post-br)
-                      (thumb-place 2 0 web-post-tr))
+      (triangle-hulls (thumb-place 2 1/2 (thumb-br 2))
+                      (thumb-place 2 1/2 (thumb-bl 2))
+                      (thumb-place 2 -1 (thumb-tr 1))
+                      (thumb-place 2 -1 (thumb-tl 1)))
 
-      ;;Connecting the two singles with the middle double
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 1 -1/2 thumb-bl)
-            (thumb-place 2 0 web-post-br)
-            (thumb-place 2 -1 web-post-tr))
-      (hull (thumb-place 1 -1/2 thumb-tl)
-            (thumb-place 2 0 web-post-tr)
-            (thumb-place 2 0 web-post-br))
-      (hull (thumb-place 1 -1/2 thumb-bl)
-            (thumb-place 2 -1 web-post-tr)
-            (thumb-place 2 -1 web-post-br))
+      (triangle-hulls (thumb-place 2 1/2 (thumb-br 2))
+                      (thumb-place 2 1/2 (thumb-bl 2))
+                      (thumb-place 2 -1 (thumb-tr 1))
+                      (thumb-place 2 -1 (thumb-tl 1)))
+
+      (triangle-hulls (thumb-place 2 -1 (thumb-br 1))
+                      (thumb-place 1 -3/4 (thumb-bl 1.5))
+                      (thumb-place 2 -1 (thumb-tr 1))
+                      (thumb-place 1 -3/4 (thumb-tl 1.5))
+                      (thumb-place 2 1/2 (thumb-br 2))
+                      (thumb-place 1 3/4 (thumb-bl 1.5))
+                      (thumb-place 2 1/2 (thumb-tr 2))
+                      (thumb-place 1 3/4 (thumb-tl 1.5))
+                      )
+
 
       ;;Connecting the thumb to everything
-      (triangle-hulls (thumb-place 0 -1/2 thumb-br)
+      (triangle-hulls (thumb-place 0 -1/2 (thumb-br 2))
                       (key-place 1 4 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 (thumb-tr 2))
                       (key-place 1 4 web-post-tl)
                       (key-place 1 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
+                      (thumb-place 0 -1/2 (thumb-tr 2))
                       (key-place 0 3 web-post-br)
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 0 -1/2 thumb-tr)
-                      (thumb-place 0 -1/2 thumb-tl)
+                      (thumb-place 0 -1/2 (thumb-tr 2))
+                      (thumb-place 0 -1/2 (thumb-tl 2))
                       (key-place 0 3 web-post-bl)
-                      (thumb-place 1 -1/2 thumb-tr)
-                      (thumb-place 1 1 web-post-br)
+                      (thumb-place 1 -3/4 (thumb-tr 1.5))
+                      (thumb-place 1 3/4 (thumb-br 1.5))
                       (key-place 0 3 web-post-bl)
                       (key-place 0 3 web-post-tl)
-                      (thumb-place 1 1 web-post-br)
-                      (thumb-place 1 1 web-post-tr))
-      (hull (thumb-place 0 -1/2 web-post-tr)
-            (thumb-place 0 -1/2 thumb-tr)
-            (key-place 1 4 web-post-bl)
-            (key-place 1 4 web-post-tl))))))
+                      (thumb-place 1 3/4 (thumb-br 1.5))
+                      (thumb-place 1 3/4 (thumb-tr 1.5))
+                      )))))
 
 (def thumb
   (union
-   thumb-connectors
-   (thumb-layout (rotate (/ π 2) [0 0 1] single-plate))
-   (thumb-place 0 -1/2 double-plates)
-   (thumb-place 1 -1/2 double-plates)))
+   (thumb-layout (rotate (/ Math/PI 2) [0 0 1] single-plate))
+   (color [0 1 1] thumb-connectors)))
 
 ;;;;;;;;;;
 ;; Case ;;
@@ -769,7 +770,6 @@
                           (not= row 4))]
             (->> bottom-key-guard
                  (key-place column row))))
-   (thumb-layout (rotate (/ π 2) [0 0 1] bottom-key-guard))
    (apply union
           (for [column columns
                 row [(last rows)] ;;
@@ -1301,12 +1301,14 @@
 
 (def voltron-top-right
   (offset-case-place [0 0 0]
-    (union
-      (difference
         (union key-holes
               connectors
               thumb
-              new-case)))))
+              caps
+              thumbcaps
+              ;; new-case
+              )
+      ))
 
 (def voltron-top-left
   (mirror [-1 0 0]
