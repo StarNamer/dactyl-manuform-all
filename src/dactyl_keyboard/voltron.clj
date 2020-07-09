@@ -34,6 +34,11 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
+        pcb (->> (cube (+ keyswitch-width 3) (+ keyswitch-height 3) 2)
+                      (color [220/255 120/255 183/255 1])
+                      (translate [0
+                                  0
+                                  -2]))
         side-nub (->> (binding [*fn* 30] (cylinder 1 2.75)) ; spec says 5.7
                       (rotate (/ π 2) [1 0 0])
                       (translate [(+ (/ keyswitch-width 2)) 0 1])
@@ -41,7 +46,7 @@
                                  (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                              0
                                              (/ plate-thickness 2)]))))
-        plate-half (union top-wall left-wall (with-fn 100 side-nub))]
+        plate-half (union top-wall left-wall pcb (with-fn 100 side-nub))]
     (union plate-half
            (->> plate-half
                 (mirror [1 0 0])
@@ -302,22 +307,6 @@
          (rotate (/ π 12) [1 1 0])
          (translate [-52 -45 40]))))
 
-(def double-plates
-  (let [plate-height (/ (- sa-double-length mount-height) 2)
-        top-plate (->> (cube mount-width plate-height web-thickness)
-                       (translate [0 (/ (+ plate-height mount-height) 2)
-                                   (- plate-thickness (/ web-thickness 2))]))
-        ; Costar or WASD stabilizers
-        stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
-                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
-                                      (color [1 0 0 1/2]))
-                                 (->> (cube 16 3.5 web-thickness)
-                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
-                                      (color [1 0 0 1/2])))
-        top-plate (difference top-plate stabilizer-cutout)
-        ]
-    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))))
-
 (defn extended-plate-height [size] (/ (- (* (+ 1 sa-length) size) mount-height) 2))
 
 (defn extended-plates [size]
@@ -328,13 +317,28 @@
     (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))
     ))
 
+(defn extended-plates-stab [size]
+  (let [plate-height (extended-plate-height size)
+        top-plate (->> (cube mount-width plate-height web-thickness)
+                       (translate [0 (/ (+ plate-height mount-height) 2)
+                                   (- plate-thickness (/ web-thickness 2))]))
+        ; Costar or WASD stabilizers
+        stabilizer-cutout (union (->> (cube 14.2 3.5 web-thickness)
+                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2))])
+                                      (color [1 0 0 1/2]))
+                                 (->> (cube 16 3.5 web-thickness)
+                                      (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
+                                      (color [1 0 0 1/2])))
+        top-plate (difference top-plate stabilizer-cutout)]
+    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))))
+
 (defn thumb-layout [shape]
   (union
-   (thumb-place 0 -1/2 (union shape (extended-plates 2)))
+   (thumb-place 0 -1/2 (union shape (extended-plates-stab 2)))
    (thumb-place 1 3/4 (union shape (extended-plates 1.5)))
    (thumb-place 1 -3/4 (union shape (extended-plates 1.5)))
    (thumb-place 2 -1 (union shape (extended-plates 1)))
-   (thumb-place 2 1/2 (union shape (extended-plates 2)))
+   (thumb-place 2 1/2 (union shape (extended-plates-stab 2)))
    ))
 
 (def thumbcaps
