@@ -49,14 +49,14 @@
 
 (def thumb-offsets [4 -3 5])
 
-(def keyboard-z-offset 17)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 18)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
 
 (def wall-z-offset -8)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def wall-thickness 4)                  ; wall thickness parameter; originally 5
+(def wall-thickness 3.5)                  ; wall thickness parameter; originally 5
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -88,8 +88,8 @@
 ;;;;;;;;;;;;;;;;;
 
 
-(def keyswitch-height 14.1) ;; Was 14.1, then 14.25
-(def keyswitch-width 14.1)
+(def keyswitch-height 14.2) 
+(def keyswitch-width 14.2)
 
 (def sa-profile-key-height 12.7)
 (def sa-length 18.25)
@@ -313,23 +313,16 @@
              (->> single-plate
                   (key-place 0 row))))))
 
-;placement for the last hole on the innermost column
+
+(def ic-2u-height-shift 0)
+; This version shifts the whole assembly up by {2u-height-shift} mm to give extra clearance for deeper keycaps - it does however 
+; create a visble keyswitch square that you may not like
 (def key-holes-inner-last
   (if (true? inner-keycap-compatability)
     (apply union
            (for [row (range (- cornerrow 2) (- cornerrow 1))]
              (->> single-plate
-                 (key-place 0 (* row 1.5)))))))
-
-; This version shifts the whole assembly down a 0.25MM so the 'edge' between the 
-; webbing isn't so visible but I'm not sure how that will impact keycaps so leaving out
-; for now.
-; (def key-holes-inner-last
-;   (if (true? inner-keycap-compatability)
-;     (apply union
-;            (for [row (range (- cornerrow 2) (- cornerrow 1))]
-;              (->> single-plate
-;                  (key-place 0 (* row 1.5))(translate [0 0 -0.25]))))))
+                 (key-place 0 (* row 1.5))(translate [0 0 ic-2u-height-shift]))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;
