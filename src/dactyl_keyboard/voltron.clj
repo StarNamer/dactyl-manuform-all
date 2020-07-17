@@ -34,7 +34,7 @@
                        (translate [(+ (/ 1.5 2) (/ keyswitch-width 2))
                                    0
                                    (/ plate-thickness 2)]))
-        pcb (->> (cube (+ keyswitch-width 3) (+ keyswitch-height 3) 2)
+        pcb (->> (cube (+ keyswitch-width 4.5) (+ keyswitch-height 2) 2)
                       (color [220/255 120/255 183/255 1])
                       (translate [0
                                   0
@@ -198,7 +198,15 @@
                :when (or (not= column 0)
                          (not= row 4))]
            (->> (sa-cap (if (and (= column 5) (not= row 4)) 1.5 1))
-                (key-place column row)))))
+                (key-place column row)
+                (color (cond
+                         (and (= row 2) (< column 4)) [255/255 121/255 33/255 1]
+                         (= row 4) [146/255 147/255 144/255 1]
+                         (= column 5) [146/255 147/255 144/255 1]
+                         :else [195/255 185/255 170/255 1]
+                         ))
+                )
+           )))
 
 (defn prism [w l h taper-1 taper-2]
   (let [t1 taper-1
@@ -314,7 +322,7 @@
         top-plate (->> (cube mount-width plate-height web-thickness)
                        (translate [0 (/ (+ plate-height mount-height) 2)
                                    (- plate-thickness (/ web-thickness 2))]))]
-    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))
+    (union top-plate (mirror [0 1 0] top-plate))
     ))
 
 (defn extended-plates-stab [size]
@@ -330,7 +338,7 @@
                                       (translate [0.5 12 (- plate-thickness (/ web-thickness 2) 1.4)])
                                       (color [1 0 0 1/2])))
         top-plate (difference top-plate stabilizer-cutout)]
-    (color [0 1 1] (union top-plate (mirror [0 1 0] top-plate)))))
+    (union top-plate (mirror [0 1 0] top-plate))))
 
 (defn thumb-layout [shape]
   (union
@@ -342,12 +350,15 @@
    ))
 
 (def thumbcaps
+
+  (color [146/255 147/255 144/255 1]
   (union
    (thumb-place 0 -1/2 (sa-cap 2))
    (thumb-place 1 3/4 (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))
    (thumb-place 1 -3/4 (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))
    (thumb-place 2 -1 (sa-cap 1))
    (thumb-place 2 1/2 (sa-cap 2))))
+    )
 
 (def thumb-connectors
   (union
@@ -431,7 +442,7 @@
 (def thumb
   (union
    (thumb-layout (rotate (/ Math/PI 2) [0 0 1] single-plate))
-   (color [0 1 1] thumb-connectors)))
+   thumb-connectors))
 
 ;;;;;;;;;;
 ;; Case ;;
@@ -626,63 +637,86 @@
            (key-place 0 2 web-post-bl)))))
 
 (def left-inside-wall
-  (let [place case-place]
+  (let [place case-place
+
+        thumb-tl #(->> web-post-tl
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-bl #(->> web-post-bl
+                       (translate [0 (- (extended-plate-height %)) 0]))
+        thumb-tr #(->> web-post-tr
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-br #(->> web-post-br
+                       (translate [0 (- (extended-plate-height %)) 0]))]
     (union
      (hull (place left-wall-column 1.71 (translate [1 0 3] wall-cube-bottom-front))
            (key-place 0 2 web-post-bl)
            (key-place 0 3 web-post-tl))
      (hull (place left-wall-column 1.71 (translate [2 0 3] wall-cube-bottom-front))
-           (thumb-place 1 1 web-post-tr)
+           (thumb-place 1 3/4 (thumb-tr 1.5))
            (key-place 0 3 web-post-tl)
            (place left-wall-column 1.71 (translate [1 0 3] wall-cube-bottom-front))
-           (thumb-place 1 1 web-post-tr)
+           (thumb-place 1 3/4 (thumb-tr 1.5))
            (thumb-place 1/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
-           (thumb-place 1/2 thumb-back-y (translate [1 -1.7 (- thumb-case-z 2.9)] wall-cube-bottom-back))))))
+           (thumb-place 1/2 thumb-back-y (translate [1 -1.7 (- thumb-case-z 2.9)] wall-cube-bottom-back)))
+     )))
 
 (def thumb-back-wall
   (let [step wall-step
         top-step 0.05
-        back-y thumb-back-y]
+        back-y thumb-back-y
+        place thumb-place
+
+        thumb-tl #(->> web-post-tl
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-bl #(->> web-post-bl
+                       (translate [0 (- (extended-plate-height %)) 0]))
+        thumb-tr #(->> web-post-tr
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-br #(->> web-post-br
+                       (translate [0 (- (extended-plate-height %)) 0]))]
     (union
      (hull
-      (thumb-place 1/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 1 1 web-post-tr)
-      (thumb-place 3/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 1 1 web-post-tl))
+      (place 1/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
+      (place 1 3/4 (thumb-tr 1.5))
+      (place 3/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
+      (place 1 3/4 (thumb-tl 1.5)))
      (hull
-      (thumb-place (+ 5/2 0.05) thumb-back-y (translate [1.5 -1.7 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 3/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 1 1 web-post-tl)
-      (thumb-place 2 1 web-post-tl)))))
+      (place (+ 5/2 0.05) thumb-back-y (translate [1.5 -1.7 thumb-case-z] wall-cube-bottom-back))
+      (place 3/2 thumb-back-y (translate [0 -1.7 thumb-case-z] wall-cube-bottom-back))
+      (place 1 3/4 (thumb-tr 1.5))
+      (place 2 1/2 (thumb-tl 2)))
+     )))
 
 (def thumb-left-wall
   (let [step wall-step
         place thumb-place
-        wall (+ thumb-left-wall-column 0.001)]
+        wall (+ thumb-left-wall-column 0.001)
+
+        thumb-tl #(->> web-post-tl
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-bl #(->> web-post-bl
+                       (translate [0 (- (extended-plate-height %)) 0]))
+        thumb-tr #(->> web-post-tr
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-br #(->> web-post-br
+                       (translate [0 (- (extended-plate-height %)) 0]))]
     (union
      (hull
-      (thumb-place wall thumb-back-y (translate [1.5 -1.7 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place wall 0 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 2 1 web-post-tl)
-      (thumb-place 2 1 web-post-bl))
+      (place wall thumb-back-y (translate [1.5 -1.7 thumb-case-z] wall-cube-bottom-back))
+      (place wall -1 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
+      (place 2 1/2 (thumb-tl 2))
+      (place 2 1/2 (thumb-bl 2))
+      )
      (hull
-      (thumb-place wall 0 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 2 0 web-post-tl)
-      (thumb-place 2 1 web-post-bl))
+      (place wall -1 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
+      (place 2 -1 (thumb-tl 1))
+      (place 2 1/2 (thumb-bl 2)))
      (hull
-      (thumb-place wall 0 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place wall -1 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 2 0 web-post-tl)
-      (thumb-place 2 0 web-post-bl))
-     (hull
-      (thumb-place wall -1 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place 2 -1 web-post-tl)
-      (thumb-place 2 0 web-post-bl))
-     (hull
-      (thumb-place wall -1 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
-      (thumb-place wall (+ -1 0.07) (translate [1.5 0.6 (+ thumb-case-z 0.2)] wall-cube-bottom-front))
-      (thumb-place 2 -1 web-post-tl)
-      (thumb-place 2 -1 web-post-bl)))))
+      (place wall -1 (translate [1.5 0 thumb-case-z] wall-cube-bottom-back))
+      (place wall (+ -1 0.07) (translate [1.5 0.6 (+ thumb-case-z 0.2)] wall-cube-bottom-front))
+      (place 2 -1 (thumb-tl 1))
+      (place 2 -1 (thumb-bl 1)))
+     )))
 
 (def thumb-front-wall
   (let [step wall-step
@@ -690,48 +724,56 @@
         place thumb-place
         wall (- thumb-front-row 0.04)
         plate-height (/ (- sa-double-length mount-height) 2)
-        thumb-tl (->> web-post-tl
-                      (translate [0 plate-height 0]))
-        thumb-bl (->> web-post-bl
-                      (translate [0 (- plate-height) 0]))
-        thumb-tr (->> web-post-tr
-                      (translate [-0 plate-height 0]))
-        thumb-br (->> web-post-br
-                      (translate [-0 (- plate-height) 0]))]
+
+        thumb-tl #(->> web-post-tl
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-bl #(->> web-post-bl
+                       (translate [0 (- (extended-plate-height %)) 0]))
+        thumb-tr #(->> web-post-tr
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-br #(->> web-post-br
+                       (translate [0 (- (extended-plate-height %)) 0]))]
 
     (union
 
      (hull (place (+ 5/2 0.05) wall (translate [1.5 1.5 thumb-case-z] wall-cube-bottom-front))
            (place (+ 3/2 0.05) wall (translate [0 1.5 thumb-case-z] wall-cube-bottom-front))
-           (place 2 -1 web-post-bl)
-           (place 2 -1 web-post-br))
+           (place 2 -1 (thumb-bl 1))
+           (place 2 -1 (thumb-br 1)))
 
      (hull (place thumb-right-wall wall (translate [-1 1.5 thumb-case-z] wall-cube-bottom-front))
            (place (+ 1/2 0.05) wall (translate [0 1.5 thumb-case-z] wall-cube-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 0 -1/2 thumb-br))
+           (place 0 -1/2 (thumb-bl 2))
+           (place 0 -1/2 (thumb-br 2)))
+
      (hull (place (+ 1/2 0.05) wall (translate [0 1.5 thumb-case-z] wall-cube-bottom-front))
            (place (+ 3/2 0.05) wall (translate [0 1.5 thumb-case-z] wall-cube-bottom-front))
-           (place 0 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-bl)
-           (place 1 -1/2 thumb-br)
-           (place 2 -1 web-post-br)))))
+           (place 0 -1/2 (thumb-bl 2))
+           (place 1 -3/4 (thumb-bl 1.5))
+           (place 1 -3/4 (thumb-br 1.5))
+           (place 2 -1 (thumb-br 1)))
+     )))
 
 (def thumb-inside-wall
   (let [place thumb-place
         wall (- thumb-front-row 0.04)
         plate-height (/ (- sa-double-length mount-height) 2)
-        thumb-bl (->> web-post-bl
-                      (translate [0 (- plate-height) 0]))
-        thumb-br (->> web-post-br
-                      (translate [-0 (- plate-height) 0]))
         thumb-bottom (->> (cube 3 3 0.001)
                        (translate [13.6 -15 -8]))
         thumb-top (->> (cube 1 1 1)
-                       (translate [13 -11.7 -5.4]))]
+                       (translate [13 -11.7 -5.4]))
+
+        thumb-tl #(->> web-post-tl
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-bl #(->> web-post-bl
+                       (translate [0 (- (extended-plate-height %)) 0]))
+        thumb-tr #(->> web-post-tr
+                       (translate [0 (extended-plate-height %) 0]))
+        thumb-br #(->> web-post-br
+                       (translate [0 (- (extended-plate-height %)) 0]))]
      (hull (place thumb-right-wall wall (translate [-1 1.5 thumb-case-z] wall-cube-bottom-front))
            (key-place 1 4 web-post-bl)
-           (place 0 -1/2 thumb-br)
+           (place 0 -1/2 (thumb-br 2))
            (case-place 0 4 thumb-top)
            (case-place 0 4 (translate [-1 10 0] thumb-bottom)))))
 
@@ -744,7 +786,8 @@
            thumb-back-wall
            thumb-left-wall
            thumb-inside-wall
-           thumb-front-wall))
+           thumb-front-wall
+           ))
 
 ;;;;;;;;;;;;
 ;; Bottom ;;
@@ -1305,12 +1348,15 @@
 
 (def voltron-top-right
   (offset-case-place [0 0 0]
+                     (difference
         (union key-holes
               connectors
               thumb
               caps
               thumbcaps
-              ;; new-case
+              new-case
+              )
+        ;; screw-holes
               )
       ))
 
