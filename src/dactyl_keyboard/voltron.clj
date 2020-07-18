@@ -286,6 +286,45 @@
              (key-place (inc column) row web-post-bl)
              (key-place (inc column) (inc row) web-post-tl))))))
 
+;;;;;;;;;;;;;;;;;;;
+;; Screw inserts ;;
+;;;;;;;;;;;;;;;;;;;
+
+(def screw-insert-height 4.0)
+(def screw-insert-bottom-radius (/ 4.6 2))
+(def screw-insert-top-radius (/ 4 2))
+
+(defn screw-insert-shape [bottom-radius top-radius height]
+  (union  (cylinder [bottom-radius top-radius] height) (with-fn 55)
+          (translate [0 0 (/ height 2)] (sphere top-radius))))
+
+(def screw-insert-hole
+  (translate [0 0 (/ screw-insert-height 2)]
+             (screw-insert-shape screw-insert-bottom-radius screw-insert-top-radius (+ screw-insert-height 4.4))))
+
+;; (def screw-insert-outer
+;;   (cylinder [(+ screw-insert-bottom-radius 3.6) (+ screw-insert-bottom-radius 3.6)] 9.2))
+
+(def screw-insert-outer
+  (translate [0 0 (/ (+ screw-insert-height 1.5) 2)]
+             (screw-insert-shape
+              (+ screw-insert-top-radius 2.1)
+              (+ screw-insert-top-radius 2.1)
+              (+ screw-insert-height 1.1))))
+
+(def screw-insert
+  (difference
+   screw-insert-outer
+   (translate [0 0 -2.4] screw-insert-hole)))
+
+;; (def screw-insert-bottom (screw-insert-shape 1.8 1.8 10)) ;;Cuts the holes for the pushfit
+;; (def screw-insert-bottom-recess (screw-insert-shape 3.1 1.95 2.1)) ;;Cuts the holes for the pushfit
+;;
+;; (def screw-insert
+;;   (difference
+;;     screw-insert-bottom
+;;     (translate [0 0 1] screw-insert-bottom-recess)))
+
 ;;;;;;;;;;;;
 ;; Thumbs ;;
 ;;;;;;;;;;;;
@@ -1349,12 +1388,20 @@
 (def voltron-top-right
   (offset-case-place [0 0 0]
                      (difference
-        (union key-holes
+        (union
+              key-holes
               connectors
               thumb
-              caps
-              thumbcaps
+              ;; caps
+              ;; thumbcaps
               new-case
+
+    ;; (->> screw-insert (translate [-36 50 0]))
+    (->> screw-insert (translate [79 46 17]))
+    (->> screw-insert (translate [79.5 -53 20]))
+
+    (->> screw-insert (translate [-84 -24 51]))
+    (->> screw-insert (translate [-24 -68 28]))
               )
         ;; screw-holes
               )
