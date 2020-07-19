@@ -9,7 +9,7 @@ Custom Dactyl fork
 * **$5** [1N4148 Diodes](https://mechboards.co.uk/shop/components/1n4148-diodes/), Pack of 50, 2 Items
 * **$6.30** [TRRS Cable](https://mechboards.co.uk/shop/accessories/trrs-cable/)
 * **$3.20** [PJ320A TRRS Jacks](https://mechboards.co.uk/shop/components/trrs-jacks/), Pack of 2
-* **$41.50** [Elite-C (v4)], 2 Items
+* **$41.50** [Elite-C (v4)](https://mechboards.co.uk/shop/components/elite-c/), 2 Items
 * **$15** [Amoeba Single-Switch PCBs](https://keeb.io/products/amoeba-single-switch-pcbs), Sheet of 30, 3 Items
 
 ### Keycaps
