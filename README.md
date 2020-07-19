@@ -13,7 +13,6 @@ Custom Dactyl fork
 * **$15** [Amoeba Single-Switch PCBs](https://keeb.io/products/amoeba-single-switch-pcbs), Sheet of 30, 3 Items
 
 ### Keycaps
-![Keycaps](https://i.imgur.com/lmka9nE.jpg)
 
 DSA/PBT Ergodox Keycaps:
 * **$55** [DSA Ergodox Alpha Kit (46 keys)](https://pimpmykeyboard.com/dsa-standard-sublimated-keysets/), Color: Beige (GQN)
