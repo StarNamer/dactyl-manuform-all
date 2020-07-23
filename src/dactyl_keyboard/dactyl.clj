@@ -14,10 +14,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (def nrows 5)
-(def ncols 7)
+(def ncols 6)
 
-(def α (/ π 12))                        ; curvature of the columns
-(def β (/ π 36))                        ; curvature of the rows
+(def α (/ π 16))                        ; curvature of the columns
+(def β (/ π 40))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 4)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
@@ -27,7 +27,7 @@
 (def last-15u-row 3)                    ; controls which should be the last row to have 1.5u keys on the outer column
 
 (def extra-row true)                   ; adds an extra bottom row to the outer columns
-(def inner-column true)                ; adds an extra inner column (two less rows than nrows)
+(def inner-column false)                ; adds an extra inner column (two less rows than nrows)
 (def thumb-style "new")                ; toggles between "default", "mini", and "new" thumb cluster
 
 (def column-style :standard)
@@ -39,8 +39,8 @@
   (>= column 5) [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
   (defn column-offset [column] (cond
-  (= column 2) [0 2.82 -4.5]
-  (>= column 4) [0 -12 5.64]            ; original [0 -5.8 5.64]
+  (= column 2) [0 0 -3] ; [0 2.82 -4.5]
+  (>= column 4) [0 -5 3] ; [0 -12 5.64]            ; original [0 -5.8 5.64]
   :else [0 0 0]))
   )
 
@@ -67,7 +67,7 @@
 
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
-(def create-side-nubs? false)
+(def create-side-nubs? true)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
@@ -738,7 +738,7 @@
        (key-place (+ innercol-offset 3) lastrow web-post-tr)
        (key-place (+ innercol-offset 3) cornerrow web-post-br)
        (key-place (+ innercol-offset 4) cornerrow web-post-bl))))))
-       
+
 ;;;;;;;;;;;;;;;;
 ;; New Thumb ;;
 ;;;;;;;;;;;;;;;;
@@ -914,19 +914,19 @@
 ;switching connectors, switchplates, etc. depending on thumb-style used
 (cond
 (= thumb-style "default") (when true
-(def thumb-type thumb) 
+(def thumb-type thumb)
 (def thumb-connector-type thumb-connectors)
 (def thumbcaps-type thumbcaps)))
 
 (cond
 (= thumb-style "new") (when true
-(def thumb-type newthumb) 
+(def thumb-type newthumb)
 (def thumb-connector-type newthumb-connectors)
 (def thumbcaps-type newthumbcaps)))
 
 (cond
 (= thumb-style "mini") (when true
-(def thumb-type minithumb) 
+(def thumb-type minithumb)
 (def thumb-connector-type minithumb-connectors)
 (def thumbcaps-type minithumbcaps)))
 
@@ -1216,7 +1216,7 @@
     (thumb-ml-place (translate (wall-locate2 -0.3 1) web-post-tr))
     (thumb-ml-place (translate (wall-locate3 -0.3 1) web-post-tr))
     (thumb-tl-place thumb-post-tl))))
-    
+
 ;switching walls depending on thumb-style used
 (cond
 (= thumb-style "default") (when true
@@ -1264,11 +1264,11 @@
       4 (def holder-offset -3.5)
       5 (def holder-offset 0)
       6 (def holder-offset 3.2))
-      
+
 (if (and (false? inner-column) (= nrows 6))
   (def holder-offset (- holder-offset 1))
   )
- 
+
 (case nrows
       4 (def notch-offset 3.15)
       5 (def notch-offset 0)
@@ -1382,6 +1382,16 @@
                    )
                   (translate [0 0 -20] (cube 350 350 40))
                   ))
+(def palm
+  (cube 10 10 10))
+
+(def digit (->> (cylinder 5 5)
+                (rotate (/ pi 2) [0 1 0])))
+
+(def hand (union
+            palm
+            (->> digit
+                 (translate [10 10 10]))))
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -1413,10 +1423,11 @@
 
        ))
 
+(spit "things/hand.scad"
+      (write-scad hand))
+
 ;(spit "things/test.scad"
 ;      (write-scad
 ;       ))
-
-
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
