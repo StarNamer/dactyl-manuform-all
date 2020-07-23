@@ -20,7 +20,7 @@ DSA/PBT Ergodox Keycaps:
 
 Optional Keycaps:
 * **$40** Colored Homerow [DSA Individual Keys](https://pimpmykeyboard.com/dsa-individual-keys-sublimated/), Color: Orange (OAX), 6 Regular + 2 Deep Dish Items
-* **$17** Clean Number Row [DSA Numpad Base Set (14 keys)](https://pimpmykeyboard.com/dsa-standard-sublimated-keysets/), Color: Beige (GQN)
+* **$17** Clear Number Row [DSA Numpad Base Set (14 keys)](https://pimpmykeyboard.com/dsa-standard-sublimated-keysets/), Color: Beige (GQN)
 
 ### Miscellaneous
 * **$3.50** [M3x5x5 Brass Knurled Nuts](https://www.aliexpress.com/item/33003887129.html?spm=a2g0s.9042311.0.0.680733edHM1GzQ), Pack of 25, 2 Items
