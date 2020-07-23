@@ -737,6 +737,8 @@
 (def original_usb_holder
     (->> (cube (+ (first original_usb_holder_size) original_usb_holder_thickness) (second original_usb_holder_size) (+ (last original_usb_holder_size) original_usb_holder_thickness))
          (translate [(first original_usb_holder_position) (second original_usb_holder_position) (/ (+ (last original_usb_holder_size) original_usb_holder_thickness) 2)])))
+; TODO
+; Move hole slightly up in Z position
 (def original_usb_holder_hole
     (->> (apply cube original_usb_holder_size)
          (translate [(first original_usb_holder_position) (second original_usb_holder_position) (/ (+ (last original_usb_holder_size) original_usb_holder_thickness) 2)])))
@@ -1145,7 +1147,7 @@
                     connectors
                     thumb
                     thumb-connectors
-					 rj9-holder
+					rj9-holder
                     (difference
 						(union case-walls
 							(if (==  bottom-cover 1) screw-insert-outers)
