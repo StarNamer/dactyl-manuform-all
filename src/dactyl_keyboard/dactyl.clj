@@ -16,8 +16,8 @@
 (def nrows 5)
 (def ncols 6)
 
-(def α (/ π 16))                                            ; curvature of the columns
-(def β (/ π 40))                                            ; curvature of the rows
+(def α (/ π 12))                                            ; curvature of the columns
+(def β (/ π 36))                                            ; curvature of the rows
 (def centerrow (- nrows 3))                                 ; controls front-back tilt
 (def centercol 4)                                           ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))                                ; or, change this for more precise tenting control
@@ -30,7 +30,7 @@
 (def inner-column false)                                    ; adds an extra inner column (two less rows than nrows)
 (def thumb-style "new")                                     ; toggles between "default", "mini", and "new" thumb cluster
 
-(def column-style :standard)
+(def column-style :orthographic)
 
 (if (true? inner-column)
   (defn column-offset [column] (cond
@@ -40,7 +40,7 @@
                                  :else [0 0 0]))
   (defn column-offset [column] (cond
                                  (= column 2) [0 0 -3]      ; [0 2.82 -4.5]
-                                 (>= column 4) [0 -5 3]     ; [0 -12 5.64]            ; original [0 -5.8 5.64]
+                                 (>= column 4) [0 -12 5.64] ; [0 -12 5.64]            ; original [0 -5.8 5.64]
                                  :else [0 0 0]))
   )
 
@@ -1383,37 +1383,60 @@
                    (translate [0 0 -20] (cube 350 350 40))
                    ))
 
-(def palm-width 10)
-(def palm-length 10)
-(def palm-height 10)
-(def hand-thumb [5 5 5])
+(def palm-width 84.78)
+(def palm-length 94.02)
+(def palm-height 29.66)
+(def hand-angle-deg 20)
+(def palm-angle-deg 30)
 
-(def finger-matrix [[5 5 5]
-                    [5 5 5]
-                    [5 5 5]
-                    [5 5 5]])
+(def finger-radius (/ 18.82 2))
+(def finger-thumb [39.97 30.52])
+(def finger-matrix [[28.49 23.66 23.61]                     ; index
+                    [31.98 30.82 26.33]                     ; middle
+                    [29.08 27.30 25.04]                     ; ring
+                    [19.88 23.34 20.31]])                   ; pinkie
+(def finger-angle-deg-matrix [[0 -40 -53]
+                              [0 -53 -69]
+                              [-29 -43 -50]
+                              [-26 -35 -42]])
 
-(defn finger [segs]
-  (map-indexed
-    (fn [i length]
-      (cond->> (cylinder 5 length)
-           (> i 0) (translate [0 0 (* i 5)])))
-    segs))
+(defn finger [segs angle-degs]
+  (let [angles (map deg2rad angle-degs)
+        coord-fn (fn [trig-fn] (map (fn [angle length] (* length (trig-fn (* -1 angle)))) angles segs))
+        angle-x-offsets (coord-fn (fn [x] (Math/cos x)))
+        angle-y-offsets (coord-fn (fn [x] (Math/sin x)))
+        cum-angle-x-offsets (cons 0 (reductions + angle-x-offsets))
+        cum-angle-y-offsets (cons 0 (reductions + angle-y-offsets))
+        numsegs (count segs)]
+    (map
+      (fn [i length angle angle-x-offset angle-y-offset]
+        (cond->> (cylinder finger-radius length :center false)
+                 (= true) (rotate angle [1 0 0])
+                 (> i 0) (translate [0 angle-y-offset 0])
+                 (> i 0) (translate [0 0 angle-x-offset])))
+      (range 0 numsegs) segs angles cum-angle-x-offsets cum-angle-y-offsets)))
 
 (def fingers
-  (map-indexed
-    (fn [i fng]
-      (cond->> (finger fng)
-               (> i 0) (translate [(* i 5) 0 0])))
-    finger-matrix))
+  (let [offset (/ palm-width 4)]
+    (map
+      (fn [i fng angles]
+        (cond->> (finger fng angles)
+                 (> i 0) (translate [(* i offset) 0 0])))
+      (range 0 (count finger-matrix)) finger-matrix finger-angle-deg-matrix)))
 
 (def palm
   (cube palm-width palm-length palm-height))
 
-(def hand (union
-            palm
-            (rotate (/ pi 2) [0 1 0] (finger hand-thumb))
-            (translate [0 0 7] fingers)))
+(def hand (->> (union
+                 palm
+                 (->> (finger finger-thumb [0 0 0])
+                      (rotate (* -1 (/ pi 2)) [0 1 0])
+                      (translate [(* -1 (/ palm-width 2)) (- (/ palm-length 2) finger-radius) 0]))
+                 (let [width-shift (+ (* -1 (/ palm-width 2)) finger-radius)]
+                   (->> fingers
+                        (rotate (/ pi 2) [1 0 0])
+                        (translate [width-shift (* -1 (/ palm-length 2)) 0]))))
+               (rotate (deg2rad (* -1 hand-angle-deg)) [0 1 0])))
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -1421,19 +1444,28 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
 
+;(spit "things/right-test.scad"
+;      (write-scad
+;        (union
+;          key-holes
+;          key-holes-inner
+;          connectors
+;          inner-connectors
+;          thumb
+;          thumb-connectors
+;          case-walls
+;          thumbcaps
+;          caps
+;          )))
+
 (spit "things/right-test.scad"
       (write-scad
         (union
-          key-holes
-          key-holes-inner
-          connectors
-          inner-connectors
-          thumb
-          thumb-connectors
-          case-walls
-          thumbcaps
-          caps
-          )))
+          model-right
+          (->> hand
+               (rotate pi [1 0 0])
+               (translate [(* -0.5 keyswitch-width) -110 80]))))
+      )
 
 (spit "things/right-plate.scad"
       (write-scad
