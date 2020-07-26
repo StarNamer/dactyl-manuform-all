@@ -1001,15 +1001,15 @@
                      (partial thumb-bl-place c) -0.5 1 web-post-tr)))
 
 (defn thumb-wall-six [c]
-  (union (wall-brace (partial thumb-tr-place c)  0 -1 thumb-post-br
-                     (partial thumb-mr-place c)  0 -1 web-post-br)
-         (wall-brace (partial thumb-mr-place c)  0 -1 web-post-br
-                     (partial thumb-mr-place c)  0 -1 web-post-bl)
-         (wall-brace (partial thumb-mr-place c)  0 -1 web-post-bl
-                     (partial thumb-br-place c)  0 -1 web-post-br)
-         (wall-brace (partial thumb-br-place c)  0 -1 web-post-br
-                     (partial thumb-br-place c)  0 -1 web-post-bl)
-         (wall-brace (partial thumb-br-place c)  0 -1 web-post-bl
+  (union (wall-brace (partial thumb-tr-place c)  0 -0.4 thumb-post-br
+                     (partial thumb-mr-place c)  0 -0.4 web-post-br)
+         (wall-brace (partial thumb-mr-place c)  0 -0.4 web-post-br
+                     (partial thumb-mr-place c)  0 -0.5 web-post-bl)
+         (wall-brace (partial thumb-mr-place c)  0 -0.5 web-post-bl
+                     (partial thumb-br-place c)  0 -0.5 web-post-br)
+         (wall-brace (partial thumb-br-place c)  0 -0.5 web-post-br
+                     (partial thumb-br-place c)  0 -0.7 web-post-bl)
+         (wall-brace (partial thumb-br-place c)  0 -0.7 web-post-bl
                      (partial thumb-br-place c) -1  0 web-post-bl)
          (wall-brace (partial thumb-br-place c) -1  0 web-post-bl
                      (partial thumb-br-place c) -1  0 web-post-tl)
