@@ -317,8 +317,7 @@
         x-rotation  (if (= thumb-count :five) 10 -6)
         y-rotation  (if (= thumb-count :five) -23 -34)
         z-rotation  (if (= thumb-count :five) 25 48)
-        movement    (if (= thumb-count :five) [-23 -34 -6] [-24 -42 -13]) ]
-        ; movement    (if (= thumb-count :five) [-23 -34 -6] [-29 -40 -13]) ]
+        movement    (if (= thumb-count :five) [-23 -34 -6] [-29 -40 -13]) ]
     (->> shape
          (rotate (deg2rad x-rotation) [1 0 0])
          (rotate (deg2rad y-rotation) [0 1 0])
@@ -328,8 +327,7 @@
 
 (defn thumb-ml-place [c shape]
   (let [thumb-count (get c :configuration-thumb-count)
-        movement    (if (= thumb-count :three) [-53 -26 -12] [-49 -31.5 -12])]
-        ; movement    (if (= thumb-count :three) [-53 -26 -12] [-51 -25 -12])]
+        movement    (if (= thumb-count :three) [-53 -26 -12] [-51 -25 -12])]
     (->> shape
          (rotate (deg2rad   6) [1 0 0])
          (rotate (deg2rad -34) [0 1 0])
@@ -342,11 +340,7 @@
         x-rotation  (if (= thumb-count :five) 6 -16)
         y-rotation  (if (= thumb-count :five) -34 -33)
         z-rotation  (if (= thumb-count :five) 35 54)
-        movement    (if (= thumb-count :five) [-39 -43 -16] [-36.8 -55.0 -24.3])]
-        ; x-rotation  (if (= thumb-count :five) 6 -16)
-        ; y-rotation  (if (= thumb-count :five) -34 -33)
-        ; z-rotation  (if (= thumb-count :five) 35 54)
-        ; movement    (if (= thumb-count :five) [-39 -43 -16] [-37.8 -55.3 -25.3])]
+        movement    (if (= thumb-count :five) [-39 -43 -16] [-37.8 -55.3 -25.3])]
     (->> shape
          (rotate (deg2rad x-rotation) [1 0 0])
          (rotate (deg2rad y-rotation) [0 1 0])
@@ -359,8 +353,7 @@
         x-rotation  (if (= thumb-count :five) 6 -4)
         y-rotation  (if (= thumb-count :five) -32 -35)
         z-rotation  (if (= thumb-count :five) 35 52)
-        movement    (if (= thumb-count :five) [-51 -25 -11.5] [-58.3 -45.3 -24.5])]
-        ; movement    (if (= thumb-count :five) [-51 -25 -11.5] [-56.3 -43.3 -23.5])]
+        movement    (if (= thumb-count :five) [-51 -25 -11.5] [-56.3 -43.3 -23.5])]
     (->> shape
        (rotate (deg2rad x-rotation) [1 0 0])
        (rotate (deg2rad y-rotation) [0 1 0])
@@ -655,16 +648,13 @@
            (triangle-hulls    ; top two to the middle two, starting on the left
             (thumb-tl-place c thumb-post-tl)
             (thumb-ml-place c web-post-tr)
-            ; (thumb-tl-place c thumb-post-bl)
+            (thumb-tl-place c thumb-post-bl)
             (thumb-ml-place c web-post-br)
-            (thumb-tl-place c thumb-post-bl) ; Yo's addition
-            (thumb-mr-place c web-post-tr) ; Yo's addition
             (thumb-tl-place c thumb-post-br)
             (thumb-mr-place c web-post-tr)
             (thumb-tr-place c thumb-post-bl)
             (thumb-mr-place c web-post-br)
-            (thumb-tr-place c thumb-post-br)
-            )
+            (thumb-tr-place c thumb-post-br))
            (triangle-hulls    ; top two to the main keyboard, starting on the left
             (thumb-tl-place c thumb-post-tl)
             (key-place c 0 cornerrow web-post-bl)
@@ -1407,7 +1397,7 @@
         :configuration-thumb-count            :six
         :configuration-last-row-count         :two
         :configuration-switch-type            :box
-        :configuration-use-inner-column?      true
+        :configuration-use-inner-column?      false
 
         :configuration-alpha                  (/ pi 12)
         :configuration-pinky-alpha            (/ pi 12)
@@ -1415,8 +1405,8 @@
         :configuration-centercol              4
         :configuration-tenting-angle          (/ pi 12)
 
-        :configuration-use-promicro-usb-hole? true
-        :configuration-use-trrs?              true
+        :configuration-use-promicro-usb-hole? false
+        :configuration-use-trrs?              false
         :configuration-use-external-holder?   false
 
         :configuration-use-hotswap?           false
@@ -1425,30 +1415,30 @@
         :configuration-stagger-middle         [0 2.8 -6.5]
         :configuration-stagger-ring           [0 0 0]
         :configuration-stagger-pinky          [0 -13 6]
-        :configuration-use-wide-pinky?        true
-        :configuration-z-offset               8
+        :configuration-use-wide-pinky?        false
+        :configuration-z-offset               6
         :configuration-use-wire-post?         false
-        :configuration-use-screw-inserts?     true
+        :configuration-use-screw-inserts?     false
 
         :configuration-hide-last-pinky?       false
-        :configuration-show-caps?             true
+        :configuration-show-caps?             false
         :configuration-plate-projection?      false})
 
-(spit "things/right.scad"
+#_(spit "things/right.scad"
         (write-scad (model-right c)))
 
 #_(spit "things/right-plate.scad"
         (write-scad (plate-right c)))
 
-; (spit "things/right-plate.scad"
-;         (write-scad
-;          (cut
-;           (translate [0 0 -0.1]
-;                      (difference (union case-walls
-;                                         teensy-holder
-;                                           ; rj9-holder
-;                                         screw-insert-outers)
-;                                  (translate [0 0 -10] screw-insert-screw-holes))))))
+#_(spit "things/right-plate.scad"
+        (write-scad
+         (cut
+          (translate [0 0 -0.1]
+                     (difference (union case-walls
+                                        teensy-holder
+                                          ; rj9-holder
+                                        screw-insert-outers)
+                                 (translate [0 0 -10] screw-insert-screw-holes))))))
 
 
 #_(spit "things/left.scad"
