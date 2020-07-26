@@ -1175,9 +1175,9 @@
 (defn trrs-usb-holder-space [c]
   (translate (map + (trrs-usb-holder-position c) [0 (* -1 wall-thickness) 1]) trrs-usb-holder-cube))
 (defn trrs-usb-holder-holder [c]
-  (translate (trrs-usb-holder-position c) (cube 19 12 4)))
+  (translate (trrs-usb-holder-position c) (cube 23 12 4)))
 
-(defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 8.1 20 5.1)))
+(defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [6 10 3]) (cube 8 18 5.1)))
 
 (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
 (def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
@@ -1306,7 +1306,7 @@
         x-middle-last     (if is-five? 1.6 2)]
     (union (screw-insert c (if use-inner-column? -1   0) 0               bottom-radius top-radius height)
            (screw-insert c (if use-inner-column? -1.5 0) (- lastrow 0.8) bottom-radius top-radius height)
-           (screw-insert c x-middle-last                 y-middle-last   bottom-radius top-radius height)
+           (screw-insert c (+ x-middle-last 0.0)         y-middle-last   bottom-radius top-radius height)
            (screw-insert c 3                             0               bottom-radius top-radius height)
            (screw-insert c lastloc                       1               bottom-radius top-radius height))))
 
@@ -1428,9 +1428,12 @@
         :configuration-use-hotswap?           false
         :configuration-stagger?               true
         :configuration-stagger-index          [0 0 0]
-        :configuration-stagger-middle         [0 2.8 -6.5]
-        :configuration-stagger-ring           [0 0 0]
-        :configuration-stagger-pinky          [0 -13 6]
+        :configuration-stagger-middle         [0 6 -11.1]
+        :configuration-stagger-ring           [0 1.6 7.9]
+        :configuration-stagger-pinky          [0 -17 14]
+        ; :configuration-stagger-middle         [0 2.8 -6.5]
+        ; :configuration-stagger-ring           [0 0 0]
+        ; :configuration-stagger-pinky          [0 -13 6]
         :configuration-use-wide-pinky?        true
         :configuration-z-offset               8
         :configuration-use-wire-post?         false
@@ -1460,7 +1463,7 @@
 ;                                  (translate [0 0 -10] screw-insert-screw-holes))))))
 
 
-#_(spit "things/left.scad"
+(spit "things/left.scad"
         (write-scad (mirror [-1 0 0] model-right)))
 
 #_(spit "things/right-test.scad"
