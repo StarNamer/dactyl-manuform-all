@@ -1001,9 +1001,9 @@
                      (partial thumb-bl-place c) -0.5 1 web-post-tr)))
 
 (defn thumb-wall-six [c]
-  (union (wall-brace (partial thumb-tr-place c)  0 -0.4 thumb-post-br
-                     (partial thumb-mr-place c)  0 -0.4 web-post-br)
-         (wall-brace (partial thumb-mr-place c)  0 -0.4 web-post-br
+  (union (wall-brace (partial thumb-tr-place c)  0 -1 thumb-post-br
+                     (partial thumb-mr-place c)  0 -0.5 web-post-br)
+         (wall-brace (partial thumb-mr-place c)  0 -0.5 web-post-br
                      (partial thumb-mr-place c)  0 -0.5 web-post-bl)
          (wall-brace (partial thumb-mr-place c)  0 -0.5 web-post-bl
                      (partial thumb-br-place c)  0 -0.5 web-post-br)
@@ -1177,7 +1177,7 @@
 (defn trrs-usb-holder-holder [c]
   (translate (trrs-usb-holder-position c) (cube 19 12 4)))
 
-(defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 8.1 20 3.1)))
+(defn trrs-usb-jack [c] (translate (map + (trrs-usb-holder-position c) [0 10 3]) (cube 8.1 20 5.1)))
 
 (def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
 (def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
@@ -1196,7 +1196,7 @@
 (defn trrs-holder-hole [c]
   (union
    (->>
-    (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
+    (->> (binding [*fn* 30] (cylinder 2.95 20))) ; 5mm trrs jack
     (rotate (deg2rad  90) [1 0 0])
     (translate [(first (trrs-holder-position c))
                 (+ (second (trrs-holder-position c))
@@ -1377,7 +1377,7 @@
                    (trrs-usb-jack c))
             (usb-holder-hole fusb-holder-position c)))
          (external-holder-space c))))
-     (translate [0 0 -60] (cube 350 350 120)))))
+     (translate [0 0 -59.99] (cube 350 350 120))))) ; changed this line to make sure screw holes are properly rendered
 
 (defn model-left [c]
   (mirror [-1 0 0] (model-right c)))
@@ -1398,6 +1398,12 @@
                                        screw-inners)]
     (difference (extrude-linear {:height 3} inner-thing)
                 screw-inners)))
+
+(defn model-right-cutoff [c]
+  (difference
+      (model-right c)
+     (translate [0 0 65] (cube 350 350 120))
+   ))
 
 (defn plate-left [c]
   (mirror [-1 0 0] (plate-right c)))
@@ -1431,11 +1437,14 @@
         :configuration-use-screw-inserts?     true
 
         :configuration-hide-last-pinky?       false
-        :configuration-show-caps?             true
+        :configuration-show-caps?             false
         :configuration-plate-projection?      false})
 
 (spit "things/right.scad"
         (write-scad (model-right c)))
+
+#_(spit "things/right-cutoff.scad"
+      (write-scad (model-right-cutoff c)))
 
 #_(spit "things/right-plate.scad"
         (write-scad (plate-right c)))
