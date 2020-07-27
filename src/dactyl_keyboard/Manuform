@@ -26,7 +26,7 @@
 ; 2 Alps
 (def switch-type 0)
 
-; Tenting definitions
+; Row & column curvature definitions
 (def α (/ π 12))                     ; column curvature
 (def β (/ π 36))                     ; row curvature
 ; (def α (deg2rad 12))               ; default 15 curvature of the columns
@@ -66,17 +66,17 @@
 
 ; Wrist rest definitions
 (def wrist-rest-on 1) 				 ; 0 for no rest 1 for a rest connection cut out in bottom case
-(def wrist-rest-back-height 30)		 ; height of the back of the wrist rest--Default 34
+(def wrist-rest-back-height 28)		 ; height of the back of the wrist rest--Default 34
 (def wrist-rest-angle 0) 			 ; angle of the wrist rest--Default 20
 (def wrist-rest-rotation-angle 0)	 ; 0 default The angle in counter clockwise the wrist rest is at
 (def wrist-rest-ledge 3.5)			 ; The height of ledge the silicone wrist rest fits inside
 (def wrist-rest-y-angle 0)			 ; Default. Controls the wrist rest y axis tilt (left to right)
 
 ; Wrist rest to case connections
-(def right_wrist_connecter_x   (if (== ncols 5) 13 25))
-(def middle_wrist_connecter_x  (if (== ncols 5) -5 0))
-(def left_wrist_connecter_x    (if (== ncols 5) -25 -25))
-(def wrist_right_nut_y         (if (== ncols 5) 10 20.5))
+(def right_wrist_connecter_x   (if (== ncols 6) 13 25))
+(def middle_wrist_connecter_x  (if (== ncols 6) -5 0))
+(def left_wrist_connecter_x    (if (== ncols 6) -25 -25))
+(def wrist_right_nut_y         (if (== ncols 6) 10 20.5))
 (def wrist_brse_position_x -1)
 
 
@@ -1155,11 +1155,12 @@
    (write-scad
 		(difference
                    (union
-                    key-holes
+                    ; key-holes
                     connectors
                     thumb
                     thumb-connectors
-					rj9-holder
+                    (if (== wrist-rest-on 1) (->> wrist-rest-build))
+					;rj9-holder
                     (difference
 						(union case-walls
 							(if (==  bottom-cover 1) screw-insert-outers)
@@ -1169,8 +1170,8 @@
 			            ; usb-holder
 			            ; trrs-holder
 						)
-                        original_usb_holder_hole
-                        rj9-space
+                        ; original_usb_holder_hole
+                        ; rj9-space
 						(if (== wrist-rest-on 1) (->> rest-case-cuts	(translate [(+ (first thumborigin ) 33) (- (second thumborigin) 50) 0]))) 
                           ;(->> usb-holder-hole(translate[20 0 0]))
 			              ;			  trrs-holder-hole
@@ -1182,7 +1183,6 @@
                     ; caps
                 )
 			(translate [0 0 -20] (cube 350 350 40))
-            (if (== wrist-rest-on 1) (->> wrist-rest-build))
 		)
   )
 )
@@ -1191,19 +1191,19 @@
 	(union
 		(difference
 			plate-bottom
-			plate-cutout
+			; plate-cutout
 			model-right
 			(translate[0 0 0.3] cut-bottom )
 
 			; Creates gap around usb holder
-			(translate [-0.75 -0.75 -2] usb-holder)
-			(translate [0.75 -0.75 -2] usb-holder)
-			(translate [4.5 -0.75 1.5] usb-holder)
+			;(translate [-0.75 -0.75 -2] usb-holder)
+			;(translate [0.75 -0.75 -2] usb-holder)
+			;(translate [4.5 -0.75 1.5] usb-holder)
 
 			; Creates extra gap around trrs holder
-			(translate [-0.75 -0.75 -2] trrs-holder)
-			(translate [0.75 -0.75 -2] trrs-holder)
-			(translate [-4 -0.75 1.5] trrs-holder)
+			;(translate [-0.75 -0.75 -2] trrs-holder)
+			;(translate [0.75 -0.75 -2] trrs-holder)
+			;(translate [-4 -0.75 1.5] trrs-holder)
 			(translate [0 0 -3.4] plate-screw-recess) ; Need to adjust this for new screw holes
 			(translate [0 0 -5] screw-insert-screw-holes)
 			(->> (cube 35 25 10)(translate [(+ (first thumborigin ) 2) (- (second thumborigin) 62) 0]))
@@ -1245,14 +1245,15 @@
 		(union
 		#_	(difference
 					(union
-						(if (== wrist-rest-on 1) (->> wrist-rest-build 		)		);;add/remove the wrist rest holes
 						case-walls
 						screw-insert-outers
 					)
 						(translate [0 0 -5] screw-insert-screw-holes)
 						cut-bottom
 
+						(if (== wrist-rest-on 1) (->> rest-case-cuts	(translate [(+ (first thumborigin ) 33) (- (second thumborigin) 50) 0]))) 
 				)
+			(if (== wrist-rest-on 1) (->> wrist-rest-build 		)		);;add/remove the wrist rest holes
 			case-wall-cutout
 			)
 	  ))
