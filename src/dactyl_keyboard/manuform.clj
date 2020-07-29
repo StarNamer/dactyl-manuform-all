@@ -1464,7 +1464,7 @@
 
 
 (spit "things/left.scad"
-        (write-scad (mirror [-1 0 0] model-right)))
+        (write-scad (mirror [-1 0 0] (model-right c))))
 
 #_(spit "things/right-test.scad"
         (write-scad
