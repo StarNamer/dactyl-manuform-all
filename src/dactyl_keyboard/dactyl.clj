@@ -1212,26 +1212,15 @@
            trrs-hole-just-circle
            screw-holes)))
 
-(spit "things/switch-hole.scad"
-      (write-scad single-plate))
-
-(spit "things/alps-holes.scad"
-      (write-scad (union connectors key-holes)))
-
-(spit "things/dactyl-top-right.scad"
-      (write-scad dactyl-top-right))
-
-(spit "things/dactyl-bottom-right.scad"
-      (write-scad dactyl-bottom-right))
-
-(spit "things/dactyl-top-left.scad"
-      (write-scad dactyl-top-left))
-
-(spit "things/dactyl-bottom-left.scad"
-      (write-scad dactyl-bottom-left))
-
-(spit "things/dactyl-top-left-with-teensy.scad"
-      (write-scad (mirror [-1 0 0] dactyl-top-right)))
-
-(spit "things/dactyl-bottom-left-with-teensy.scad"
-      (write-scad (mirror [-1 0 0] dactyl-bottom-right)))
+(defn -main []
+  (spit "things/switch-hole.scad"
+        (write-scad single-plate))
+  (spit "things/dactyl-top-right.scad"
+        (write-scad dactyl-top-right))
+  (spit "things/dactyl-bottom-right.scad"
+        (write-scad dactyl-bottom-right))
+  (spit "things/dactyl-top-left.scad"
+        (write-scad dactyl-top-left))
+  (spit "things/dactyl-bottom-left.scad"
+        (write-scad dactyl-bottom-left))
+)
