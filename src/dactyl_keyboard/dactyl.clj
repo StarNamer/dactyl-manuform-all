@@ -1122,7 +1122,7 @@
               trrs-box-hole)
        (key-place 1/2 0)))
 
-(def teensy-pcb-thickness 1.6)
+(def teensy-pcb-thickness 2.2)
 (def teensy-offset-height 5)
 
 (def teensy-pcb (->> (cube 18 30.5 teensy-pcb-thickness)
@@ -1141,9 +1141,9 @@
                (translate [0 0 -2])
                (key-place 1/2 2)
                (color [0 0 1]))
-          (->> (cube 3 3 (+ teensy-pcb-thickness 3))
+          (->> (cube 3 3 (+ teensy-pcb-thickness 4))
                (translate [0 (/ 30.5 -2) (+ (- teensy-offset-height)
-                                            #_(/ (+ teensy-pcb-thickness 3) -2)
+                                            #_(/ (+ teensy-pcb-thickness 4) -2)
                                             )])
                (key-place 1/2 3/2)
                (color [0 0 1]))))
