@@ -621,8 +621,8 @@
 (def teensy-holder
     (->>
         (union
-          (->> (cube 3 teensy-holder-length (+ 6 teensy-width))
-               (translate [1.5 teensy-holder-offset 0]))
+          (->> (cube 4 teensy-holder-length (+ 6 teensy-width))
+               (translate [1 teensy-holder-offset 0]))
           (->> (cube teensy-pcb-thickness teensy-holder-length 3)
                (translate [(+ (/ teensy-pcb-thickness 2) 3) teensy-holder-offset (- -1.5 (/ teensy-width 2))]))
           (->> (cube 4 teensy-holder-length 4)
