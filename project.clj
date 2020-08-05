@@ -6,6 +6,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [unicode-math "0.2.0"]
+                 [clojure-watch "0.1.9"]
                  [scad-clj "0.4.0"]])
 
 

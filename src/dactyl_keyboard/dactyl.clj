@@ -1,6 +1,7 @@
 (ns dactyl-keyboard.dactyl
   (:refer-clojure :exclude [use import])
   (:require [clojure.core.matrix :refer [array matrix mmul]]
+            [clojure-watch.core :refer [start-watch]]
             [scad-clj.scad :refer :all]
             [scad-clj.model :refer :all]
             [unicode-math.core :refer :all]))
@@ -713,50 +714,63 @@
                    (translate [0 0 -20] (cube 350 350 40))
                   ))
 
-(spit "things/right.scad"
-      (write-scad model-right))
+(defn run []
+  (spit "things/right.scad"
+        (write-scad model-right))
 
-(spit "things/left.scad"
-      (write-scad (mirror [-1 0 0] model-right)))
+  (spit "things/left.scad"
+        (write-scad (mirror [-1 0 0] model-right)))
 
-(spit "things/right-test.scad"
-      (write-scad
-                   (union
-                    key-holes
-                    connectors
-                    thumb
-                    thumb-connectors
-                    case-walls
-                    thumbcaps
-                    caps
-                    teensy-holder
-                    rj9-holder
-                    usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout
-                    ;             rj9-space
-                                ; wire-posts
-                  )))
+  (spit "things/right-test.scad"
+        (write-scad
+         (union
+          key-holes
+          connectors
+          thumb
+          thumb-connectors
+          case-walls
+          thumbcaps
+          caps
+          teensy-holder
+          rj9-holder
+          usb-holder-hole
+                                        ; usb-holder-hole
+                                        ; ; teensy-holder-hole
+                                        ;             screw-insert-outers
+                                        ;             teensy-screw-insert-holes
+                                        ;             teensy-screw-insert-outers
+                                        ;             usb-cutout
+                                        ;             rj9-space
+                                        ; wire-posts
+          )))
 
-(spit "things/right-plate.scad"
-      (write-scad
-                   (cut
-                     (translate [0 0 -0.1]
-                       (difference (union case-walls
-                                          teensy-holder
-                                          ; rj9-holder
-                                          screw-insert-outers)
-                                   (translate [0 0 -10] screw-insert-screw-holes))
-                  ))))
+  (spit "things/right-plate.scad"
+        (write-scad
+         (cut
+          (translate [0 0 -0.1]
+                     (difference (union case-walls
+                                        teensy-holder
+                                        ; rj9-holder
+                                        screw-insert-outers)
+                                 (translate [0 0 -10] screw-insert-screw-holes))
+                     ))))
 
-(spit "things/test.scad"
-      (write-scad
+  (spit "things/test.scad"
+        (write-scad
          (difference usb-holder usb-holder-hole)))
+  )
 
 
+(defn -main []
+  (let [path "/home/david/projects/dactyl-manuform/src/dactyl_keyboard/"
+        srcfile (str path "dactyl.clj")]
+    (start-watch [{:path path
+                   :event-types [:create :modify]
+                   :bootstrap (fn [path] (println "Starting to watch " path))
+                   :callback (fn [event filename]
+                               (when (= filename srcfile)
+                                 (println "File changed " filename)
+                                 (load-file filename)))}]))
+  1)
 
-(defn -main [dum] 1)  ; dummy to make it easier to batch
+(run)
