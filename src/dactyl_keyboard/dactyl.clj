@@ -12,18 +12,18 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 5)
+(def nrows 4)
 (def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
-(def centercol 2)                       ; controls left-right tilt / tenting (higher number is more tenting)
+(def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
-(def pinky-15u true)
+(def pinky-15u false)
 
 (defn column-offset [column] (cond
                                (= column 2) [0 2.82 -4.5]
@@ -34,8 +34,8 @@
 
 (def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
-(def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 1.0)                  ; original= 0.5
+(def extra-width 2.2)                   ; extra space between the base of keys; original= 2
+(def extra-height 1.2)                  ; original= 0.5
 
 (def wall-z-offset -5)                 ; original=-15 length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
@@ -70,7 +70,7 @@
 (def keyswitch-height 14.2) ;; Was 14.1, then 14.25
 (def keyswitch-width 14.2)
 
-(def sa-profile-key-height 12.7)
+(def sa-profile-key-height 8)
 
 (def plate-thickness 2)
 (def side-nub-thickness 4)
@@ -320,11 +320,11 @@
 
 (defn thumb-tr-place [shape]
   (->> shape
-       (rotate (deg2rad  14) [1 0 0])
-       (rotate (deg2rad -15) [0 1 0])
+       (rotate (deg2rad  11) [1 0 0])
+       (rotate (deg2rad -9) [0 1 0])
        (rotate (deg2rad  10) [0 0 1]) ; original 10
        (translate thumborigin)
-       (translate [-15 -10 5]))) ; original 1.5u  (translate [-12 -16 3])
+       (translate [-15 -10 0]))) ; original 1.5u  (translate [-12 -16 3])
 (defn thumb-tl-place [shape]
   (->> shape
        (rotate (deg2rad  10) [1 0 0])
@@ -340,14 +340,14 @@
        (rotate (deg2rad -23) [0 1 0])
        (rotate (deg2rad  25) [0 0 1])
        (translate thumborigin)
-       (translate [-23 -34 -6])))
+       (translate [-23 -34 -11])))
 (defn thumb-br-place [shape]
   (->> shape
        (rotate (deg2rad   6) [1 0 0])
        (rotate (deg2rad -34) [0 1 0])
        (rotate (deg2rad  35) [0 0 1])
        (translate thumborigin)
-       (translate [-39 -43 -16])))
+       (translate [-39 -43 -21])))
 (defn thumb-bl-place [shape]
   (->> shape
        (rotate (deg2rad   6) [1 0 0])
@@ -589,7 +589,7 @@
 
 (def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
 
-(def usb-holder-position (map + [17 19.3 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
+(def usb-holder-position (map + [17 20 0] [(first usb-holder-ref) (second usb-holder-ref) 2]))
 (def usb-holder-cube   (cube 15 12 2))
 (def usb-holder-space  (translate (map + usb-holder-position [0 (* -1 wall-thickness) 1]) usb-holder-cube))
 (def usb-holder-holder (translate usb-holder-position (cube 19 12 4)))
@@ -649,12 +649,12 @@
          (translate (map + offset [(first position) (second position) (/ height 2)])))))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0 0         bottom-radius top-radius height [11 10 0])
-         (screw-insert 0 lastrow   bottom-radius top-radius height [0 0 0])
+  (union (screw-insert 0 0         bottom-radius top-radius height [9 10 0])
+         (screw-insert 0 lastrow   bottom-radius top-radius height [-2 0 0])
         ;  (screw-insert lastcol lastrow  bottom-radius top-radius height [-5 13 0])
         ;  (screw-insert lastcol 0         bottom-radius top-radius height [-3 6 0])
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [0 12 0])
-         (screw-insert lastcol 0         bottom-radius top-radius height [0 7 0])
+         (screw-insert lastcol lastrow  bottom-radius top-radius height [-5 12 0])
+         (screw-insert lastcol 0         bottom-radius top-radius height [-3 7 0])
          (screw-insert 1 lastrow         bottom-radius top-radius height [0 -16 0])))
 
 ; Hole Depth Y: 4.4
@@ -705,9 +705,10 @@
                    thumb-connectors
                    (difference (union case-walls
                                       screw-insert-outers
-                                      pro-micro-holder
-                                      usb-holder-holder
-                                      trrs-holder)
+                                      ; pro-micro-holder
+                                      ; usb-holder-holder
+                                      ; trrs-holder
+                                      )
                                usb-holder-space
                                usb-jack
                                trrs-holder-hole
