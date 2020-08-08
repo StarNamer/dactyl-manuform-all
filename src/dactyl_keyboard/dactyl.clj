@@ -714,6 +714,25 @@
                    (translate [0 0 -20] (cube 350 350 40))
                   ))
 
+(def plate-right (let [bot (cut
+                            (translate [0 0 -0.1]
+                                       (difference (union case-walls
+                                                          teensy-holder
+                                                          usb-holder
+                                                          rj9-holder
+                                                          screw-insert-outers)
+                                                   (translate [0 0 -10] screw-insert-screw-holes))))
+                       inner-thing (difference
+                                    (translate [0 0 -0.1]
+                                               (project
+                                                (union (extrude-linear {:height 5
+                                                                        :scale 0.1
+                                                                        :center true} bot)
+                                                       (cube 50 50 5))))
+                                               screw-insert-screw-holes)]
+                   (difference (extrude-linear {:height 3} inner-thing)
+                               (translate [0 0 -5] screw-insert-screw-holes))))
+
 (defn run []
   (spit "things/right.scad"
         (write-scad model-right))
@@ -722,16 +741,15 @@
         (write-scad (mirror [-1 0 0] model-right)))
 
   (spit "things/right-plate.scad"
+        (write-scad plate-right))
+
+  (spit "things/right-test.scad"
         (write-scad
-         (cut
-          (translate [0 0 -0.1]
-                     (difference (union case-walls
-                                        teensy-holder
-                                        rj9-holder
-                                        screw-insert-outers)
-                                 (translate [0 0 -10] screw-insert-screw-holes))
-                     ))))
-  )
+         (union
+          model-right
+          caps
+          thumbcaps
+          (translate [0 0 -1.5] plate-right)))))
 
 
 (defn -main []
