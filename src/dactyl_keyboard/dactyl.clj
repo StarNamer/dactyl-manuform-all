@@ -604,9 +604,6 @@
          (translate [(first usb-holder-position) (second usb-holder-position) (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
 
 (def teensy-width 20)
-(def teensy-height 12)
-(def teensy-length 33)
-(def teensy2-length 53)
 (def teensy-pcb-thickness 2)
 (def teensy-holder-width  (+ 7 teensy-pcb-thickness))
 (def teensy-holder-height (+ 6 teensy-width))
