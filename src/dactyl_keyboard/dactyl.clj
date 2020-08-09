@@ -73,13 +73,14 @@
 (def nrows 5)
 (def ncols 6)
 
-(def α (/ π 18))                        ; curvature of the columns
+(def α (/ π 10))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
-(def column-style
-  (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
+(def column-style :orthographic)
+; (def column-style
+;   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
 (def pinky-15u false)
 
@@ -90,9 +91,9 @@
     (= column 5) [0 -15 3.0]            ; original [0 -5.8 5.64]
     :else [0 0 0]))
 
-(def thumb-offsets [4 -3 7])
+(def thumb-offsets [4 -3 2])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 16)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1)                  ; original= 0.5
@@ -114,7 +115,7 @@
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ;;;;;;;;;Wrist rest;;;;;;;;;;
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@
-(def wrist-rest-on 1) 						;;0 for no rest 1 for a rest connection cut out in bottom case
+(def wrist-rest-on 0) 						;;0 for no rest 1 for a rest connection cut out in bottom case
 (def wrist-rest-back-height 18)				;;height of the back of the wrist rest--Default 34
 (def wrist-rest-angle -1) 			        ;;angle of the wrist rest--Default 20
 (def wrist-rest-rotation-angle 100)			;;0 default The angle in counter clockwise the wrist rest is at
@@ -446,22 +447,28 @@
 (def pinky-connectors
   (apply union
          (concat
-          ;; Row connections
-          (for [row (range 0 lastrow)]
+          (for [row (range lastrow nrows)
+                column (range (dec lastcol) ncols)]
             (triangle-hulls
-             (key-place lastcol row web-post-tr)
-             (key-place lastcol row wide-post-tr)
-             (key-place lastcol row web-post-br)
-             (key-place lastcol row wide-post-br)))
+              (key-place column row web-post-tl)
+              (key-place (dec column) row web-post-tr)
+              (key-place column row web-post-bl)
+              (key-place (dec column) row web-post-br)))
+              
+          (for [column (range (dec lastcol) ncols)]
+            (triangle-hulls
+              (key-place column cornerrow web-post-bl)
+              (key-place column cornerrow web-post-br)
+              (key-place column (inc cornerrow) web-post-tl)
+              (key-place column (inc cornerrow) web-post-tr)))
 
-          ;; Column connections
-          (for [row (range 0 cornerrow)]
+          (for [column (range (dec (dec lastcol)) lastcol)
+                row (cons cornerrow ())]
             (triangle-hulls
-             (key-place lastcol row web-post-br)
-             (key-place lastcol row wide-post-br)
-             (key-place lastcol (inc row) web-post-tr)
-             (key-place lastcol (inc row) wide-post-tr)))
-          ;;
+              (key-place column row web-post-br)
+              (key-place column (inc row) web-post-tr)
+              (key-place (inc column) row web-post-bl)
+              (key-place (inc column) (inc row) web-post-tl)))
 )))
 
 (def key-connectors
@@ -487,7 +494,7 @@
                  (key-place column (inc row) web-post-tr)))
 
              ;; Diagonal connections
-             (for [column (range 0 (dec ncols))
+             (for [column (range 0 lastcol)
                    row (range 0 cornerrow)]
                (triangle-hulls
                  (key-place column row web-post-br)
@@ -574,7 +581,7 @@
 (def thumbcaps
   (union
    (thumb-1x-layout (sa-cap 1))
-   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.25)))))
+   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1)))))
 
 (defn thumb-holes [filled]
   (->>
@@ -714,7 +721,7 @@
 (defn key-holes [filled]
   (union
     (apply union
-           (for [column columns row rows :when (or (.contains [3] column) (not= row lastrow))]
+           (for [column columns row rows :when (or (.contains [3, 4, 5] column) (not= row lastrow))]
              (->> (key-hole filled)
                   (key-place column row))
              ))
@@ -729,7 +736,11 @@
                  :when (or (.contains [3] column)
                            (not= row lastrow))]
              (->> (sa-cap (if (and (true? pinky-15u) (= column lastcol)) 1.5 1))
-                  (key-place column row))))
+                  (key-place column row)))
+            (for [column (range (dec (dec lastcol)) ncols)]
+              (->> (sa-cap (if (and (true? pinky-15u) (= column lastcol)) 1.5 1))
+                   (key-place column lastrow)))
+                   )
     thumbcaps
     ))
 
@@ -911,11 +922,12 @@
     (let [tr (if (true? pinky-15u) wide-post-tr web-post-tr)
           br (if (true? pinky-15u) wide-post-br web-post-br)]
       (union (key-wall-brace lastcol 0 0 1 tr lastcol 0 1 0 tr)
-             (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 tr lastcol y 1 0 br))
-             (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 br lastcol y 1 0 tr))
-             (key-wall-brace lastcol cornerrow 0 -1 br lastcol cornerrow 1 0 br)))
+             (for [y (range 0 nrows)] (key-wall-brace lastcol y 1 0 tr lastcol y 1 0 br))
+             (for [y (range 1 nrows)] (key-wall-brace lastcol (dec y) 1 0 br lastcol y 1 0 tr))
+             (key-wall-brace lastcol lastrow 0 -1 br lastcol lastrow 1 0 br)
+             ))
     ; pinky-walls
-    (key-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 0 -1 wide-post-br)
+    (key-wall-brace lastcol lastrow 0 -1 web-post-br lastcol lastrow 0 -1 wide-post-br)
     (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 0 1 wide-post-tr)
     ; back wall
     (for [x (range 0 ncols)] (key-wall-brace x 0 0 1 web-post-tl x       0 0 1 web-post-tr))
@@ -929,9 +941,9 @@
     (wall-brace  thumb-tl-place -1 0 web-post-tl thumb-tl-place -1 0 web-post-bl)
     ; front wall
     (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-    (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 0.5 -1 web-post-bl)
-    (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br)) ; TODO fix extra wall
-    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
+    ; (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 0.5 -1 web-post-bl)
+    (for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl x       lastrow 0 -1 web-post-br)) ; TODO fix extra wall
+    (for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
     ; thumb walls
     (wall-brace thumb-br-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
     (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
@@ -955,7 +967,7 @@
 (def controller-cutout-pos (map + [-21 19.8 0] [(first controller-ref) (second controller-ref) 2]))
 
 (def controller-holder-stl-pos
-  (add-vec controller-cutout-pos [16.4 -23.9 -2.0]))
+  (add-vec controller-cutout-pos [16.4 -22.9 -2.0]))
 
 (def controller-holder-stl
   (->> (import "controller holder.stl")
@@ -1011,7 +1023,7 @@
          ; top right
          (screw-insert lastcol 0         bottom-radius top-radius height [-4 9 0])
          ; lower right
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [-4 13 0])
+         (screw-insert lastcol nrows  bottom-radius top-radius height [-4 13 0])
          ; middle bottom
          (screw-insert 3 lastrow         bottom-radius top-radius height [-5 2 0])
          ; thumb cluster, closest to user
@@ -1191,9 +1203,10 @@
                        (key-holes false)
                        left-section
                        connectors
-                       (difference case-walls-with-screws
-                                   (controller-cutout case-walls-with-screws)
-                                   ))
+                       case-walls-with-screws)
+                      ;  (difference case-walls-with-screws
+                      ;              (controller-cutout case-walls-with-screws)
+                      ;              ))
                      (if (== wrist-rest-on 1) (->> rest-case-cuts	(translate [(+ (first thumborigin ) 33) (- (second thumborigin)  (- 56 nrows)) 0])))
                      (left-wall-plate-place 0 0 oled-holder-cut)
                      screw-insert-holes
@@ -1240,9 +1253,12 @@
       (write-scad
         (union 
           model-right
-          (-% controller-holder-stl)
+          ; (-% controller-holder-stl)
           )
         ))
+
+(spit "things/controller-holder.scad"
+      (write-scad (-% controller-holder-stl)))
 
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
