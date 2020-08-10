@@ -593,6 +593,57 @@
                               (union (translate [0 2 0] (cube 10.78  9 18.38))
                                      (translate [0 0 5] (cube 10.78 13  5))))))
 
+(def trrs-usb-holder-ref
+  (let [y-addition (case nrows
+                     2 0
+                     3 0
+                     4 0
+                     5 -1
+                     6 -3
+                     -3)]
+    (key-position 1 0 (map - (wall-locate2  0 y-addition) [0 (/ mount-height 2) 0]))))
+
+(def trrs-usb-holder-position
+  (map + [17 19.3 0] [(first trrs-usb-holder-ref) (second trrs-usb-holder-ref) 2]))
+(def trrs-usb-holder-cube
+  (cube 15 12 2))
+(def trrs-usb-holder-space
+  (translate (map + trrs-usb-holder-position [0 (* -1 wall-thickness) 1]) trrs-usb-holder-cube))
+(def trrs-usb-holder-holder
+  (translate trrs-usb-holder-position (cube 19 12 4)))
+
+(def trrs-usb-jack (translate (map + trrs-usb-holder-position [0 10 3]) (cube 8.1 20 3.1)))
+
+(def trrs-holder-size [6.2 10 2]) ; trrs jack PJ-320A
+(def trrs-holder-hole-size [6.2 10 6]) ; trrs jack PJ-320A
+(def trrs-holder-position
+  (map + trrs-usb-holder-position [-23.6 0.2 0]))
+(def trrs-holder-thickness 2)
+(def trrs-holder-thickness-2x (* 2 trrs-holder-thickness))
+(def trrs-holder
+  (union
+   (->> (cube (+ (first trrs-holder-size) trrs-holder-thickness-2x)
+              (+ trrs-holder-thickness (second trrs-holder-size))
+              (+ (last trrs-holder-size) trrs-holder-thickness))
+        (translate [(first trrs-holder-position)
+                    (second trrs-holder-position)
+                    (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2)]))))
+(def trrs-holder-hole
+  (union
+   (->>
+    (->> (binding [*fn* 30] (cylinder 2.55 20))) ; 5mm trrs jack
+    (rotate (deg2rad  90) [1 0 0])
+    (translate [(first trrs-holder-position)
+                (+ (second trrs-holder-position)
+                   (/ (+ (second trrs-holder-size) trrs-holder-thickness) 2))
+                (+ 3 (/ (+ (last trrs-holder-size) trrs-holder-thickness) 2))])) ;1.5 padding
+  ; rectangular trrs holder
+   (->> (apply cube trrs-holder-hole-size)
+        (translate [(first trrs-holder-position)
+                    (+ (/ trrs-holder-thickness -2) (second trrs-holder-position))
+                    (+ (/ (last trrs-holder-hole-size) 2) trrs-holder-thickness)]))))
+
+
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
 (def usb-holder-thickness 4)
@@ -699,11 +750,13 @@
                     (difference (union case-walls
                                        screw-insert-outers
                                        teensy-holder
+                                       ;; rj9-holder
+                                       trrs-holder
                                        usb-holder)
-                                rj9-space
+                                ;; rj9-space
+                                trrs-holder-hole
                                 usb-holder-hole
                                 screw-insert-holes)
-                    rj9-holder
                     ; wire-posts
                     ; thumbcaps
                     ; caps
@@ -716,7 +769,7 @@
                                        (difference (union case-walls
                                                           teensy-holder
                                                           usb-holder
-                                                          rj9-holder
+                                                          trrs-holder
                                                           screw-insert-outers)
                                                    (translate [0 0 -10] screw-insert-screw-holes))))
                        inner-thing (difference
