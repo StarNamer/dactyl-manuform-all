@@ -78,7 +78,7 @@
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 3)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
-(def column-style :orthographic)
+(def column-style :standard)
 ; (def column-style
 ;   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 ; (def column-style :fixed)
@@ -91,12 +91,12 @@
     (= column 5) [0 -15 3.0]            ; original [0 -5.8 5.64]
     :else [0 0 0]))
 
-(def thumb-offsets [4 -3 2])
+(def thumb-offsets [-14 -6 2])
 
-(def keyboard-z-offset 16)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 13)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
-(def extra-height 1)                  ; original= 0.5
+(def extra-height 2.5)                  ; original= 0.5
 
 (def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
@@ -963,7 +963,7 @@
 
 
 ; Cutout for controller/trrs jack holder
-(def controller-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
+(def controller-ref (key-position 0 0 (map - (wall-locate3  0  -1) [0 (/ mount-height 2) 0])))
 (def controller-cutout-pos (map + [-21 19.8 0] [(first controller-ref) (second controller-ref) 2]))
 
 (def controller-holder-stl-pos
@@ -978,14 +978,71 @@
      )
   )
 
-(defn intersect-bottom [a b]
-  (->> (project (intersection a b))
-       (extrude-linear {:height 12.6 :twist 0 :convexity 0})
-       (translate [0 0 (/ 12.6 2)])
-       )
-  )
+; (defn intersect-bottom [a b]
+;   (->> (project (intersection a b))
+;        (extrude-linear {:height 12.6 :twist 0 :convexity 0})
+;        (translate [0 0 (/ 12.6 2)])
+;        )
+;   )
 
-(defn controller-cutout [shape] (intersect-bottom controller-holder-stl shape))
+; (defn controller-cutout [shape] (intersect-bottom controller-holder-stl shape))
+
+; usb-c adapter cutout
+
+(defn smooth-circle [radius] (scale [0.01 0.01 0.01] (circle (* 100 radius))))
+
+(defn move-to-usb-center [shape]
+  (->> shape
+      (rotate (deg2rad 90) [1 0 0])
+      (rotate (deg2rad 90) [0 1 0])
+      (rotate oled-mount-rotation-z [0 0 1])
+      (translate (add-vec (left-wall-plate-position 0 1) [-5 1.5 -27]))
+      ))
+
+(def inner-usbc-cutout
+  (->> (hull
+        (translate [-3 0 0] (smooth-circle 3.5))
+        (translate [3 0 0] (smooth-circle 3.5))
+       )
+    (extrude-linear {:height (+ 1 wall-thickness)})
+    (move-to-usb-center)
+  )
+)
+
+(def bottom-usb-screw-hole
+  (->> (smooth-circle 2.2)
+       (extrude-linear {:height (+ 1 wall-thickness)})
+       (move-to-usb-center)
+       (translate [0, 0, -10])
+))
+
+(def top-usb-screw-hole
+  (->> (smooth-circle 2.2)
+       (extrude-linear {:height (+ 1 wall-thickness)})
+       (move-to-usb-center)
+       (translate [0, 0, 10])
+))
+
+(def usb-screw-holes
+  (union top-usb-screw-hole bottom-usb-screw-hole)
+)
+
+(def trrs-hole
+  (->> (square 6 6.2)
+       (extrude-linear {:height (+ 2 wall-thickness)})
+       (move-to-usb-center)
+       (translate [10 0 -9])
+  ))
+
+(def trrs-lip
+  (->> (square 7.1 8.2)
+       (extrude-linear {:height wall-thickness})
+       (move-to-usb-center)
+       (translate [10 0.5 -9])
+  ))
+
+(def trrs-cutout
+  (union trrs-hole trrs-lip))
 
 (def encoder-pos (add-vec (left-wall-plate-position 0 -1) [0 -13 0]))
 (def encoder-rot-x oled-mount-rotation-x)
@@ -1027,9 +1084,9 @@
          ; middle bottom
          (screw-insert 3 lastrow         bottom-radius top-radius height [-5 2 0])
          ; thumb cluster, closest to user
-         (screw-insert 1 lastrow         bottom-radius top-radius height [-2 -13 0])
+         (screw-insert 1 lastrow         bottom-radius top-radius height [-14 -11 0])
          ; thumb cluster left
-         (screw-insert 0 lastrow   bottom-radius top-radius height [19 -80 0])
+         (screw-insert 0 lastrow   bottom-radius top-radius height [4 -80 0])
 ))
 
 ; Hole Depth Y: 4.4
@@ -1203,10 +1260,11 @@
                        (key-holes false)
                        left-section
                        connectors
-                       case-walls-with-screws)
-                      ;  (difference case-walls-with-screws
-                      ;              (controller-cutout case-walls-with-screws)
-                      ;              ))
+                       (difference case-walls-with-screws
+                                   inner-usbc-cutout
+                                   usb-screw-holes
+                                   trrs-cutout
+                                   ))
                      (if (== wrist-rest-on 1) (->> rest-case-cuts	(translate [(+ (first thumborigin ) 33) (- (second thumborigin)  (- 56 nrows)) 0])))
                      (left-wall-plate-place 0 0 oled-holder-cut)
                      screw-insert-holes
@@ -1274,6 +1332,8 @@
         )
       )
 
+(spit "things/usbc-cutout.scad"
+      (write-scad inner-usbc-cutout))
 
 (spit "things/right-plate.scad"
       (write-scad
