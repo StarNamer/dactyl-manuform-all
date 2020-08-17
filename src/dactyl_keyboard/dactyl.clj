@@ -687,8 +687,8 @@
            ))
 
 (defn screw-insert-shape [bottom-radius top-radius height]
-   (union (cylinder [bottom-radius top-radius] height)
-          (translate [0 0 (/ height 2)] (sphere top-radius))))
+  (union (binding [*fn* 30] (cylinder [bottom-radius top-radius] height))
+         (translate [0 0 (/ height 2)] (binding [*fn* 30] (sphere top-radius)))))
 
 (defn screw-insert [column row bottom-radius top-radius height]
   (let [shift-right   (= column lastcol)
@@ -711,12 +711,13 @@
          (screw-insert 3 0         bottom-radius top-radius height)
          (screw-insert lastcol 1   bottom-radius top-radius height)
          ))
-(def screw-insert-height 3.8)
-(def screw-insert-bottom-radius (/ 5.31 2))
-(def screw-insert-top-radius (/ 5.1 2))
+(def screw-insert-height 5.7)
+(def screw-insert-bottom-radius (/ 4 2))
+(def screw-insert-top-radius (/ 4 2))
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
-(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
+(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.8) (+ screw-insert-top-radius 1.8) (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
+(def screw-insert-screw-head-holes  (screw-insert-all-shapes 2.7 2.7 10))
 
 (def wire-post-height 7)
 (def wire-post-overhang 3.5)
@@ -762,7 +763,7 @@
                     ; caps
                     )
                    (translate [0 0 -20] (cube 350 350 40))
-                  ))
+                   (translate [0 0 -0.1] screw-insert-holes)))
 
 (def plate-right (let [bot (cut
                             (translate [0 0 -0.1]
@@ -780,8 +781,10 @@
                                                                         :center true} bot)
                                                        (cube 50 50 5))))
                                                screw-insert-screw-holes)]
-                   (difference (extrude-linear {:height 3} inner-thing)
-                               (translate [0 0 -5] screw-insert-screw-holes))))
+                   (union
+                    (difference (extrude-linear {:height 3} inner-thing)
+                                (translate [0 0 -5] screw-insert-screw-holes)
+                                (translate [0 0 -0.4] (mirror [0 0 -1] screw-insert-screw-head-holes))))))
 
 (defn run []
   (spit "things/right.scad"
@@ -792,6 +795,9 @@
 
   (spit "things/right-plate.scad"
         (write-scad plate-right))
+
+  (spit "things/left-plate.scad"
+        (write-scad (mirror [-1 0 0] plate-right)))
 
   (spit "things/right-test.scad"
         (write-scad
