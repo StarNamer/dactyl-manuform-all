@@ -116,6 +116,8 @@
 ;; Placement Functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(def row-offset-distance (/ keyswitch-width 2))
+
 (def columns (range 0 6))
 (def rows (range 0 5))
 
@@ -138,12 +140,16 @@
                         (= column 2) [0 2.82 -3.0] ;;was moved -4.5
                         (>= column 4) [0 -5.8 5.64]
                         :else [0 0 0])
+        row-offset (cond
+                     (= row 0) [0 0 0]
+                     :else [(* row row-offset-distance) 0 0])
         column-angle (* β (- 2 column))
         placed-shape (->> row-placed-shape
                           (translate [0 0 (- column-radius)])
                           (rotate column-angle [0 1 0])
                           (translate [0 0 column-radius])
-                          (translate column-offset))]
+                          (translate column-offset)
+                          (translate row-offset))]
     (->> placed-shape
          (rotate (/ π 12) [0 1 0])
          (translate [0 0 13]))))
@@ -405,7 +411,8 @@
   (concat (range start end step) [end]))
 
 (def wall-step 0.2)
-(def wall-sphere-n 20) ;;Sphere resolution, lower for faster renders
+;; (def wall-sphere-n 20) ;;Sphere resolution, lower for faster renders
+(def wall-sphere-n 10) ;;Sphere resolution, lower for faster renders
 
 (defn wall-sphere-at [coords]
   (->> (sphere 1)

@@ -5,6 +5,8 @@
 * Add docker-compose.yml
   * activate clojure dev environment via `docker-compose run dactyl-dev /bin/bash`
   * regen models with `docker-compose run generat`
+* remove ortholinearity
+  * i don't like it okay
 
 # Original Readme
 
