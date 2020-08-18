@@ -5,6 +5,8 @@
             [dactyl-keyboard.util :refer :all]
             [unicode-math.core :refer :all]))
 
+(defn -main [] (load-file "src/dactyl_keyboard/dactyl.clj"))
+
 ;;;;;;;;;;;;;;;;;
 ;; Switch Hole ;;
 ;;;;;;;;;;;;;;;;;

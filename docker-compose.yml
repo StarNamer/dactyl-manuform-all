@@ -1,0 +1,16 @@
+version: '3'
+services:
+  dactyl-dev:
+    image: clojure:latest
+    stdin_open: true
+    tty: true
+    working_dir: '/dactyl-keyboard'
+    volumes:
+      - ./:/dactyl-keyboard
+  generate:
+    image: clojure:latest
+    command: lein run
+    working_dir: '/dactyl-keyboard'
+    volumes:
+      - ./:/dactyl-keyboard
+

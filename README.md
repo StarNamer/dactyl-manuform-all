@@ -1,4 +1,13 @@
 # The Dactyl Keyboard
+
+## Changelog vs [https://github.com/adereth/dactyl-keyboard](https://github.com/adereth/dactyl-keyboard)
+
+* Add docker-compose.yml
+  * activate clojure dev environment via `docker-compose run dactyl-dev /bin/bash`
+  * regen models with `docker-compose run generat`
+
+# Original Readme
+
 The Dactyl is a parameterized, split-hand, concave, columnar, ergonomic keyboard.
 
 <img src="https://raw.githubusercontent.com/adereth/dactyl-cave/master/resources/glamourshot.png"/>
