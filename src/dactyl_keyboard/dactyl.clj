@@ -93,7 +93,7 @@
 
 (def thumb-offsets [-14 -6 2])
 
-(def keyboard-z-offset 13)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 11)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 2.5)                  ; original= 0.5
@@ -447,28 +447,22 @@
 (def pinky-connectors
   (apply union
          (concat
-          (for [row (range lastrow nrows)
-                column (range (dec lastcol) ncols)]
+          ;; Row connections
+          (for [row (range 0 lastrow)]
             (triangle-hulls
-              (key-place column row web-post-tl)
-              (key-place (dec column) row web-post-tr)
-              (key-place column row web-post-bl)
-              (key-place (dec column) row web-post-br)))
-              
-          (for [column (range (dec lastcol) ncols)]
-            (triangle-hulls
-              (key-place column cornerrow web-post-bl)
-              (key-place column cornerrow web-post-br)
-              (key-place column (inc cornerrow) web-post-tl)
-              (key-place column (inc cornerrow) web-post-tr)))
+             (key-place lastcol row web-post-tr)
+             (key-place lastcol row wide-post-tr)
+             (key-place lastcol row web-post-br)
+             (key-place lastcol row wide-post-br)))
 
-          (for [column (range (dec (dec lastcol)) lastcol)
-                row (cons cornerrow ())]
+          ;; Column connections
+          (for [row (range 0 cornerrow)]
             (triangle-hulls
-              (key-place column row web-post-br)
-              (key-place column (inc row) web-post-tr)
-              (key-place (inc column) row web-post-bl)
-              (key-place (inc column) (inc row) web-post-tl)))
+             (key-place lastcol row web-post-br)
+             (key-place lastcol row wide-post-br)
+             (key-place lastcol (inc row) web-post-tr)
+             (key-place lastcol (inc row) wide-post-tr)))
+          ;;
 )))
 
 (def key-connectors
@@ -721,7 +715,7 @@
 (defn key-holes [filled]
   (union
     (apply union
-           (for [column columns row rows :when (or (.contains [3, 4, 5] column) (not= row lastrow))]
+           (for [column columns row rows :when (or (.contains [3] column) (not= row lastrow))]
              (->> (key-hole filled)
                   (key-place column row))
              ))
@@ -922,12 +916,11 @@
     (let [tr (if (true? pinky-15u) wide-post-tr web-post-tr)
           br (if (true? pinky-15u) wide-post-br web-post-br)]
       (union (key-wall-brace lastcol 0 0 1 tr lastcol 0 1 0 tr)
-             (for [y (range 0 nrows)] (key-wall-brace lastcol y 1 0 tr lastcol y 1 0 br))
-             (for [y (range 1 nrows)] (key-wall-brace lastcol (dec y) 1 0 br lastcol y 1 0 tr))
-             (key-wall-brace lastcol lastrow 0 -1 br lastcol lastrow 1 0 br)
-             ))
+             (for [y (range 0 lastrow)] (key-wall-brace lastcol y 1 0 tr lastcol y 1 0 br))
+             (for [y (range 1 lastrow)] (key-wall-brace lastcol (dec y) 1 0 br lastcol y 1 0 tr))
+             (key-wall-brace lastcol cornerrow 0 -1 br lastcol cornerrow 1 0 br)))
     ; pinky-walls
-    (key-wall-brace lastcol lastrow 0 -1 web-post-br lastcol lastrow 0 -1 wide-post-br)
+    (key-wall-brace lastcol cornerrow 0 -1 web-post-br lastcol cornerrow 0 -1 wide-post-br)
     (key-wall-brace lastcol 0 0 1 web-post-tr lastcol 0 0 1 wide-post-tr)
     ; back wall
     (for [x (range 0 ncols)] (key-wall-brace x 0 0 1 web-post-tl x       0 0 1 web-post-tr))
@@ -941,9 +934,9 @@
     (wall-brace  thumb-tl-place -1 0 web-post-tl thumb-tl-place -1 0 web-post-bl)
     ; front wall
     (key-wall-brace 3 lastrow   0 -1 web-post-bl 3 lastrow 0.5 -1 web-post-br)
-    ; (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 0.5 -1 web-post-bl)
-    (for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl x       lastrow 0 -1 web-post-br)) ; TODO fix extra wall
-    (for [x (range 4 ncols)] (key-wall-brace x lastrow 0 -1 web-post-bl (dec x) lastrow 0 -1 web-post-br))
+    (key-wall-brace 3 lastrow 0.5 -1 web-post-br 4 cornerrow 0.5 -1 web-post-bl)
+    (for [x (range 4 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl x       cornerrow 0 -1 web-post-br)) ; TODO fix extra wall
+    (for [x (range 5 ncols)] (key-wall-brace x cornerrow 0 -1 web-post-bl (dec x) cornerrow 0 -1 web-post-br))
     ; thumb walls
     (wall-brace thumb-br-place  0 -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
     (wall-brace thumb-br-place  0 -1 web-post-br thumb-br-place  0 -1 web-post-bl)
@@ -960,7 +953,6 @@
     (wall-brace thumb-tr-place 0  -1 web-post-br thumb-ttr-place 0  -1 web-post-bl)
     (wall-brace thumb-ttr-place  0 -1 thumb-post-br (partial key-place 3 lastrow)  0 -1 web-post-bl)
     ))
-
 
 ; Cutout for controller/trrs jack holder
 (def controller-ref (key-position 0 0 (map - (wall-locate3  0  -1) [0 (/ mount-height 2) 0])))
@@ -996,35 +988,43 @@
       (rotate (deg2rad 90) [1 0 0])
       (rotate (deg2rad 90) [0 1 0])
       (rotate oled-mount-rotation-z [0 0 1])
-      (translate (add-vec (left-wall-plate-position 0 1) [-5 1.5 -27]))
+      (translate (add-vec (left-wall-plate-position 0 1) [-5 1.5 -25]))
       ))
 
 (def inner-usbc-cutout
   (->> (hull
-        (translate [-3 0 0] (smooth-circle 3.5))
-        (translate [3 0 0] (smooth-circle 3.5))
+        (translate [-2.5 0 0] (smooth-circle 3))
+        (translate [2.5 0 0] (smooth-circle 3))
        )
-    (extrude-linear {:height (+ 1 wall-thickness)})
+    (extrude-linear {:height (+ 2 wall-thickness)})
     (move-to-usb-center)
   )
 )
 
 (def bottom-usb-screw-hole
-  (->> (smooth-circle 2.2)
-       (extrude-linear {:height (+ 1 wall-thickness)})
+  (->> (smooth-circle 1.2)
+       (extrude-linear {:height (+ 2 wall-thickness)})
        (move-to-usb-center)
-       (translate [0, 0, -10])
+       (translate [0 0 -7.5])
 ))
 
 (def top-usb-screw-hole
-  (->> (smooth-circle 2.2)
-       (extrude-linear {:height (+ 1 wall-thickness)})
+  (->> (smooth-circle 1.2)
+       (extrude-linear {:height (+ 2 wall-thickness)})
        (move-to-usb-center)
-       (translate [0, 0, 10])
+       (translate [0 0 7.5])
 ))
 
+(def usb-wall-cutout
+  (->> (hull
+         (translate [-7.5 0 0] (smooth-circle 4))
+         (translate [7.5 0 0] (smooth-circle 4)))
+       (extrude-linear {:height wall-thickness})
+       (move-to-usb-center)
+       (translate [0 -0.5 0])))
+
 (def usb-screw-holes
-  (union top-usb-screw-hole bottom-usb-screw-hole)
+  (union top-usb-screw-hole bottom-usb-screw-hole usb-wall-cutout)
 )
 
 (def trrs-hole
@@ -1080,7 +1080,7 @@
          ; top right
          (screw-insert lastcol 0         bottom-radius top-radius height [-4 9 0])
          ; lower right
-         (screw-insert lastcol nrows  bottom-radius top-radius height [-4 13 0])
+         (screw-insert lastcol lastrow  bottom-radius top-radius height [-4 13 0])
          ; middle bottom
          (screw-insert 3 lastrow         bottom-radius top-radius height [-5 2 0])
          ; thumb cluster, closest to user
