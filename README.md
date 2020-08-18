@@ -1,18 +1,31 @@
+<div align="center">
+
 # Dactyl ManuForm Keyboard
 
-This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard). The Dactyl-Manuform is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard) with the thumb cluster from [ManuForm](https://github.com/jeffgran/ManuForm). Some features from the Dactyl Manuform Mini are kept along with new features added. 
+<img src="https://user-images.githubusercontent.com/8348199/90482639-198ff500-e166-11ea-9a9b-e9ca39cbb729.png" height="500px">
 
-## Features
+This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboard).  
+The Dactyl-Manuform is a fork of the [Dactyl](https://github.com/adereth/dactyl-keyboard) with the thumb cluster from [ManuForm](https://github.com/jeffgran/ManuForm).
 
-- The use of sidenubs can be disabled. Sidenub should be disabled if you use Kailh, and Outemu. If you use Cherry MX, Gateron or Zealios switches, you can enable the sidenubs.
-- Toggle for outer column between using 1.5u sized keys and 1u sized keys.
-- If enabled, the rows which use 1.5u sized keys can be specified.
-- Toggle for an extra row of keys for the outer column(s).
-- Toggle for an extra inner column before the thumbcluster with (nrows-2) rows.
-- Toggle between using the default thumb cluster, the mini thumb cluster designed by [l4u](https://github.com/l4u/dactyl-manuform-mini-keyboard), and a new thumb cluster.
-- This new thumb cluster uses the same keycaps as the default, but is more compact. The thumb only has to move one position left or right from its neutral position to reach all the keys. 
-- Removable controller board / TRRS jack holder as a separate part. This holder is then friction fit into a cutout on the back wall of the case. Designed for common TRRS breakout boards. 
-- Models for both pro-micro and elite-c holders in the [things/](things/) directory. 
+</div>
+
+## Differences to [carbonfet's](https://github.com/carbonfet/dactyl-manuform) dactyl-manuform
+This version is adapted to my preferences and requirements. As such, there are a number of changes made to the root projects; the keyboard is still customizable, but changing the variables/parameters may require code changes as well.  
+Changes to root project:
+
+- Inclusion of [crystalhand's](https://github.com/crystalhand/dactyl-keyboard) wrist-rest
+- All 1.0u keys (most ortho kits should provide all caps required for this build)
+- Default manuform thumb cluster, but moved out a little bit (I have big hands and want my thumb to rest on the first thumb key)
+- Some fixes to the generated bottom plate, which was faulty if extra bottom row is used (which I do)
+- Usage of Bossard BN1936 brass inserts (M3) for screws
+- Screw nubs moved inside the case
+
+## Future changes (planned)
+
+- Removal of controller board / TRRS jack holder breakout and putting of USB-C jack instead
+- Development of my own controller board, QMK (and maybe VIA) programmable
+- (Hopefully) Usage of BLE (as two separate keyboards) so no connection between the halves required
+- (Alternatively) Usage of higher-quality 5-pin jack (no TRRS or audio jacks)
 
 ## Generate OpenSCAD and STL models
 
@@ -26,7 +39,7 @@ This is a fork of the [Dactyl-ManuForm](https://github.com/tshort/dactyl-keyboar
 
 ## License
 
-Copyright © 2015-2018 Matthew Adereth, Tom Short and Leo Lou
+Copyright © 2015-2020 Matthew Adereth, Tom Short and Leo Lou, Andreas Hauser
 
 The source code for generating the models is distributed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).
 

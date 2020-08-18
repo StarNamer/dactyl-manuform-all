@@ -14,7 +14,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 
 (def nrows 5)
-(def ncols 7)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -22,13 +22,13 @@
 (def centercol 4)                       ; controls left-right tilt / tenting (higher number is more tenting)
 (def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 
-(def pinky-15u true)                   ; controls whether the outer column uses 1.5u keys
+(def pinky-15u false)                   ; controls whether the outer column uses 1.5u keys
 (def first-15u-row 0)                   ; controls which should be the first row to have 1.5u keys on the outer column
 (def last-15u-row 3)                    ; controls which should be the last row to have 1.5u keys on the outer column
 
 (def extra-row true)                   ; adds an extra bottom row to the outer columns
-(def inner-column true)                ; adds an extra inner column (two less rows than nrows)
-(def thumb-style "new")                ; toggles between "default", "mini", and "new" thumb cluster
+(def inner-column false)                ; adds an extra inner column (two less rows than nrows)
+(def thumb-style "default")                ; toggles between "default", "mini", and "new" thumb cluster
 
 (def column-style :standard)
 
@@ -42,7 +42,8 @@
           (>= column 4) [0 -12 5.64]    ; original [0 -5.8 5.64]
           :else [0 0 0])))
 
-(def thumb-offsets [6 -3 7])
+(def thumb-offsets [6 -10 7])
+;(def thumb-offsets [0 0 0])
 
 (def keyboard-z-offset 10)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
@@ -52,6 +53,8 @@
 (def wall-z-offset -8)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
 (def wall-thickness 2)                  ; wall thickness parameter; originally 5
+
+(def bottom-plate-thickness 2)          ; Thickness of bottom plate; wrist rest needs to extend by that amount in z direction
 
 ;; Settings for column-style == :fixed
 ;; The defaults roughly match Maltron settings
@@ -65,7 +68,28 @@
 
 ; If you use Cherry MX or Gateron switches, this can be turned on.
 ; If you use other switches such as Kailh, you should set this as false
-(def create-side-nubs? false)
+(def create-side-nubs? true)
+
+; Screw insert definitions
+(def screw-insert-height 6) ; Boassard BN 1936 M3 - insert length 4.8mm; Hole Depth Y: 4.4
+(def screw-insert-bottom-radius (/ 4.0 2)) ; Bossard BN 1936 M3 - diameter 4mm ; Hole Diameter C: 4.1-4.4
+(def screw-insert-top-radius (/ 4.0 2))
+(def screw-insert-rest-ring 2.0) ; 2mm rest ring for Bossard BN 1936 inserts
+(def screw-hole-radius (/ 3.4 2)) ; M3 screw - normal fit, drill size 3.4mm
+
+; Wrist rest definitons
+(def wrist-rest-on 1) 							;;0 for no rest 1 for a rest connection cut out in bottom case	
+(def wrist-rest-back-height 46)					;;Default 46 height of the back of the wrist rest
+(def wrist-rest-angle 20) 						;;Default 20 angle of the wrist rest
+(def wrist-rest-rotation-angle 0)				;;Default 9 The angle in counter clockwise the wrist rest is at			
+(def wrist-rest-ledge 4)						;;Default 4 The height of ledge the silicone wrist rest fits inside
+(def wrist-rest-offset-x -25)							;; Default 0 offset of the entire wrist rest (including case connectors) in the x direction
+(def wrist-rest-offset-y -8.2)							;; Default 0 offset of the entire wrist rest (including case connectors) in the y direction
+(def rest-offset-x 0)							;; Default 0 offset of the wrist rest (without case connectors) in the x direction
+(def rest-offset-y 0)							;; Default 0
+(def wrist-rest-y-angle 0)						;;0 Default.  Controls the wrist rest y axis tilt (left to right)
+(def wrist-rest-connector-middle-offset-x -10)							;; Default 0 - Offset of middle case connector in x direction to adapt to case shape
+(def wrist-rest-connector-left-offset-x -20)							;; Default 0 - Offset of left case connector in x direction to adapt to case shape
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; General variables ;;
@@ -272,8 +296,9 @@
   (apply union
          (conj (for [column columns
                row rows
-               :when (or (and (= column 0) (< row 3))
+               :when (or (and (= column 0) (< row 4))
                          (and (.contains [1 2] column) (< row 4))
+                         (and extra-row (= column 2) (= row 4))
                          (.contains [3 4 5 6] column))]
                (->> (sa-cap (if (and pinky-15u (= column lastcol) (not= row lastrow)) 1.5 1))
                     (key-place column row)))
@@ -285,8 +310,9 @@
   (apply union
          (conj (for [column columns
                row rows
-               :when (or (and (= column 0) (< row 3))
+               :when (or (and (= column 0) (< row 4))
                          (and (.contains [1 2] column) (< row 4))
+                         (and extra-row (= column 2) (= row 4))
                          (.contains [3 4 5 6] column))]
                  (key-place column row keyhole-fill))
                (list (key-place 0 0 keyhole-fill)
@@ -508,7 +534,7 @@
 (def thumbcaps
   (union
    (thumb-1x-layout (sa-cap 1))
-   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1.5)))))
+   (thumb-15x-layout (rotate (/ π 2) [0 0 1] (sa-cap 1))))) ; 1.0u caps on inner thumb keys
 
 (def thumbcaps-fill
   (union
@@ -1307,14 +1333,18 @@
     5 0
     6 -5.07))
 
-; Cutout for controller/trrs jack holder
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;;;;;;;;;Controller/TRRS cutouts;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 (def usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
 (def usb-holder-position (map + [(+ 18.8 holder-offset) 18.7 1.3] [(first usb-holder-ref) (second usb-holder-ref) 2]))
 (def usb-holder-cube   (cube 28.666 30 19.8))
 (def usb-holder-space  (translate (map + usb-holder-position [-1.5 (* -1 wall-thickness) 6.6]) usb-holder-cube))
 (def usb-holder-notch  (translate (map + usb-holder-position [-1.5 (+ 4.4 notch-offset) 6.6]) (cube 31.366 1.3 19.8)))
 
-; Screw insert definition & position
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;;;;;;;;;Screw inserts;;;;;;;;;;;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 (defn screw-insert-shape [bottom-radius top-radius height]
   (union
    (->> (binding [*fn* 30]
@@ -1330,27 +1360,28 @@
                           (if shift-left (map + (left-key-position row 0) (wall-locate3 -1 0))
                             (key-position column row (map + (wall-locate2  1  0) [(/ mount-width 2) 0 0])))))]
     (->> (screw-insert-shape bottom-radius top-radius height)
-         (translate (map + offset [(first position) (second position) (/ height 2)])))))
+         (translate (map + offset [(first position) (second position) (/ height 2)]))))
+)
 
-         (defn screw-insert-all-shapes [bottom-radius top-radius height]
-  (union (screw-insert 0 0         bottom-radius top-radius height [7 6.5 0])
-         (screw-insert 0 lastrow   bottom-radius top-radius height [13 4 0])
-         (screw-insert lastcol lastrow  bottom-radius top-radius height [7 14 0])
-         (screw-insert lastcol 0         bottom-radius top-radius height [1 7 0])
-         (screw-insert (+ 1 innercol-offset) lastrow         bottom-radius top-radius height [13 -7 0])))
+(defn screw-insert-all-shapes [bottom-radius top-radius height]
+  (union 
+      (screw-insert 0                     0         bottom-radius top-radius height [7.5 6.5 0])
+      (screw-insert 0                     lastrow   bottom-radius top-radius height [-0.5 4 0])
+      (screw-insert lastcol               lastrow   bottom-radius top-radius height [-3 14 0])
+      (screw-insert lastcol               0         bottom-radius top-radius height [-3 7 0])
+      (screw-insert (+ 1 innercol-offset) lastrow   bottom-radius top-radius height [13 -3 0])
+  )
+)
 
-; Hole Depth Y: 4.4
-(def screw-insert-height 6)
-
-; Hole Diameter C: 4.1-4.4
-(def screw-insert-bottom-radius (/ 4.0 2))
-(def screw-insert-top-radius (/ 3.9 2))
 (def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
 
 ; Wall Thickness W:\t1.65
-(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.65) (+ screw-insert-top-radius 1.65) (+ screw-insert-height 1)))
-(def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
+(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius screw-insert-rest-ring) (+ screw-insert-top-radius screw-insert-rest-ring) (+ screw-insert-height 1)))
+(def screw-insert-screw-holes  (screw-insert-all-shapes screw-hole-radius screw-hole-radius 350))
 
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;;;;;;;;;1.5u wall connectors;;;;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ; Connectors between outer column and right wall when 1.5u keys are used
 (def pinky-connectors
   (if pinky-15u
@@ -1393,22 +1424,200 @@
                (key-place lastcol (inc row) web-post-tr))))
 ))))
 
-(def model-right (difference
-                   (union
-                     key-holes
-                     key-holes-inner
-                     pinky-connectors
-                     extra-connectors
-                     connectors
-                     inner-connectors
-                     thumb-type
-                     thumb-connector-type
-                     (difference (union case-walls
-                                        screw-insert-outers)
-                                 usb-holder-space
-                                 usb-holder-notch
-                                 screw-insert-holes))
-                   (translate [0 0 -20] (cube 350 350 40))))
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;;;;;;;;;Case geometry;;;;;;;;;;;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+(def case-geometry
+  (union
+    key-holes
+    key-holes-inner
+    pinky-connectors
+    extra-connectors
+    connectors
+    inner-connectors
+    thumb-type
+    thumb-connector-type
+    case-walls
+    thumbcaps-fill-type
+    caps-fill
+    screw-insert-outers)
+)
+
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;;;;;;;;;Wrist rest;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+(def wrist-rest-front-cut
+
+		(scale[1.1, 1, 1](->> (cylinder 7 200)(with-fn 300)
+			(translate [0 -13.4 0]))
+))
+
+(def cut-bottom
+	(->>(cube 200 200 110)(translate [0 0 -55])) ;-60
+)
+
+(def h-offset
+	 (* (Math/tan(/ (* π wrist-rest-angle) 180)) 88)
+)
+
+(def scale-cos
+	  (Math/cos(/ (* π wrist-rest-angle) 180))
+)
+
+(def scale-amount 
+	(/ (* 83.7 scale-cos) 19.33)
+)
+
+(def wrist-rest
+	(scale [4.25  scale-amount  1] (difference (union
+		(difference 
+			;the main back circle
+					(scale[1.3, 1, 1](->> (cylinder 10 150)(with-fn 200)
+					(translate [0 0 0])))		
+				;front cut cube and circle
+			(scale[1.1, 1, 1](->> (cylinder 7 201)(with-fn 200)
+				(translate [0 -13.4 0]))
+			(->> (cube 18 10 201)(translate [0 -12.4 0]))
+			
+		))
+	;;side fillers
+		(->> (cylinder 6.8 200)(with-fn 200)
+			(translate [-6.15 -0.98 0]))		
+			(->> (cylinder 6.8 200)(with-fn 200)
+			(translate [6.15 -0.98 0]))
+	;;heart shapes at bottom		
+		(->> (cylinder 5.9 200)(with-fn 200)
+			(translate [-6.35 -2 0]))		
+		(scale[1.01, 1, 1](->> (cylinder 5.9 200)(with-fn 200)
+		(translate [6.35 -2. 0])))
+			)
+		cut-bottom
+	))
+)
+		
+(def wrist-rest-back-height-corrected (+ wrist-rest-back-height bottom-plate-thickness)) ; offset wrist rest height by height of bottom plate
+
+(def wrist-rest-base
+  (->> 
+    (scale [1 1 1] ;;;;scale the wrist rest to the final size after it has been cut
+      (difference 
+			  (scale [1.08 1.08 1] wrist-rest )
+				(->> (cube 200 200 200)(translate [0 0 (+ (+ (/ h-offset 2) (- wrist-rest-back-height-corrected h-offset) ) 100)]) (rotate  (/ (* π wrist-rest-angle) 180)  [1 0 0])(rotate  (/ (* π wrist-rest-y-angle) 180)  [0 1 0]))
+			  (->> (difference 
+					  wrist-rest
+					  (->> (cube 200 200 200)(translate [0 0 (- (+ (/ h-offset 2) (- wrist-rest-back-height-corrected h-offset) ) (+ 100  wrist-rest-ledge))]) (rotate  (/ (* π wrist-rest-angle) 180)  [1 0 0])(rotate  (/ (* π wrist-rest-y-angle) 180)  [0 1 0]))
+				  )
+			  )
+		  )
+    )
+  )
+)
+
+(def rest-case-cuts
+	(union
+	;;right cut
+			(->> (cylinder 1.85 25)(with-fn 20) (rotate  (/  π 2)  [1 0 0])(translate [25 45 4.5]))
+			 (scale [1.3 1 1] (->> (cylinder 2 3.2)(with-fn 50) (rotate  (/  π 2)  [1 0 0])(translate [19.23 54 4.])))
+			(->> (cube 6 3 12.2)(translate [25 39 1.5]))
+	;;middle cut
+			(->> (cylinder 1.85 25)(with-fn 20) (rotate  (/  π 2)  [1 0 0])(translate [0 45 4.5]))
+			(scale [1.3 1 1] (->> (cylinder 2 3.2)(with-fn 50) (rotate  (/  π 2)  [1 0 0])(translate [0 54 4.])))
+			(->> (cube 6 3 12.2)(translate [0 39 1.5]))
+			
+	;;left
+			(->> (cylinder 1.85 25)(with-fn 20) (rotate  (/  π 2)  [1 0 0])(translate [-25 45 4.5]))
+			(scale [1.3 1 1] (->> (cylinder 2 3.2)(with-fn 50) (rotate  (/  π 2)  [1 0 0])(translate [-19.23 54 4.])))
+			(->> (cube 6 3 12.2)(translate [-25 39 1.5]))
+	)
+)
+
+(def dactyl-shape
+  (extrude-linear
+    {:height 40 :center true}
+    (project
+      case-geometry)
+  )
+)
+
+(def rest-case-connectors
+	(difference
+		(union			
+			(scale [1 1 1.6] (->> (cylinder 6 100)(with-fn 200) (rotate  (/  π 2)  [1 0 0])(translate [(+ 25 wrist-rest-offset-x) (+ 13 wrist-rest-offset-y) 0])))
+			(scale [1 1 1.6] (->> (cylinder 6 100)(with-fn 200) (rotate  (/  π 2)  [1 0 0])(translate [(+ 0 wrist-rest-offset-x wrist-rest-connector-middle-offset-x) (+ 13 wrist-rest-offset-y) 0])))
+			(scale [1 1 1.6] (->> (cylinder 6 100)(with-fn 200) (rotate  (/  π 2)  [1 0 0])(translate [(+ -25 wrist-rest-offset-x wrist-rest-connector-left-offset-x) (+ 13 wrist-rest-offset-y) 0]))) ; x_old=-25
+		)
+	)
+)
+	
+(def wrist-rest-build
+  (union
+    ; Wrist rest base
+    (->>
+      (difference
+        (->> wrist-rest-base  (translate [(+ 0 rest-offset-x wrist-rest-offset-x) (+ -15 rest-offset-y wrist-rest-offset-y) 0])(rotate  (/ (* π wrist-rest-rotation-angle) 180)  [0 0 1]))
+        cut-bottom
+      )
+      (translate [20 -103 (- bottom-plate-thickness)])
+    )
+
+    ; Case connectors
+    (difference
+      (->> 
+        (difference
+          rest-case-connectors
+          cut-bottom
+        )
+        (translate [20 -103 0])
+      )
+      dactyl-shape
+    )
+  )
+)		
+
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;;;;;;;;; Compile keyboard ;;;;;;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+(def model-right-without-wrist-rest
+  (difference
+     (union
+       key-holes
+       key-holes-inner
+       pinky-connectors
+       extra-connectors
+       connectors
+       inner-connectors
+       thumb-type
+       thumb-connector-type
+       (difference
+         (union
+           case-walls
+           screw-insert-outers
+          )
+          usb-holder-space
+          usb-holder-notch
+          screw-insert-holes
+        )
+      )
+      (translate [0 0 -20] (cube 350 350 40))
+  )
+)
+
+(def model-right
+  (union
+    model-right-without-wrist-rest
+    wrist-rest-build
+  )
+)
+
+(def plate
+  (project
+    (difference
+      case-geometry
+      (translate [0 0 -10] screw-insert-screw-holes)
+    )
+  )
+)
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -1422,25 +1631,13 @@
                          caps)))
 
 (spit "things/right-plate.scad"
-      (write-scad
-        (extrude-linear
-          {:height 2.6 :center false}
-          (project
-            (difference
-              (union
-                key-holes
-                key-holes-inner
-                pinky-connectors
-                extra-connectors
-                connectors
-                inner-connectors
-                thumb-type
-                thumb-connector-type
-                case-walls
-                thumbcaps-fill-type
-                caps-fill
-                screw-insert-outers)
-              (translate [0 0 -10] screw-insert-screw-holes))))))
+  (write-scad
+    (extrude-linear
+      {:height 2.6 :center false}
+      plate
+    )
+  )
+)
 
 (spit "things/right-plate-laser.scad"
       (write-scad
